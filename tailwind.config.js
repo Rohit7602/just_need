@@ -5,7 +5,9 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: { boxShadow: {
+      'custom': '0px 4px 20px 0px #0000001A',
+  },},
   },
   plugins: [],
 }
