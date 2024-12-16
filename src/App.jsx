@@ -1,12 +1,12 @@
-import './App.css'
-import AdminRoutes from './routes/admin/AdminRoutes'
+import "./App.css";
+import AdminRoutes from "./routes/admin/AdminRoutes";
 
 function App() {
   return (
     <>
-          <AdminRoutes/>
+      <AdminRoutes />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import SubscriptionPage from "../../components/SubscriptionPage";
 
 function Dashboard() {
   return (
-    <div>Dashboard</div>
-  )
+    <>
+      <SubscriptionPage />
+    </>
+  );
 }
 
-export default Dashboard
+export default Dashboard;
