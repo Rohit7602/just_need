@@ -8,7 +8,7 @@ import SubscriptionPage from '../../Components/SubscriptionPage';
 function AdminRoutes() {
   return (
     <Routes>
-        <Route path='/dashboard' element={<AdminLayout/>}>
+        <Route path='/' element={<AdminLayout/>}>
         <Route index element={<Aside/>}/>
         <Route path='subscription' element={<SubscriptionPage/>}/>
         </Route>  
