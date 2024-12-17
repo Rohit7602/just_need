@@ -29,7 +29,7 @@ function SideBar() {
         </div>
         <div className="flex items-center mt-4 group_hover">
           <VerticalVilotSvg />
-          <NavLink className="flex items-center py-2.5 px-[15px] gap-5 ms-[5px] w-full">
+          <NavLink to="/" className="flex items-center py-2.5 px-[15px] gap-5 ms-[5px] w-full">
             <DasboardSvg />
             <span className="font-normal text-base text-[#00000099]">
               Dashboard
