@@ -5,14 +5,9 @@
   text-decoration: none !important;
   list-style-type: none !important;
   box-sizing: border-box !important;
+  font-family: "Outfit", sans-serif !important;
 }
 
-.ff_outfit {
-  font-family: "Outfit", sans-serif;
-}
-.ff_sen {
-  font-family: "Sen", serif;
-}
 .group_hover:hover svg path,
 .group_hover:hover span {
   fill: #6c4def;
