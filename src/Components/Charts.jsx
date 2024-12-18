@@ -1,6 +1,3 @@
-
-
-
 import React from "react";
 import {
   AreaChart,
@@ -40,7 +37,7 @@ const PerformanceChart = () => {
           {/* Gradient for the shaded area */}
           <defs>
             <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#314CFF" stopOpacity={0.8} />
+              <stop offset="5%" stopColor="#314CFF" stopOpacity={0.8} borderWidth="100px" />
               <stop offset="95%" stopColor="#314CFF" stopOpacity={0} />
             </linearGradient>
           </defs>
@@ -52,7 +49,7 @@ const PerformanceChart = () => {
             tick={{ fill: "black" }}
             axisLine={false}
             tickLine={false}
-           
+            borderWidth="100px"
           />
 
           <YAxis hide />
@@ -74,7 +71,7 @@ const PerformanceChart = () => {
             dataKey="value"
             stroke="#314CFF"
             strokeDasharray="5 5"
-            dot={{ stroke: "#314CFF", strokeWidth: 2 }}
+            dot={{ stroke: "#000000", strokeWidth: 2 }}
             isAnimationActive={false}
           />
         </AreaChart>

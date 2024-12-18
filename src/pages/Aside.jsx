@@ -21,13 +21,13 @@ function Aside() {
                     </div>
 
                     <div className='flex items-center'>
-                        <div className='h-[50px] w-[50px] rounded-full bg-[white] flex items-center justify-center'>
+                        <div className='h-[50px] w-[50px] rounded-full bg-[white] flex items-center justify-center cursor-pointer'>
                             <Message />
                         </div>
-                        <div className='h-[50px] w-[50px] rounded-full bg-[white] flex items-center justify-center mx-[14px]'>
+                        <div className='h-[50px] w-[50px] rounded-full bg-[white] flex items-center justify-center mx-[14px] cursor-pointer'>
                             <Notificationicon />
                         </div>
-                        <div className='flex items-center'>
+                        <div className='flex items-center cursor-pointer'>
                             <div className='h-[56px] w-[56px] bg-[#6C4DEF] rounded-full flex items-center justify-center'>
                                 <img src={Boy} alt="Boy" />
                             </div>
@@ -46,7 +46,7 @@ function Aside() {
                 <div className='flex  mt-[16px] -mx-2'>
                     {cardData.map((card, index) => (
                         <div key={index} className=' w-[25%] px-2'>
-                            <div className='h-full  border rounded-[10px] px-[20px] py-[24px] shadow-lg bg-[white] hover:bg-[#6C4DEF] hover:text-white group'>
+                            <div className=' cursor-pointer h-full  border rounded-[10px] px-[20px] py-[24px] shadow-lg bg-[white] hover:bg-[#6C4DEF] hover:text-white group'>
                                 <div className='flex items-center justify-between'>
                                     <p className='text-[16px] font-normal'>{card.title}</p>
                                     <div className='h-[28px] w-[28px] rounded-full border border-black group-hover:bg-[white] group-hover:border-none flex items-center justify-center'>
