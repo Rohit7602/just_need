@@ -1,9 +1,9 @@
 import React from 'react';
-import { Arrowicon, Message, Notificationicon, Searchicon } from '../Components/Common/Icons';
-import Boy from "../assets/Images/Png/Boy.png";
-import Graph1 from "../assets/Images/Png/Graph1.png";
-import Graph2 from "../assets/Images/Png/Graph2.png";
-import { cardData } from '../Components/Common/Helper';
+import { Arrowicon, Message, Notificationicon, Searchicon } from '../../Components/Common/Icons';
+import Boy from "../../assets/Images/Png/Boy.png";
+import Graph1 from "../../assets/Images/Png/Graph1.png";
+import Graph2 from "../../assets/Images/Png/Graph2.png";
+import { cardData } from '../../Components/Common/Helper';
 
 
 function Aside() {
@@ -11,33 +11,6 @@ function Aside() {
 
     return (
         <div>
-            <div className='bg-[#F7F7F7] py-3 px-[14px]'>
-                <div className='flex items-center justify-between'>
-                    <div className='flex bg-[white] w-[337px] rounded-[20px] px-[13px] py-[16px] items-center shadow-lg'>
-                        <Searchicon />
-                        <input type="text" className=' bg-[transparent] opacity-[50%] ms-[10px]' placeholder='search task' />
-                    </div>
-
-                    <div className='flex items-center'>
-                        <div className='h-[50px] w-[50px] rounded-full bg-[white] flex items-center justify-center'>
-                            <Message />
-                        </div>
-                        <div className='h-[50px] w-[50px] rounded-full bg-[white] flex items-center justify-center mx-[14px]'>
-                            <Notificationicon />
-                        </div>
-                        <div className='flex items-center'>
-                            <div className='h-[56px] w-[56px] bg-[#6C4DEF] rounded-full flex items-center justify-center'>
-                                <img src={Boy} alt="Boy" />
-                            </div>
-                            <div className='ms-2'>
-                                <p className='font-normal text-[16px] leading-[20px]'>Super Admin</p>
-                                <p className='font-normal text-[16px] leading-[20px] opacity-[60%]'>superadmin@gmail.com</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div className='bg-[#F7F7F7] mt-[15px] px-[14px] py-[15px]'>
                 <p className='font-medium text-[28px]'>Dashboard</p>
                 <p className='font-normal text-[16px]'>Plan, prioritize, and accomplish your tasks with ease.</p>
