@@ -1,19 +1,11 @@
 import React from 'react';
-<<<<<<< HEAD:src/pages/admin/Aside.jsx
 import { Arrowicon, Message, Notificationicon, Searchicon } from '../../Components/Common/Icons';
-import Boy from "../../assets/Images/Png/Boy.png";
-import Graph1 from "../../assets/Images/Png/Graph1.png";
-import Graph2 from "../../assets/Images/Png/Graph2.png";
+
+
 import { cardData } from '../../Components/Common/Helper';
-=======
-import { Arrowicon, Message, Notificationicon, Searchicon } from '../Components/Common/Icons';
-
-
-import { cardData } from '../Components/Common/Helper';
-import Charts from '../Components/Charts';
-import Piechart from '../Components/Common/Piechart';
-import blur from "../assets/Images/Png/blur.png"
->>>>>>> ee41d1433f1e3ecd0cf990ca91d120fc0cbe2b25:src/pages/Aside.jsx
+import Charts from '../../Components/Charts';
+import Piechart from '../../Components/Common/Piechart';
+import blur from "../../assets/Images/Png/blur.png"
 
 
 function Aside() {
@@ -21,13 +13,9 @@ function Aside() {
 
     return (
         <div>
-<<<<<<< HEAD:src/pages/admin/Aside.jsx
-            <div className='bg-[#F7F7F7] mt-[15px] px-[14px] py-[15px]'>
-=======
         
 
             <div className='  px-[14px] '>
->>>>>>> ee41d1433f1e3ecd0cf990ca91d120fc0cbe2b25:src/pages/Aside.jsx
                 <p className='font-medium text-[28px]'>Dashboard</p>
                 <p className='font-normal text-[16px] opacity-[70%]'>Plan, prioritize, and accomplish your tasks with ease.</p>
 
