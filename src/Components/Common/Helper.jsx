@@ -20,7 +20,7 @@ export const cardData = [
     {
         title: 'Complaints',
         count: "08",
-        increase: '10+',
+        increase: '-2',
         description: 'Increased from last month',
     },
 ];
