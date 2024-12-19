@@ -2,60 +2,8 @@ import React, { useState } from "react";
 import avatar from "../assets/avatar.png";
 import { CiSearch, CiFilter } from "react-icons/ci";
 import { FaAngleDown } from "react-icons/fa";
-const customers = [
-  {
-    id: 1204,
-    name: "John Leo",
-    email: "john@email.co",
-    phone: "+91 8945121024",
-    address: "ABS Street",
-    start: "11 Dec, 2025",
-    end: "11 Dec, 2026",
-    status: "10 days left",
-  },
-  {
-    id: 1204,
-    name: "John Leo",
-    email: "john@email.co",
-    phone: "+91 8945121024",
-    address: "ABS Street",
-    start: "11 Dec, 2025",
-    end: "11 Dec, 2026",
-    status: "60 days left",
-  },
-  {
-    id: 1204,
-    name: "John Leo",
-    email: "john@email.co",
-    phone: "+91 8945121024",
-    address: "ABS Street",
-    start: "11 Dec, 2025",
-    end: "11 Dec, 2026",
-    status: "45 days left",
-  },
-  {
-    id: 1204,
-    name: "John Leo",
-    email: "john@email.co",
-    phone: "+91 8945121024",
-    address: "ABS Street",
-    start: "11 Dec, 2025",
-    end: "11 Dec, 2026",
-    status: "20 days left",
-  },
-  {
-    id: 1204,
-    name: "John Leo",
-    email: "john@email.co",
-    phone: "+91 8945121024",
-    address: "ABS Street",
-    start: "11 Dec, 2025",
-    end: "11 Dec, 2026",
-    status: "06 days left",
-  },
-];
 
-const CustomerTable = () => {
+const CustomerTable = ({ mapData }) => {
   const [status, setStatus] = useState("Block");
   const [showPopup, setShowPopup] = useState(false);
   const [showfilterPopup, setshowfilterPopup] = useState(false);
@@ -78,7 +26,7 @@ const CustomerTable = () => {
   }
 
   return (
-    <div className="bg-white p-5 rounded-[10px] shadow-md">
+    <div className="bg-[#FFFFFF] p-5 rounded-[10px] shadow-md">
       <div className="flex justify-between mb-4">
         <h2 className="text-[20px] font-medium text-[#000000]">
           All Customers
@@ -105,7 +53,7 @@ const CustomerTable = () => {
       </div>
 
       <div className="overflow-x-auto">
-        <table className="w-full text-left border-collapse whitespace-nowrap">
+        <table className="w-full text-left border-collapse whitespace-nowrap rounded-[10px]">
           <thead>
             <tr>
               <th className="p-[19px] md:p-[24px]">
@@ -151,7 +99,7 @@ const CustomerTable = () => {
             </tr>
           </thead>
           <tbody>
-            {customers.map((customer, index) => (
+            {mapData.map((customer, index) => (
               <tr key={index}>
                 <td className="p-[19px] md:p-[24px]">
                   <input className="w-[16px] h-[16px]" type="checkbox" />
@@ -182,7 +130,9 @@ const CustomerTable = () => {
                 <td className="p-[19px] md:p-[24px] text-sm font-normal text-[#000000]">
                   {customer.end}
                 </td>
-                <td className="p-[19px] md:p-[24px] text-sm font-normal text-[#000000]">
+                <td
+                  className={`p-[19px] md:p-[24px] text-sm font-normal text-[#000000] ${customer.TextColor}`}
+                >
                   {customer.status}
                 </td>
                 <td
