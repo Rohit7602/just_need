@@ -27,25 +27,25 @@ const CustomerTable = ({ mapData }) => {
 
   return (
     <div className="bg-[#FFFFFF] p-5 rounded-[10px] shadow-md">
-      <div className="flex justify-between mb-4">
+      <div className="flex justify-between mb-4 items-center">
         <h2 className="text-[20px] font-medium text-[#000000]">
           All Customers
         </h2>
         <div className="flex gap-2">
-          <div className="flex border rounded-[20px] items-center p-2 bg-[#F7F7F7] drop-shadow-lg">
+          <div className="flex rounded-[10px] items-center p-2 bg-[#F1F1F1] me-[20px]">
             <CiSearch className="ms-2" />
             <input
               type="text"
               placeholder="Search task"
-              className="ms-3 focus:outline-none focus:ring-gray-400] bg-[#F7F7F7]"
+              className="ms-2.5 focus:outline-none focus:ring-gray-400 bg-[#F1F1F1]"
             />
           </div>
           <button
-            className="bg-[#0832DE] text-white px-[15px] py-3 rounded-md flex items-center"
+            className="bg-[#0832DE] text-white px-[15px] py-3 rounded-[10px] flex items-center"
             onClick={handleFilter}
           >
             <span>
-              <CiFilter className="w-[24px] h-[24px] me-3" />
+              <CiFilter className="w-[24px] h-[24px] me-[12px]" />
             </span>{" "}
             Filter
           </button>
@@ -53,7 +53,7 @@ const CustomerTable = ({ mapData }) => {
       </div>
 
       <div className="overflow-x-auto">
-        <table className="w-full text-left border-collapse whitespace-nowrap rounded-[10px]">
+        <table className="w-full text-left border-collapse whitespace-nowrap rounded-[10px] ">
           <thead>
             <tr>
               <th className="p-[19px] md:p-[24px]">
@@ -149,15 +149,15 @@ const CustomerTable = ({ mapData }) => {
 
       <div className="flex justify-between items-center mt-[60px]">
         <span className="text-base font-normal">Showing 1 out of 5</span>
-        <div className="flex gap-2 items-center">
-          <FaAngleDown className="-rotate-[-90deg]" />
+        <div className="flex items-center">
+          <FaAngleDown className="-rotate-[-90deg] me-[30px]" />
           <span className="font-semibold py-[2px] px-[6px] bg-[#0832DE] text-white">
             1
           </span>
-          <span className="font-semibold py-[2px] px-[6px] text-black hover:bg-[#0832DE] hover:text-white">
+          <span className="font-semibold py-[2px] px-[6px] text-black hover:bg-[#0832DE] hover:text-white ms-[26px]">
             2
           </span>
-          <FaAngleDown className="-rotate-90" />
+          <FaAngleDown className="-rotate-90 ms-[30px]" />
         </div>
       </div>
       {showPopup && (

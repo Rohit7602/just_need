@@ -1,14 +1,14 @@
 import React from "react";
 import CustomerTable from "./CustomerTable";
 
-const SubscriptionPage = ({mapData}) => {
+const SubscriptionPage = ({ mapData }) => {
   return (
     <div className="w-full min-h-screen p-[15px]">
-      <div className="bg-[#F7F7F7] py-5 rounded-lg mb-5">
+      <div className="rounded-lg mb-5">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-[28px] font-medium mb-1.5">Subscription</h1>
-            <p className="text-base font-normal">
+            <h1 className="text-[28px] font-medium mb-[5px]">Subscription</h1>
+            <p className="text-base font-normal opacity-[70%]">
               Plan, prioritize, and accomplish your tasks with ease.
             </p>
           </div>
@@ -36,7 +36,7 @@ const SubscriptionPage = ({mapData}) => {
         </div>
       </div>
 
-      <CustomerTable mapData={mapData}/>
+      <CustomerTable mapData={mapData} />
     </div>
   );
 };
