@@ -10,12 +10,12 @@ function TopBar() {
   return (
     <div>
       <div className="flex items-center justify-between gap-5">
-        <div className="flex items-center py-3 px-4 bg-white rounded-[20px] max-w-[330px]">
+        <div className="flex items-center py-3 px-4 bg-[#F1F1F1] rounded-[1xl0px] max-w-[330px]">
           <SearchIcon />
           <input
             type="text"
             placeholder="Search task"
-            className="w-full outline-none ms-2.5 text-base placeholder:text-base placeholder:font-normal font-normal placeholder:text-[#00000080]"
+            className="w-full outline-none bg-[#F1F1F1] ms-2.5 text-base placeholder:text-base placeholder:font-normal font-normal placeholder:text-[#00000080]"
           />
         </div>
         <div className="flex items-center gap-4">
