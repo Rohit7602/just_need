@@ -59,9 +59,14 @@ const CustomerTable = () => {
   const [status, setStatus] = useState("Block");
   const [showPopup, setShowPopup] = useState(false);
   const [showfilterPopup, setshowfilterPopup] = useState(false);
+  const [mainCheckbox, setMaincheckbox] = useState(false);
 
   function handleFilter() {
     setshowfilterPopup(!showfilterPopup);
+  }
+
+  function handleMainCheckboxChange() {
+    setMaincheckbox(!mainCheckbox);
   }
 
   function handlefilterpopupclose() {
@@ -104,7 +109,12 @@ const CustomerTable = () => {
           <thead>
             <tr>
               <th className="p-[19px] md:p-[24px]">
-                <input className="w-[16px] h-[16px]" type="checkbox" />
+                <input
+                  className="w-[16px] h-[16px]"
+                  type="checkbox"
+                  checked={mainCheckbox}
+                  onChange={handleMainCheckboxChange}
+                />
               </th>
               <th className="p-[19px] md:p-[24px]  font-medium text-sm md:text-base">
                 Customer Id
@@ -176,7 +186,7 @@ const CustomerTable = () => {
                   {customer.status}
                 </td>
                 <td
-                  className="p-[19px] md:p-[24px]text-center"
+                  className="p-[19px] md:p-[24px] text-center"
                   onClick={handlePopup}
                 >
                   <button className="text-2xl font-medium ">&#8942;</button>
