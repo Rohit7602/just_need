@@ -16,7 +16,7 @@ import {
 
 function SideBar() {
   return (
-    <div className="bg-[#F7F7F7] pt-[11px] rounded-[10px] h-full">
+    <div className="bg-white py-[11px] rounded-[10px] h-full overflow-y-auto scrollRemove">
       <div className="px-6 pb-[11px]">
         <NavLink to="/dashboard">
           <img className="max-w-[222px]" src={CustomerServiceLogo} alt="logo" />
@@ -24,7 +24,9 @@ function SideBar() {
       </div>
       <div className="px-[35px]">
         <div className=" mt-5">
-          <h6 className="text-[#00000099] font-normal text-base ps-2.5">Menu</h6>
+          <h6 className="text-[#00000099] font-normal text-base ps-2.5">
+            Menu
+          </h6>
         </div>
         <div className="flex items-center mt-4 group_hover">
           <VerticalVilotSvg />
@@ -35,7 +37,7 @@ function SideBar() {
             </span>
           </NavLink>
         </div>
-        <div className="flex items-center mt-2.5 group_hover">
+        <div className="flex items-center mt-5 group_hover">
           <VerticalVilotSvg />
           <NavLink className="flex items-center py-2.5 px-[15px] gap-5 ms-[5px] w-full">
             <CustomerSvg />
@@ -44,9 +46,9 @@ function SideBar() {
             </span>
           </NavLink>
         </div>
-        <div className="flex items-center mt-2.5 group_hover">
+        <div className="flex items-center mt-5 group_hover">
           <VerticalVilotSvg />
-          <NavLink className="flex items-center py-2.5 px-[15px] gap-5 ms-[5px] w-full">
+          <NavLink  className="flex items-center py-2.5 px-[15px] gap-5 ms-[5px] w-full">
             <ProviderSvg />
             <span className="font-normal text-base text-[#00000099]">
               Providers
@@ -54,7 +56,7 @@ function SideBar() {
             <NextArrowSvg />
           </NavLink>
         </div>
-        <div className="flex items-center mt-2.5 group_hover">
+        <div className="flex items-center mt-5 group_hover">
           <VerticalVilotSvg />
           <NavLink to="/dashboard/subscription" className="flex items-center py-2.5 px-[15px] ms-[5px] w-full">
             <SubsciptionSvg />
@@ -65,7 +67,7 @@ function SideBar() {
           </NavLink>
         </div>
 
-        <div className="flex items-center mt-2.5 group_hover">
+        <div className="flex items-center mt-5 group_hover">
           <VerticalVilotSvg />
           <NavLink className="flex items-center py-2.5 px-[15px] gap-5 ms-[5px] w-full">
             <ServiceRequestSvg />
@@ -75,23 +77,25 @@ function SideBar() {
           </NavLink>
         </div>
         <div className=" my-4">
-          <h6 className="text-[#00000099] font-normal text-base ps-2.5">General</h6>
+          <h6 className="text-[#00000099] font-normal text-base ps-2.5">
+            General
+          </h6>
         </div>
         <div className="flex items-center group_hover duration-500">
           <VerticalVilotSvg />
           <NavLink className="flex items-center py-2.5 px-[15px] gap-5 ms-[5px] w-full">
-            <SettingSvg/>
+            <SettingSvg />
             <span className="font-normal text-base text-[#00000099]">
-            Setting
+              Setting
             </span>
           </NavLink>
         </div>
-        <div className="flex items-center group_hover mt-2.5">
+        <div className="flex items-center group_hover mt-5">
           <VerticalVilotSvg />
           <NavLink className="flex items-center py-2.5 px-[15px] gap-5 ms-[5px] w-full">
-            <LogoutSvg/>
+            <LogoutSvg />
             <span className="font-normal text-base text-[#00000099]">
-            Logout
+              Logout
             </span>
           </NavLink>
         </div>

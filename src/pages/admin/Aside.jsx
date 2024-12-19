@@ -1,5 +1,5 @@
 import React from 'react';
-import { Arrowicon, Message, Notificationicon, Searchicon } from '../../Components/Common/Icons';
+import { Arrowicon } from '../../Components/Common/Icons';
 
 
 import { cardData } from '../../Components/Common/Helper';
