@@ -41,8 +41,8 @@ function Piechart() {
   };
 
   return (
-    <div style={{ width: "112px", height: "112px", textAlign: "center" }}>
-      <Doughnut data={data} options={options} />
+    <div className="!max-w-[220px] lg:w-[112px]   h-[70%] lg:h-[112px] text-center">
+      <Doughnut data={data} options={options} className="w-full"/>
     </div>
   );
 }
