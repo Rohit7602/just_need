@@ -14,7 +14,7 @@ const customers = [
     status: "10 days left",
   },
   {
-    id: 1204,
+    id: 1205,
     name: "John Leo",
     email: "john@email.co",
     phone: "+91 8945121024",
@@ -24,7 +24,7 @@ const customers = [
     status: "60 days left",
   },
   {
-    id: 1204,
+    id: 1206,
     name: "John Leo",
     email: "john@email.co",
     phone: "+91 8945121024",
@@ -34,7 +34,7 @@ const customers = [
     status: "45 days left",
   },
   {
-    id: 1204,
+    id: 1207,
     name: "John Leo",
     email: "john@email.co",
     phone: "+91 8945121024",
@@ -44,7 +44,7 @@ const customers = [
     status: "20 days left",
   },
   {
-    id: 1204,
+    id: 1208,
     name: "John Leo",
     email: "john@email.co",
     phone: "+91 8945121024",
@@ -59,6 +59,7 @@ const CustomerTable = () => {
   const [status, setStatus] = useState("Block");
   const [showPopup, setShowPopup] = useState(false);
   const [showfilterPopup, setshowfilterPopup] = useState(false);
+  const[selectitem,setSelectitem]=useState([])
 
   function handleFilter() {
     setshowfilterPopup(!showfilterPopup);
@@ -71,6 +72,32 @@ const CustomerTable = () => {
   function handlePopup() {
     setShowPopup(!showPopup);
   }
+  function checkhandler(e){
+const isselected=e.target.checked
+const value=parseInt(e.target.value)
+
+if (isselected){
+  setSelectitem([...selectitem,value])
+}
+else{
+  setSelectitem((prevdata)=>{
+    return prevdata.filter((id)=>{
+      return id!==value
+    })
+  })
+}
+}
+function maincheckbox(){
+if (customers.length==selectitem.length){
+  setSelectitem([])
+}
+else{
+  const postids=customers.map((items)=>{
+    return items.id
+      })
+      setSelectitem(postids)
+ }
+}
 
   return (
     <div className="bg-white p-5 rounded-[10px] shadow-md">
@@ -104,7 +131,7 @@ const CustomerTable = () => {
           <thead>
             <tr>
               <th className="p-[19px] md:p-[24px]">
-                <input className="w-[16px] h-[16px]" type="checkbox" />
+                <input className="w-[16px] h-[16px]" type="checkbox" checked={customers.length==selectitem.length} onChange={maincheckbox} />
               </th>
               <th className="p-[19px] md:p-[24px]  font-medium text-sm md:text-base">
                 Customer Id
@@ -144,7 +171,8 @@ const CustomerTable = () => {
             {customers.map((customer, index) => (
               <tr key={index}>
                 <td className="p-[19px] md:p-[24px]">
-                  <input className="w-[16px] h-[16px]" type="checkbox" />
+                  <input className="w-[16px] h-[16px]" type="checkbox" onChange={checkhandler}  
+                  checked={selectitem.includes(customer.id)} value={customer.id} />
                 </td>
                 <td className="p-[19px] md:p-[24px] text-sm font-normal text-[#000000]">
                   {customer.id}
