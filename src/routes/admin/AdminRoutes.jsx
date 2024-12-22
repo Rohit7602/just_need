@@ -2,7 +2,7 @@
 import { Route, Routes, Navigate } from "react-router-dom";
 import AdminLayout from "../../Components/AdminLayout";
 import Aside from "../../pages/admin/Aside";
-import SubscriptionPage from "../../Components/SubscriptionPage";
+import SubscriptionPage from "../../Components/SubscriptionPage.jsx";
 import ProvidersDetail from "../../pages/admin/ProvidersDetail";
 import CustomerListPage from "../../components/CustomerListPage";
 import { customersData } from "../../Components/Common/Helper";
