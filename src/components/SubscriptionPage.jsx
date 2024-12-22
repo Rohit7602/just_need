@@ -1,4 +1,4 @@
-import React from "react";
+
 import CustomerTable from "./CustomerTable";
 
 const SubscriptionPage = ({ mapData }) => {

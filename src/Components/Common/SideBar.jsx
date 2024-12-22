@@ -53,7 +53,7 @@ function SideBar() {
         </div>
         <div className="flex items-center mt-5 group_hover">
           <VerticalVilotSvg />
-          <NavLink className="flex items-center py-2.5 px-[15px] gap-5 ms-[5px] w-full">
+          <NavLink to={"/dashboard/services"}  className="flex items-center py-2.5 px-[15px] gap-5 ms-[5px] w-full" >
             <ProviderSvg />
             <span className="font-normal text-base text-[#00000099]">
               Providers
