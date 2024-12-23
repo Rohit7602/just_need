@@ -55,11 +55,11 @@ const customers = [
   },
 ];
 
-const CustomerTable = () => {
+const CustomerData = () => {
   const [status, setStatus] = useState("Block");
   const [showPopup, setShowPopup] = useState(false);
   const [showfilterPopup, setshowfilterPopup] = useState(false);
-  const[selectitem,setSelectitem]=useState([])
+  const [selectitem, setSelectitem] = useState([])
 
   function handleFilter() {
     setshowfilterPopup(!showfilterPopup);
@@ -72,35 +72,35 @@ const CustomerTable = () => {
   function handlePopup() {
     setShowPopup(!showPopup);
   }
-  function checkhandler(e){
-const isselected=e.target.checked
-const value=parseInt(e.target.value)
+  function checkhandler(e) {
+    const isselected = e.target.checked
+    const value = parseInt(e.target.value)
 
-if (isselected){
-  setSelectitem([...selectitem,value])
-}
-else{
-  setSelectitem((prevdata)=>{
-    return prevdata.filter((id)=>{
-      return id!==value
-    })
-  })
-}
-}
-function maincheckbox(){
-if (customers.length==selectitem.length){
-  setSelectitem([])
-}
-else{
-  const postids=customers.map((items)=>{
-    return items.id
+    if (isselected) {
+      setSelectitem([...selectitem, value])
+    }
+    else {
+      setSelectitem((prevdata) => {
+        return prevdata.filter((id) => {
+          return id !== value
+        })
+      })
+    }
+  }
+  function maincheckbox() {
+    if (customers.length == selectitem.length) {
+      setSelectitem([])
+    }
+    else {
+      const postids = customers.map((items) => {
+        return items.id
       })
       setSelectitem(postids)
- }
-}
+    }
+  }
 
   return (
-    <div className="bg-white p-5 rounded-[10px] shadow-md">
+    <div className="p-5">
       <div className="flex justify-between mb-4">
         <h2 className="text-[20px] font-medium text-[#000000]">
           All Customers
@@ -131,7 +131,7 @@ else{
           <thead>
             <tr>
               <th className="p-[19px] md:p-[24px]">
-                <input className="w-[16px] h-[16px]" type="checkbox" checked={customers.length==selectitem.length} onChange={maincheckbox} />
+                <input className="w-[16px] h-[16px]" type="checkbox" checked={customers.length == selectitem.length} onChange={maincheckbox} />
               </th>
               <th className="p-[19px] md:p-[24px]  font-medium text-sm md:text-base">
                 Customer Id
@@ -171,8 +171,8 @@ else{
             {customers.map((customer, index) => (
               <tr key={index}>
                 <td className="p-[19px] md:p-[24px]">
-                  <input className="w-[16px] h-[16px]" type="checkbox" onChange={checkhandler}  
-                  checked={selectitem.includes(customer.id)} value={customer.id} />
+                  <input className="w-[16px] h-[16px]" type="checkbox" onChange={checkhandler}
+                    checked={selectitem.includes(customer.id)} value={customer.id} />
                 </td>
                 <td className="p-[19px] md:p-[24px] text-sm font-normal text-[#000000]">
                   {customer.id}
@@ -348,4 +348,5 @@ else{
   );
 };
 
-export default CustomerTable;
+
+export default CustomerData

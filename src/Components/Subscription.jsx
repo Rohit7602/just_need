@@ -1,9 +1,9 @@
+import CustomerData from "./CustomerData";
 
-import CustomerTable from "./CustomerTable";
 
-const SubscriptionPage = ({ mapData }) => {
+const Subscription = ({ mapData }) => {
   return (
-    <div className="w-full min-h-screen p-[15px]">
+    <div className="w-full min-h-screen p-[15px] bg-white rounded-[10px]">
       <div className="rounded-lg mb-5">
         <div className="flex justify-between items-center">
           <div>
@@ -36,9 +36,10 @@ const SubscriptionPage = ({ mapData }) => {
         </div>
       </div>
 
-      <CustomerTable mapData={mapData} />
+      <CustomerData mapData={mapData} />
     </div>
   );
 };
 
-export default SubscriptionPage;
+
+export default Subscription

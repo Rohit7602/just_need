@@ -35,11 +35,11 @@ const handleOverlayClick = () => {
   
 
     return (
-        <div className="p-[14px]">
+        <div className="p-[14px] rounded-[10px] shadow-md bg-white">
             <div className="xl:flex-row flex-col flex xl:items-center justify-between">
                 <div>
                     <p className="font-medium text-[28px]">Services</p>
-                    <p className="text-[16px] font-normal opacity-[75%] mt-1">
+                    <p className="text-[16px] font-normal opacity-[70%] mt-1">
                         Plan, prioritize, and accomplish your tasks with ease.
                     </p>
                 </div>
@@ -100,22 +100,22 @@ const handleOverlayClick = () => {
                             <div className="border-t border-dashed border-[#00000066] my-[16px] group-hover:border-[white]"></div>
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="opacity-[80%] font-normal text-[12px] mb-[10px]">
+                                    <p className="opacity-[60%] font-normal text-[12px] mb-[10px]">
                                        1. {items.val2}
                                     </p>
-                                    <p className="opacity-[80%] font-normal text-[12px] mb-[10px]">
+                                    <p className="opacity-[60%] font-normal text-[12px] mb-[10px]">
                                        2. {items.val3}
                                     </p>
-                                    <p className="opacity-[80%] font-normal text-[12px]">3.{items.val4}</p>
+                                    <p className="opacity-[60%] font-normal text-[12px]">3.{items.val4}</p>
                                 </div>
                                 <div>
-                                    <p className="opacity-[80%] font-normal text-[12px] mb-[10px]">
+                                    <p className="opacity-[60%] font-normal text-[12px] mb-[10px]">
                                         4. {items.val5}
                                     </p>
-                                    <p className="opacity-[80%] font-normal text-[12px] mb-[10px]">
+                                    <p className="opacity-[60%] font-normal text-[12px] mb-[10px]">
                                       5.  {items.val6}
                                     </p>
-                                    <p className="opacity-[80%] font-normal text-[12px]" onClick={() => handleItemClick(items)} >  {items.val7}</p>
+                                    <p className=" font-normal text-[12px]" onClick={() => handleItemClick(items)} >  {items.val7}</p>
                                 </div>
                             </div>
                         </div>

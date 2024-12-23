@@ -15,7 +15,7 @@ import {
 
 function SideBar() {
   return (
-    <div className="bg-[#F1F1F1] py-[11px] rounded-[10px] h-full overflow-y-auto scrollRemove">
+    <div className="bg-[#fff] py-[11px] rounded-[10px] h-full overflow-y-auto scrollRemove">
       <div className="px-6 pb-[11px]">
         <NavLink to="/dashboard">
           <img className="max-w-[222px]" src={CustomerServiceLogo} alt="logo" />

@@ -6,8 +6,8 @@ import { Arrowicon } from '../../Components/Common/Icons';
 import Charts from '../../Components/Charts';
 import Piechart from '../../Components/Common/Piechart';
 import blur from "../../assets/Images/Png/blur.png"
-import CustomerTable from '../../Components/CustomerTable';
 import {cardData} from "../../Components/Common/Helper"
+import CustomerData from '../../Components/CustomerData';
 
 
 function Aside() {
@@ -93,7 +93,7 @@ function Aside() {
 
                     </div>
                 </div>
-                <div className='mt-[45px]'>  <CustomerTable /></div>
+                <div className='mt-[45px]'>  <CustomerData /></div>
 
             </div>
 
