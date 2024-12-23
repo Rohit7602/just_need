@@ -13,7 +13,6 @@ import {
   VerticalVilotSvg,
 } from "../../assets/icon/Icon";
 
-
 function SideBar() {
   const location = useLocation()
   const pathName = location.pathname

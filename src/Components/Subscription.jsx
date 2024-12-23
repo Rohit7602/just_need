@@ -1,14 +1,15 @@
-import React from "react";
-import CustomerTable from "./CustomerTable";
+import CustomerData from "./CustomerData";
 
-const SubscriptionPage = () => {
+
+const Subscription = ({ mapData }) => {
+  console.log(mapData,"madpdsf")
   return (
-    <div className="w-full min-h-screen p-[15px]">
-      <div className="bg-[#F7F7F7] p-5 rounded-lg shadow-md mb-5">
+    <div className="w-full min-h-screen p-[15px] bg-white rounded-[10px]">
+      <div className="rounded-lg mb-5">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-[28px] font-medium mb-1.5">Subscription</h1>
-            <p className="text-base font-normal">
+            <h1 className="text-[28px] font-medium mb-[5px]">Subscription</h1>
+            <p className="text-base font-normal opacity-[70%]">
               Plan, prioritize, and accomplish your tasks with ease.
             </p>
           </div>
@@ -35,9 +36,10 @@ const SubscriptionPage = () => {
         </div>
       </div>
 
-      <CustomerTable />
+      <CustomerData mapData={mapData} />
     </div>
   );
 };
 
-export default SubscriptionPage;
+
+export default Subscription
