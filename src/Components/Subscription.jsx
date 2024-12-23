@@ -1,5 +1,5 @@
-
 import CustomerTable from "./CustomerTable";
+
 
 const Subscription = ({ mapData }) => {
   return (
