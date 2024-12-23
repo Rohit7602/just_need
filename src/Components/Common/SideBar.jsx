@@ -13,10 +13,9 @@ import {
   VerticalVilotSvg,
 } from "../../assets/icon/Icon";
 
-
 function SideBar() {
   return (
-    <div className="bg-white py-[11px] rounded-[10px] h-full overflow-y-auto scrollRemove">
+    <div className="bg-[#F1F1F1] py-[11px] rounded-[10px] h-full overflow-y-auto scrollRemove">
       <div className="px-6 pb-[11px]">
         <NavLink to="/dashboard">
           <img className="max-w-[222px]" src={CustomerServiceLogo} alt="logo" />
@@ -30,7 +29,10 @@ function SideBar() {
         </div>
         <div className="flex items-center mt-4 group_hover">
           <VerticalVilotSvg />
-          <NavLink  to="/dashboard" className="flex items-center py-2.5 px-[15px] gap-5 ms-[5px] w-full">
+          <NavLink
+            to="/dashboard"
+            className="flex items-center py-2.5 px-[15px] gap-5 ms-[5px] w-full"
+          >
             <DasboardSvg />
             <span className="font-normal text-base text-[#00000099]">
               Dashboard
@@ -39,7 +41,10 @@ function SideBar() {
         </div>
         <div className="flex items-center mt-5 group_hover">
           <VerticalVilotSvg />
-          <NavLink className="flex items-center py-2.5 px-[15px] gap-5 ms-[5px] w-full">
+          <NavLink
+            to="customerList"
+            className="flex items-center py-2.5 px-[15px] gap-5 ms-[5px] w-full"
+          >
             <CustomerSvg />
             <span className="font-normal text-base text-[#00000099]">
               Customer’s
@@ -58,7 +63,10 @@ function SideBar() {
         </div>
         <div className="flex items-center mt-5 group_hover">
           <VerticalVilotSvg />
-          <NavLink to="/dashboard/subscription" className="flex items-center py-2.5 px-[15px] ms-[5px] w-full">
+          <NavLink
+            to="/dashboard/subscription"
+            className="flex items-center py-2.5 px-[15px] ms-[5px] w-full"
+          >
             <SubsciptionSvg />
             <span className="font-normal text-base text-[#00000099] ms-5 me-2">
               Subscription
