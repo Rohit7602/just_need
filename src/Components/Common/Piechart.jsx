@@ -14,7 +14,7 @@ function Piechart() {
       {
         data: [65, 20, 15],
         backgroundColor: ["#2B4DED", "#FFD1A7", "#FF9E69"],
-        borderWidth: 0,
+        borderwidth: 0,
         cutout: "70%", // Makes it a donut chart
       },
     ],
@@ -26,7 +26,7 @@ function Piechart() {
       tooltip: {
         backgroundColor: "#FFFFFF", // Set background color to white
         borderColor: "#D3D3D3", // Optional: Add a light border for better visibility
-        borderWidth: 1, // Optional: Border thickness
+        borderwidth: 1, // Optional: Border thickness
         borderRadius: 20,  // Make the tooltip rounded
         titleColor: "#000", // Set title color
         bodyColor: "#000", // Set tooltip text color

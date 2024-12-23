@@ -37,7 +37,7 @@ const PerformanceChart = () => {
           {/* Gradient for the shaded area */}
           <defs>
             <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#314CFF" stopOpacity={0.8} borderWidth="100px" />
+              <stop offset="5%" stopColor="#314CFF" stopOpacity={0.8} borderwidth="100px" />
               <stop offset="95%" stopColor="#314CFF" stopOpacity={0} />
             </linearGradient>
           </defs>
@@ -49,7 +49,7 @@ const PerformanceChart = () => {
             tick={{ fill: "black" }}
             axisLine={false}
             tickLine={false}
-            borderWidth="100px"
+            borderwidth="100px"
           />
 
           <YAxis hide />

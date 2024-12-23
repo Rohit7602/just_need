@@ -10,7 +10,7 @@ function TopBar() {
   return (
     <div>
       <div className="flex items-center justify-between gap-5">
-        <div className="flex items-center py-3 px-4 bg-[#F1F1F1] rounded-[1xl0px] max-w-[330px]">
+        <div className="flex items-center py-3 px-4 bg-[#F1F1F1] rounded-[10px] max-w-[330px]">
           <SearchIcon />
           <input
             type="text"
