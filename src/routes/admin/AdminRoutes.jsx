@@ -7,7 +7,7 @@ import CustomerListPage from "../../Components/CustomerListPage";
 import { customersData } from "../../Components/Common/Helper";
 import Services from "../../Components/Common/Services";
 import Actions from "../../Components/Popups/Actions";
-import SubscriptionPage from '../../Components/SubscriptionPage'
+import Subscription from "../../Components/Subscription";
 
 function AdminRoutes() {
   return (
@@ -17,7 +17,7 @@ function AdminRoutes() {
         <Route index element={<Aside />} />
         <Route
           path="subscription"
-          element={<SubscriptionPage mapData={customersData} />}
+          element={<Subscription mapData={customersData} />}
         />
         <Route path="services" element={<Services />} />
         <Route path="providersDetail" element={<ProvidersDetail />} />
