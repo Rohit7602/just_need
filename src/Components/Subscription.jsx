@@ -1,4 +1,4 @@
-import CustomerTable from "./CustomerTable";
+import CustomerData from "./CustomerData";
 
 
 const Subscription = ({ mapData }) => {
@@ -36,7 +36,7 @@ const Subscription = ({ mapData }) => {
         </div>
       </div>
 
-      <CustomerTable mapData={mapData} />
+      <CustomerData mapData={mapData} />
     </div>
   );
 };

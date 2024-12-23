@@ -7,7 +7,7 @@ import Charts from '../../Components/Charts';
 import Piechart from '../../Components/Common/Piechart';
 import blur from "../../assets/Images/Png/blur.png"
 import {cardData} from "../../Components/Common/Helper"
-import CustomerTable from '../../Components/CustomerTable';
+import CustomerData from '../../Components/CustomerData';
 
 
 function Aside() {
@@ -93,7 +93,7 @@ function Aside() {
 
                     </div>
                 </div>
-                <div className='mt-[45px]'>  <CustomerTable /></div>
+                <div className='mt-[45px]'>  <CustomerData /></div>
 
             </div>
 
