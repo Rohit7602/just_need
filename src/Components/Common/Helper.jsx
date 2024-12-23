@@ -114,7 +114,7 @@ export const Actiondata = [
 
 
 
-export const customersData = [
+export const customersDataList = [
   {
     id: 1204,
     name: "John Leo",
