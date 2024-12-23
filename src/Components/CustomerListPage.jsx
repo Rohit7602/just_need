@@ -1,5 +1,5 @@
 import React from "react";
-import CustomerTable from "./CustomerTable";
+import CustomerData from "./CustomerData";
 
 function CustomerListPage({ mapData }) {
   return (
@@ -9,7 +9,7 @@ function CustomerListPage({ mapData }) {
         <p className="font-normal text-base opacity-[70%] mb-[15px]">
           Plan, prioritize, and accomplish your tasks with ease.
         </p>
-        <CustomerTable mapData={mapData} />
+        <CustomerData mapData={mapData} />
       </div>
     </>
   );
