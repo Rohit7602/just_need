@@ -19,7 +19,7 @@ function Actions() {
 
     return (
         <div>
-            <div className="w-[700px] bg-white absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 border border-gray-300 p-4 rounded-lg shadow-lg">
+            <div className="w-[700px] bg-white absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 border border-gray-300 p-4 rounded-lg shadow-lg ">
                
                 <div className="flex items-center justify-between">
                     <p className="text-[18px] font-medium">Profession</p>

@@ -124,7 +124,7 @@ const handleOverlayClick = () => {
             </div>
 {showPopup && (
     <div
-        className="fixed inset-0 bg-black bg-opacity-50 z-[30] flex items-center justify-center" onClick={handleOverlayClick} >
+        className="fixed inset-0 bg-black bg-opacity-50 z-[50] flex items-center justify-center " onClick={handleOverlayClick} >
         <div
             className="bg-white p-4 rounded-lg shadow-lg max-w-lg w-full"
             onClick={(e) => e.stopPropagation()} 

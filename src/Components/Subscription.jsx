@@ -2,6 +2,7 @@ import CustomerData from "./CustomerData";
 
 
 const Subscription = ({ mapData }) => {
+  console.log(mapData,"madpdsf")
   return (
     <div className="w-full min-h-screen p-[15px] bg-white rounded-[10px]">
       <div className="rounded-lg mb-5">

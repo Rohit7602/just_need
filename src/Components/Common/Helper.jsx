@@ -114,7 +114,7 @@ export const Actiondata = [
 
 
 
-export const customersData = [
+export const customersDataList = [
   {
     id: 1204,
     name: "John Leo",
@@ -127,7 +127,7 @@ export const customersData = [
     TextColor: "text-[#FF0000]",
   },
   {
-    id: 1204,
+    id: 1205,
     name: "John Leo",
     email: "john@email.co",
     phone: "+91 8945121024",
@@ -139,7 +139,7 @@ export const customersData = [
 
   },
   {
-    id: 1204,
+    id: 1206,
     name: "John Leo",
     email: "john@email.co",
     phone: "+91 8945121024",
@@ -151,7 +151,7 @@ export const customersData = [
 
   },
   {
-    id: 1204,
+    id: 1207,
     name: "John Leo",
     email: "john@email.co",
     phone: "+91 8945121024",
@@ -163,7 +163,7 @@ export const customersData = [
 
   },
   {
-    id: 1204,
+    id: 1208,
     name: "John Leo",
     email: "john@email.co",
     phone: "+91 8945121024",
