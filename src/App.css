@@ -18,7 +18,7 @@
   color: #6c4def;
   opacity: 1;
 }
-.group_hover:hover .setting_svg path {
+ .group_hover:hover .setting_svg path {
   stroke: #6c4def !important;
   fill: transparent !important;
   stroke-opacity: 1;

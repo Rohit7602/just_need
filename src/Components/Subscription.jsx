@@ -17,8 +17,7 @@ const Subscription = ({ mapData }) => {
             <span className="me-3">+</span> Edit Subscription
           </button>
         </div>
-
-        <div className="p-[15px] bg-white rounded-[10px] mt-5 inline-block w-[242px]">
+        <div className="bg-white p-[15px] rounded-[10px] mt-5 inline-block w-[242px]">
           <h2 className="font-medium text-[18px] mb-[15px]">Subscription</h2>
           <div className="border-t border-dashed border-[#00000066]"></div>
 
