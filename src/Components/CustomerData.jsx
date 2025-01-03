@@ -57,7 +57,7 @@ const CustomerData = ({ mapData }) => {
     
 
   return (
-    <div className="bg-[#FFFFFF] p-5 rounded-[10px] shadow-md">
+    <div className="bg-[#FFFFFF] p-5 rounded-[10px]">
       <div className="flex justify-between mb-4 items-center">
         <h2 className="text-[20px] font-medium text-[#000000]">
           All Customers
