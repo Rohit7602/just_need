@@ -25,7 +25,7 @@ function Aside() {
                 <div className='flex flex-wrap mt-[16px] -mx-2'>
                     {cardData.map((card, index) => (
                         <div key={index} className='w-full sm:w-[50%] lg:w-[25%] px-2 mb-4'>
-                            <div className='relative z-[20] cursor-pointer h-full border-[#0000001A] rounded-[10px] px-[20px] py-[24px] hover:shadow-lg border-[1px] bg-[white] hover:bg-[#6C4DEF] hover:text-white group duration-300'>
+                            <div className='relative z-[20] cursor-pointer h-full border-[#0000001A] rounded-[10px] px-[20px] py-[24px] hover:shadow-lg border-[1px] bg-[white] hover:bg-[#6C4DEF] hover:text-white group duration-500'>
                                 <div className='flex items-center justify-between'>
                                     <p className='text-[16px] font-normal opacity-[80%]'>{card.title}</p>
                                     <div className='h-[28px] w-[28px] rounded-full border border-black group-hover:bg-[white] group-hover:border-none flex items-center justify-center'>

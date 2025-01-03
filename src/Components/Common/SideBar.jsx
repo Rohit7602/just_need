@@ -5,7 +5,6 @@ import {
   CustomerSvg,
   DasboardSvg,
   LogoutSvg,
-  ProviderSvg,
   ServiceRequestSvg,
   ServicesSvg,
   SettingSvg,
@@ -39,20 +38,11 @@ function SideBar() {
           </NavLink>
         </div>
         <div className="flex items-center mt-5 group_hover">
-          <VerticalVilotSvg pathName={pathName} currentpath="/dashboard/customers" />
-          <NavLink to="/dashboard/customers" className="flex items-center py-2.5 px-[15px] gap-5 ms-[5px] w-full">
+          <VerticalVilotSvg pathName={pathName} currentpath="/dashboard/users" />
+          <NavLink to="/dashboard/users" className="flex items-center py-2.5 px-[15px] gap-5 ms-[5px] w-full">
             <CustomerSvg pathName={pathName} />
-            <span className={`font-normal text-base ${pathName=="/dashboard/customers"?"text-[#6c4def]":"text-[#00000099]"}`}>
-              Customer’s
-            </span>
-          </NavLink>
-        </div>
-        <div className="flex items-center mt-5 group_hover">
-          <VerticalVilotSvg  pathName={pathName} currentpath="/dashboard/providers"/>
-          <NavLink to="/dashboard/providers"   className="flex items-center py-2.5 px-[15px] gap-5 ms-[5px] w-full">
-            <ProviderSvg pathName={pathName} />
-            <span className={`font-normal text-base ${pathName=="/dashboard/providers"?"text-[#6c4def]":"text-[#00000099]"}`}>
-              Providers
+            <span className={`font-normal text-base ${pathName=="/dashboard/uders"?"text-[#6c4def]":"text-[#00000099]"}`}>
+              Users
             </span>
           </NavLink>
         </div>
