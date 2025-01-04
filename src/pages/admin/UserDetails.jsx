@@ -5,9 +5,12 @@ import {
   PhoneIcon,
   LocationIcon,
   EmailIcon,
+  RedDisableIcon,
+  RatingStarIcon
 } from "../../assets/icon/Icon";
 import GalleryImg1 from "../../assets/png/galleryImg1.png";
 import MechanicImage from "../../assets/png/mechanicImage.png";
+import HouseCleaner from "../../assets/png/houseCleaner.png"
 
 function UserDetails() {
   const [showPopup, setShowPopup] = useState(false);
@@ -30,16 +33,18 @@ function UserDetails() {
   return (
     <div className="p-4">
       <div className="flex items-center justify-between">
-      <div className="flex items-center gap-[15px]">
-        <BackArrowIcon />
-        <h1 className="text-black text-[28px] font-medium">User’s Details</h1>
-      </div>
-      <div>
-        <button className="flex items-center gap-3 bg-[#0832DE] py-3 px-[15px] rounded-[10px]">
-            <DisalbleIcon/>
-            <span className="text-white font-normal text-base">Disable Provider</span>
-        </button>
-      </div>
+        <div className="flex items-center gap-[15px]">
+          <BackArrowIcon />
+          <h1 className="text-black text-[28px] font-medium">User’s Details</h1>
+        </div>
+        <div>
+          <button onClick={handlePopup} className="flex items-center gap-3 bg-[#0832DE] py-3 px-[15px] rounded-[10px]">
+            <DisalbleIcon />
+            <span className="text-white font-normal text-base">
+              Disable Provider
+            </span>
+          </button>
+        </div>
       </div>
       <div className="flex mt-[30px] ">
         <div className="w-5/12 pe-2.5">
@@ -122,8 +127,30 @@ function UserDetails() {
         </div>
       </div>
       <p className="font-medium text-lg leading-[22px] text-black pb-2.5 border-b-[0.5px] border-dashed border-[#00000066] mt-[30px]">
-      Posted Listing
-            </p>
+        Posted Listing
+      </p>
+      <div className="flex flex-row flex-wrap -mx-3 mt-[15px]">
+        {[1,2,3,4].map((item,index)=>{
+            return (
+                <div className="w-3/12 px-3">
+                    <div className="border-[0.5px] border-[#0000004D] rounded-[10px]">
+                        <img className="rounded-[10px] w-full " src={HouseCleaner} alt="house cleaner image"/>
+                        <div className="p-2.5">
+                            <div className="flex items-center justify-between">
+                                <p className="font-medium text-sm text-black">House Cleaner</p>
+                                <button><RedDisableIcon/></button>
+                            </div>
+                            <p className="font-normal text-[10px] text-[#00000099] mt-1">Lorem ipsum dolor sit amet consectetur. Venenatis urna mattis mi at sed dapibus.</p>
+                                <div className="flex items-center gap-1 mt-2">
+                                    <RatingStarIcon/>
+                                    <h3 className="text-[#000F02] text-[10px] font-normal">4.2   |   1452 reviews</h3>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            )
+        })}
+      </div>
       <div className="bg-white rounded-[10px] p-4 mt-3">
         <p className="font-medium text-lg leading-[22px] text-black pb-2.5 border-b-[0.5px] border-dashed border-[#00000066]">
           Images
