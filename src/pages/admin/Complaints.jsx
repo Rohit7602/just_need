@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SearchIcon, FilterIcon, DottedIcon } from '../../assets/icon/Icon';
 import { FaAngleDown } from 'react-icons/fa';
+import Filters from '../../Components/Popups/Filters';
 
 export const Complaints = () => {
   // Table Data
@@ -11,6 +12,11 @@ export const Complaints = () => {
     serviceType: 'House Cleaning',
     message: `Lorem Ipsum is simply dummy text of the printing and typesetting industry... `,
   }));
+  //  filters **
+  const [ShowFilter, setShowFilter] = useState('');
+  const handleFilterToggle = () => {
+    setShowFilter(!ShowFilter);
+  };
 
   return (
     // All Complaints and Filter button
@@ -33,12 +39,15 @@ export const Complaints = () => {
                 className="w-full outline-none bg-[#F1F1F1] ms-2.5 text-base placeholder:text-base placeholder:font-normal font-normal placeholder:text-[#00000080]"
               />
             </div>
-            <button className="bg-[#0832DE] flex text-white font-normal sm:text-sm md:text-base md:px-4 md:py-3 px-2 py-3 rounded-[10px] ms-4">
+            <button
+              onClick={handleFilterToggle}
+              className="bg-[#0832DE] flex text-white font-normal sm:text-sm md:text-base md:px-4 md:py-3 px-2 py-3 rounded-[10px] ms-4  relative">
               <FilterIcon />
-              <h5 className="md:ms-3 ms-2">Filter</h5>
+              <h5 className="md:ms-3 ms-2 ">Filter</h5>
             </button>
           </div>
         </div>
+        {ShowFilter && <Filters />}
         {/* Table */}
         <div className="overflow-x-auto mt-6">
           <table className="w-full text-left border-collapse whitespace-nowrap rounded-[10px]">
