@@ -2,15 +2,12 @@ import React, { useState } from "react";
 import {
   BackArrowIcon,
   DisalbleIcon,
-  // PhoneIcon,
-  // LocationIcon,
-  // EmailIcon,
-  // RedDisableIcon,
-  // RatingStarIcon
+
 } from "../../assets/icon/Icon";
 import GalleryImg1 from "../../assets/png/galleryImg1.png";
 import MechanicImage from "../../assets/png/mechanicImage.png";
 import HouseCleaner from "../../assets/png/houseCleaner.png"
+import { EmailIcon, LocationIcon, PhoneIcon, RatingStarIcon, Redicon } from "../../Components/Common/Icons";
 
 function UserDetails() {
   const [showPopup, setShowPopup] = useState(false);
@@ -130,25 +127,25 @@ function UserDetails() {
         Posted Listing
       </p>
       <div className="flex flex-row flex-wrap -mx-3 mt-[15px]">
-        {[1,2,3,4].map((item,index)=>{
-            return (
-                <div className="w-3/12 px-3">
-                    <div className="border-[0.5px] border-[#0000004D] rounded-[10px]">
-                        <img className="rounded-[10px] w-full " src={HouseCleaner} alt="house cleaner image"/>
-                        <div className="p-2.5">
-                            <div className="flex items-center justify-between">
-                                <p className="font-medium text-sm text-black">House Cleaner</p>
-                                <button><RedDisableIcon/></button>
-                            </div>
-                            <p className="font-normal text-[10px] text-[#00000099] mt-1">Lorem ipsum dolor sit amet consectetur. Venenatis urna mattis mi at sed dapibus.</p>
-                                <div className="flex items-center gap-1 mt-2">
-                                    <RatingStarIcon/>
-                                    <h3 className="text-[#000F02] text-[10px] font-normal">4.2   |   1452 reviews</h3>
-                                </div>
-                        </div>
-                    </div>
+        {[1, 2, 3, 4].map((item, index) => {
+          return (
+            <div className="w-3/12 px-3">
+              <div className="border-[0.5px] border-[#0000004D] rounded-[10px]">
+                <img className="rounded-[10px] w-full " src={HouseCleaner} alt="house cleaner image" />
+                <div className="p-2.5">
+                  <div className="flex items-center justify-between">
+                    <p className="font-medium text-sm text-black">House Cleaner</p>
+                    <button><Redicon /></button>
+                  </div>
+                  <p className="font-normal text-[10px] text-[#00000099] mt-1">Lorem ipsum dolor sit amet consectetur. Venenatis urna mattis mi at sed dapibus.</p>
+                  <div className="flex items-center gap-1 mt-2">
+                    <RatingStarIcon/>
+                    <h3 className="text-[#000F02] text-[10px] font-normal">4.2   |   1452 reviews</h3>
+                  </div>
                 </div>
-            )
+              </div>
+            </div>
+          )
         })}
       </div>
       <div className="bg-white rounded-[10px] p-4 mt-3">
