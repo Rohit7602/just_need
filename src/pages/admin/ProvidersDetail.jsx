@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { BackArrowIcon, DisalbleIcon } from "../../assets/icon/Icon";
 import GalleryImg1 from "../../assets/png/galleryImg1.png";
 import MechanicImage from "../../assets/png/mechanicImage.png";
+import { useParams } from "react-router-dom";
 
 function ProvidersDetail() {
+  const {id}=useParams()
   const [showPopup, setShowPopup] = useState(false);
   const [popUpData, setPopUpData] = useState({
     status: "",

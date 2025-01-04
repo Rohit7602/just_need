@@ -11,6 +11,7 @@ import Actions from "../../Components/Popups/Actions";
 import Subscription from "../../Components/Subscription";
 import Users from "../../pages/admin/Users";
 import UserDetails from "../../pages/admin/UserDetails";
+import { Complaints } from "../../pages/admin/Complaints";
 
 function AdminRoutes() {
   return (
@@ -22,6 +23,9 @@ function AdminRoutes() {
         <Route path="userDetails" element={<UserDetails />} />
         <Route path="serviceRequest" element={<ServiceRequest/>}/>
         <Route path="services" element={<Services />}/>
+        <Route path="complaints" element={<Complaints />}>
+          <Route path="providerDetail/:id" element={<ProvidersDetail />} />
+        </Route>
         <Route path="setting" element={<Setting/>}/>
         <Route path="logout" element={<Logout/>}/>
         <Route
@@ -29,7 +33,7 @@ function AdminRoutes() {
           element={<Subscription />}
         />
       </Route>
-      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      {/* <Route path="*" element={<Navigate to="/dashboard" replace />} /> */}
     </Routes>
   );
 }
