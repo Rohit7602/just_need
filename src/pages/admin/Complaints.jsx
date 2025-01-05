@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { SearchIcon, FilterIcon, DottedIcon } from '../../assets/icon/Icon';
 import { FaAngleDown } from 'react-icons/fa';
 import Filters from '../../Components/Popups/Filters';
+import { NavLink } from 'react-router-dom';
 
 export const Complaints = () => {
   // Table Data
@@ -70,7 +71,11 @@ export const Complaints = () => {
               {Data.map((item, index) => (
                 <tr key={item.id}>
                   <td className="text-black text-sm font-normal py-3 px-4">{index + 1}</td>
-                  <td className="text-black text-sm font-normal py-3 px-4">{item.Customer}</td>
+                  <NavLink to="/providerDetail">
+                    <td className="text-[#0832DE] text-sm font-normal py-3 px-4">
+                      {item.Customer}
+                    </td>
+                  </NavLink>
                   <td className="text-black text-sm font-normal py-3 px-4">{item.name}</td>
                   <td className="text-black text-sm font-normal py-3 px-4">{item.serviceType}</td>
                   <td className="text-black text-sm font-normal py-3 px-4">{item.message}</td>
