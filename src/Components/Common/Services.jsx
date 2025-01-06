@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Editicon, Greenicon, Plusicon, Redicon, Searchicon } from './Icons';
+import { Editicon, Greenicon, Plusicon, DisableRedicon, Searchicon } from './Icons';
 import { servicedata } from "../../Components/Common/Helper";
 import Actions from '../Popups/Actions'; 
 
@@ -87,7 +87,7 @@ const handleOverlayClick = () => {
                                                 <Editicon />
                                             </div>
                                             <div className="ms-[20px]">
-                                                <Redicon />
+                                                <DisableRedicon />
                                             </div>
                                         </>
                                     ) : (

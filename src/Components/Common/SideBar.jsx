@@ -20,49 +20,49 @@ function SideBar() {
     <div className="bg-white pt-[11px] pb-10 rounded-[10px] h-full overflow-y-auto scrollRemove">
       <div className="px-6 pb-[11px]">
         <NavLink to="/dashboard">
-          <img className="max-w-[222px]" src={CustomerServiceLogo} alt="logo" />
+          <img className="max-w-[150px] xl:max-w-[222px]" src={CustomerServiceLogo} alt="logo" />
         </NavLink>
       </div>
-      <div className="px-[35px]">
-        <div className=" mt-5">
+      <div className="px-4 xl:px-[35px]">
+        <div className="mt-3 xl:mt-5">
           <h6 className="text-[#00000099] font-normal text-base ps-2.5">Menu</h6>
         </div>
-        <div className="flex items-center mt-4 group_hover">
+        <div className="flex items-center mt-3 xl:mt-4 group_hover">
           <VerticalVilotSvg pathName={pathName} currentpath="/dashboard" />
           <NavLink
             to="/dashboard"
-            className="flex items-center py-2.5 px-[15px] gap-5 ms-[5px] w-full">
+            className="flex items-center py-2.5 px-2 xl:px-[15px] gap-3 xl:gap-5 ms-[5px] w-full">
             <DasboardSvg pathName={pathName} />
             <span
-              className={`font-normal text-base ${
+              className={`font-normal text-sm xl:text-base ${
                 pathName == '/dashboard' ? 'text-[#6c4def]' : 'text-[#00000099]'
               }`}>
               Dashboard
             </span>
           </NavLink>
         </div>
-        <div className="flex items-center mt-5 group_hover">
+        <div className="flex items-center mt-3 xl:mt-5 group_hover">
           <VerticalVilotSvg pathName={pathName} currentpath="/dashboard/users" />
           <NavLink
             to="/dashboard/users"
-            className="flex items-center py-2.5 px-[15px] gap-5 ms-[5px] w-full">
+            className="flex items-center py-2.5 px-2 xl:px-[15px] gap-3 xl:gap-5 ms-[5px] w-full">
             <CustomerSvg pathName={pathName} />
             <span
-              className={`font-normal text-base ${
+              className={`font-normal text-sm xl:text-base ${
                 pathName == '/dashboard/uders' ? 'text-[#6c4def]' : 'text-[#00000099]'
               }`}>
               Users
             </span>
           </NavLink>
         </div>
-        <div className="flex items-center mt-5 group_hover">
+        <div className="flex items-center mt-3 xl:mt-5 group_hover">
           <VerticalVilotSvg pathName={pathName} currentpath="/dashboard/subscription" />
           <NavLink
             to="/dashboard/subscription"
-            className="flex items-center gap-5 py-2.5 px-[15px] ms-[5px] w-full">
+            className="flex items-center gap-3 xl:gap-5 py-2.5 px-2 xl:px-[15px] ms-[5px] w-full">
             <SubsciptionSvg pathName={pathName} />
             <span
-              className={`font-normal text-base ${
+              className={`font-normal text-sm xl:text-base ${
                 pathName == '/dashboard/subscription' ? 'text-[#6c4def]' : 'text-[#00000099]'
               }`}>
               Subscription
@@ -70,28 +70,28 @@ function SideBar() {
           </NavLink>
         </div>
 
-        <div className="flex items-center mt-5 group_hover">
+        <div className="flex items-center mt-3 xl:mt-5 group_hover">
           <VerticalVilotSvg pathName={pathName} currentpath="/dashboard/serviceRequest" />
           <NavLink
             to="/dashboard/serviceRequest"
-            className="flex items-center py-2.5 px-[15px] gap-5 ms-[5px] w-full">
+            className="flex items-center py-2.5 px-2 xl:px-[15px] gap-3 xl:gap-5 ms-[5px] w-full">
             <ServiceRequestSvg pathName={pathName} />
             <span
-              className={`font-normal text-base ${
+              className={`font-normal text-sm xl:text-base ${
                 pathName == '/dashboard/serviceRequest' ? 'text-[#6c4def]' : 'text-[#00000099]'
               }`}>
               Service Request
             </span>
           </NavLink>
         </div>
-        <div className="flex items-center mt-5 group_hover">
+        <div className="flex items-center mt-3 xl:mt-5 group_hover">
           <VerticalVilotSvg pathName={pathName} currentpath="/dashboard/services" />
           <NavLink
             to="/dashboard/services"
-            className="flex items-center py-2.5 px-[15px] gap-5 ms-[5px] w-full">
+            className="flex items-center py-2.5 px-2 xl:px-[15px] gap-3 xl:gap-5 ms-[5px] w-full">
             <ServicesSvg pathName={pathName} />
             <span
-              className={`font-normal text-base ${
+              className={`font-normal text-sm xl:text-base ${
                 pathName == '/dashboard/services' ? 'text-[#6c4def]' : 'text-[#00000099]'
               }`}>
               Services
@@ -99,14 +99,14 @@ function SideBar() {
           </NavLink>
         </div>
 
-        <div className="flex items-center mt-5 group_hover">
+        <div className="flex items-center mt-3 xl:mt-5 group_hover">
           <VerticalVilotSvg pathName={pathName} currentpath="/dashboard/complaints" />
           <NavLink
             to="/dashboard/complaints"
-            className="flex items-center py-2.5 px-[15px] gap-5 ms-[5px] w-full">
+            className="flex items-center py-2.5 px-2 xl:px-[15px] gap-3 xl:gap-5 ms-[5px] w-full">
             <ComplaintsSvg pathName={pathName} />
             <span
-              className={`font-normal text-base ${
+              className={`font-normal text-sm xl:text-base ${
                 pathName == '/dashboard/complaints' ? 'text-[#6c4def]' : 'text-[#00000099]'
               }`}>
               Complaints
@@ -120,24 +120,24 @@ function SideBar() {
           <VerticalVilotSvg pathName={pathName} currentpath="/dashboard/setting" />
           <NavLink
             to="/dashboard/setting"
-            className="flex items-center py-2.5 px-[15px] gap-5 ms-[5px] w-full">
+            className="flex items-center py-2.5 px-2 xl:px-[15px] gap-3 xl:gap-5 ms-[5px] w-full">
             <SettingSvg pathName={pathName} />
             <span
-              className={`font-normal text-base ${
+              className={`font-normal text-sm xl:text-base ${
                 pathName == '/dashboard/setting' ? 'text-[#6c4def]' : 'text-[#00000099]'
               }`}>
               Setting
             </span>
           </NavLink>
         </div>
-        <div className="flex items-center group_hover mt-5">
+        <div className="flex items-center group_hover mt-3 xl:mt-5">
           <VerticalVilotSvg pathName={pathName} currentpath="/dashboard/logout" />
           <NavLink
             to="/dashboard/logout"
-            className="flex items-center py-2.5 px-[15px] gap-5 ms-[5px] w-full">
+            className="flex items-center py-2.5 px-2 xl:px-[15px] gap-3 xl:gap-5 ms-[5px] w-full">
             <LogoutSvg pathName={pathName} />
             <span
-              className={`font-normal text-base ${
+              className={`font-normal text-sm xl:text-base ${
                 pathName == '/dashboard/logout' ? 'text-[#6c4def]' : 'text-[#00000099]'
               }`}>
               Logout
