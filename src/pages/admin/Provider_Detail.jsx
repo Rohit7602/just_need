@@ -40,13 +40,13 @@ const Provider_Detail = () => {
       <div className="lg:flex justify-between gap-5">
         <div className="bg-[#6C4DEF] p-5 rounded-[10px] mt-5 w-full lg:w-[379px]">
           <h2 className="font-medium text-sm lg:text-lg text-white">Customer Detail</h2>
-          <div className="w-full border-[0.5px] border-dashed border-white opacity-60 my-3"></div>
+          <div className="w-full border-[0.5px] border-dashed border-white border-opacity-60 opacity-60 my-3"></div>
           <div className="flex items-center gap-5">
             <div className="w-1/4">
               <img src={imgCustemer} alt="Customer" />
               <h2 className="font-medium text-white pt-2 text-sm md:text-base">Jhon Deo</h2>
             </div>
-            <div className="border border-dashed border-white opacity-60 h-24"></div>
+            <div className="border border-dashed border-white border-opacity-60 opacity-60 h-24"></div>
             <div className="flex-1">
               <div className="flex items-center gap-3">
                 <PhnIcon />
@@ -66,13 +66,13 @@ const Provider_Detail = () => {
 
         <div className="bg-[#F1F1F1] p-5 rounded-[10px] mt-5 w-full lg:w-[379px]">
           <h2 className="font-medium text-sm lg:text-lg text-black">Provider Detail</h2>
-          <div className="w-full border-[0.5px] border-dashed border-black opacity-60 my-3"></div>
+          <div className="w-full border-[0.5px] border-dashed border-black border-opacity-60 opacity-60 my-3"></div>
           <div className="flex items-center gap-5">
             <div className="w-1/4">
               <img src={imgCustemer} alt="Provider" />
               <h2 className="font-medium text-black pt-2 text-sm md:text-base">Mike Tyson</h2>
             </div>
-            <div className="border border-dashed border-black opacity-60 h-24"></div>
+            <div className="border border-dashed border-black border-opacity-60 opacity-60 h-24"></div>
             <div className="flex-1">
               <div className="flex items-center gap-3">
                 <PhnIcon2 />
@@ -95,7 +95,7 @@ const Provider_Detail = () => {
       <div className="lg:flex justify-between gap-5 pt-8">
         <div className="lg:w-6/12">
           <h2 className="font-medium text-lg text-black">Complaint Description</h2>
-          <div className="w-full border-[0.5px] border-dashed border-black opacity-60 my-3"></div>
+          <div className="w-full border-[0.5px] border-dashed border-black border-opacity-40 opacity-40 my-3"></div>
           <p className="text-base text-black opacity-70">
             Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
             has been the industry's standard dummy text ever since the 1500s, when an unknown
@@ -123,7 +123,7 @@ const Provider_Detail = () => {
 
       {/* Images Section */}
       <h2 className="font-medium text-lg pt-8">Images</h2>
-      <div className="w-full border-[0.5px] border-dashed border-black opacity-60 my-3"></div>
+      <div className="w-full border-[0.5px] border-dashed border-black border-opacity-40 opacity-40 my-3"></div>
       <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 pt-5">
         {[img1, img2, img3, img4, img5, img6, img7].map((img, index) => (
           <img key={index} className="w-full" src={img} alt={`img-${index + 1}`} />

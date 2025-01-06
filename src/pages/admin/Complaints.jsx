@@ -7,7 +7,8 @@ import { Link, Outlet, useLocation } from 'react-router-dom';
 export const Complaints = () => {
   const location = useLocation();
   const [val, setVal] = useState('');
-  // Table Data
+  const [ShowFilter, setShowFilter] = useState(false);
+
   const Data = Array.from({ length: 10 }, (_, index) => ({
     id: (index + 1).toString(),
     Customer: `003244`,
@@ -15,16 +16,16 @@ export const Complaints = () => {
     serviceType: 'House Cleaning',
     message: `Lorem Ipsum is simply dummy text of the printing and typesetting industry... `,
   }));
-  //  filters **
-  const [ShowFilter, setShowFilter] = useState('');
+
   const handleFilterToggle = () => {
     setShowFilter(!ShowFilter);
   };
 
   return (
-    // All Complaints and Filter button
     <div>
-      {location.pathname !== `/dashboard/complaints/providerDetail/${val}` && (
+      {location.pathname === `/dashboard/complaints/providerDetail/${val}` ? (
+        <Outlet />
+      ) : (
         <div className="mt-3 ps-4">
           <h2 className="font-medium sm:text-[20px] lg:text-[28px] text-black">Complaints</h2>
           <p className="font-normal sm:text-sm lg:text-base text-black opacity-70">
@@ -45,19 +46,18 @@ export const Complaints = () => {
               </div>
               <button
                 onClick={handleFilterToggle}
-                className="bg-[#0832DE] flex text-white font-normal sm:text-sm md:text-base md:px-4 md:py-3 px-2 py-3 rounded-[10px] ms-4  relative">
+                className="bg-[#0832DE] flex text-white font-normal sm:text-sm md:text-base md:px-4 md:py-3 px-2 py-3 rounded-[10px] ms-4 relative">
                 <FilterIcon />
                 <h5 className="md:ms-3 ms-2 ">Filter</h5>
               </button>
             </div>
           </div>
           {ShowFilter && <Filters />}
-          {/* Table */}
           <div className="overflow-x-auto mt-6">
             <table className="w-full text-left border-collapse whitespace-nowrap rounded-[10px]">
               <thead>
                 <tr>
-                  <th className="text-black text-sm  font-medium py-3 px-4 border-b">#</th>
+                  <th className="text-black text-sm font-medium py-3 px-4 border-b">#</th>
                   <th className="text-black text-sm font-medium py-3 px-4 border-b">Customer Id</th>
                   <th className="text-black text-sm font-medium py-3 px-4 border-b">Name</th>
                   <th className="text-black text-sm font-medium py-3 px-4 border-b">
@@ -68,7 +68,7 @@ export const Complaints = () => {
                 </tr>
                 <tr>
                   <td colSpan="6">
-                    <div className="w-full border border-dashed border-[#00000066]  mb-3  "></div>
+                    <div className="w-full border border-dashed border-[#00000066] mb-3"></div>
                   </td>
                 </tr>
               </thead>
@@ -76,7 +76,6 @@ export const Complaints = () => {
                 {Data.map((item, index) => (
                   <tr key={item.id}>
                     <td className="text-black text-sm font-normal py-3 px-4">{index + 1}</td>
-
                     <td
                       className="text-[#0832DE] text-sm font-normal py-3 px-4"
                       onClick={() => setVal(item.id)}>
@@ -90,7 +89,6 @@ export const Complaints = () => {
                 ))}
               </tbody>
             </table>
-            {/* Showing */}
             <div className="flex justify-between items-center mt-[60px]">
               <span className="text-base font-normal">Showing 1 out of 5</span>
               <div className="flex items-center">
@@ -105,7 +103,6 @@ export const Complaints = () => {
           </div>
         </div>
       )}
-      <Outlet />
     </div>
   );
 };
