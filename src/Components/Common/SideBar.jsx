@@ -100,14 +100,14 @@ function SideBar() {
         </div>
 
         <div className="flex items-center mt-5 group_hover">
-          <VerticalVilotSvg pathName={pathName} currentpath="/dashboard/Complaints" />
+          <VerticalVilotSvg pathName={pathName} currentpath="/dashboard/complaints" />
           <NavLink
-            to="/dashboard/Complaints"
+            to="/dashboard/complaints"
             className="flex items-center py-2.5 px-[15px] gap-5 ms-[5px] w-full">
             <ComplaintsSvg pathName={pathName} />
             <span
               className={`font-normal text-base ${
-                pathName == '/dashboard/Complaints' ? 'text-[#6c4def]' : 'text-[#00000099]'
+                pathName == '/dashboard/complaints' ? 'text-[#6c4def]' : 'text-[#00000099]'
               }`}>
               Complaints
             </span>

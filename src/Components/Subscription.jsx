@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 const Subscription = () => {
-    const [showPopup, setShowPopup] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
   function handlePopup() {
     setShowPopup(!showPopup);
   }
@@ -15,7 +15,10 @@ const Subscription = () => {
               Plan, prioritize, and accomplish your tasks with ease.
             </p>
           </div>
-          <button onClick={handlePopup} className="bg-[#0832DE] font-normal text-base text-white py-3 px-[15px] rounded-[10px] mt-3 float-right">
+          <button
+            onClick={handlePopup}
+            className="bg-[#0832DE] font-normal text-base text-white py-3 px-[15px] rounded-[10px] mt-3 float-right"
+          >
             <span className="me-3">+</span> Add Plan
           </button>
         </div>
@@ -35,29 +38,46 @@ const Subscription = () => {
             <span className="text-[64px] font-semibold">99</span>
             <sub className="text-xl font-normal">/2 Year</sub>
           </p>
-          <p className="mt-[15px] text-[#FFFFFF99] text-base font-normal">How It Works?</p>
+          <p className="mt-[15px] text-[#FFFFFF99] text-base font-normal">
+            How It Works?
+          </p>
           <div className="flex items-center gap-[15px] mt-[15px]">
-           <div>
-           <div className="rounded-[50px] text-white h-[24px] w-[24px] bg-[#382488] text-sm font-normal flex items-center justify-center"><span>1</span></div>
-           </div>
-            <p className="text-sm font-normal text-[#FFFFFF99]">Lorem ipsum dolor sit amet consectetur.Lorem ipsum dolor sit amet consectetur.</p>
+            <div>
+              <div className="rounded-[50px] text-white h-[24px] w-[24px] bg-[#382488] text-sm font-normal flex items-center justify-center">
+                <span>1</span>
+              </div>
+            </div>
+            <p className="text-sm font-normal text-[#FFFFFF99]">
+              Lorem ipsum dolor sit amet consectetur.Lorem ipsum dolor sit amet
+              consectetur.
+            </p>
           </div>
           <div className="flex items-center gap-[15px] mt-[15px]">
-           <div>
-           <div className="rounded-[50px] text-white h-[24px] w-[24px] bg-[#382488] text-sm font-normal flex items-center justify-center"><span>2</span></div>
-           </div>
-            <p className="text-sm font-normal text-[#FFFFFF99]">Lorem ipsum dolor sit amet consectetur.Lorem ipsum dolor sit amet consectetur.</p>
+            <div>
+              <div className="rounded-[50px] text-white h-[24px] w-[24px] bg-[#382488] text-sm font-normal flex items-center justify-center">
+                <span>2</span>
+              </div>
+            </div>
+            <p className="text-sm font-normal text-[#FFFFFF99]">
+              Lorem ipsum dolor sit amet consectetur.Lorem ipsum dolor sit amet
+              consectetur.
+            </p>
           </div>
           <div className="flex items-center gap-[15px] mt-[15px]">
-           <div>
-           <div className="rounded-[50px] text-white h-[24px] w-[24px] bg-[#382488] text-sm font-normal flex items-center justify-center"><span>3</span></div>
-           </div>
-            <p className="text-sm font-normal text-[#FFFFFF99]">Lorem ipsum dolor sit amet consectetur.Lorem ipsum dolor sit amet consectetur.</p>
+            <div>
+              <div className="rounded-[50px] text-white h-[24px] w-[24px] bg-[#382488] text-sm font-normal flex items-center justify-center">
+                <span>3</span>
+              </div>
+            </div>
+            <p className="text-sm font-normal text-[#FFFFFF99]">
+              Lorem ipsum dolor sit amet consectetur.Lorem ipsum dolor sit amet
+              consectetur.
+            </p>
           </div>
         </div>
         <div className="w-4/12 bg-gradient-to-r from-[#B870F2] to-[#3A1479] p-5 rounded-[10px]">
           <h1 className="text-center text-[26px] font-semibold text-white">
-          PREMIUM
+            PREMIUM
           </h1>
           <div className="border-t-[1px] border-dashed border-white my-2.5"></div>
           <p className="text-center font-normal text-xs text-white">
@@ -69,35 +89,52 @@ const Subscription = () => {
             <span className="text-[64px] font-semibold">199</span>
             <sub className="text-xl font-normal">/2 Year</sub>
           </p>
-          <p className="mt-[15px] text-[#FFFFFF99] text-base font-normal">How It Works?</p>
+          <p className="mt-[15px] text-[#FFFFFF99] text-base font-normal">
+            How It Works?
+          </p>
           <div className="flex items-center gap-[15px] mt-[15px]">
-           <div>
-           <div className="rounded-[50px] text-white h-[24px] w-[24px] bg-[#382488] text-sm font-normal flex items-center justify-center"><span>1</span></div>
-           </div>
-            <p className="text-sm font-normal text-[#FFFFFF99]">Lorem ipsum dolor sit amet consectetur.Lorem ipsum dolor sit amet consectetur.</p>
+            <div>
+              <div className="rounded-[50px] text-white h-[24px] w-[24px] bg-[#382488] text-sm font-normal flex items-center justify-center">
+                <span>1</span>
+              </div>
+            </div>
+            <p className="text-sm font-normal text-[#FFFFFF99]">
+              Lorem ipsum dolor sit amet consectetur.Lorem ipsum dolor sit amet
+              consectetur.
+            </p>
           </div>
           <div className="flex items-center gap-[15px] mt-[15px]">
-           <div>
-           <div className="rounded-[50px] text-white h-[24px] w-[24px] bg-[#382488] text-sm font-normal flex items-center justify-center"><span>2</span></div>
-           </div>
-            <p className="text-sm font-normal text-[#FFFFFF99]">Lorem ipsum dolor sit amet consectetur.Lorem ipsum dolor sit amet consectetur.</p>
+            <div>
+              <div className="rounded-[50px] text-white h-[24px] w-[24px] bg-[#382488] text-sm font-normal flex items-center justify-center">
+                <span>2</span>
+              </div>
+            </div>
+            <p className="text-sm font-normal text-[#FFFFFF99]">
+              Lorem ipsum dolor sit amet consectetur.Lorem ipsum dolor sit amet
+              consectetur.
+            </p>
           </div>
           <div className="flex items-center gap-[15px] mt-[15px]">
-           <div>
-           <div className="rounded-[50px] text-white h-[24px] w-[24px] bg-[#382488] text-sm font-normal flex items-center justify-center"><span>3</span></div>
-           </div>
-            <p className="text-sm font-normal text-[#FFFFFF99]">Lorem ipsum dolor sit amet consectetur.Lorem ipsum dolor sit amet consectetur.</p>
+            <div>
+              <div className="rounded-[50px] text-white h-[24px] w-[24px] bg-[#382488] text-sm font-normal flex items-center justify-center">
+                <span>3</span>
+              </div>
+            </div>
+            <p className="text-sm font-normal text-[#FFFFFF99]">
+              Lorem ipsum dolor sit amet consectetur.Lorem ipsum dolor sit amet
+              consectetur.
+            </p>
           </div>
         </div>
       </div>
       {showPopup && (
         <>
           <div
-            onClick={()=>handlePopup()}
+            onClick={() => handlePopup()}
             className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50"
           ></div>
-          <div className="fixed inset-0 flex items-center justify-center z-50 h-[368px] w-[448px] m-auto">
-            <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-6 relative">
+          <div className="fixed inset-0 flex items-center justify-center z-50 h-[458px] w-[694px] m-auto">
+            <div className="w-full  bg-white rounded-lg shadow-lg p-6 relative">
               <button
                 onClick={handlePopup}
                 className="absolute top-2 right-2 text-gray-600 hover:text-black"
@@ -105,40 +142,60 @@ const Subscription = () => {
               >
                 &#10005;
               </button>
-
-              <div className="mb-6">
+              <p className="font-normal text-lg text-black text-center pb-[15px] border-b-[0.5px] border-dashed border-[#00000066]">
+                Add Subscription
+              </p>
+              <div className=" mt-[15px]">
                 <label
-                  htmlFor="status"
+                  htmlFor="subscriptinName"
                   className="block text-base font-normal text-gray-700 mb-2.5"
                 >
-                  Status
+                  Subscription Name
                 </label>
-                <select
-                  id="status"
-                  name="status"
-                  className="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="Block">Block</option>
-                  <option value="Unblock ">Unblock</option>
-                </select>
+                <input
+                  id="subscriptinName"
+                  name="subscriptinName"
+                  type="text"
+                  placeholder="Standard"
+                  className="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-base placeholder:font-normal"
+                />
               </div>
-
-              <div className="mb-6">
-                <label
-                  htmlFor="reason"
-                  className="block font-normal text-base mb-2.5"
-                >
-                  Reason
-                </label>
-                <textarea
-                  name="reason"
-                  placeholder="type here.."
-                  className="w-full h-28 px-3 py-2 bg-gray-100 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                ></textarea>
+              <div className="flex justify-between mt-[15px]">
+                <div className="w-[48%]">
+                  <label
+                    htmlFor="price"
+                    className="block text-base font-normal text-gray-700 mb-2.5"
+                  >
+                    Price
+                  </label>
+                  <input
+                    id="price"
+                    name="price"
+                    type="number"
+                    placeholder="₹199.00"
+                    className="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-base placeholder:font-normal"
+                  />
+                </div>
+                <div className="w-[48%]">
+                  <label
+                    htmlFor="duration"
+                    className="block text-base font-normal text-gray-700 mb-2.5"
+                  >
+                    Duration (In Years)
+                  </label>
+                  <input
+                    id="duration"
+                    name="duration"
+                    type="number"
+                    placeholder="1"
+                    className="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-base placeholder:font-normal"
+                  />
+                </div>
               </div>
+              
 
-              <button className="w-full bg-[#0832DE] text-base text-white font-medium py-3 rounded-[10px]">
-                Update Status
+              <button className="w-full bg-[#0832DE] text-base text-white font-medium py-3 rounded-[10px] mt-[15px]">
+                Save Details
               </button>
             </div>
           </div>
