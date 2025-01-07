@@ -26,6 +26,7 @@ export const Complaints = () => {
       {location.pathname === `/dashboard/complaints/providerDetail/${val}` ? (
         <Outlet />
       ) : (
+        // button for filter and search
         <div className="mt-3 ps-4">
           <h2 className="font-medium sm:text-[20px] lg:text-[28px] text-black">Complaints</h2>
           <p className="font-normal sm:text-sm lg:text-base text-black opacity-70">
@@ -52,6 +53,7 @@ export const Complaints = () => {
               </button>
             </div>
           </div>
+          {/* Table */}
           {ShowFilter && <Filters />}
           <div className="overflow-x-auto mt-6">
             <table className="w-full text-left border-collapse whitespace-nowrap rounded-[10px]">
@@ -89,6 +91,7 @@ export const Complaints = () => {
                 ))}
               </tbody>
             </table>
+            {/*  showing  */}
             <div className="flex justify-between items-center mt-[60px]">
               <span className="text-base font-normal">Showing 1 out of 5</span>
               <div className="flex items-center">
