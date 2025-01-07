@@ -1,5 +1,16 @@
-import React from 'react';
-import { ArrowIcon, Resolve_Issue } from '../../assets/icon/Icon';
+import React, { useState } from 'react';
+import ResolveIssuePopups from '../../Components/Popups/ResolveIssuePopus';
+import {
+  ArrowIcon,
+  Resolve_Issue,
+  PhnIcon,
+  EmailIcon,
+  LocsionIcon,
+  LocsionIcon2,
+  PhnIcon2,
+  EmailIcon2,
+  StarIcon,
+} from '../../Components/Common/Icons';
 import imgCustemer from '../../assets/png/Frame 1000004210.png';
 import HouseCleaner from '../../assets/png/HouseCleaner.png';
 import img1 from '../../assets/png/Frame 1171276954.png';
@@ -9,17 +20,14 @@ import img4 from '../../assets/png/img4.png';
 import img5 from '../../assets/png/img5.png';
 import img6 from '../../assets/png/img6.png';
 import img7 from '../../assets/png/img7.png';
-import {
-  PhnIcon,
-  EmailIcon,
-  LocsionIcon,
-  LocsionIcon2,
-  PhnIcon2,
-  EmailIcon2,
-  StarIcon,
-} from '../../assets/icon/Icon';
 
 const Provider_Detail = () => {
+  const [Popus, setPopus] = useState(false); // Moved inside the component
+
+  const handleResolveIssue = () => {
+    setPopus(!Popus); // Fixed toggle logic
+  };
+
   return (
     <div className="py-4 px-4">
       {/* Complaints Details and Resolve Issue button */}
@@ -30,13 +38,14 @@ const Provider_Detail = () => {
             Complaints Details
           </h2>
         </div>
-        <button className="bg-[#0832DE] flex items-center text-white font-normal text-sm md:text-base px-3 md:px-4 py-2 md:py-3 rounded-[10px]">
+        <button
+          onClick={handleResolveIssue}
+          className="bg-[#0832DE] flex items-center text-white font-normal text-sm md:text-base px-3 md:px-4 py-2 md:py-3 rounded-[10px] relative">
           <Resolve_Issue />
           <h5 className="ms-2 md:ms-3">Resolve Issue</h5>
         </button>
       </div>
-
-      {/* Customer and Provider detail boxes */}
+      {Popus && <ResolveIssuePopups />}
       <div className="lg:flex justify-between gap-5">
         <div className="bg-[#6C4DEF] p-5 rounded-[10px] mt-5 w-full lg:w-[379px]">
           <h2 className="font-medium text-sm lg:text-lg text-white">Customer Detail</h2>
@@ -90,7 +99,6 @@ const Provider_Detail = () => {
           </div>
         </div>
       </div>
-
       {/* Complaint Description */}
       <div className="lg:flex justify-between gap-5 pt-8">
         <div className="lg:w-6/12">
@@ -105,22 +113,23 @@ const Provider_Detail = () => {
             took a galley of type and scrambled it to make a type specimen book.
           </p>
         </div>
-        <div className="w-full lg:w-[379px] border border-solid border-black border-opacity-30 rounded-[10px] mt-4">
+        <div className="w-full lg:w-[382px] border border-solid border-black border-opacity-30 rounded-[10px] mt-4">
           <img className="w-full rounded-[10px]" src={HouseCleaner} alt="House Cleaner" />
           <div className="p-3 flex items-center justify-between">
             <h3 className="font-medium text-base text-black">House Cleaner</h3>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <StarIcon />
-              <h2 className="text-sm">4.2 | 1452 reviews</h2>
+              <h2 className="text-sm">
+                4.2 <span className=" px-2"> |</span> 1452 reviews
+              </h2>
             </div>
           </div>
-          <p className="text-sm opacity-60 px-3">
-            Lorem ipsum dolor sit amet consectetur. Venenatis urna mattis mi at sed dapibus. Blandit
-            non lacus nisi donec a sagittis.
+          <p className="text-sm opacity-60 px-3 pb-4">
+            Lorem ipsum dolor sit amet consectetur. urna mattis mi at sed dapibus. Blandit non lacus
+            nisi donec a sagittis.
           </p>
         </div>
       </div>
-
       {/* Images Section */}
       <h2 className="font-medium text-lg pt-8">Images</h2>
       <div className="w-full border-[0.5px] border-dashed border-black border-opacity-40 opacity-40 my-3"></div>
