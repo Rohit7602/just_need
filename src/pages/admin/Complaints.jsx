@@ -50,7 +50,7 @@ export const Complaints = () => {
               </div>
             </div>
             <div className="flex sm:mt-5">
-              <div className="flex items-center py-3 px-4 bg-[#F1F1F1] rounded-[10px] max-w-[330px]">
+              <div className="flex items-center py-3 px-4 bg-[#F1F1F1] rounded-[10px] w-[337px]">
                 <SearchIcon />
                 <input
                   type="text"
@@ -83,14 +83,14 @@ export const Complaints = () => {
                 </tr>
                 <tr>
                   <td colSpan="10">
-                    <div className=" w-full border-[0.5px] border-dashed border-[#00000066]"></div>
+                    <div className=" w-full border-[0.5px] border-opacity-40 opacity-40 border-dashed border-[#00000066]"></div>
                   </td>
                 </tr>
               </thead>
               <tbody>
                 {Data.map((item, index) => (
                   <tr key={item.id}>
-                    <td className="text-black text-sm font-normal py-4 lg:py-5 px-4">
+                    <td className="text-black text-sm font-normal py-3 lg:py-[20.5px] px-4">
                       {index + 1}
                     </td>
                     <td

@@ -29,7 +29,7 @@ const Provider_Detail = () => {
   };
 
   return (
-    <div className="py-4 px-4">
+    <div className=" ">
       {/* Complaints Details and Resolve Issue button */}
       <div className="flex justify-between items-center flex-wrap gap-y-4">
         <div className="flex items-center">
