@@ -82,8 +82,8 @@ export const Complaints = () => {
                   <th className="text-black text-sm font-medium py-3 px-4 border-b">Action</th>
                 </tr>
                 <tr>
-                  <td colSpan="10">
-                    <div className=" w-full border-[0.5px] border-opacity-40 opacity-40 border-dashed border-[#00000066]"></div>
+                  <td colSpan="9">
+                    <div className=" w-full border-[1px] border-opacity-40  border-dashed border-[#00000066]"></div>
                   </td>
                 </tr>
               </thead>
