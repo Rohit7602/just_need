@@ -18,7 +18,7 @@ function SideBar() {
   const location = useLocation();
   const pathName = location.pathname;
   return (
-    <div className="bg-white pt-[11px] pb-10 rounded-[10px] h-full overflow-y-auto scrollRemove">
+    <div className="bg-white pt-[11px] pb-10  rounded-[10px] h-full overflow-y-auto scrollRemove">
       <div className="px-6 pb-[11px]">
         <NavLink to="/dashboard">
           <img

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { SearchIcon, FilterIcon, DottedIcon } from '../../assets/icon/Icon';
+import { SearchIcon } from '../../assets/icon/Icon';
+import { FilterIcon, CloseIcon } from '../../assets/icon/Icons';
 import { FaAngleDown } from 'react-icons/fa';
 import Filters from '../../Components/Popups/Filters';
 import { Link, Outlet, useLocation } from 'react-router-dom';
@@ -12,9 +13,10 @@ export const Complaints = () => {
   const Data = Array.from({ length: 10 }, (_, index) => ({
     id: (index + 1).toString(),
     Customer: `003244`,
-    name: `Customer `,
+    name: `John Deo `,
     serviceType: 'House Cleaning',
-    message: `Lorem Ipsum is simply dummy text of the printing and typesetting industry... `,
+    message: `Lorem Ipsum is simply dummy text of the printing and typesetting industry...`,
+    status: index % 7 === 0 || index % 7 >= 5 ? 'Open' : 'Closed',
   }));
 
   const handleFilterToggle = () => {
@@ -22,21 +24,33 @@ export const Complaints = () => {
   };
 
   return (
-    <div>
+    <div className="p-5">
       {location.pathname === `/dashboard/complaints/providerDetail/${val}` ? (
         <Outlet />
       ) : (
-        <div className="mt-3 ps-4">
+        // button for filter and search
+        <div className="mt-3 ">
           <h2 className="font-medium sm:text-[20px] lg:text-[28px] text-black">Complaints</h2>
           <p className="font-normal sm:text-sm lg:text-base text-black opacity-70">
             Plan, prioritize, and accomplish your tasks with ease.
           </p>
-          <div className="pt-[35px] lg:flex justify-between items-center ps-[20px] pe-[20px]">
-            <h2 className="font-medium sm:text-md md:text-xl text-black opacity-70">
-              All Complaints
-            </h2>
-            <div className="flex sm:mt-4">
-              <div className="flex items-center py-3 px-4 bg-[#F1F1F1] rounded-[10px] max-w-[330px]">
+          <div className="pt-[35px] lg:flex justify-between items-center ps-2  pe-[20px]">
+            <div className="flex items-center">
+              <div className=" flex items-center">
+                <h2 className=" text-base font-normal text-[#FC4100] pe-1 ">Yesterday</h2>
+                <CloseIcon />
+              </div>
+              <div className=" flex items-center">
+                <h2 className=" text-base font-normal text-[#6C4DEF] pe-1 ps-3">Plumber</h2>
+                <CloseIcon />
+              </div>
+              <div className=" flex items-center">
+                <h2 className=" text-base font-normal text-[#0DA800] pe-1 ps-3">Resolved</h2>
+                <CloseIcon />
+              </div>
+            </div>
+            <div className="flex sm:mt-5">
+              <div className="flex items-center py-3 px-4 bg-[#F1F1F1] rounded-[10px] w-[337px]">
                 <SearchIcon />
                 <input
                   type="text"
@@ -52,9 +66,10 @@ export const Complaints = () => {
               </button>
             </div>
           </div>
+          {/* Table */}
           {ShowFilter && <Filters />}
-          <div className="overflow-x-auto mt-6">
-            <table className="w-full text-left border-collapse whitespace-nowrap rounded-[10px]">
+          <div className="overflow-x-auto mt-6 ">
+            <table className="w-full text-left border-collapse  whitespace-nowrap rounded-[10px] ">
               <thead>
                 <tr>
                   <th className="text-black text-sm font-medium py-3 px-4 border-b">#</th>
@@ -67,29 +82,37 @@ export const Complaints = () => {
                   <th className="text-black text-sm font-medium py-3 px-4 border-b">Action</th>
                 </tr>
                 <tr>
-                  <td colSpan="6">
-                    <div className="w-full border border-dashed border-[#00000066] mb-3"></div>
+                  <td colSpan="9">
+                    <div className=" w-full border-[1px] border-opacity-40  border-dashed border-[#00000066]"></div>
                   </td>
                 </tr>
               </thead>
               <tbody>
                 {Data.map((item, index) => (
                   <tr key={item.id}>
-                    <td className="text-black text-sm font-normal py-3 px-4">{index + 1}</td>
+                    <td className="text-black text-sm font-normal py-3 lg:py-[20.5px] px-4">
+                      {index + 1}
+                    </td>
                     <td
-                      className="text-[#0832DE] text-sm font-normal py-3 px-4"
+                      className="text-[#0832DE] text-sm font-normal  px-4"
                       onClick={() => setVal(item.id)}>
                       <Link to={`providerDetail/${item.id}`}>{item.Customer}</Link>
                     </td>
-                    <td className="text-black text-sm font-normal py-3 px-4">{item.name}</td>
-                    <td className="text-black text-sm font-normal py-3 px-4">{item.serviceType}</td>
-                    <td className="text-black text-sm font-normal py-3 px-4">{item.message}</td>
-                    <td className="text-black text-sm font-normal py-3 px-4">{<DottedIcon />}</td>
+                    <td className="text-black text-sm font-normal  px-4">{item.name}</td>
+                    <td className="text-black text-sm font-normal  px-4">{item.serviceType}</td>
+                    <td className="text-black text-sm font-normal  px-4">{item.message}</td>
+                    <td
+                      className={`text-sm font-normal py-3 px-4 ${
+                        item.status === 'Open' ? ' text-green-500' : 'text-red-500'
+                      }`}>
+                      {item.status}
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-            <div className="flex justify-between items-center mt-[60px]">
+            {/*  showing  */}
+            <div className="flex justify-between items-center mt-[60px] pe-4 sm:mb-[40px] md:mb-[40px] lg:mb-[89px]">
               <span className="text-base font-normal">Showing 1 out of 5</span>
               <div className="flex items-center">
                 <FaAngleDown className="-rotate-[-90deg] me-[30px]" />
