@@ -59,7 +59,7 @@ function SideBar() {
             <CustomerSvg pathName={pathName} />
             <span
               className={`font-normal text-sm xl:text-base ${
-                pathName == "/dashboard/users"
+                pathName.startsWith("/dashboard/users")
                   ? "text-[#6c4def]"
                   : "text-[#00000099]"
               }`}
