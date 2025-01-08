@@ -13,7 +13,7 @@ function AdminLayout() {
         <div className="sticky top-0 z-30 bg-white px-4 pt-5 pb-[15px] rounded-[10px]">
           <TopBar />
         </div>
-        <div className="min-h-[calc(100vh-85px)] flex flex-col bg-white mt-4 rounded-[10px] pb-5">
+        <div className="min-h-[calc(100vh-117px)] flex flex-col bg-white mt-4 rounded-[10px] pb-5">
           <Outlet />
         </div>
       </div>
