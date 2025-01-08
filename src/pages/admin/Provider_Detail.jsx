@@ -47,7 +47,7 @@ const Provider_Detail = () => {
       </div>
       {Popus && <ResolveIssuePopups />}
       <div className="lg:flex justify-between gap-5">
-        <div className="bg-[#6C4DEF] p-5 rounded-[10px] mt-5 w-full md:w-[490px] m-auto lg:w-[379px]">
+        <div className="bg-[#6C4DEF] p-5 rounded-[10px] mt-5 w-full lg:w-[379px]">
           <h2 className="font-medium text-sm lg:text-lg text-white">Customer Detail</h2>
           <div className="w-full border-[0.5px] border-dashed border-white border-opacity-60 opacity-60 my-3"></div>
           <div className="flex items-center gap-5">
@@ -73,7 +73,7 @@ const Provider_Detail = () => {
           </div>
         </div>
 
-        <div className="bg-[#F1F1F1] p-5 rounded-[10px] mt-5 w-full md:w-[490px] m-auto lg:w-[379px]">
+        <div className="bg-[#F1F1F1] p-5 rounded-[10px] mt-5 w-full lg:w-[379px]">
           <h2 className="font-medium text-sm lg:text-lg text-black">Provider Detail</h2>
           <div className="w-full border-[0.5px] border-dashed border-black border-opacity-60 opacity-60 my-3"></div>
           <div className="flex items-center gap-5">
@@ -113,7 +113,7 @@ const Provider_Detail = () => {
             took a galley of type and scrambled it to make a type specimen book.
           </p>
         </div>
-        <div className="w-full md:w-[490px] m-auto lg:w-[382px] border border-solid border-black border-opacity-30 rounded-[10px] mt-4">
+        <div className="w-full lg:w-[382px] border border-solid border-black border-opacity-30 rounded-[10px] mt-4">
           <img className="w-full rounded-[10px]" src={HouseCleaner} alt="House Cleaner" />
           <div className="p-3 flex items-center justify-between">
             <h3 className="font-medium text-base text-black">House Cleaner</h3>
