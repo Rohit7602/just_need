@@ -7,7 +7,7 @@ import {
 import GalleryImg1 from "../../assets/png/galleryImg1.png";
 import MechanicImage from "../../assets/png/mechanicImage.png";
 import HouseCleaner from "../../assets/png/houseCleaner.png"
-import { EmailIcon, LocationIcon, PhoneIcon, RatingStarIcon, DisableRedicon } from "../../Components/Common/Icons";
+import { EmailIcon, LocationIcon, PhoneIcon, RatingStarIcon, DisableRedicon } from "../../assets/icon/Icons";
 import DisableProviderPopUp from "../../Components/Popups/DisableProviderPopUp";
 import DisablePopUp from "../../Components/Popups/DisablePopUp";
 import EnablePopUp from "../../Components/Popups/EnablePopUp";

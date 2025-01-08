@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Editicon, Greenicon, Plusicon, DisableRedicon, Searchicon } from './Icons';
+import { Editicon, Greenicon, Plusicon, DisableRedicon, Searchicon } from '../../assets/icon/Icons';
 import { servicedata } from "../../Components/Common/Helper";
 import Actions from '../Popups/Actions'; 
 

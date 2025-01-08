@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Crossicon, Editicon, Redcrossicon } from "../Common/Icons";
+import { Crossicon, Editicon, Redcrossicon } from "../../assets/icon/Icons";
 import { Actiondata } from "../Common/Helper";
 
 function Actions() {
