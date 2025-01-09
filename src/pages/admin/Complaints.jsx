@@ -25,16 +25,12 @@ export const Complaints = () => {
 
   return (
     <div className="p-5">
-      {location.pathname === `/dashboard/complaints/providerDetail/${val}` ? (
+      {location.pathname === `/dashboard/complaints/complaintsDetails/${val}` ? (
         <Outlet />
       ) : (
         // button for filter and search
         <div className="mt-3 ">
-          <h2 className="font-medium sm:text-[20px] lg:text-[28px] text-black">Complaints</h2>
-          <p className="font-normal sm:text-sm lg:text-base text-black opacity-70">
-            Plan, prioritize, and accomplish your tasks with ease.
-          </p>
-          <div className="pt-[35px] lg:flex justify-between items-center ps-2  pe-[20px]">
+          <div className=" lg:flex justify-between items-center ps-2  pe-[20px]">
             <div className="flex items-center">
               <div className=" flex items-center">
                 <h2 className=" text-base font-normal text-[#FC4100] pe-1 ">Yesterday</h2>
@@ -96,7 +92,7 @@ export const Complaints = () => {
                     <td
                       className="text-[#0832DE] text-sm font-normal  px-4"
                       onClick={() => setVal(item.id)}>
-                      <Link to={`providerDetail/${item.id}`}>{item.Customer}</Link>
+                      <Link to={`complaintsDetails/${item.id}`}>{item.Customer}</Link>
                     </td>
                     <td className="text-black text-sm font-normal  px-4">{item.name}</td>
                     <td className="text-black text-sm font-normal  px-4">{item.serviceType}</td>

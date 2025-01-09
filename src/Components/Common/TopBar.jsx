@@ -1,36 +1,78 @@
 import React, { useState } from "react";
-import { ChatIcon, NotificationIcon, SearchIconTopBar } from "../../assets/icon/Icon";
+import {
+  ChatIcon,
+  NotificationIcon,
+  SearchIconTopBar,
+} from "../../assets/icon/Icon";
 import AdminImage from "../../assets/png/AdminImage.png";
+import { useLocation } from "react-router-dom";
+import { ArrowIcon } from "../../assets/icon/Icons";
 
 function TopBar() {
   const [isInputVisible, setIsInputVisible] = useState(false);
+  const location = useLocation();
 
   const toggleSearchInput = () => {
     setIsInputVisible((prev) => !prev);
   };
+
+  // Regular expression to check for paths ending with a number
+  const showArrowButton =
+    /\/dashboard\/complaints\/complaintsDetails\/\d+$/.test(
+      location.pathname
+    ) ||
+    /\/dashboard\/usersList\/userDetails\/\d+$/.test(location.pathname) ||
+    location.pathname === "/dashboard/setting";
+
   return (
     <div>
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 xl:gap-5">
-        <div>
-          {" "}
-          <p className="font-medium text-lg xl:text-[22px]">Dashboard</p>
-          <p className="font-normal text-xs xl:text-[14px] opacity-[70%]">
-            Plan, prioritize, and accomplish your tasks with ease.
-          </p>
+        <div className="flex items-center">
+          {showArrowButton && (
+            <div className="flex items-center justify-center me-[15px]">
+              <button>
+                <ArrowIcon />
+              </button>
+            </div>
+          )}
+          <div>
+            <p className={"font-medium text-lg xl:text-[22px] capitalize"}>
+              {location.pathname.startsWith("/dashboard/setting/") ? (
+                <p className="text-[#00000099] font-medium text-lg xl:text-[22px] capitalize">
+                  setting /
+                  <span className=" text-black ms-1">
+                    {location.pathname.replace("/dashboard/setting/", "") .replace("&", " & ")}
+                  </span>
+                </p>
+              ) : (
+                <p>
+                  {location.pathname
+                    .replace("/", "")
+                    .replace("dashboard/", "")
+                    .replace(/usersList\/userDetails\/\d+/, "User's Details")
+                    .replace(
+                      /complaints\/complaintsDetails\/\d+/,
+                      "Complaints Details"
+                    )
+                    .replace("&", " & ")
+                    .replace("/", " / ")
+                    .replace("usersList", "Users List")}
+                </p>
+              )}
+            </p>
+            <p className={"font-normal text-xs xl:text-[14px] opacity-[70%]"}>
+              {location.state}
+            </p>
+          </div>
         </div>
 
         <div className="flex items-center gap-2 xl:gap-4">
           <div
             className={`flex me-2 items-center pe-3 rounded-[10px] ${
-              isInputVisible
-                ? "max-w-[330px] bg-[#F1F1F1]"
-                : "max-w-[40px]"
+              isInputVisible ? "max-w-[330px] bg-[#F1F1F1]" : "max-w-[40px]"
             } transition-all duration-300`}
           >
-            <div
-              onClick={toggleSearchInput}
-              className={`cursor-pointer`}
-            >
+            <div onClick={toggleSearchInput} className={`cursor-pointer`}>
               <SearchIconTopBar />
             </div>
             {isInputVisible && (

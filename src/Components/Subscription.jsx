@@ -9,13 +9,8 @@ const Subscription = () => {
   return (
     <div className="w-full min-h-screen p-[15px] bg-white rounded-[10px]">
       <div className="rounded-lg mb-5">
-        <div className="flex justify-between items-center">
-          <div>
-            <h1 className="text-xl xl:text-[28px] font-medium mb-[5px]">Subscription</h1>
-            <p className="text-sm xl:text-base font-normal opacity-[70%]">
-              Plan, prioritize, and accomplish your tasks with ease.
-            </p>
-          </div>
+        <div className="flex justify-end items-center">
+          
           <button
             onClick={handlePopup}
             className="bg-[#0832DE] font-normal text-base text-white py-2 xl:py-3 px-3 xl:px-[15px] rounded-[10px] mt-3 float-right"

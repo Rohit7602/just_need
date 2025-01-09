@@ -3,15 +3,7 @@ import React from 'react'
 function SettingKeysCredentials() {
   return (
     <div className='p-[15px]'>
-          <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-medium text-xl lg:text-[28px] text-[#00000099] leading-[35px]">
-            Setting<span className="text-black">/ Keys & Credentials</span>
-          </h1>
-          <p className="text-sm lg:text-base font-normal opacity-70 text-black">
-          Manage 3rd Party Keys and Credentials
-          </p>
-        </div>
+          <div className="flex items-center justify-end">
         <div>
           <button className="text-base font-normal text-black py-3 px-[28px] rounded-[10px] bg-[#F1F1F1] me-[15px]">
             Discard

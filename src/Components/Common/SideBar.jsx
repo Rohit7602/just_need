@@ -20,7 +20,9 @@ function SideBar() {
   return (
     <div className="bg-white pt-[11px] pb-10  rounded-[10px] h-full overflow-y-auto scrollRemove">
       <div className="px-6 pb-[11px]">
-        <NavLink to="/dashboard">
+        <NavLink 
+        state={"Plan, prioritize, and accomplish your tasks with ease."}
+        to="/dashboard">
           <img
             className="max-w-[150px] xl:max-w-[222px]"
             src={CustomerServiceLogo}
@@ -37,6 +39,8 @@ function SideBar() {
         <div className="flex items-center mt-3 xl:mt-4 group_hover">
         <VerticalVilotgSvg pathName={pathName} currentPath="/dashboard"/>
           <NavLink
+            
+            state={"Plan, prioritize, and accomplish your tasks with ease."}
             to="/dashboard"
             className="flex items-center py-2.5 px-2 xl:px-[15px] gap-3 xl:gap-5 ms-[5px] w-full"
           >
@@ -51,15 +55,17 @@ function SideBar() {
           </NavLink>
         </div>
         <div className="flex items-center mt-3 xl:mt-5 group_hover">      
-        <VerticalVilotSettingSvg pathName={pathName} checkpath="/dashboard/users"/>
+        <VerticalVilotSettingSvg pathName={pathName} checkpath="/dashboard/usersList"/>
           <NavLink
-            to="/dashboard/users"
+            
+            state={"Plan, prioritize, and accomplish your tasks with ease."}
+            to="/dashboard/usersList"
             className="flex items-center py-2.5 px-2 xl:px-[15px] gap-3 xl:gap-5 ms-[5px] w-full"
           >
             <CustomerSvg pathName={pathName} />
             <span
               className={`font-normal text-sm xl:text-base ${
-                pathName.startsWith("/dashboard/users")
+                pathName.startsWith("/dashboard/usersList")
                   ? "text-[#6c4def]"
                   : "text-[#00000099]"
               }`}
@@ -71,6 +77,8 @@ function SideBar() {
         <div className="flex items-center mt-3 xl:mt-5 group_hover">
         <VerticalVilotSettingSvg pathName={pathName} checkpath="/dashboard/subscription"/>
           <NavLink
+            
+            state={"Plan, prioritize, and accomplish your tasks with ease."}
             to="/dashboard/subscription"
             className="flex items-center gap-3 xl:gap-5 py-2.5 px-2 xl:px-[15px] ms-[5px] w-full"
           >
@@ -90,6 +98,8 @@ function SideBar() {
         <div className="flex items-center mt-3 xl:mt-5 group_hover">
         <VerticalVilotSettingSvg pathName={pathName} checkpath="/dashboard/serviceRequest"/>
           <NavLink
+            
+            state={"Plan, prioritize, and accomplish your tasks with ease."}
             to="/dashboard/serviceRequest"
             className="flex items-center py-2.5 px-2 xl:px-[15px] gap-3 xl:gap-5 ms-[5px] w-full"
           >
@@ -109,6 +119,8 @@ function SideBar() {
         
         <VerticalVilotSettingSvg pathName={pathName} checkpath="/dashboard/services"/>
           <NavLink
+            
+            state={"Plan, prioritize, and accomplish your tasks with ease."}
             to="/dashboard/services"
             className="flex items-center py-2.5 px-2 xl:px-[15px] gap-3 xl:gap-5 ms-[5px] w-full"
           >
@@ -128,6 +140,8 @@ function SideBar() {
         <div className="flex items-center mt-3 xl:mt-5 group_hover">
            <VerticalVilotSettingSvg pathName={pathName} checkpath="/dashboard/complaints"/>
           <NavLink
+            
+            state={"Plan, prioritize, and accomplish your tasks with ease."}
             to="/dashboard/complaints"
             className="flex items-center py-2.5 px-2 xl:px-[15px] gap-3 xl:gap-5 ms-[5px] w-full"
           >
@@ -152,6 +166,8 @@ function SideBar() {
             <VerticalVilotSettingSvg pathName={pathName} checkpath="/dashboard/setting"/>
      
           <NavLink
+            
+            state={"Manage your platform"}
             to="/dashboard/setting"
             className="flex items-center py-2.5 px-2 xl:px-[15px] gap-3 xl:gap-5 ms-[5px] w-full"
           >
@@ -171,6 +187,8 @@ function SideBar() {
         <VerticalVilotSettingSvg pathName={pathName} checkpath="/dashboard/logout"/>
          
           <NavLink
+            
+            state={"Plan, prioritize, and accomplish your tasks with ease."}
             to="/dashboard/logout"
             className="flex items-center py-2.5 px-2 xl:px-[15px] gap-3 xl:gap-5 ms-[5px] w-full"
           >

@@ -22,13 +22,7 @@ function Users() {
     <div className="p-4">
       {!isUserDetailsPage && (
         <>
-          <h2 className="text-black font-medium text-2xl xl:text-[28px]">
-            Users List
-          </h2>
-          <p className="font-normal text-sm xl:text-base text-black mt-1">
-            Plan, prioritize, and accomplish your tasks with ease.
-          </p>
-          <div className="flex justify-between items-center p-5 mt-[15px]">
+          <div className="flex justify-between items-center">
             <h2 className="text-base xl:text-[20px] font-medium text-[#000000] opacity-70">
               All Users
             </h2>
