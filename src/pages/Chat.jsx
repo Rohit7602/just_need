@@ -107,7 +107,7 @@ const Chat = () => {
                 {chat.message}
               </p>
             </div>
-            <div className="lg:w-6/12 text-right flex flex-col justify-center ">
+            <div className="lg:w-7/12 text-right flex flex-col justify-center ">
               <p className="font-normal text-xs md:text-sm">{chat.time}</p>
               <div className="flex justify-end lg: pt-5">
                 {index < 2 ? <Icon1 /> : index === 2 ? <Icon3 /> : null}
