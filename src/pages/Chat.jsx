@@ -97,19 +97,23 @@ const Chat = () => {
         {chatData.map((chat, index) => (
           <div
             key={chat.id}
-            className="flex items-center mt-4 hover:bg-purple-100 px-2 py-3 cursor-pointer rounded-lg">
-            <div className="w-2/12">
-              <img src={chat.imgSrc} alt="Chat" className="rounded-full" />
+            className="flex items-center mt-4 hover:bg-purple-100 px-[17%] py-3 cursor-pointer rounded-lg ps-3">
+            <div className="w-[70px] h-[70px] flex-shrink-0">
+              <img
+                src={chat.imgSrc}
+                alt="Chat"
+                className="rounded-full w-full h-full object-cover"
+              />
             </div>
-            <div className="w-8/12 ps-4 flex flex-col justify-center ">
+            <div className="w-8/12 ps-4 flex flex-col justify-center">
               <h2 className="font-medium text-sm md:text-base text-black">{chat.name}</h2>
-              <p className="font-normal text-xs md:text-sm text-gray-600  pt-3 lg:pt-4 truncate">
+              <p className="font-normal text-xs md:text-sm text-gray-600 pt-3 lg:pt-4 truncate">
                 {chat.message}
               </p>
             </div>
-            <div className="lg:w-7/12 text-right flex flex-col justify-center ">
-              <p className="font-normal text-xs md:text-sm">{chat.time}</p>
-              <div className="flex justify-end lg: pt-5">
+            <div className="lg:w-3/12 text-right flex flex-col justify-center">
+              <p className="font-normal text-xs md:text-sm whitespace-nowrap">{chat.time}</p>
+              <div className="flex justify-end pt-5">
                 {index < 2 ? <Icon1 /> : index === 2 ? <Icon3 /> : null}
               </div>
             </div>
