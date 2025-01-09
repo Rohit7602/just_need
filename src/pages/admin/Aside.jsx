@@ -20,10 +20,6 @@ function Aside() {
   return (
     <div>
       <div className="  px-[14px]">
-        <p className="font-medium text-[28px]">Dashboard</p>
-        <p className="font-normal text-[16px] opacity-[70%]">
-          Plan, prioritize, and accomplish your tasks with ease.
-        </p>
         <div className="flex flex-wrap mt-[16px] -mx-2">
           {cardData.map((card, index) => (
             <div key={index} className="w-full sm:w-[50%] xl:w-[25%] px-2 mb-4">

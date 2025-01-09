@@ -9,6 +9,8 @@ import {
 import { servicedata } from "../../Components/Common/Helper";
 import Actions from "../Popups/Actions";
 import AddNewServicePopUp from "../Popups/AddNewServicePopUp";
+import EnablePopUp from "../Popups/EnablePopUp";
+import DisablePopUp from "../Popups/DisablePopUp";
 
 function Services() {
   const [editIndex, setEditIndex] = useState(null);
@@ -17,9 +19,13 @@ function Services() {
   const [selectedItem, setSelectedItem] = useState(null);
   const [disabledCards, setDisabledCards] = useState([]); // State to track disabled cards
   const [showNewServicePopUp, setShowNewServicePopUp] = useState(false);
-    function handleNewServicePopUp() {
-        setShowNewServicePopUp(!showNewServicePopUp);
-    }
+  const [showEnablePopup, setShowEnablePopup] = useState(false);
+  const [showDisablePopup, setShowDisablePopup] = useState(false);
+  const [currentCardIndex, setCurrentCardIndex] = useState(null);
+
+  function handleNewServicePopUp() {
+    setShowNewServicePopUp(!showNewServicePopUp);
+  }
 
   const handleEditClick = (index, data) => {
     setEditIndex(index);
@@ -47,12 +53,27 @@ function Services() {
     setSelectedItem(null);
   };
 
-  const toggleDisableCard = (index) => {
-    setDisabledCards((prev) =>
-      prev.includes(index)
-        ? prev.filter((i) => i !== index) // Remove index to enable
-        : [...prev, index] // Add index to disable
-    );
+  const toggleDisableCard = (index, action) => {
+    if (action === "confirm") {
+      setDisabledCards((prev) =>
+        prev.includes(index)
+          ? prev.filter((i) => i !== index)
+          : [...prev, index]
+      );
+    }
+    setShowEnablePopup(false);
+    setShowDisablePopup(false);
+    setCurrentCardIndex(null);
+  };
+
+  const handleDisableClick = (index) => {
+    setCurrentCardIndex(index);
+    setShowDisablePopup(true);
+  };
+
+  const handleEnableClick = (index) => {
+    setCurrentCardIndex(index);
+    setShowEnablePopup(true);
   };
 
   return (
@@ -75,7 +96,10 @@ function Services() {
               />
             </div>
           </div>
-          <div onClick={()=>handleNewServicePopUp()} className="whitespace-nowrap cursor-pointer bg-[#0832DE] flex items-center px-[16px] py-[12px] rounded-[10px] ms-[20px]">
+          <div
+            onClick={() => handleNewServicePopUp()}
+            className="whitespace-nowrap cursor-pointer bg-[#0832DE] flex items-center px-[16px] py-[12px] rounded-[10px] ms-[20px]"
+          >
             <Plusicon />
             <p className="font-normal text-[16px] text-white ms-[12px]">
               Add New Service
@@ -114,7 +138,11 @@ function Services() {
                       </div>
                       <div
                         className="ms-[20px] cursor-pointer"
-                        onClick={() => toggleDisableCard(index)}
+                        onClick={() =>
+                          disabledCards.includes(index)
+                            ? handleEnableClick(index)
+                            : handleDisableClick(index)
+                        }
                       >
                         {disabledCards.includes(index) ? (
                           <span className="text-xs font-normal text-[#0DA800] opacity-100">
@@ -180,7 +208,22 @@ function Services() {
           </div>
         </div>
       )}
-      {showNewServicePopUp && <AddNewServicePopUp handleNewServicePopUp={handleNewServicePopUp}/>}
+      {showNewServicePopUp && (
+        <AddNewServicePopUp handleNewServicePopUp={handleNewServicePopUp} />
+      )}
+      {showEnablePopup && (
+        <EnablePopUp
+          onConfirm={() => toggleDisableCard(currentCardIndex, "confirm")}
+          onCancel={() => setShowEnablePopup(false)}
+        />
+      )}
+
+      {showDisablePopup && (
+        <DisablePopUp
+          onConfirm={() => toggleDisableCard(currentCardIndex, "confirm")}
+          onCancel={() => setShowDisablePopup(false)}
+        />
+      )}
     </div>
   );
 }
