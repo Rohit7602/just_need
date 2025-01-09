@@ -1,6 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
+import Logo from "../../assets/logo.png";
 
 function SettinGeneral() {
+  const [image, setImage] = useState(Logo);
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const imageURL = URL.createObjectURL(file);
+      setImage(imageURL);
+    }
+  };
   return (
     <div className="p-[15px]">
       <div className="flex items-center justify-between">
@@ -55,12 +64,40 @@ function SettinGeneral() {
             />
           </div>
         </div>
-        {/* <div className="flex gap-5 items-center mt-[30px]">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-center mt-[30px]">
           <p className="min-w-[160px] text-base font-normal text-black">
             Platform Logo:
           </p>
-          <input type="file" />
-        </div> */}
+          <div className="border-[1px] border-[#00000033] rounded-[10px] w-[222px] h-[64px]">
+            <img
+              className="w-full h-full object-contain"
+              src={image}
+              alt="Platform Logo"
+            />
+          </div>
+
+          <label
+            htmlFor="fileInput"
+            className="cursor-pointer flex items-center border-[1px] border-[#00000033] rounded-[10px] bg-white ps-4 w-full justify-between xl:w-[500px]"
+          >
+            <input
+              type="text"
+              value={image}
+              readOnly
+              className=" px-2 w-[250px] xl:w-[356px]  text-sm text-gray-600 bg-white py-[23px] pe-4 outline-none border-none "
+            />
+            <div className="bg-[#335ACB1A] border-s-[1px] border-[#00000033] rounded-[10px] px-4 py-[23px] text-sm font-medium text-gray-700">
+              Upload Image
+            </div>
+            <input
+              id="fileInput"
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleImageChange}
+            />
+          </label>
+        </div>
         <div className="flex flex-col lg:flex-row gap-5 lg:items-center mt-[30px]">
           <p className="min-w-[160px] text-base font-normal text-black">
             Platform Appearance:

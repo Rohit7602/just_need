@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import avatar from "../assets/avatar.png";
 import { FaAngleDown } from "react-icons/fa";
 import ActionUserPupUp from "./Popups/ActionUserPupUp";
+import { Link } from "react-router-dom";
 
 const CustomerData = ({ mapData }) => {
   const [showPopup, setShowPopup] = useState(false);
   const [mainCheckbox, setMaincheckbox] = useState(false);
-  const[selectitem,setSelectitem]=useState([])
+  const [selectitem, setSelectitem] = useState([]);
 
   function handleMainCheckboxChange() {
     setMaincheckbox(!mainCheckbox);
@@ -16,34 +17,30 @@ const CustomerData = ({ mapData }) => {
     setShowPopup(!showPopup);
   }
 
-
   function checkhandler(e) {
-        const isselected = e.target.checked
-        const value = parseInt(e.target.value)
-    
-        if (isselected) {
-          setSelectitem([...selectitem, value])
-        }
-        else {
-          setSelectitem((prevdata) => {
-            return prevdata.filter((id) => {
-              return id !== value
-            })
-          })
-        }
-      }
-      function maincheckbox() {
-        if (mapData.length == selectitem.length) {
-          setSelectitem([])
-        }
-        else {
-          const postids = mapData.map((items) => {
-            return items.id
-          })
-          setSelectitem(postids)
-        }
-      }
-    
+    const isselected = e.target.checked;
+    const value = parseInt(e.target.value);
+
+    if (isselected) {
+      setSelectitem([...selectitem, value]);
+    } else {
+      setSelectitem((prevdata) => {
+        return prevdata.filter((id) => {
+          return id !== value;
+        });
+      });
+    }
+  }
+  function maincheckbox() {
+    if (mapData.length == selectitem.length) {
+      setSelectitem([]);
+    } else {
+      const postids = mapData.map((items) => {
+        return items.id;
+      });
+      setSelectitem(postids);
+    }
+  }
 
   return (
     <div className="bg-[#FFFFFF] p-5 rounded-[10px]">
@@ -52,7 +49,12 @@ const CustomerData = ({ mapData }) => {
           <thead>
             <tr>
               <th className="p-[19px] md:p-[24px]">
-              <input className="w-[16px] h-[16px]" type="checkbox" checked={mapData.length == selectitem.length} onChange={maincheckbox} />
+                <input
+                  className="w-[16px] h-[16px]"
+                  type="checkbox"
+                  checked={mapData.length == selectitem.length}
+                  onChange={maincheckbox}
+                />
               </th>
               <th className="p-[19px] md:p-[24px]  font-medium text-sm md:text-base">
                 Customer Id
@@ -91,9 +93,14 @@ const CustomerData = ({ mapData }) => {
           <tbody>
             {mapData.map((customer, index) => (
               <tr key={index}>
-                  <td className="p-[19px] md:p-[24px]">
-             <input className="w-[16px] h-[16px]" type="checkbox" onChange={checkhandler}
-                checked={selectitem.includes(customer.id)} value={customer.id} />
+                <td className="p-[19px] md:p-[24px]">
+                  <input
+                    className="w-[16px] h-[16px]"
+                    type="checkbox"
+                    onChange={checkhandler}
+                    checked={selectitem.includes(customer.id)}
+                    value={customer.id}
+                  />
                 </td>
                 {/* <td className="p-[19px] md:p-[24px]">
                   <input className="w-[16px] h-[16px]" type="checkbox" />
@@ -101,14 +108,16 @@ const CustomerData = ({ mapData }) => {
                 <td className="p-[19px] md:p-[24px] text-sm font-normal text-[#000000]">
                   {customer.id}
                 </td>
-                <td className="p-[19px] md:p-[24px] flex items-center gap-2">
-                  <img
-                    src={avatar}
-                    alt="avatar"
-                    className="w-8 h-8 rounded-full"
-                  />
-                  {customer.name}
-                </td>
+                <Link to={`/dashboard/users/userDetails/${customer.id}`}>
+                  <td className="p-[19px] md:p-[24px] flex items-center gap-2">
+                    <img
+                      src={avatar}
+                      alt="avatar"
+                      className="w-8 h-8 rounded-full"
+                    />
+                    {customer.name}
+                  </td>
+                </Link>
                 <td className="p-[19px] md:p-[24px] text-sm font-normal text-[#000000]">
                   {customer.email}
                 </td>
@@ -154,18 +163,9 @@ const CustomerData = ({ mapData }) => {
           <FaAngleDown className="-rotate-90 ms-[30px]" />
         </div>
       </div>
-      {showPopup && (
-        <ActionUserPupUp handlePopup={handlePopup}/>
-      )}
+      {showPopup && <ActionUserPupUp handlePopup={handlePopup} />}
     </div>
   );
 };
 
-
-export default CustomerData
-
-
-
-
-
-
+export default CustomerData;
