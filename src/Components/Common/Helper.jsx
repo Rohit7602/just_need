@@ -106,9 +106,9 @@ export const servicedata = [{
 ]
 
 export const Actiondata = [
-    { val1: '1. Oil Change', val2: '1. Oil Change', val3: '1. Oil Change', val4: '1. Oil Change', val5: '1. Oil Change' },
-    { val1: '2. Tire Change', val2: '2. Tire Change', val3: '2. Tire Change', val4: '2. Tire Change', val5: '2. Tire Change' },
-    { val1: '3. Car Wash', val2: '3. Car Wash', val3: '3. Car Wash', val4: '3. Car Wash', val5: '3. Car Wash' },
+    { val1: 'Oil Change', val2: 'Oil Change', val3: 'Oil Change', val4: 'Oil Change', val5: 'Oil Change' },
+    { val1: 'Tire Change', val2: 'Tire Change', val3: 'Tire Change', val4: 'Tire Change', val5: 'Tire Change' },
+    { val1: 'Car Wash', val2: 'Car Wash', val3: 'Car Wash', val4: 'Car Wash', val5: 'Car Wash' },
     // Add more rows as needed
 ];
 

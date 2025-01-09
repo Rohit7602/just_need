@@ -49,7 +49,7 @@ export const Complaints = () => {
                 <CloseIcon />
               </div>
             </div>
-            <div className="flex sm:mt-5">
+            <div className="flex sm:mt-5 lg:mt-0">
               <div className="flex items-center py-3 px-4 bg-[#F1F1F1] rounded-[10px] w-[337px]">
                 <SearchIcon />
                 <input

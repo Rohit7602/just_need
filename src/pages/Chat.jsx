@@ -117,8 +117,8 @@ const Chat = () => {
         ))}
       </div>
 
-      <div className="lg:w-[570px] w-full p-3">
-        <div className="bg-gray-300 p-4 rounded-t-xl rounded-br-xl  lg:w-[400px]">
+      <div className="lg:w-[570px] w-full p-3 lg:pe-[40px]">
+        <div className="bg-gray-300 p-4 rounded-t-xl rounded-br-xl  lg:w-[400px] ">
           <p className="font-normal text-sm md:text-base">
             Hi, there I am having some problem with my delivered product
           </p>
@@ -135,7 +135,7 @@ const Chat = () => {
           <p className="font-normal text-xs md:text-sm pt-2 float-right">Just Now</p>
         </div>
         <div className="flex  gap-3 mt-5 float-left">
-          <div className="flex-grow bg-gray-300 rounded-full py-2 px-4 sm:w-[50vh]  lg:w-[390px]">
+          <div className="flex-grow bg-gray-300 rounded-full py-2 px-4 sm:w-[30vh] md:w-[40vh]  xl:w-[390px]">
             <input
               type="text"
               placeholder="Enter your message"
