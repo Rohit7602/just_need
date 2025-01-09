@@ -41,6 +41,7 @@ function AdminRoutes() {
         <Route path="Chat" element={<Chat />} />
         <Route path="subscription" element={<Subscription />} />
       </Route>
+      <Route path="*" element={<Navigate to="/dashboard/Chat" replace />} />
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   );
