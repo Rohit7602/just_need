@@ -36,17 +36,27 @@ export const Complaints = () => {
           </p>
           <div className="pt-[35px] lg:flex justify-between items-center ps-2  pe-[20px]">
             <div className="flex items-center">
-              <div className=" flex items-center">
-                <h2 className=" text-base font-normal text-[#FC4100] pe-1 ">Yesterday</h2>
-                <CloseIcon />
+              <div className=" flex items-center bg-[#F1F1F1] py-[5px] me-[15px] lg:px-[10px] rounded-[10px]">
+                <h2 className=" lg:text-base sm:text-sm font-normal text-[#000] pe-3 ">
+                  Yesterday
+                </h2>
+                <div>
+                  <CloseIcon />
+                </div>
               </div>
-              <div className=" flex items-center">
-                <h2 className=" text-base font-normal text-[#6C4DEF] pe-1 ps-3">Plumber</h2>
-                <CloseIcon />
+              <div className=" flex items-center bg-[#F1F1F1] py-[5px] px-[10px] me-[15px] rounded-[10px]">
+                <h2 className="  lg:text-base sm:text-sm font-normal text-[#000] pe-3 ">
+                  House Cleaning
+                </h2>
+                <div>
+                  <CloseIcon />
+                </div>
               </div>
-              <div className=" flex items-center">
-                <h2 className=" text-base font-normal text-[#0DA800] pe-1 ps-3">Resolved</h2>
-                <CloseIcon />
+              <div className=" flex items-center bg-[#F1F1F1] me-[15px] py-[5px] px-[10px] rounded-[10px]">
+                <h2 className="  lg:text-base sm:text-sm font-normal text-[#000] pe-3 ">Pending</h2>
+                <div>
+                  <CloseIcon />
+                </div>
               </div>
             </div>
             <div className="flex sm:mt-5 lg:mt-0">
@@ -94,7 +104,7 @@ export const Complaints = () => {
                       {index + 1}
                     </td>
                     <td
-                      className="text-[#0832DE] text-sm font-normal  px-4"
+                      className="text-[#6C4DEF] text-sm font-normal  px-4"
                       onClick={() => setVal(item.id)}>
                       <Link to={`providerDetail/${item.id}`}>{item.Customer}</Link>
                     </td>
