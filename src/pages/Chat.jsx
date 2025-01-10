@@ -97,19 +97,23 @@ const Chat = () => {
         {chatData.map((chat, index) => (
           <div
             key={chat.id}
-            className="flex items-center mt-4 hover:bg-purple-100 px-2 py-3 cursor-pointer rounded-lg">
-            <div className="w-2/12">
-              <img src={chat.imgSrc} alt="Chat" className="rounded-full" />
+            className="flex items-center mt-4 hover:bg-purple-100 px-[17%] py-3 cursor-pointer rounded-lg ps-3">
+            <div className="w-[70px] h-[70px] flex-shrink-0">
+              <img
+                src={chat.imgSrc}
+                alt="Chat"
+                className="rounded-full w-full h-full object-cover"
+              />
             </div>
-            <div className="w-8/12 ps-4 flex flex-col justify-center ">
+            <div className="w-8/12 ps-4 flex flex-col justify-center">
               <h2 className="font-medium text-sm md:text-base text-black">{chat.name}</h2>
-              <p className="font-normal text-xs md:text-sm text-gray-600  pt-3 lg:pt-4 truncate">
+              <p className="font-normal text-xs md:text-sm text-gray-600 pt-3 lg:pt-4 truncate">
                 {chat.message}
               </p>
             </div>
-            <div className="lg:w-6/12 text-right flex flex-col justify-center ">
-              <p className="font-normal text-xs md:text-sm">{chat.time}</p>
-              <div className="flex justify-end lg: pt-5">
+            <div className="lg:w-3/12 text-right flex flex-col justify-center">
+              <p className="font-normal text-xs md:text-sm whitespace-nowrap">{chat.time}</p>
+              <div className="flex justify-end pt-5">
                 {index < 2 ? <Icon1 /> : index === 2 ? <Icon3 /> : null}
               </div>
             </div>
@@ -117,8 +121,8 @@ const Chat = () => {
         ))}
       </div>
 
-      <div className="lg:w-[570px] w-full p-3">
-        <div className="bg-gray-300 p-4 rounded-t-xl rounded-br-xl  lg:w-[400px]">
+      <div className="lg:w-[570px] w-full p-3 lg:pe-[40px]">
+        <div className="bg-gray-300 p-4 rounded-t-xl rounded-br-xl  lg:w-[400px] ">
           <p className="font-normal text-sm md:text-base">
             Hi, there I am having some problem with my delivered product
           </p>
@@ -135,7 +139,7 @@ const Chat = () => {
           <p className="font-normal text-xs md:text-sm pt-2 float-right">Just Now</p>
         </div>
         <div className="flex  gap-3 mt-5 float-left">
-          <div className="flex-grow bg-gray-300 rounded-full py-2 px-4 sm:w-[50vh]  lg:w-[390px]">
+          <div className="flex-grow bg-gray-300 rounded-full py-2 px-4 sm:w-[30vh] md:w-[40vh]  xl:w-[390px]">
             <input
               type="text"
               placeholder="Enter your message"

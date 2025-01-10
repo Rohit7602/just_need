@@ -21,7 +21,6 @@ import Chat from '../../pages/Chat';
 function AdminRoutes() {
   return (
     <Routes>
-      <Route path="/Actions" element={<Actions />} />
       <Route path="/dashboard" element={<AdminLayout />}>
         <Route index element={<Aside />} />
         <Route path="usersList" element={<Users />}>

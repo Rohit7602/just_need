@@ -64,7 +64,7 @@ function SettingLegal() {
           modules={modules}
           formats={formats}
           theme="snow"
-          className="bg-white border  border-gray-300 rounded-lg"
+          className="bg-white border  border-gray-300 rounded-lg min-h-[300px] max-h-[500px]"
         />
       </div>
       <p className="text-base font-medium text-black mt-[15px]">Privacy Policy</p>
@@ -75,7 +75,7 @@ function SettingLegal() {
           modules={modules}
           formats={formats}
           theme="snow"
-          className="bg-white border  border-gray-300 rounded-lg"
+          className="bg-white border  border-gray-300 rounded-lg  min-h-[300px] max-h-[500px]"
         />
       </div>
     </div>

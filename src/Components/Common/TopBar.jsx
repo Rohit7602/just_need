@@ -5,7 +5,7 @@ import {
   SearchIconTopBar,
 } from "../../assets/icon/Icon";
 import AdminImage from "../../assets/png/AdminImage.png";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ArrowIcon } from "../../assets/icon/Icons";
 
 function TopBar() {
@@ -24,6 +24,10 @@ function TopBar() {
     /\/dashboard\/usersList\/userDetails\/\d+$/.test(location.pathname) ||
     location.pathname === "/dashboard/setting";
 
+  // const goToChatPage = () => {
+  //   navigate('/Chat');
+  // };
+
   return (
     <div>
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 xl:gap-5">
@@ -41,7 +45,9 @@ function TopBar() {
                 <p className="text-[#00000099] font-medium text-lg xl:text-[22px] capitalize">
                   setting /
                   <span className=" text-black ms-1">
-                    {location.pathname.replace("/dashboard/setting/", "") .replace("&", " & ")}
+                    {location.pathname
+                      .replace("/dashboard/setting/", "")
+                      .replace("&", " & ")}
                   </span>
                 </p>
               ) : (
@@ -79,13 +85,16 @@ function TopBar() {
               <input
                 type="text"
                 placeholder="Search task"
-                className={`w-full outline-none py-3 bg-[#F1F1F1] text-base placeholder:text-base placeholder:font-normal font-normal placeholder:text-[#00000080] "rounded-[10px]" `}
+                className="w-full outline-none py-3 bg-[#F1F1F1] text-base placeholder:text-base placeholder:font-normal font-normal placeholder:text-[#00000080] rounded-[10px]"
               />
             )}
           </div>
-          <button>
+          <Link
+            to={"/dashboard/chat"}
+            state={"Plan, prioritize, and accomplish your tasks with ease."}
+          >
             <ChatIcon />
-          </button>
+          </Link>
           <button>
             <NotificationIcon />
           </button>
