@@ -5,7 +5,7 @@ import {
   SearchIconTopBar,
 } from "../../assets/icon/Icon";
 import AdminImage from "../../assets/png/AdminImage.png";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ArrowIcon } from "../../assets/icon/Icons";
 
 function TopBar() {
@@ -16,9 +16,6 @@ function TopBar() {
     setIsInputVisible((prev) => !prev);
   };
 
-  const goToChatPage = () => {
-    navigate('/Chat');
-  };
   // Regular expression to check for paths ending with a number
   const showArrowButton =
     /\/dashboard\/complaints\/complaintsDetails\/\d+$/.test(
@@ -26,6 +23,10 @@ function TopBar() {
     ) ||
     /\/dashboard\/usersList\/userDetails\/\d+$/.test(location.pathname) ||
     location.pathname === "/dashboard/setting";
+
+  // const goToChatPage = () => {
+  //   navigate('/Chat');
+  // };
 
   return (
     <div>
@@ -44,7 +45,9 @@ function TopBar() {
                 <p className="text-[#00000099] font-medium text-lg xl:text-[22px] capitalize">
                   setting /
                   <span className=" text-black ms-1">
-                    {location.pathname.replace("/dashboard/setting/", "") .replace("&", " & ")}
+                    {location.pathname
+                      .replace("/dashboard/setting/", "")
+                      .replace("&", " & ")}
                   </span>
                 </p>
               ) : (
@@ -86,14 +89,21 @@ function TopBar() {
               />
             )}
           </div>
-          <button onClick={goToChatPage}>
+          <Link
+            to={"/dashboard/chat"}
+            state={"Plan, prioritize, and accomplish your tasks with ease."}
+          >
             <ChatIcon />
-          </button>
+          </Link>
           <button>
             <NotificationIcon />
           </button>
           <div className="flex items-center">
-            <img className="max-w-[45px] xl:max-w-[60px]" src={AdminImage} alt="image of admin" />
+            <img
+              className="max-w-[45px] xl:max-w-[60px]"
+              src={AdminImage}
+              alt="image of admin"
+            />
             <div className="ms-2.5">
               <p className="font-normal text-sm xl:text-base text-[#171717] leading-[20px]">
                 Super Admin
