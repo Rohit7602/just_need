@@ -24,18 +24,18 @@ function AdminRoutes() {
       <Route path="/Actions" element={<Actions />} />
       <Route path="/dashboard" element={<AdminLayout />}>
         <Route index element={<Aside />} />
-        <Route path="users" element={<Users />}>
+        <Route path="usersList" element={<Users />}>
           <Route path="userDetails/:id" element={<UserDetails />} />
         </Route>
         <Route path="serviceRequest" element={<ServiceRequest />} />
         <Route path="services" element={<Services />} />
         <Route path="complaints" element={<Complaints />}>
-          <Route path="providerDetail/:id" element={<Provider_Detail />} />
+          <Route path="complaintsDetails/:id" element={<Provider_Detail />} />
         </Route>
         <Route path="setting" element={<Setting />} />
         <Route path="setting/general" element={<SettinGeneral />} />
         <Route path="setting/legal" element={<SettingLegal />} />
-        <Route path="setting/keysCredentials" element={<SettingKeysCredentials />} />
+        <Route path="setting/keys&Credentials" element={<SettingKeysCredentials />} />
         <Route path="Provider_Detail" element={<Provider_Detail />} />
         <Route path="logout" element={<Logout />} />
         <Route path="Chat" element={<Chat />} />
