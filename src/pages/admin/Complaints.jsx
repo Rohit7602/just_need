@@ -58,7 +58,7 @@ export const Complaints = () => {
                 <input
                   type="text"
                   placeholder="Search task"
-                  className="w-full outline-none bg-[#F1F1F1] ms-2.5 text-base placeholder:text-base placeholder:font-normal font-normal placeholder:text-[#00000080]"
+                  className="w-full outline-none bg-transparent ml-2.5 text-base placeholder:text-gray-500"
                 />
               </div>
               <div className="relative">
