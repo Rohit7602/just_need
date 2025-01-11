@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Crossicon, Editicon, Greenicon, Redcrossicon } from "../../assets/icon/Icons";
+import { Crossicon, EditiconActionPopUp, Greenicon, Redcrossicon } from "../../assets/icon/Icons";
 import { Actiondata } from "../Common/Helper";
 
 function Actions({selectedItem,handleOverlayClick}) {
@@ -49,8 +49,6 @@ function Actions({selectedItem,handleOverlayClick}) {
   const handleCancelClick = () => {
     setShowRedIcons(false); // Show the delete button
   };
-console.log(Actiondata)
-console.log(selectedItem)
   return (
     <div>
       <div className="w-[700px] bg-white absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 border border-gray-300 p-4 rounded-lg shadow-lg">
@@ -99,19 +97,19 @@ console.log(selectedItem)
                       className="font-normal text-[16px] me-[12px] cursor-pointer border border-[#000] rounded-[10px] py-[5px] px-[10px] w-[120px]"
                     />
                   ) : (
-                    <p className="font-normal text-[16px] me-[12px] cursor-pointer border border-transparent py-[5px] w-[120px]">
+                    <p className="font-normal text-[16px] me-[12px] border border-transparent py-[5px] w-[120px]">
                       {item[field]}
                     </p>
                   )}
                   {showRedIcons ? (
-                    <span>
+                    <button>
                       <Redcrossicon />
-                    </span>
+                    </button>
                   ) : (
                     <span
                       onClick={() => handleEditClick(index, field, item[field])}
                     >
-                    {editingIndex === index && editField === field?<Greenicon />:<Editicon />}
+                    {editingIndex === index && editField === field?<Greenicon />:<EditiconActionPopUp />}
                       
                     </span>
                   )}

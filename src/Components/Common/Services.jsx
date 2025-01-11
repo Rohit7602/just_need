@@ -104,13 +104,15 @@ function Services() {
 
       <div className="flex flex-wrap mt-[16px] -mx-2">
         {servicedata.map((items, index) => (
-          <div
-            key={index}
-            className={`w-full md:w-1/2 xl:w-1/3 px-2 mt-4 ${
-              disabledCards.includes(index) ? "opacity-50" : "opacity-100"
+          <div key={index} className={`w-full md:w-1/2 xl:w-1/3 px-2 mt-4`}>
+            <div
+              className={`relative z-[20] cursor-pointer h-full border-[#0000001A] rounded-[10px] p-[20px]  border-[1px] bg-[white] group 
+            duration-300 ${
+              disabledCards.includes(index)
+                ? " text-[#0000002A] border-[#0000001A]"
+                : "hover:bg-[#6C4DEF] hover:text-white hover:shadow-lg"
             }`}
-          >
-            <div className="relative z-[20] cursor-pointer h-full border-[#0000001A] rounded-[10px] p-[20px] hover:shadow-lg border-[1px] bg-[white] hover:bg-[#6C4DEF] hover:text-white group duration-300">
+            >
               <div className="flex items-center justify-between">
                 {editIndex === index ? (
                   <input
@@ -127,11 +129,36 @@ function Services() {
                 <div className="flex items-center">
                   {editIndex !== index ? (
                     <>
-                      <div onClick={() => handleEditClick(index, items.data)}>
-                        <Editicon />
-                      </div>
+                      {!disabledCards.includes(index) ? (
+                        <div
+                          className={`${
+                            disabledCards.includes(index)
+                              ? " opacity-20"
+                              : " opacity-100"
+                          }`}
+                          onClick={() => handleEditClick(index, items.data)}
+                        >
+                          <Editicon
+                            disabledCards={disabledCards}
+                            index={index}
+                          />
+                        </div>
+                      ) : (
+                        <div
+                          className={`${
+                            disabledCards.includes(index)
+                              ? " opacity-20"
+                              : " opacity-100"
+                          }`}
+                        >
+                          <Editicon
+                            disabledCards={disabledCards}
+                            index={index}
+                          />
+                        </div>
+                      )}
                       <div
-                        className="ms-[20px] cursor-pointer"
+                        className="ms-[20px] cursor-pointer opacity-100"
                         onClick={() =>
                           disabledCards.includes(index)
                             ? handleEnableClick(index)
@@ -139,7 +166,7 @@ function Services() {
                         }
                       >
                         {disabledCards.includes(index) ? (
-                          <span className="text-xs font-normal text-[#0DA800] opacity-100">
+                          <span className="text-xs font-normal text-[#0DA800] !opacity-100">
                             Enable
                           </span>
                         ) : (
@@ -154,7 +181,17 @@ function Services() {
                   )}
                 </div>
               </div>
-              <div className="border-t border-dashed border-[#00000066] my-[16px] group-hover:border-[white]"></div>
+              <div
+                className={`border-t border-dashed  ${
+                  disabledCards.includes(index)
+                    ? "border-[#000000Ai]"
+                    : "border-[#00000066]"
+                } my-[16px] ${
+                  disabledCards.includes(index)
+                    ? null
+                    : "group-hover:border-[white]"
+                }`}
+              ></div>
               <div className="flex items-center justify-between">
                 <div>
                   <p className="opacity-[60%] font-normal text-[12px] mb-[10px]">
@@ -174,12 +211,16 @@ function Services() {
                   <p className="opacity-[60%] font-normal text-[12px] mb-[10px]">
                     5. {items.val6}
                   </p>
-                  <p
-                    className="font-normal text-[12px]"
-                    onClick={() => handleItemClick(items)}
-                  >
-                    {items.val7}
-                  </p>
+                  {disabledCards.includes(index) ? (
+                    <p className="font-normal text-[12px]">{items.val7}</p>
+                  ) : (
+                    <p
+                      className="font-normal text-[12px]"
+                      onClick={() => handleItemClick(items)}
+                    >
+                      {items.val7}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
