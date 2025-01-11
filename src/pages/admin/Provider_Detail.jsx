@@ -31,13 +31,7 @@ const Provider_Detail = () => {
   return (
     <div className=" ">
       {/* Complaints Details and Resolve Issue button */}
-      <div className="flex justify-between items-center flex-wrap gap-y-4">
-        <div className="flex items-center">
-          <ArrowIcon />
-          <h2 className="font-medium text-lg md:text-xl lg:text-[28px] text-black ps-5">
-            Complaints Details
-          </h2>
-        </div>
+      <div className="flex justify-end items-center flex-wrap gap-y-4">
         <button
           onClick={handleResolveIssue}
           className="bg-[#0832DE] flex items-center text-white font-normal text-sm md:text-base px-3 md:px-4 py-2 md:py-3 rounded-[10px] relative">

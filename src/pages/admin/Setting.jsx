@@ -5,16 +5,9 @@ import { Link } from "react-router-dom";
 function Setting() {
   return (
     <div className="p-[15px]">
-      <h1 className="font-medium text-xl lg:text-[28px] text-black leading-[35px]">
-        Setting
-      </h1>
-      <p className="text-sm lg:text-base font-normal opacity-70 text-black">
-        Manage your platform
-      </p>
-      <div className="mt-[15px] border-t-[1px] border-[#00000033]"></div>
       <div className="flex -mx-3 flex-wrap">
         <div className="w-6/12 xl:w-5/12 px-3">
-          <Link to="/dashboard/setting/general">
+          <Link state={"Manage your platform Appearance"} to="/dashboard/setting/general">
             <div className="flex gap-3 xl:gap-5 p-2 xl:p-5 mt-[15px] cursor-pointer">
               <SettinWithBgIcon />
               <div>
@@ -30,7 +23,7 @@ function Setting() {
           </Link>
         </div>
         <div className="w-6/12 xl:w-5/12 px-3">
-        <Link to="/dashboard/setting/keysCredentials">
+        <Link state={"Manage 3rd Party Keys and Credentials"} to="/dashboard/setting/keys&Credentials">
           <div className="flex gap-3 xl:gap-5 p-2 xl:p-5 mt-[15px] cursor-pointer">
             <SettinWithBgIcon />
             <div>
@@ -45,7 +38,7 @@ function Setting() {
           </Link>
         </div>
         <div className="w-6/12 xl:w-5/12 px-3">
-        <Link to="/dashboard/setting/legal">
+        <Link state={"Manage Terms and Privacy Policy "} to="/dashboard/setting/legal">
           <div className="flex gap-3 xl:gap-5 p-2 xl:p-5 mt-[15px] cursor-pointer">
             <SettinWithBgIcon />
             <div>

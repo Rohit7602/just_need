@@ -45,15 +45,7 @@ function SettingLegal() {
 
   return (
     <div className="p-[15px]">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-medium text-xl lg:text-[28px] text-[#00000099] leading-[35px]">
-            Setting<span className="text-black">/Legal</span>
-          </h1>
-          <p className="text-sm lg:text-base font-normal opacity-70 text-black">
-            Manage Terms and Privacy Policy
-          </p>
-        </div>
+      <div className="flex items-center justify-end">
         <div>
           <button className="text-base font-normal text-black py-3 px-[28px] rounded-[10px] bg-[#F1F1F1] me-[15px]">
             Discard
@@ -72,7 +64,7 @@ function SettingLegal() {
           modules={modules}
           formats={formats}
           theme="snow"
-          className="bg-white border  border-gray-300 rounded-lg"
+          className="bg-white border  border-gray-300 rounded-lg min-h-[300px] max-h-[500px]"
         />
       </div>
       <p className="text-base font-medium text-black mt-[15px]">Privacy Policy</p>
@@ -83,7 +75,7 @@ function SettingLegal() {
           modules={modules}
           formats={formats}
           theme="snow"
-          className="bg-white border  border-gray-300 rounded-lg"
+          className="bg-white border  border-gray-300 rounded-lg  min-h-[300px] max-h-[500px]"
         />
       </div>
     </div>

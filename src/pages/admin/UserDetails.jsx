@@ -55,20 +55,14 @@ function UserDetails() {
 
  
   return (
-    <div className="p-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-[15px]">
-          <BackArrowIcon />
-          <h1 className="text-black text-2xl xl:text-[28px] font-medium">User’s Details</h1>
-        </div>
-        <div>
+    <div className="px-4">
+      <div className="flex items-center justify-center">
           <button onClick={handlePopupDisable} className="flex items-center gap-3 bg-[#0832DE] py-2 xl:py-3 px-3 xl:px-[15px] rounded-[10px]">
             <DisalbleIcon />
             <span className="text-white font-normal text-base">
               Disable Provider
             </span>
           </button>
-        </div>
       </div>
       <div className="flex flex-wrap  mt-[30px] ">
         <div className="w-10/12 xl:w-5/12 xl:pe-2.5">

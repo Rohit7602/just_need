@@ -108,7 +108,7 @@ const CustomerData = ({ mapData }) => {
                 <td className="p-[19px] md:p-[24px] text-sm font-normal text-[#000000]">
                   {customer.id}
                 </td>
-                <Link to={`/dashboard/users/userDetails/${customer.id}`}>
+                <Link to={`/dashboard/usersList/userDetails/${customer.id}`}>
                   <td className="p-[19px] md:p-[24px] flex items-center gap-2">
                     <img
                       src={avatar}

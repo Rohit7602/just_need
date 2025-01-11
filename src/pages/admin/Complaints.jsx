@@ -25,54 +25,34 @@ export const Complaints = () => {
 
   return (
     <div className="p-5">
-      {location.pathname === `/dashboard/complaints/providerDetail/${val}` ? (
+      {location.pathname === `/dashboard/complaints/complaintsDetails/${val}` ? (
         <Outlet />
       ) : (
         // button for filter and search
         <div className="mt-3 ">
-          <h2 className="font-medium sm:text-[20px] lg:text-[28px] text-black">Complaints</h2>
-          <p className="font-normal sm:text-sm lg:text-base text-black opacity-70">
-            Plan, prioritize, and accomplish your tasks with ease.
-          </p>
-          <div className="pt-[35px] lg:flex justify-between items-center ps-2  pe-[20px]">
-            <div className="flex items-center">
-              <div className=" flex items-center bg-[#F1F1F1] py-[5px] me-[15px] lg:px-[10px] rounded-[10px]">
-                <h2 className=" lg:text-base sm:text-sm font-normal text-[#000] pe-3 ">
-                  Yesterday
-                </h2>
-                <div>
+          <div className="flex flex-col lg:flex-row justify-between items-center px-2 lg:px-4">
+            <div className="flex flex-wrap items-center gap-3 mb-4 lg:mb-0">
+              {['Yesterday', 'House Cleaning', 'Pending'].map((label) => (
+                <div key={label} className="flex items-center bg-gray-200 py-1.5 px-2.5 rounded-lg">
+                  <h2 className="text-sm lg:text-base font-normal text-black pe-3">{label}</h2>
                   <CloseIcon />
                 </div>
-              </div>
-              <div className=" flex items-center bg-[#F1F1F1] py-[5px] px-[10px] me-[15px] rounded-[10px]">
-                <h2 className="  lg:text-base sm:text-sm font-normal text-[#000] pe-3 ">
-                  House Cleaning
-                </h2>
-                <div>
-                  <CloseIcon />
-                </div>
-              </div>
-              <div className=" flex items-center bg-[#F1F1F1] me-[15px] py-[5px] px-[10px] rounded-[10px]">
-                <h2 className="  lg:text-base sm:text-sm font-normal text-[#000] pe-3 ">Pending</h2>
-                <div>
-                  <CloseIcon />
-                </div>
-              </div>
+              ))}
             </div>
-            <div className="flex sm:mt-5 lg:mt-0">
-              <div className="flex items-center py-3 px-4 bg-[#F1F1F1] rounded-[10px] w-[337px]">
+            <div className="flex w-full lg:w-auto items-center gap-3">
+              <div className="flex items-center py-3 px-4 bg-gray-200 rounded-lg flex-grow lg:flex-grow-0 lg:w-[337px] md:w-[222px]">
                 <SearchIcon />
                 <input
                   type="text"
                   placeholder="Search task"
-                  className="w-full outline-none bg-[#F1F1F1] ms-2.5 text-base placeholder:text-base placeholder:font-normal font-normal placeholder:text-[#00000080]"
+                  className="w-full outline-none bg-transparent ml-2.5 text-base placeholder:text-gray-500"
                 />
               </div>
               <button
                 onClick={handleFilterToggle}
-                className="bg-[#0832DE] flex text-white font-normal sm:text-sm md:text-base md:px-4 md:py-3 px-2 py-3 rounded-[10px] ms-4 relative">
+                className="bg-blue-700 text-white font-normal text-sm md:text-base md:px-4 md:py-3 px-3 py-2 rounded-lg flex items-center relative">
                 <FilterIcon />
-                <h5 className="md:ms-3 ms-2 ">Filter</h5>
+                <h5 className="ml-2 md:ml-3">Filter</h5>
               </button>
             </div>
           </div>
@@ -106,7 +86,7 @@ export const Complaints = () => {
                     <td
                       className="text-[#6C4DEF] text-sm font-normal  px-4"
                       onClick={() => setVal(item.id)}>
-                      <Link to={`providerDetail/${item.id}`}>{item.Customer}</Link>
+                      <Link to={`complaintsDetails/${item.id}`}>{item.Customer}</Link>
                     </td>
                     <td className="text-black text-sm font-normal  px-4">{item.name}</td>
                     <td className="text-black text-sm font-normal  px-4">{item.serviceType}</td>

@@ -78,13 +78,7 @@ function Services() {
 
   return (
     <div className="p-[14px] rounded-[10px] shadow-md bg-white">
-      <div className="xl:flex-row flex-col flex xl:items-center justify-between">
-        <div>
-          <p className="font-medium text-[28px]">Services</p>
-          <p className="text-[16px] font-normal opacity-[70%] mt-1">
-            Plan, prioritize, and accomplish your tasks with ease.
-          </p>
-        </div>
+      <div className="xl:flex-row flex-col flex xl:items-center justify-end">
         <div className="flex items-center mt-[20px] xl:mt-[0px]">
           <div className="bg-[#F1F1F1] w-[337px] p-[16px] rounded-[10px]">
             <div className="flex items-center">
