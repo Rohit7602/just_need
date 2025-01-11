@@ -7,7 +7,7 @@ function SuscriptionPopUp({ handlePopup }) {
     price: "",
     duration: "",
   };
-  const [color, setColor] = useState("#7057D7");
+  const [color, setColor] = useState("");
   const [subscriptionData, setSubscriptionData] = useState(initialData);
 
   const handleColorChange = (e) => {
@@ -109,7 +109,7 @@ function SuscriptionPopUp({ handlePopup }) {
             <input
               className="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-base placeholder:font-normal"
               value={color}
-              readOnly
+              onChange={handleColorChange}
             />
           </div>
 
