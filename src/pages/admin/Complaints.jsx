@@ -1,9 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
-import { SearchIcon } from "../../assets/icon/Icon";
-import { FilterIcon, CloseIcon } from "../../assets/icon/Icons";
-import { FaAngleDown } from "react-icons/fa";
-import Filters from "../../Components/Popups/Filters";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import React, { useState, useEffect, useRef } from 'react';
+import { SearchIcon } from '../../assets/icon/Icon';
+import { FilterIcon, CloseIcon } from '../../assets/icon/Icons';
+import { FaAngleDown } from 'react-icons/fa';
+import Filters from '../../Components/Popups/Filters';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 
 export const Complaints = () => {
   const location = useLocation();
@@ -24,17 +24,15 @@ export const Complaints = () => {
     setShowFilter(!ShowFilter);
   };
 
-  // Close the filter when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (filterRef.current && !filterRef.current.contains(event.target)) {
         setShowFilter(false);
       }
     };
-
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('click', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('click', handleClickOutside);
     };
   }, []);
 
@@ -43,30 +41,35 @@ export const Complaints = () => {
       {location.pathname === `/dashboard/complaints/complaintsDetails/${val}` ? (
         <Outlet />
       ) : (
+        // Button for filter and search
         <div className="mt-3">
-          <div className="lg:flex justify-between items-center pe-[20px]">
-            <div className="flex items-center gap-[15px]">
-              {/* Filter Tags */}
-              <div className="flex items-center px-[10px] py-[6px] gap-2.5 rounded-[10px] bg-[#F1F1F1]">
-                <h2 className="text-base font-normal text-[#000000]">
-                  Yesterday
-                </h2>
-                <CloseIcon />
+          <div className="lg:flex justify-between items-center px-4 py-2">
+            <div className="flex items-center gap-4 flex-wrap md:flex-wrap">
+              <div className="flex items-center px-[10px] py-2 rounded-[10px] bg-[#F1F1F1] space-x-2">
+                <h2 className="lg:text-base sm:text-sm font-normal text-black">Yesterday</h2>
+                <a href="">
+                  {' '}
+                  <CloseIcon />
+                </a>
               </div>
-              <div className="flex items-center px-[10px] py-[6px] gap-2.5 rounded-[10px] bg-[#F1F1F1]">
-                <h2 className="text-base font-normal text-[#000000]">House Cleaning</h2>
-                <CloseIcon />
+              <div className="flex items-center px-[10px] py-2 rounded-[10px] bg-[#F1F1F1] space-x-2">
+                <h2 className="lg:text-base sm:text-sm font-normal text-black">House Cleaning</h2>
+                <a href="">
+                  {' '}
+                  <CloseIcon />
+                </a>
               </div>
-              <div className="flex items-center px-[10px] py-[6px] gap-2.5 rounded-[10px] bg-[#F1F1F1]">
-                <h2 className="text-base font-normal text-[#000000]">
-                Pending
-                </h2>
-                <CloseIcon />
+              <div className="flex items-center px-[10px] py-2 rounded-[10px] bg-[#F1F1F1] space-x-2">
+                <h2 className="lg:text-base sm:text-sm font-normal text-black">Pending</h2>
+                <a href="">
+                  {' '}
+                  <CloseIcon />
+                </a>
               </div>
             </div>
-            {/* Filter Button */}
-            <div className="flex sm:mt-5 lg:mt-0">
-              <div className="flex items-center h-[42px] px-4 bg-[#F1F1F1] rounded-[10px] w-[337px]">
+
+            <div className="flex items-center gap-4 mt-4 lg:mt-0">
+              <div className="flex items-center h-[44px] px-4 bg-gray-200 rounded-lg w-[51vh] lg:w-[250px]">
                 <SearchIcon />
                 <input
                   type="text"
@@ -77,13 +80,12 @@ export const Complaints = () => {
               <div className="relative" ref={filterRef}>
                 <button
                   onClick={handleFilterToggle}
-                  className="bg-[#0832DE] flex items-center justify-center text-white font-normal sm:text-sm md:text-base md:px-4 h-[42px] px-2 rounded-[10px] ms-4"
-                >
+                  className="bg-[#0832DE] flex items-center justify-center text-white font-normal sm:text-sm md:text-base px-4 h-[44px] rounded-lg ml-4">
                   <FilterIcon />
                   <h5 className="md:ms-3 ms-2">Filter</h5>
                 </button>
                 {ShowFilter && (
-                  <div className="absolute end-0">
+                  <div className="absolute right-0 mt-2 z-10">
                     <Filters />
                   </div>
                 )}
@@ -93,65 +95,34 @@ export const Complaints = () => {
 
           {/* Table */}
           <div className="overflow-x-auto mt-6">
-            <table className="w-full text-left border-collapse whitespace-nowrap rounded-[10px]">
+            <table className="w-full text-left border-collapse whitespace-nowrap rounded-xl">
               <thead>
-                <tr className="h-[44px]">
-                  <th className="text-black text-sm font-medium  px-4 border-b">
-                    #
-                  </th>
-                  <th className="text-black text-sm font-medium  px-4 border-b">
-                    Customer Id
-                  </th>
-                  <th className="text-black text-sm font-medium  px-4 border-b">
-                    Name
-                  </th>
-                  <th className="text-black text-sm font-medium  px-4 border-b">
+                <tr>
+                  <th className="text-black text-sm font-medium py-3 px-4 border-b">#</th>
+                  <th className="text-black text-sm font-medium py-3 px-4 border-b">Customer Id</th>
+                  <th className="text-black text-sm font-medium py-3 px-4 border-b">Name</th>
+                  <th className="text-black text-sm font-medium py-3 px-4 border-b">
                     Service Type
                   </th>
-                  <th className="text-black text-sm font-medium  px-4 border-b">
-                    Message
-                  </th>
-                  <th className="text-black text-sm font-medium  px-4 border-b">
-                    Action
-                  </th>
+                  <th className="text-black text-sm font-medium py-3 px-4 border-b">Message</th>
+                  <th className="text-black text-sm font-medium py-3 px-4 border-b">Action</th>
                 </tr>
                 <tr>
                   <td colSpan="9">
-                    <div className="w-full border-[1px] border-opacity-40 border-dashed border-[#00000066]"></div>
+                    <div className="w-full border-[1px] border-opacity-40 border-dashed border-black"></div>
                   </td>
                 </tr>
               </thead>
               <tbody>
                 {Data.map((item, index) => (
-                  <tr key={item.id} className="h-[44px]">
-                    <td className="text-black text-sm font-normal  px-4">
+                  <tr key={item.id}>
+                    <td className="text-black text-sm font-normal py-3 lg:py-4 px-4">
                       {index + 1}
                     </td>
                     <td
-                      className="text-[#0832DE] text-sm font-normal px-4"
-                      onClick={() => setVal(item.id)}
-                    >
-                      <Link to={`complaintsDetails/${item.id}`}>
-                        {item.Customer}
-                      </Link>
-                    </td>
-                    <td className="text-black text-sm font-normal px-4">
-                      {item.name}
-                    </td>
-                    <td className="text-black text-sm font-normal px-4">
-                      {item.serviceType}
-                    </td>
-                    <td className="text-black text-sm font-normal px-4">
-                      {item.message}
-                    </td>
-                    <td
-                      className={`text-sm font-normal py-3 px-4 ${
-                        item.status === "Open"
-                          ? "text-green-500"
-                          : "text-red-500"
-                      }`}
-                    >
-                      {item.status}
+                      className="text-[#6C4DEF] text-sm font-normal px-4"
+                      onClick={() => setVal(item.id)}>
+                      <Link to={`complaintsDetails/${item.id}`}>{item.Customer}</Link>
                     </td>
                     <td className="text-black text-sm font-normal px-4">{item.name}</td>
                     <td className="text-black text-sm font-normal px-4">{item.serviceType}</td>
