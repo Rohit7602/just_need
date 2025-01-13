@@ -11,13 +11,20 @@ import { EmailIcon, LocationIcon, PhoneIcon, RatingStarIcon, DisableRedicon } fr
 import DisableProviderPopUp from "../../Components/Popups/DisableProviderPopUp";
 import DisablePopUp from "../../Components/Popups/DisablePopUp";
 import EnablePopUp from "../../Components/Popups/EnablePopUp";
+import ImagePreviewPopUp from "../../Components/Popups/ImagePreviewPopUp";
 
 function UserDetails() {
   const [showPopupDisable, setShowPopupDisable] = useState(false);
+  const [showImagePreviewPopUp,setShowImagePreviewPupUp] = useState(false)
 
 
   function handlePopupDisable() {
     setShowPopupDisable(!showPopupDisable);
+  }
+
+  const handleImagePreviewPopUp = ()=>{
+    setShowImagePreviewPupUp(!showImagePreviewPopUp)
+    console.log("first")
   }
 
    const [listings, setListings] = useState([
@@ -190,7 +197,7 @@ function UserDetails() {
           {[1, 2, 3, 4, 5, 6, 7].map((item, index) => {
             return (
               <div key={index} className="w-[33%] xl:w-[20%] px-3 mt-4">
-                <div>
+                <div onClick={handleImagePreviewPopUp} className="cursor-pointer">
                   <img
                     className="w-full"
                     src={GalleryImg1}
@@ -214,6 +221,7 @@ function UserDetails() {
           )}
         </div>
       )}
+      {showImagePreviewPopUp && (<ImagePreviewPopUp images={[GalleryImg1,GalleryImg1,GalleryImg1,GalleryImg1,GalleryImg1,GalleryImg1]} onCancel={handleImagePreviewPopUp}/>)}
     </div>
   );
 }

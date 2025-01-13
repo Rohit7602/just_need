@@ -9,7 +9,7 @@ const Filters = () => {
   };
 
   return (
-    <div className="relative z-[100]">
+    <div className="relative z-[25]">
       <div className="bg-white border-2 border-[#00000026] w-[400px] mt-4 rounded-[10px] ">
         {/* Duration Dropdown */}
         <div>
