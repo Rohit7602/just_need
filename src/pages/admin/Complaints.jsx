@@ -47,15 +47,24 @@ export const Complaints = () => {
             <div className="flex items-center gap-4 flex-wrap md:flex-wrap">
               <div className="flex items-center px-[10px] py-2 rounded-[10px] bg-[#F1F1F1] space-x-2">
                 <h2 className="lg:text-base sm:text-sm font-normal text-black">Yesterday</h2>
-                <CloseIcon />
+                <a href="">
+                  {' '}
+                  <CloseIcon />
+                </a>
               </div>
               <div className="flex items-center px-[10px] py-2 rounded-[10px] bg-[#F1F1F1] space-x-2">
                 <h2 className="lg:text-base sm:text-sm font-normal text-black">House Cleaning</h2>
-                <CloseIcon />
+                <a href="">
+                  {' '}
+                  <CloseIcon />
+                </a>
               </div>
               <div className="flex items-center px-[10px] py-2 rounded-[10px] bg-[#F1F1F1] space-x-2">
                 <h2 className="lg:text-base sm:text-sm font-normal text-black">Pending</h2>
-                <CloseIcon />
+                <a href="">
+                  {' '}
+                  <CloseIcon />
+                </a>
               </div>
             </div>
 
@@ -118,12 +127,15 @@ export const Complaints = () => {
                     <td className="text-black text-sm font-normal px-4">{item.name}</td>
                     <td className="text-black text-sm font-normal px-4">{item.serviceType}</td>
                     <td className="text-black text-sm font-normal px-4">{item.message}</td>
-                    <td
-                      className={`text-sm font-normal py-3 px-4 ${
-                        item.status === 'Open' ? 'text-[#3D9602]' : 'text-[#FF0000]'
-                      }`}>
-                      {item.status}
-                    </td>
+                    <a href="">
+                      {' '}
+                      <td
+                        className={`text-sm font-normal py-3 px-4 ${
+                          item.status === 'Open' ? 'text-[#3D9602]' : 'text-[#FF0000]'
+                        }`}>
+                        {item.status}
+                      </td>
+                    </a>
                   </tr>
                 ))}
               </tbody>
