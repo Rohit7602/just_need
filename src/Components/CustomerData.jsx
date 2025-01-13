@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import avatar from "../assets/avatar.png";
-import { FaAngleDown } from "react-icons/fa";
-import ActionUserPupUp from "./Popups/ActionUserPupUp";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import avatar from '../assets/avatar.png';
+import { FaAngleDown } from 'react-icons/fa';
+import ActionUserPupUp from './Popups/ActionUserPupUp';
+import { Link } from 'react-router-dom';
 
 const CustomerData = ({ mapData }) => {
   const [showPopup, setShowPopup] = useState(false);
@@ -59,30 +59,14 @@ const CustomerData = ({ mapData }) => {
               <th className="p-[19px] md:p-[24px]  font-medium text-sm md:text-base">
                 Customer Id
               </th>
-              <th className="p-[19px] md:p-[24px]  font-medium text-sm md:text-base">
-                Full Name
-              </th>
-              <th className="p-[19px] md:p-[24px]  font-medium text-sm md:text-base">
-                Email
-              </th>
-              <th className="p-[19px] md:p-[24px]  font-medium text-sm md:text-base">
-                Mobile
-              </th>
-              <th className="p-[19px] md:p-[24px]  font-medium text-sm md:text-base">
-                Address
-              </th>
-              <th className="p-[19px] md:p-[24px]  font-medium text-sm md:text-base">
-                Start Date
-              </th>
-              <th className="p-[19px] md:p-[24px]  font-medium text-sm md:text-base">
-                End Date
-              </th>
-              <th className="p-[19px] md:p-[24px]  font-medium text-sm md:text-base">
-                Status
-              </th>
-              <th className="p-[19px] md:p-[24px]  font-medium text-sm md:text-base">
-                Action
-              </th>
+              <th className="p-[19px] md:p-[24px]  font-medium text-sm md:text-base">Full Name</th>
+              <th className="p-[19px] md:p-[24px]  font-medium text-sm md:text-base">Email</th>
+              <th className="p-[19px] md:p-[24px]  font-medium text-sm md:text-base">Mobile</th>
+              <th className="p-[19px] md:p-[24px]  font-medium text-sm md:text-base">Address</th>
+              <th className="p-[19px] md:p-[24px]  font-medium text-sm md:text-base">Start Date</th>
+              <th className="p-[19px] md:p-[24px]  font-medium text-sm md:text-base">End Date</th>
+              <th className="p-[19px] md:p-[24px]  font-medium text-sm md:text-base">Status</th>
+              <th className="p-[19px] md:p-[24px]  font-medium text-sm md:text-base">Action</th>
             </tr>
             <tr>
               <td colSpan="10">
@@ -110,11 +94,7 @@ const CustomerData = ({ mapData }) => {
                 </td>
                 <Link to={`/dashboard/usersList/userDetails/${customer.id}`}>
                   <td className="p-[19px] md:p-[24px] flex items-center gap-2">
-                    <img
-                      src={avatar}
-                      alt="avatar"
-                      className="w-8 h-8 rounded-full"
-                    />
+                    <img src={avatar} alt="avatar" className="w-8 h-8 rounded-full" />
                     {customer.name}
                   </td>
                 </Link>
@@ -134,14 +114,10 @@ const CustomerData = ({ mapData }) => {
                   {customer.end}
                 </td>
                 <td
-                  className={`p-[19px] md:p-[24px] text-sm font-normal text-[#000000] ${customer.TextColor}`}
-                >
+                  className={`p-[19px] md:p-[24px] text-sm font-normal text-[#000000] ${customer.TextColor}`}>
                   {customer.status}
                 </td>
-                <td
-                  className="p-[19px] md:p-[24px] text-center"
-                  onClick={handlePopup}
-                >
+                <td className="p-[19px] md:p-[24px] text-center" onClick={handlePopup}>
                   <button className="text-2xl font-medium ">&#8942;</button>
                 </td>
               </tr>
@@ -154,9 +130,7 @@ const CustomerData = ({ mapData }) => {
         <span className="text-base font-normal">Showing 1 out of 5</span>
         <div className="flex items-center">
           <FaAngleDown className="-rotate-[-90deg] me-[30px]" />
-          <span className="font-semibold py-[2px] px-[6px] bg-[#0832DE] text-white">
-            1
-          </span>
+          <span className="font-semibold py-[2px] px-[6px] bg-[#0832DE] text-white">1</span>
           <span className="font-semibold py-[2px] px-[6px] text-black hover:bg-[#0832DE] hover:text-white ms-[26px]">
             2
           </span>
