@@ -113,7 +113,7 @@ function SuscriptionPopUp({ handlePopup }) {
             />
           </div>
 
-          <button onClick={handleDetails} className="w-full bg-[#0832DE] text-base text-white font-medium py-3 rounded-[10px] mt-[15px]">
+          <button onClick={handleDetails} className="w-full bg-[#0832DE] text-base text-white font-medium py-2.5 h-[42px] rounded-[10px] mt-[15px]">
             Save Details
           </button>
         </div>

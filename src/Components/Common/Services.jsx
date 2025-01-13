@@ -80,7 +80,7 @@ function Services() {
     <div className="p-[14px] rounded-[10px] shadow-md bg-white">
       <div className="xl:flex-row flex-col flex xl:items-center justify-end">
         <div className="flex items-center mt-[20px] xl:mt-[0px]">
-          <div className="bg-[#F1F1F1] w-[337px] p-[16px] rounded-[10px]">
+          <div className="bg-[#F1F1F1] w-[337px] px-[16px] py-2.5 h-[42px] rounded-[10px]">
             <div className="flex items-center">
               <Searchicon />
               <input
@@ -92,7 +92,7 @@ function Services() {
           </div>
           <div
             onClick={() => handleNewServicePopUp()}
-            className="whitespace-nowrap cursor-pointer bg-[#0832DE] flex items-center px-[16px] py-[12px] rounded-[10px] ms-[20px]"
+            className="whitespace-nowrap cursor-pointer bg-[#0832DE] flex items-center h-[42px] px-[16px] py-2.5 rounded-[10px] ms-[20px]"
           >
             <Plusicon />
             <p className="font-normal text-[16px] text-white ms-[12px]">

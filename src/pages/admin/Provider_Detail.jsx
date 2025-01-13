@@ -34,7 +34,7 @@ const Provider_Detail = () => {
       <div className="flex justify-end items-center flex-wrap gap-y-4">
         <button
           onClick={handleResolveIssue}
-          className="bg-[#0832DE] flex items-center text-white font-normal text-sm md:text-base px-3 md:px-4 py-2 md:py-3 rounded-[10px] relative">
+          className="bg-[#0832DE] flex items-center text-white font-normal text-sm md:text-base px-3 md:px-4 py-2.5 h-[42px] rounded-[10px] relative">
           <Resolve_Issue />
           <h5 className="ms-2 md:ms-3">Resolve Issue</h5>
         </button>

@@ -5,10 +5,10 @@ function SettingKeysCredentials() {
     <div className='p-[15px]'>
           <div className="flex items-center justify-end">
         <div>
-          <button className="text-base font-normal text-black py-3 px-[28px] rounded-[10px] bg-[#F1F1F1] me-[15px]">
+          <button className="text-base font-normal text-black py-2.5 h-[42px] px-[28px] rounded-[10px] bg-[#F1F1F1] me-[15px]">
             Discard
           </button>
-          <button className="text-base font-normal text-white py-3 px-[28px] rounded-[10px] bg-[#0832DE]">
+          <button className="text-base font-normal text-white py-2.5 h-[42px] px-[28px] rounded-[10px] bg-[#0832DE]">
             Update
           </button>
         </div>
@@ -26,7 +26,7 @@ function SettingKeysCredentials() {
             id="googleMapKey"
             name="googleMapKey"
             placeholder="h9897G8Hoh80986960g8G98"
-            className="px-4 py-3.5 placeholder:text-sm placeholder:font-normal text-sm font-normal outline-[#0832DE] w-full border-[1px] border-[#00000033] rounded-[10px]"
+            className="px-4 py-2.5 h-[42px] placeholder:text-sm placeholder:font-normal text-sm font-normal outline-[#0832DE] w-full border-[1px] border-[#00000033] rounded-[10px]"
           />
         </div>
         <div className="flex items-center justify-between gap-5 mt-5">
@@ -40,7 +40,7 @@ function SettingKeysCredentials() {
             id="databaseUrl"
             name="databaseUrl"
             placeholder="https://www.amazon.com"
-            className="px-4 py-3.5 placeholder:text-sm placeholder:font-normal text-sm font-normal outline-[#0832DE] w-full border-[1px] border-[#00000033] rounded-[10px]"
+            className="px-4 py-2.5 h-[42px] placeholder:text-sm placeholder:font-normal text-sm font-normal outline-[#0832DE] w-full border-[1px] border-[#00000033] rounded-[10px]"
           />
         </div>
         <div className="flex items-center justify-between gap-5 mt-5">
@@ -54,7 +54,7 @@ function SettingKeysCredentials() {
             id="smsServiceUrl"
             name="smsServiceUrl"
             placeholder="https://www.amazon.com"
-            className="px-4 py-3.5 placeholder:text-sm placeholder:font-normal text-sm font-normal outline-[#0832DE] w-full border-[1px] border-[#00000033] rounded-[10px]"
+            className="px-4 py-2.5 h-[42px] placeholder:text-sm placeholder:font-normal text-sm font-normal outline-[#0832DE] w-full border-[1px] border-[#00000033] rounded-[10px]"
           />
         </div>
         <div className="flex items-center justify-between gap-5 mt-5">
@@ -68,7 +68,7 @@ function SettingKeysCredentials() {
             id="razorpayApiKey"
             name="razorpayApiKey"
             placeholder="JHG5876g5867809j6H5867GE5789h"
-            className="px-4 py-3.5 placeholder:text-sm placeholder:font-normal text-sm font-normal outline-[#0832DE] w-full border-[1px] border-[#00000033] rounded-[10px]"
+            className="px-4 py-2.5 h-[42px] placeholder:text-sm placeholder:font-normal text-sm font-normal outline-[#0832DE] w-full border-[1px] border-[#00000033] rounded-[10px]"
           />
         </div>
       </div>

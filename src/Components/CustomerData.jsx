@@ -47,8 +47,8 @@ const CustomerData = ({ mapData }) => {
       <div className="overflow-x-auto scrollRemove">
         <table className="w-full text-left border-collapse whitespace-nowrap rounded-[10px] ">
           <thead>
-            <tr>
-              <th className="p-[19px] md:p-[24px]">
+            <tr className="py-2.5">
+              <th className="px-[19px] py-2.5 md:px-[24px]">
                 <input
                   className="w-[16px] h-[16px]"
                   type="checkbox"
@@ -56,31 +56,31 @@ const CustomerData = ({ mapData }) => {
                   onChange={maincheckbox}
                 />
               </th>
-              <th className="p-[19px] md:p-[24px]  font-medium text-sm md:text-base">
+              <th className="px-[19px] py-2.5 md:px-[24px]  font-medium text-sm md:text-base">
                 Customer Id
               </th>
-              <th className="p-[19px] md:p-[24px]  font-medium text-sm md:text-base">
+              <th className="px-[19px] py-2.5 md:px-[24px]  font-medium text-sm md:text-base">
                 Full Name
               </th>
-              <th className="p-[19px] md:p-[24px]  font-medium text-sm md:text-base">
+              <th className="px-[19px] py-2.5 md:px-[24px]  font-medium text-sm md:text-base">
                 Email
               </th>
-              <th className="p-[19px] md:p-[24px]  font-medium text-sm md:text-base">
+              <th className="px-[19px] py-2.5 md:px-[24px]  font-medium text-sm md:text-base">
                 Mobile
               </th>
-              <th className="p-[19px] md:p-[24px]  font-medium text-sm md:text-base">
+              <th className="px-[19px] py-2.5 md:px-[24px]  font-medium text-sm md:text-base">
                 Address
               </th>
-              <th className="p-[19px] md:p-[24px]  font-medium text-sm md:text-base">
+              <th className="px-[19px] py-2.5 md:px-[24px]  font-medium text-sm md:text-base">
                 Start Date
               </th>
-              <th className="p-[19px] md:p-[24px]  font-medium text-sm md:text-base">
+              <th className="px-[19px] py-2.5 md:px-[24px]  font-medium text-sm md:text-base">
                 End Date
               </th>
-              <th className="p-[19px] md:p-[24px]  font-medium text-sm md:text-base">
+              <th className="px-[19px] py-2.5 md:px-[24px]  font-medium text-sm md:text-base">
                 Status
               </th>
-              <th className="p-[19px] md:p-[24px]  font-medium text-sm md:text-base">
+              <th className="px-[19px] py-2.5 md:px-[24px]  font-medium text-sm md:text-base">
                 Action
               </th>
             </tr>
@@ -93,7 +93,7 @@ const CustomerData = ({ mapData }) => {
           <tbody>
             {mapData.map((customer, index) => (
               <tr key={index}>
-                <td className="p-[19px] md:p-[24px]">
+                <td className="px-[19px] md:px-[24px] py-1.5">
                   <input
                     className="w-[16px] h-[16px]"
                     type="checkbox"
@@ -102,14 +102,14 @@ const CustomerData = ({ mapData }) => {
                     value={customer.id}
                   />
                 </td>
-                {/* <td className="p-[19px] md:p-[24px]">
+                {/* <td className="px-[19px] md:px-[24px] py-1.5">
                   <input className="w-[16px] h-[16px]" type="checkbox" />
                 </td> */}
-                <td className="p-[19px] md:p-[24px] text-sm font-normal text-[#000000]">
+                <td className="px-[19px] md:px-[24px] py-1.5 text-sm font-normal text-[#000000]">
                   {customer.id}
                 </td>
                 <Link to={`/dashboard/usersList/userDetails/${customer.id}`}>
-                  <td className="p-[19px] md:p-[24px] flex items-center gap-2">
+                  <td className="px-[19px] md:px-[24px] py-1.5 flex items-center gap-2 min-w-[160px]">
                     <img
                       src={avatar}
                       alt="avatar"
@@ -118,28 +118,28 @@ const CustomerData = ({ mapData }) => {
                     {customer.name}
                   </td>
                 </Link>
-                <td className="p-[19px] md:p-[24px] text-sm font-normal text-[#000000]">
+                <td className="px-[19px] md:px-[24px] py-1.5 text-sm font-normal text-[#000000]">
                   {customer.email}
                 </td>
-                <td className="p-[19px] md:p-[24px] text-sm font-normal text-[#000000]">
+                <td className="px-[19px] md:px-[24px] py-1.5 text-sm font-normal text-[#000000]">
                   {customer.phone}
                 </td>
-                <td className="p-[19px] md:p-[24px] text-sm font-normal text-[#000000]">
+                <td className="px-[19px] md:px-[24px] py-1.5 text-sm font-normal text-[#000000]">
                   {customer.address}
                 </td>
-                <td className="p-[19px] md:p-[24px] text-sm font-normal text-[#000000]">
+                <td className="px-[19px] md:px-[24px] py-1.5 text-sm font-normal text-[#000000]">
                   {customer.start}
                 </td>
-                <td className="p-[19px] md:p-[24px] text-sm font-normal text-[#000000]">
+                <td className="px-[19px] md:px-[24px] py-1.5 text-sm font-normal text-[#000000]">
                   {customer.end}
                 </td>
                 <td
-                  className={`p-[19px] md:p-[24px] text-sm font-normal text-[#000000] ${customer.TextColor}`}
+                  className={`px-[19px] md:px-[24px] py-1.5 text-sm font-normal text-[#000000] ${customer.TextColor}`}
                 >
                   {customer.status}
                 </td>
                 <td
-                  className="p-[19px] md:p-[24px] text-center"
+                  className="px-[19px] md:px-[24px] py-1.5 text-center"
                   onClick={handlePopup}
                 >
                   <button className="text-2xl font-medium ">&#8942;</button>

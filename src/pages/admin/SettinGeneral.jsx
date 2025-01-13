@@ -15,10 +15,10 @@ function SettinGeneral() {
       <div className="flex items-center justify-end">
 
         <div>
-          <button className="text-base font-normal text-black py-3 px-[28px] rounded-[10px] bg-[#F1F1F1] me-[15px]">
+          <button className="text-base font-normal text-black py-2.5 h-[42px] px-[28px] rounded-[10px] bg-[#F1F1F1] me-[15px]">
             Discard
           </button>
-          <button className="text-base font-normal text-white py-3 px-[28px] rounded-[10px] bg-[#0832DE]">
+          <button className="text-base font-normal text-white py-2.5 h-[42px] px-[28px] rounded-[10px] bg-[#0832DE]">
             Update
           </button>
         </div>
@@ -38,7 +38,7 @@ function SettinGeneral() {
               name="title"
               type="text"
               placeholder="Just Need"
-              className="py-[14px] px-[15px] w-full rounded-[10px] bg-[#F2F2F2] placeholder:text-sm placeholder:font-normal text-sm font-normal outline-[#0832DE] border-none"
+              className="py-3 h-[42px] px-[15px] w-full rounded-[10px] bg-[#F2F2F2] placeholder:text-sm placeholder:font-normal text-sm font-normal outline-[#0832DE] border-none"
             />
           </div>
           <div className="flex items-center justify-between lg:w-[48%] gap-5 mt-4 lg:mt-0">
@@ -53,7 +53,7 @@ function SettinGeneral() {
               name="email"
               type="email"
               placeholder="email@example.com"
-              className="py-[14px] px-[15px] w-full rounded-[10px] bg-[#F2F2F2] placeholder:text-sm placeholder:font-normal text-sm font-normal outline-[#0832DE] border-none"
+              className="py-3 h-[42px] px-[15px] w-full rounded-[10px] bg-[#F2F2F2] placeholder:text-sm placeholder:font-normal text-sm font-normal outline-[#0832DE] border-none"
             />
           </div>
         </div>
@@ -77,9 +77,9 @@ function SettinGeneral() {
               type="text"
               value={image}
               readOnly
-              className=" px-2 w-[250px] xl:w-[356px]  text-sm text-gray-600 bg-white py-[23px] pe-4 outline-none border-none "
+              className=" px-2 w-[250px] xl:w-[356px]  text-sm text-gray-600 bg-white pe-4 py-3 h-[42px] outline-none border-none "
             />
-            <div className="bg-[#335ACB1A] border-s-[1px] border-[#00000033] rounded-[10px] px-4 py-[23px] text-sm font-medium text-gray-700">
+            <div className="bg-[#335ACB1A] border-s-[1px] border-[#00000033] rounded-[10px] py-3 h-[42px]  px-4 text-sm font-medium text-gray-700">
               Upload Image
             </div>
             <input
@@ -99,7 +99,7 @@ function SettinGeneral() {
             <p className="min-w-[160px] text-base font-normal text-black">
               Primary Colour
             </p>
-            <button className="bg-[#6C4DEF] px-[50px] lg:px-[15px] xl:px-[50px] py-3.5 rounded-[10px] text-white text-sm font-normal">
+            <button className="bg-[#6C4DEF] px-[50px] lg:px-[15px] xl:px-[50px] py-3  h-[42px]  rounded-[10px] text-white text-sm font-normal">
               #6C4DEF
             </button>
           </div>
@@ -107,7 +107,7 @@ function SettinGeneral() {
             <p className="min-w-[160px] text-base font-normal text-black">
               Secondary Colour
             </p>
-            <button className="bg-[#F1F1F1] px-[50px] lg:px-[15px] xl:px-[50px] py-3.5 rounded-[10px] text-black text-sm font-normal">
+            <button className="bg-[#F1F1F1] px-[50px] lg:px-[15px] xl:px-[50px] py-3 h-[42px] rounded-[10px] text-black text-sm font-normal">
               #F1F1F1
             </button>
           </div>
@@ -132,7 +132,7 @@ function SettinGeneral() {
             id="whatsapp"
             name="whatsapp"
             placeholder="+91 1234 1234 00"
-            className="px-4 py-3.5 placeholder:text-sm placeholder:font-normal text-sm font-normal outline-[#0832DE] w-full border-[1px] border-[#00000033] rounded-[10px]"
+            className="px-4 py-2.5 h-[42px] placeholder:text-sm placeholder:font-normal text-sm font-normal outline-[#0832DE] w-full border-[1px] border-[#00000033] rounded-[10px]"
           />
         </div>
         <div className="flex items-center justify-between gap-5 mt-5">
@@ -146,7 +146,7 @@ function SettinGeneral() {
             id="tollFree"
             name="tollFree"
             placeholder="1800-000-000"
-            className="px-4 py-3.5 placeholder:text-sm placeholder:font-normal text-sm font-normal outline-[#0832DE] w-full border-[1px] border-[#00000033] rounded-[10px]"
+            className="px-4 py-2.5 h-[42px] placeholder:text-sm placeholder:font-normal text-sm font-normal outline-[#0832DE] w-full border-[1px] border-[#00000033] rounded-[10px]"
           />
         </div>
         <div className="flex items-center justify-between gap-5 mt-5">
@@ -160,7 +160,7 @@ function SettinGeneral() {
             id="supportEmail"
             name="supportEmail"
             placeholder="support@example.com"
-            className="px-4 py-3.5 placeholder:text-sm placeholder:font-normal text-sm font-normal outline-[#0832DE] w-full border-[1px] border-[#00000033] rounded-[10px]"
+            className="px-4 py-2.5 h-[42px] placeholder:text-sm placeholder:font-normal text-sm font-normal outline-[#0832DE] w-full border-[1px] border-[#00000033] rounded-[10px]"
           />
         </div>
         <div className="flex items-center justify-between gap-5 mt-5">
@@ -174,7 +174,7 @@ function SettinGeneral() {
             id="accountDeleteLink"
             name="accountDeleteLink"
             placeholder="https://www.request_accountdelete@example.com"
-            className="px-4 py-3.5 placeholder:text-sm placeholder:font-normal text-sm font-normal outline-[#0832DE] w-full border-[1px] border-[#00000033] rounded-[10px]"
+            className="px-4 py-2.5 h-[42px] placeholder:text-sm placeholder:font-normal text-sm font-normal outline-[#0832DE] w-full border-[1px] border-[#00000033] rounded-[10px]"
           />
         </div>
       </div>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Arrowicon } from "../../assets/icon/Icons";
+import { UpArrowGreen } from "../../assets/icon/Icon";
 
 import Charts from "../../Components/Charts";
 import Piechart from "../../Components/Common/Piechart";
@@ -8,6 +9,7 @@ import { cardData, customersDataList } from "../../Components/Common/Helper";
 import CustomerData from "../../Components/CustomerData";
 import UsersFilterPopUp from "../../Components/Popups/UsersFilterPopUp";
 import { CiSearch, CiFilter } from "react-icons/ci";
+import RevenueGraph from "../../assets/png/revenueGraph.png";
 
 function Aside() {
   const [showfilterPopup, setshowfilterPopup] = useState(false);
@@ -25,20 +27,40 @@ function Aside() {
             <div key={index} className="w-full sm:w-[50%] xl:w-[25%] px-2 mb-4">
               <div className="relative z-[20] cursor-pointer h-full border-[#0000001A] rounded-[10px] px-[20px] py-[24px] hover:shadow-lg border-[1px] bg-[white] hover:bg-[#6C4DEF] hover:text-white group duration-500">
                 <div className="flex items-center justify-between">
-                  <p className="text-[16px] font-normal opacity-[80%]">
+                  <p className="text-[16px] font-medium text-black">
                     {card.title}
                   </p>
-                  <div className="h-[28px] w-[28px] rounded-full border border-black group-hover:bg-[white] group-hover:border-none flex items-center justify-center">
-                    <Arrowicon />
+                  {index === 3 ? (
+                    <button className="font-normal text-xs text-[#6C4DEF]">
+                      March
+                    </button>
+                  ) : (
+                    <div className="h-[28px] w-[28px] rounded-full border border-black group-hover:bg-[white] group-hover:border-none flex items-center justify-center">
+                      <Arrowicon />
+                    </div>
+                  )}
+                </div>
+                <div className="flex items-center justify-between mt-[15px]">
+                  <p className="text-[50px] font-medium">{card.count}</p>
+                  <div className="w-6/12">
+                    {index === 3 ? (
+                      <img
+                        className="w-full"
+                        src={RevenueGraph}
+                        alt="graph image"
+                      />
+                    ) : null}
                   </div>
                 </div>
-                <p className="text-[50px] font-medium mt-[15px]">
-                  {card.count}
-                </p>
                 <div className="flex items-center mt-[12px]">
-                  <div className="border group-hover:bg-[transparent] group-hover:border-white border-black items-center justify-center flex w-[27px] h-[19px] rounded-[5px] py-2 px-4 opacity-[70%]">
-                    <p className="text-[12px] font-normal">{card.increase}</p>
-                  </div>
+                  {index === 3 ? (
+                    <p className="text-[12px] font-normal flex items-center gap-1.5">₹1658.00 <span><UpArrowGreen/></span></p>
+                  ) : (
+                    <div className="border group-hover:bg-[transparent] group-hover:border-white border-black items-center justify-center flex w-[27px] h-[19px] rounded-[5px] py-2 px-4 opacity-[70%]">
+                      <p className="text-[12px] font-normal">{card.increase}</p>
+                    </div>
+                  )}
+
                   <p className="text-[12px] font-normal leading-[15px] ms-[10px] ">
                     {card.description}
                   </p>
@@ -113,7 +135,7 @@ function Aside() {
             Users List
           </h2>
           <div className="flex ">
-            <div className="flex rounded-[10px] items-center p-2 bg-[#F1F1F1] me-2 xl:me-[20px]">
+            <div className="flex rounded-[10px] items-center p-2 h-[42px] bg-[#F1F1F1] me-2 xl:me-[20px]">
               <CiSearch className="ms-2" />
               <input
                 type="text"
@@ -122,7 +144,7 @@ function Aside() {
               />
             </div>
             <button
-              className="bg-[#0832DE] text-white px-[15px] py-3 rounded-[10px] flex items-center"
+              className="bg-[#0832DE] text-white px-[15px] py-2 rounded-[10px] flex items-center"
               onClick={handleFilter}
             >
               <span>
