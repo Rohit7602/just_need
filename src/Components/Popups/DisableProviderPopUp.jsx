@@ -65,7 +65,7 @@ function DisableProviderPopUp({handlePopupDisable}) {
 
         <button
           onClick={handleUpdate}
-          className="w-full bg-[#0832DE] text-base text-white font-medium py-3 rounded-[10px]"
+          className="w-full bg-[#0832DE] text-base text-white font-medium py-2.5 h-[42px] rounded-[10px]"
         >
           Update Status
         </button>

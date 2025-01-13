@@ -53,7 +53,7 @@ function AddNewServicePopUp({ handleNewServicePopUp }) {
           </div>
           <div className="flex justify-end mt-[15px]">
             <button
-              className="  bg-[#0832DE] flex items-center px-[16px] py-[12px] rounded-[10px]"
+              className="  bg-[#0832DE] flex items-center px-[16px] py-2.5 h-[42px] rounded-[10px]"
             >
               <Plusicon />
               <p className="font-normal text-[16px] text-white ms-[12px]">
@@ -72,7 +72,7 @@ function AddNewServicePopUp({ handleNewServicePopUp }) {
                 </div>
              })}
            </div>
-          <button className="w-full bg-[#0832DE] text-base text-white font-medium py-3 rounded-[10px] mt-[15px]">
+          <button className="w-full bg-[#0832DE] text-base text-white font-medium h-[42px] py-2.5 rounded-[10px] mt-[15px]">
             Save Details
           </button>
         </div>

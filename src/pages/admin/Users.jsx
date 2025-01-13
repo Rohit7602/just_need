@@ -27,7 +27,7 @@ function Users() {
               All Users
             </h2>
             <div className="flex">
-              <div className="flex rounded-[10px] items-center p-2 bg-[#F1F1F1] me-2 xl:me-[20px]">
+              <div className="flex rounded-[10px] items-center h-[42px] p-2 bg-[#F1F1F1] me-2 xl:me-[20px]">
                 <CiSearch className="ms-2" />
                 <input
                   type="text"
@@ -36,7 +36,7 @@ function Users() {
                 />
               </div>
               <button
-                className="bg-[#0832DE] text-white px-[15px] py-3 rounded-[10px] flex items-center"
+                className="bg-[#0832DE] text-white px-[15px] py-2 rounded-[10px] flex items-center"
                 onClick={handleFilter}
               >
                 <span>

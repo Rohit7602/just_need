@@ -37,25 +37,13 @@ const Provider_Detail = () => {
   return (
     <div className=" ">
       {/* Complaints Details and Resolve Issue button */}
-      <div className="relative">
-        <div className="flex justify-end items-center flex-wrap gap-y-4">
-          <button
-            onClick={handleResolveIssue}
-            className="bg-[#0832DE] flex items-center text-white font-normal text-sm md:text-base px-3 md:px-4 py-2 md:py-3 rounded-[10px] ">
-            <Resolve_Issue />
-            <h5 className="ms-2 md:ms-3">Resolve Issue</h5>
-          </button>
-        </div>
-
-        {Popus && (
-          <div
-            className="fixed right-0 bottom-[45%]  sm:bottom-[45%]  md:bottom-[45%] lg:bottom-[55%]  xl:bottom-[40%] 2xl:bottom-[60%] inset-1 flex justify-center items-center z-50"
-            onClick={handleClickOutside}>
-            <div onClick={(e) => e.stopPropagation()}>
-              <ResolveIssuePopups />
-            </div>
-          </div>
-        )}
+      <div className="flex justify-end items-center flex-wrap gap-y-4">
+        <button
+          onClick={handleResolveIssue}
+          className="bg-[#0832DE] flex items-center text-white font-normal text-sm md:text-base px-3 md:px-4 py-2.5 h-[42px] rounded-[10px] relative">
+          <Resolve_Issue />
+          <h5 className="ms-2 md:ms-3">Resolve Issue</h5>
+        </button>
       </div>
       <div className="lg:flex justify-between gap-5">
         <div className="bg-[#6C4DEF] p-5 rounded-[10px] mt-5 w-full md:w-[489px] lg:w-[379px]">

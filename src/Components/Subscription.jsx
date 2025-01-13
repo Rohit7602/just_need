@@ -8,12 +8,12 @@ const Subscription = () => {
     setShowPopup(!showPopup);
   }
   return (
-    <div className="w-full min-h-screen p-[15px] bg-white rounded-[10px]">
+    <div className="w-full p-[15px] bg-white rounded-[10px]">
       <div className="rounded-lg mb-5">
         <div className="flex justify-end items-center">
           <button
             onClick={handlePopup}
-            className="bg-[#0832DE] font-normal text-base text-white py-2 xl:py-3 px-3 xl:px-[15px] rounded-[10px] mt-3 float-right"
+            className="bg-[#0832DE] font-normal text-base text-white py-2 xl:py-2.5 h-[42px] px-3 xl:px-[15px] rounded-[10px] mt-3 float-right"
           >
             <span className="me-3">+</span> Add Plan
           </button>

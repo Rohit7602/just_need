@@ -57,7 +57,7 @@ function UserDetails() {
   return (
     <div className="px-4">
       <div className="flex items-center justify-center">
-          <button onClick={handlePopupDisable} className="flex items-center gap-3 bg-[#0832DE] py-2 xl:py-3 px-3 xl:px-[15px] rounded-[10px]">
+          <button onClick={handlePopupDisable} className="flex items-center gap-3 bg-[#0832DE] py-2.5 h-[42px] px-3 xl:px-[15px] rounded-[10px]">
             <DisalbleIcon />
             <span className="text-white font-normal text-base">
               Disable Provider

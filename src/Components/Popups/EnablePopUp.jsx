@@ -14,8 +14,8 @@ function EnablePopUp({onConfirm,onCancel}) {
                 <BlackEnableIcon/>
                 <p className='mt-[15px] text-black text-sm font-normal'>Are you sure, You want to disable the Listing</p>
                 <div className='flex items-center gap-3 mt-[15px]'>
-                    <button onClick={onCancel} className='text-base font-normal text-black px-11 py-[15px] bg-[#EDEDED] rounded-[10px]'>No, Cancel</button>
-                    <button onClick={onConfirm} className='text-base font-normal text-white px-11 py-[15px] bg-[#0832DE] rounded-[10px]'>Yes, Enable</button>
+                    <button onClick={onCancel} className='text-base font-normal text-black px-11 py-2.5 h-[42px] bg-[#EDEDED] rounded-[10px]'>No, Cancel</button>
+                    <button onClick={onConfirm} className='text-base font-normal text-white px-11 py-2.5 h-[42px] bg-[#0832DE] rounded-[10px]'>Yes, Enable</button>
                 </div>
                </div>
           </div>

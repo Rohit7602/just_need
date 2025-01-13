@@ -18,7 +18,7 @@ export const cardData = [
         description: 'Decreased from last month',
     },
     {
-        title: 'Total Subscription',
+        title: 'Total Revenue',
         count: 450,
         increase: '10+',
         description: 'Increased from last month',

@@ -47,10 +47,10 @@ function SettingLegal() {
     <div className="p-[15px]">
       <div className="flex items-center justify-end">
         <div>
-          <button className="text-base font-normal text-black py-3 px-[28px] rounded-[10px] bg-[#F1F1F1] me-[15px]">
+          <button className="text-base font-normal text-black py-2.5 h-[42px] px-[28px] rounded-[10px] bg-[#F1F1F1] me-[15px]">
             Discard
           </button>
-          <button className="text-base font-normal text-white py-3 px-[28px] rounded-[10px] bg-[#0832DE]">
+          <button className="text-base font-normal text-white py-2.5 h-[42px] px-[28px] rounded-[10px] bg-[#0832DE]">
             Update
           </button>
         </div>

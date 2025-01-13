@@ -65,14 +65,14 @@ function Actions({selectedItem,handleOverlayClick}) {
           <p className="text-[18px] font-medium">Profession</p>
           {showRedIcons ? (
             <div
-              className="rounded-[10px] bg-[#0832DE] text-white px-[16px] py-3 font-normal text-[16px] cursor-pointer"
+              className="rounded-[10px] bg-[#0832DE] text-white px-[16px] py-2.5 h-[42px] font-normal text-[16px] cursor-pointer"
               onClick={handleCancelClick}
             >
               Cancel
             </div>
           ) : (
             <div
-              className="bg-[#0832DE] py-[12px]  px-[15px] flex items-center rounded-[10px] cursor-pointer gap-3"
+              className="bg-[#0832DE] py-2.5 h-[42px]  px-[15px] flex items-center rounded-[10px] cursor-pointer gap-3"
               onClick={handleDeleteClick}
             >
              
@@ -121,7 +121,7 @@ function Actions({selectedItem,handleOverlayClick}) {
 
         <button
           onClick={handleSaveClick}
-          className="rounded-[10px] bg-[#0832DE] text-white w-full py-3 mt-[16px] font-normal text-[16px]"
+          className="rounded-[10px] bg-[#0832DE] text-white w-full py-2.5 h-[42px] mt-[16px] font-normal text-[16px]"
         >
           Update status
         </button>
