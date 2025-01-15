@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ResolveIssuePopups from '../../Components/Popups/ResolveIssuePopus';
+import ResolveIssuePopus from '../../Components/Popups/ResolveIssuePopus';
 import {
   ArrowIcon,
   Resolve_Issue,
@@ -22,29 +22,37 @@ import img6 from '../../assets/png/img6.png';
 import img7 from '../../assets/png/img7.png';
 
 const Provider_Detail = () => {
-  const [Popus, setPopus] = useState(false);
+  const [popup, setPopup] = useState(false);
 
   // Toggle the visibility of the popup
-  const handleResolveIssue = () => {
-    setPopus(!Popus);
+  const togglePopup = () => {
+    setPopup(!popup);
   };
+
   const handleClickOutside = (e) => {
-    if (e.target === e.currentTarget) {
-      setPopus(false);
+    if (e.target.classList.contains('popup-container')) {
+      setPopup(false);
     }
   };
 
   return (
-    <div className=" ">
+    <div className="">
       {/* Complaints Details and Resolve Issue button */}
-      <div className="flex justify-end items-center flex-wrap gap-y-4">
+      <div className="flex justify-end items-center flex-wrap gap-y-4 mt-5 md:mt-0">
         <button
-          onClick={handleResolveIssue}
-          className="bg-[#0832DE] flex items-center text-white font-normal text-sm md:text-base px-3 md:px-4 py-2.5 h-[42px] rounded-[10px] relative">
+          onClick={togglePopup}
+          className="bg-[#0832DE] flex items-center text-white font-normal text-sm md:text-base px-3 md:px-4 py-2.5 h-[42px] rounded-[10px] relative mt-5 md:mt-0">
           <Resolve_Issue />
           <h5 className="ms-2 md:ms-3">Resolve Issue</h5>
         </button>
       </div>
+      {popup && (
+        <div
+          onClick={handleClickOutside}
+          className="fixed inset-0 sm:top-[-300px] top-[-40%] md:top-[-346px] lg:top-[-426px] flex justify-center items-center popup-container z-[100] ">
+          <ResolveIssuePopus onClose={() => setPopup(false)} />
+        </div>
+      )}
       <div className="lg:flex justify-between gap-5">
         <div className="bg-[#6C4DEF] p-5 rounded-[10px] mt-5 w-full md:w-[489px] lg:w-[379px]">
           <h2 className="font-medium text-sm lg:text-lg text-white">Customer Detail</h2>
@@ -72,7 +80,7 @@ const Provider_Detail = () => {
           </div>
         </div>
 
-        <div className="bg-[#F1F1F1] p-5 rounded-[10px] mt-5 w-full  md:w-[489px] lg:w-[379px]">
+        <div className="bg-[#F1F1F1] p-5 rounded-[10px] mt-5 w-full md:w-[489px] lg:w-[379px]">
           <h2 className="font-medium text-sm lg:text-lg text-black">Provider Detail</h2>
           <div className="w-full border-[0.5px] border-dashed border-black border-opacity-60 opacity-60 my-3"></div>
           <div className="flex items-center gap-5">
@@ -80,7 +88,7 @@ const Provider_Detail = () => {
               <img src={imgCustemer} alt="Provider" />
               <h2 className="font-medium text-black pt-2 text-sm md:text-base">Mike Tyson</h2>
             </div>
-            <div className="border border-dashed border-black border-opacity-60 opacity-60 h-24"></div>
+            <div className="border border-dashed border-black border-opacity-60 opacity-60 h-24 "></div>
             <div className="flex-1">
               <div className="flex items-center gap-3">
                 <PhnIcon2 />
@@ -104,22 +112,22 @@ const Provider_Detail = () => {
           <h2 className="font-medium text-lg text-black">Complaint Description</h2>
           <div className="w-full border-[0.5px] border-dashed border-black border-opacity-40 opacity-40 my-3"></div>
           <p className="text-base text-black opacity-70">
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
             has been the industry's standard dummy text ever since the 1500s, when an unknown
-            printer took a galley of type and scrambled it to make a type specimen book. Lorem
-            Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-            been the industry's standard dummy text ever since the 1500s, when an unknown printer
-            took a galley of type and scrambled it to make a type specimen book.
+            printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum
+            is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+            industry's standard dummy text ever since the 1500s, when an unknown printer took a
+            galley of type and scrambled it to make a type specimen book.
           </p>
         </div>
-        <div className="w-full lg:w-[382px]  md:w-[489px]  border_gradient border-opacity-30 rounded-[10px] mt-4">
+        <div className="w-full lg:w-[382px] md:w-[489px] border_gradient border-opacity-30 rounded-[10px] mt-4">
           <img className="w-full rounded-[10px]" src={HouseCleaner} alt="House Cleaner" />
           <div className="p-3 flex items-center justify-between">
             <h3 className="font-medium text-base text-black">House Cleaner</h3>
             <div className="flex items-center gap-3">
               <StarIcon />
               <h2 className="text-sm">
-                4.2 <span className=" px-2"> |</span> 1452 reviews
+                4.2 <span className="px-2">|</span> 1452 reviews
               </h2>
             </div>
           </div>
