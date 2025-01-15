@@ -100,11 +100,7 @@ function Aside() {
                   <p className="text-[50px] font-medium">{card.count}</p>
                   <div className="w-6/12">
                     {index === 3 ? (
-                      <img
-                        className="w-full"
-                        src={RevenueGraph}
-                        alt="graph image"
-                      />
+                      <img className="w-full" src={RevenueGraph} alt="graph image" />
                     ) : null}
                   </div>
                 </div>
@@ -118,8 +114,7 @@ function Aside() {
                       <p className="text-[12px] font-normal">{card.increase}</p>
                     </div>
                   )}
-
-                  <p className="text-[12px] font-normal leading-[15px] ms-[10px] ">
+                  <p className="text-[12px] font-normal leading-[15px] ms-[10px]">
                     {card.description}
                   </p>
                 </div>
@@ -137,9 +132,7 @@ function Aside() {
           {/* Overall Performance Section */}
           <div className="w-full lg:w-[75%]">
             <div className=" bg-[white] rounded-[15px] px-[13px] py-[15px] ">
-              <p className="font-medium text-[18px] text-center">
-                Users Requisition Performance
-              </p>
+              <p className="font-medium text-[18px] text-center">Users Requisition Performance</p>
               <Charts />
             </div>
           </div>
@@ -147,9 +140,7 @@ function Aside() {
           {/* Popular Services Section */}
           <div className="w-full lg:w-[25%] ps-4 ">
             <div className=" bg-white rounded-[10px] px-[13px] py-[15px] h-full border-[#0000001A] border-[1px]">
-              <p className="font-medium text-[18px] text-center">
-                Popular Services
-              </p>
+              <p className="font-medium text-[18px] text-center">Popular Services</p>
               <div className="flex items-center justify-center my-[22px]">
                 <Piechart />
               </div>
@@ -159,27 +150,21 @@ function Aside() {
                 <div className="flex items-center justify-between gap-10 mt-[15px]">
                   <div className="flex items-center">
                     <div className="h-[14px] w-[14px] rounded-full bg-[#2B4DED]"></div>
-                    <p className="text-[12px] font-medium ms-[10px] opacity-[50%]">
-                      Car Washing
-                    </p>
+                    <p className="text-[12px] font-medium ms-[10px] opacity-[50%]">Car Washing</p>
                   </div>
                   <p className="text-[12px] font-medium opacity-[90%]">60%</p>
                 </div>
                 <div className="flex items-center justify-between gap-10 mt-[15px]">
                   <div className="flex items-center">
                     <div className="h-[14px] w-[14px] rounded-full bg-[#FF9E69]"></div>
-                    <p className="text-[12px] font-medium ms-[10px] opacity-[50%]">
-                      Plumbing
-                    </p>
+                    <p className="text-[12px] font-medium ms-[10px] opacity-[50%]">Plumbing</p>
                   </div>
                   <p className="text-[12px] font-medium opacity-[90%]">20%</p>
                 </div>
                 <div className="flex items-center justify-between gap-10 mt-[15px]">
                   <div className="flex items-center">
                     <div className="h-[14px] w-[14px] rounded-full bg-[#FFD1A7]"></div>
-                    <p className="text-[12px] font-medium ms-[10px] opacity-[50%]">
-                      Carpainter
-                    </p>
+                    <p className="text-[12px] font-medium ms-[10px] opacity-[50%]">Carpainter</p>
                   </div>
                   <p className="text-[12px] font-medium opacity-[90%]">15%</p>
                 </div>
@@ -202,15 +187,14 @@ function Aside() {
             </div>
             <button
               className="bg-[#0832DE] text-white px-[15px] py-2 rounded-[10px] flex items-center"
-              onClick={handleFilter}
-            >
+              onClick={handleFilter}>
               <span>
                 <CiFilter className="w-[24px] h-[24px] me-[12px]" />
-              </span>{" "}
+              </span>{' '}
               Filter
             </button>
           </div>
-        </div>{" "}
+        </div>{' '}
         <CustomerData mapData={customersDataList} />
         {showfilterPopup && (
           <UsersFilterPopUp

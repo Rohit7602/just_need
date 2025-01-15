@@ -109,12 +109,8 @@ const CustomerData = ({ mapData }) => {
                   {customer.id}
                 </td>
                 <Link to={`/dashboard/usersList/userDetails/${customer.id}`}>
-                  <td className="px-[19px] md:px-[24px] py-1.5 flex items-center gap-2 min-w-[160px]">
-                    <img
-                      src={avatar}
-                      alt="avatar"
-                      className="w-8 h-8 rounded-full"
-                    />
+                  <td className="px-[19px] md:px-[24px] text-[#6C4DEF] py-1.5 flex items-center gap-2 min-w-[160px]">
+                    <img src={avatar} alt="avatar" className="w-8 h-8 rounded-full" />
                     {customer.name}
                   </td>
                 </Link>
@@ -134,14 +130,10 @@ const CustomerData = ({ mapData }) => {
                   {customer.end}
                 </td>
                 <td
-                  className={`px-[19px] md:px-[24px] py-1.5 text-sm font-normal text-[#000000] ${customer.TextColor}`}
-                >
+                  className={`px-[19px] md:px-[24px] py-1.5 text-sm font-normal text-[#000000] ${customer.TextColor}`}>
                   {customer.status}
                 </td>
-                <td
-                  className="px-[19px] md:px-[24px] py-1.5 text-center"
-                  onClick={handlePopup}
-                >
+                <td className="px-[19px] md:px-[24px] py-1.5 text-center" onClick={handlePopup}>
                   <button className="text-2xl font-medium ">&#8942;</button>
                 </td>
               </tr>
