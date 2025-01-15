@@ -116,10 +116,10 @@ const CustomerData = ({ mapData }) => {
                   {customer.address}
                 </td>
                 <td className="px-[19px] md:px-[24px] py-1.5 text-sm font-normal text-[#000000]">
-                  {customer.start} 11:00
+                  {customer.start}
                 </td>
                 <td className="px-[19px] md:px-[24px] py-1.5 text-sm font-normal text-[#000000]">
-                  {customer.end} 11:00
+                  {customer.end}
                 </td>
                 <td
                   className={`px-[19px] md:px-[24px] py-1.5 text-sm font-normal text-[#000000] ${customer.TextColor}`}>
