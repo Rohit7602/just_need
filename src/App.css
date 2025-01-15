@@ -31,4 +31,7 @@
   border-image: linear-gradient(to top, #0000002c 30%, #ffffff 50%) 1 stretch;
   border-radius: 10px !important;
 }
+.slick-prev:before, .slick-next:before {
+  color: black !important;
+}
 
