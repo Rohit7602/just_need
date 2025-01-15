@@ -1,59 +1,35 @@
 import React, { useState } from 'react';
-import { BackArrowIcon, DisalbleIcon } from '../../assets/icon/Icon';
-import GalleryImg1 from '../../assets/png/galleryImg1.png';
-import MechanicImage from '../../assets/png/mechanicImage.png';
-import HouseCleaner from '../../assets/png/houseCleaner.png';
 import {
-  EmailIcon,
-  LocationIcon,
-  PhoneIcon,
-  RatingStarIcon,
-  DisableRedicon,
-} from '../../assets/icon/Icons';
-import DisableProviderPopUp from '../../Components/Popups/DisableProviderPopUp';
-import DisablePopUp from '../../Components/Popups/DisablePopUp';
-import EnablePopUp from '../../Components/Popups/EnablePopUp';
+  DisalbleIcon,
+
+} from "../../assets/icon/Icon";
+import GalleryImg1 from "../../assets/png/galleryImg1.png";
+import MechanicImage from "../../assets/png/mechanicImage.png";
+import HouseCleaner from "../../assets/png/houseCleaner.png"
+import { EmailIcon, LocationIcon, PhoneIcon, RatingStarIcon, DisableRedicon } from "../../assets/icon/Icons";
+import DisableProviderPopUp from "../../Components/Popups/DisableProviderPopUp";
+import DisablePopUp from "../../Components/Popups/DisablePopUp";
+import EnablePopUp from "../../Components/Popups/EnablePopUp";
+import ImagePreviewPopUp from "../../Components/Popups/ImagePreviewPopUp";
 
 function UserDetails() {
   const [showPopupDisable, setShowPopupDisable] = useState(false);
+  const [showImagePreviewPopUp,setShowImagePreviewPupUp] = useState(false)
 
   function handlePopupDisable() {
     setShowPopupDisable(!showPopupDisable);
   }
 
-  const [listings, setListings] = useState([
-    {
-      id: 1,
-      name: 'House Cleaner',
-      description: 'Lorem ipsum...',
-      rating: 4.2,
-      reviews: 1452,
-      isEnabled: true,
-    },
-    {
-      id: 2,
-      name: 'Plumber',
-      description: 'Lorem ipsum...',
-      rating: 4.5,
-      reviews: 980,
-      isEnabled: true,
-    },
-    {
-      id: 3,
-      name: 'Electrician',
-      description: 'Lorem ipsum...',
-      rating: 4.0,
-      reviews: 870,
-      isEnabled: true,
-    },
-    {
-      id: 4,
-      name: 'Gardener',
-      description: 'Lorem ipsum...',
-      rating: 4.3,
-      reviews: 450,
-      isEnabled: true,
-    },
+  const handleImagePreviewPopUp = ()=>{
+    setShowImagePreviewPupUp(!showImagePreviewPopUp)
+    console.log("first")
+  }
+
+   const [listings, setListings] = useState([
+    { id: 1, name: "House Cleaner", description: "Lorem ipsum...", rating: 4.2, reviews: 1452, isEnabled: true },
+    { id: 2, name: "Plumber", description: "Lorem ipsum...", rating: 4.5, reviews: 980, isEnabled: true },
+    { id: 3, name: "Electrician", description: "Lorem ipsum...", rating: 4.0, reviews: 870, isEnabled: true },
+    { id: 4, name: "Gardener", description: "Lorem ipsum...", rating: 4.3, reviews: 450, isEnabled: true },
   ]);
 
   const [showPopup, setShowPopup] = useState(false);
@@ -204,8 +180,12 @@ function UserDetails() {
           {[1, 2, 3, 4, 5, 6, 7].map((item, index) => {
             return (
               <div key={index} className="w-[33%] xl:w-[20%] px-3 mt-4">
-                <div>
-                  <img className="w-full" src={GalleryImg1} alt="image of provider" />
+                <div onClick={handleImagePreviewPopUp} className="cursor-pointer">
+                  <img
+                    className="w-full"
+                    src={GalleryImg1}
+                    alt="image of provider"
+                  />
                 </div>
               </div>
             );
@@ -222,6 +202,7 @@ function UserDetails() {
           )}
         </div>
       )}
+      {showImagePreviewPopUp && (<ImagePreviewPopUp images={[GalleryImg1,GalleryImg1,GalleryImg1,GalleryImg1,GalleryImg1,GalleryImg1]} onCancel={handleImagePreviewPopUp}/>)}
     </div>
   );
 }
