@@ -1,128 +1,118 @@
-import React, { useState } from "react";
-import { Crossicon, EditiconActionPopUp, Greenicon, Redcrossicon } from "../../assets/icon/Icons";
-import { Actiondata } from "../Common/Helper";
+import React, { useState } from 'react';
+import { Crossicon, EditiconActionPopUp, Greenicon, Redcrossicon } from '../../assets/icon/Icons';
+import { Actiondata } from '../Common/Helper';
 
-function Actions({selectedItem,handleOverlayClick}) {
+function Actions({ selectedItem, handleOverlayClick }) {
   const [showRedIcons, setShowRedIcons] = useState(false);
-  const [editingIndex, setEditingIndex] = useState(null); // Track the index of the item being edited
-  const [editField, setEditField] = useState(null); // Track the field being edited (val1, val2, etc.)
-  const [inputValues, setInputValues] = useState({}); // Store the input values for each item and field
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [editField, setEditField] = useState(null);
+  const [inputValues, setInputValues] = useState({});
 
-  // Handle click to toggle editing a specific field
   const handleEditClick = (index, field, value) => {
     if (editingIndex === index && editField === field) {
-      // If the same field is clicked again, reset the editing state
       setEditingIndex(null);
       setEditField(null);
     } else {
-      // Otherwise, set the new field as being edited
       setEditingIndex(index);
       setEditField(field);
       setInputValues((prev) => ({
         ...prev,
         [`${index}-${field}`]: value,
-      })); // Set the initial value to be edited
+      }));
     }
   };
 
-  // Handle input change
   const handleInputChange = (index, field, event) => {
     setInputValues((prev) => ({
       ...prev,
       [`${index}-${field}`]: event.target.value,
-    })); // Update input value
+    }));
   };
 
-  // Handle save changes
   const handleSaveClick = () => {
-    console.log("Updated Values:", inputValues); // For debugging
-    setEditingIndex(null); // Close the editing mode
+    console.log('Updated Values:', inputValues);
+    setEditingIndex(null);
     setEditField(null);
   };
 
-  // Handle delete button click
   const handleDeleteClick = () => {
-    setShowRedIcons(true); // Show the cancel button
+    setShowRedIcons(true);
   };
 
-  // Handle cancel button click
   const handleCancelClick = () => {
-    setShowRedIcons(false); // Show the delete button
+    setShowRedIcons(false);
   };
+
+  let continuousIndex = 1;
+
   return (
     <div>
       <div className="w-[700px] bg-white absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 border border-gray-300 p-4 rounded-lg shadow-lg">
-      <div className="text-end">
-      <button
-            onClick={handleOverlayClick}
-            className="mb-5"
-            aria-label="Close"
-          >
+        <div className="text-end">
+          <button onClick={handleOverlayClick} className="mb-5" aria-label="Close">
             &#10005;
           </button>
-      </div>
+        </div>
         <div className="flex items-center justify-between">
           <p className="text-[18px] font-medium">Profession</p>
           {showRedIcons ? (
             <div
               className="rounded-[10px] bg-[#0832DE] text-white px-[16px] py-2.5 h-[42px] font-normal text-[16px] cursor-pointer"
-              onClick={handleCancelClick}
-            >
+              onClick={handleCancelClick}>
               Cancel
             </div>
           ) : (
             <div
               className="bg-[#0832DE] py-2.5 h-[42px]  px-[15px] flex items-center rounded-[10px] cursor-pointer gap-3"
-              onClick={handleDeleteClick}
-            >
-             
-                <Crossicon className="bg-white"/>
+              onClick={handleDeleteClick}>
+              <Crossicon className="bg-white" />
               <p className="font-normal text-white text-[16px] leading-[24px]">Delete</p>
             </div>
           )}
         </div>
 
-        {/* Data Section */}
         <div className="flex flex-row justify-between mt-[30px]">
           {Actiondata.map((item, index) => (
             <div key={index} className="flex flex-col">
-              {["val1", "val2", "val3", "val4", "val5"].map((field, i) => (
-                <div key={i} className="flex items-center mt-[30px]">
-                <p className="me-[12px] font-normal text-[16px]">{i+1}.</p>
-                  {editingIndex === index && editField === field ? (
-                    <input
-                      type="text"
-                      value={inputValues[`${index}-${field}`] || item[field]}
-                      onChange={(e) => handleInputChange(index, field, e)}
-                      className="font-normal text-[16px] me-[12px] cursor-pointer border border-[#000] rounded-[10px] py-[5px] px-[10px] w-[120px]"
-                    />
-                  ) : (
-                    <p className="font-normal text-[16px] me-[12px] border border-transparent py-[5px] w-[120px]">
-                      {item[field]}
-                    </p>
-                  )}
-                  {showRedIcons ? (
-                    <button>
-                      <Redcrossicon />
-                    </button>
-                  ) : (
-                    <span
-                      onClick={() => handleEditClick(index, field, item[field])}
-                    >
-                    {editingIndex === index && editField === field?<Greenicon />:<EditiconActionPopUp />}
-                      
-                    </span>
-                  )}
-                </div>
-              ))}
+              {['val1', 'val2', 'val3', 'val4', 'val5'].map((field, i) => {
+                return (
+                  <div key={i} className="flex items-center mt-[30px]">
+                    <p className="me-[12px] font-normal text-[16px]">{continuousIndex++}.</p>
+                    {editingIndex === index && editField === field ? (
+                      <input
+                        type="text"
+                        value={inputValues[`${index}-${field}`] || item[field]}
+                        onChange={(e) => handleInputChange(index, field, e)}
+                        className="font-normal text-[16px] me-[12px] cursor-pointer border border-[#000] rounded-[10px] py-[5px] px-[10px] w-[120px]"
+                      />
+                    ) : (
+                      <p className="font-normal text-[16px] me-[12px] border border-transparent py-[5px] w-[120px]">
+                        {item[field]}
+                      </p>
+                    )}
+                    {showRedIcons ? (
+                      <button>
+                        <Redcrossicon />
+                      </button>
+                    ) : (
+                      <span onClick={() => handleEditClick(index, field, item[field])}>
+                        {editingIndex === index && editField === field ? (
+                          <Greenicon />
+                        ) : (
+                          <EditiconActionPopUp />
+                        )}
+                      </span>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           ))}
         </div>
 
         <button
           onClick={handleSaveClick}
-          className="rounded-[10px] bg-[#0832DE] text-white w-full py-2.5 h-[42px] mt-[16px] font-normal text-[16px]"
-        >
+          className="rounded-[10px] bg-[#0832DE] text-white w-full py-2.5 h-[42px] mt-[16px] font-normal text-[16px]">
           Update status
         </button>
       </div>
@@ -131,97 +121,3 @@ function Actions({selectedItem,handleOverlayClick}) {
 }
 
 export default Actions;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
