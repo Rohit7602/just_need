@@ -72,8 +72,8 @@ const Chat = () => {
 
   return (
     <div className="flex flex-col lg:flex-row lg:justify-between lg:items-end gap-5 h">
-      <div className="lg:w-[100vh] w-full p-3 border rounded-lg overflow-x-auto h-[80vh]">
-        <div className="flex items-center sticky w-[54vh] top-0 px-4 bg-white border border-opacity-30 border-gray-800 rounded-lg z-10">
+      <div className="lg:w-[100vh] w-full p-3 border rounded-lg overflow-x-auto h-[80vh] custom-scrollbar">
+        <div className="flex items-center sticky md:w-[60vh] lg:w-[54vh] top-0 px-4 bg-white border border-opacity-30 border-gray-800 rounded-lg z-10">
           <UserIcon />
           <input
             type="text"
@@ -81,7 +81,7 @@ const Chat = () => {
             className="w-full outline-none  bg-white ms-2.5 h-[40px] text-sm md:text-sm placeholder:text-gray-400"
           />
         </div>
-        <div className="border rounded-md  border-gray-300 h-[40px] mt-5  bg-gray-100">
+        <div className="border rounded-md  border-gray-300 lg:w-[54vh] md:w-[60vh] h-[40px] mt-5  bg-gray-100">
           <div className="flex text-center ">
             <h2 className="flex-1 font-normal  pt-2 text-sm rounded-md md:text-sm text-gray-700 hover:bg-blue-500 h-[38px]   hover:text-white cursor-pointer ">
               All
@@ -119,7 +119,7 @@ const Chat = () => {
       </div>
 
       <div className="border w-full p-3 lg:pe-[40px] rounded-lg h-[80vh] flex flex-col">
-        <div className="overflow-y-auto flex-grow mb-3 pr-2">
+        <div className="overflow-y-auto flex-grow mb-3 pr-2 custom-scrollbar">
           <div className="bg-gray-300 p-4 rounded-t-xl rounded-br-xl lg:w-[400px]">
             <p className="font-normal text-sm md:text-sm">
               Hi, there I am having some problem with my delivered product
@@ -134,7 +134,7 @@ const Chat = () => {
                 scelerisque aliquam.
               </p>
             </div>
-            <p className="font-normal text-xs md:text-sm pt-2">Just Now</p>
+            <p className="font-normal text-xs md:text-sm pt-2">2 min Now</p>
           </div>
           <div className="bg-gray-300 p-4 rounded-t-xl rounded-br-xl lg:w-[400px]">
             <p className="font-normal text-sm md:text-sm">

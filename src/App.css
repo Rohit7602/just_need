@@ -31,7 +31,19 @@
   border-image: linear-gradient(to top, #0000002c 30%, #ffffff 50%) 1 stretch;
   border-radius: 10px !important;
 }
-.slick-prev:before, .slick-next:before {
+.slick-prev:before,
+.slick-next:before {
   color: black !important;
 }
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
 
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #6c4def;
+  border-radius: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0.1); /* Scrollbar track color */
+}
