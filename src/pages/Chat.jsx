@@ -152,7 +152,6 @@ const Chat = () => {
           </div>
         </div>
 
-        {/* Fixed input area at the bottom */}
         <div className="flex items-center gap-3 w-full border-t pt-4">
           <div className="flex-grow bg-gray-300 rounded-full px-4">
             <input
