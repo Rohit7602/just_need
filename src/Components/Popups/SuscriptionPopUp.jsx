@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { GiDuration } from 'react-icons/gi';
+import React, { useState, useRef, useEffect } from 'react';
+import { ChromePicker } from 'react-color';
 
 function SuscriptionPopUp({ handlePopup }) {
   const initialData = {
@@ -7,8 +7,12 @@ function SuscriptionPopUp({ handlePopup }) {
     price: '',
     duration: '',
   };
+
   const [color, setColor] = useState('');
   const [subscriptionData, setSubscriptionData] = useState(initialData);
+  const [primaryColor, setPrimaryColor] = useState('#000000');
+  const [showPrimaryPicker, setShowPrimaryPicker] = useState(false);
+  const primaryColorPickerRef = useRef(null);
 
   const handleColorChange = (e) => {
     const selectedColor = e.target.value;
@@ -18,21 +22,41 @@ function SuscriptionPopUp({ handlePopup }) {
       color: selectedColor,
     }));
   };
+
+  const handlePrimaryColorChange = (color) => {
+    setPrimaryColor(color.hex);
+    setColor(color.hex);
+  };
+
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setSubscriptionData((prev) => ({ ...prev, [name]: value }));
   };
+
   const handleDetails = () => {
     console.log(subscriptionData);
     setSubscriptionData(initialData);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (primaryColorPickerRef.current && !primaryColorPickerRef.current.contains(e.target)) {
+        setShowPrimaryPicker(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
     <>
       <div
         onClick={() => handlePopup()}
         className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50"></div>
-      <div className="fixed inset-0 flex items-center justify-center z-50  h-[458px] w-[500px] xl:w-[694px] m-auto">
-        <div className="w-full  bg-white rounded-lg shadow-lg p-6 relative">
+      <div className="fixed inset-0 flex items-center justify-center z-50 h-[458px] w-[500px] xl:w-[694px] m-auto">
+        <div className="w-full bg-white rounded-lg shadow-lg p-6 relative">
           <button
             onClick={handlePopup}
             className="absolute top-2 right-2 text-gray-600 hover:text-black"
@@ -42,7 +66,7 @@ function SuscriptionPopUp({ handlePopup }) {
           <p className="font-normal text-lg text-black text-center pb-[15px] border-b-[0.5px] border-dashed border-[#00000066]">
             Add Subscription
           </p>
-          <div className=" mt-[15px]">
+          <div className="mt-[15px]">
             <label
               htmlFor="subscriptionName"
               className="block text-base font-normal text-gray-700 mb-2.5">
@@ -70,7 +94,7 @@ function SuscriptionPopUp({ handlePopup }) {
                 onChange={handleOnChange}
                 value={subscriptionData.price}
                 placeholder="₹000.00"
-                className="w-full px-3 py-[12px] rounded-[7px] bg-gray-100   focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-base placeholder:font-normal"
+                className="w-full px-3 py-[12px] rounded-[7px] bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-base placeholder:font-normal"
               />
             </div>
             <div className="w-[48%]">
@@ -91,20 +115,26 @@ function SuscriptionPopUp({ handlePopup }) {
             </div>
           </div>
           <div className="flex items-center gap-[15px] mt-[15px]">
+            <div className="flex items-center gap-2.5">
+              <button
+                className="px-[50px] lg:px-[15px] xl:px-[50px] py-3 h-[42px] rounded-[10px] text-white text-sm font-normal"
+                style={{ backgroundColor: primaryColor }}
+                onClick={() => setShowPrimaryPicker(!showPrimaryPicker)}>
+                {primaryColor}
+              </button>
+
+              {showPrimaryPicker && (
+                <div ref={primaryColorPickerRef} className="absolute z-10">
+                  <ChromePicker color={primaryColor} onChange={handlePrimaryColorChange} />
+                </div>
+              )}
+            </div>
+
             <input
-              type="color"
-              className="h-[50px] w-[163px] rounded-[10px] outline-none border-none"
-              id="color"
+              className="w-full px-3 py-[12px] bg-gray-100 rounded-[7px] focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-base placeholder:font-normal"
               value={color}
               onChange={handleColorChange}
-              style={{ backgroundColor: color }}
-            />
-            <div></div>
-            <input
-              className="w-full px-3 py-[12px] bg-gray-100  rounded-[7px] focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-base placeholder:font-normal"
-              value={color}
-              onChange={handleColorChange}
-              placeholder="#0000"
+              placeholder="#000000"
             />
           </div>
 

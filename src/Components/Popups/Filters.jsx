@@ -1,53 +1,44 @@
 import React, { useState } from 'react';
 import { DropdownIcon } from '../../assets/icon/Icon';
 
-const Filters = () => {
+const Filters = ({ activeFilters, onFilterChange }) => {
   const [activeDropdown, setActiveDropdown] = useState(null);
-  const [serviceType, setServiceType] = useState({
-    houseCleaning: false,
-    carMechanic: false,
-    painter: false,
-    carpenter: false,
-    plumber: false,
-    all: false, // Added 'all' for serviceType
-  });
-  const [complaintStatus, setComplaintStatus] = useState({
-    all: false,
-    resolved: false,
-    processing: false,
-    pending: false,
-  });
 
   const toggleDropdown = (dropdown) => {
     setActiveDropdown(activeDropdown === dropdown ? null : dropdown);
   };
 
-  const handleServiceTypeChange = (service) => {
-    setServiceType((prevState) => {
-      const newState = { ...prevState, [service]: !prevState[service] };
-
-      // Check if all individual services are checked to set 'All' checkbox status
-      const allChecked = Object.values(newState).every((value) => value === true);
-      newState.all = allChecked;
-
-      return newState;
-    });
+  const handleFilterChange = (filterType, value) => {
+    const newValue = Array.isArray(activeFilters[filterType]) ? [...activeFilters[filterType]] : [];
+    if (newValue.includes(value)) {
+      const index = newValue.indexOf(value);
+      newValue.splice(index, 1);
+    } else {
+      newValue.push(value);
+    }
+    onFilterChange(filterType, newValue);
   };
 
-  const handleComplaintStatusChange = (status) => {
-    setComplaintStatus((prevState) => {
-      const newState = { ...prevState, [status]: !prevState[status] };
+  const handleSelectAll = (filterType, options) => {
+    const allSelected = options.every((option) => activeFilters[filterType]?.includes(option));
+    const newValue = allSelected ? [] : options;
+    onFilterChange(filterType, newValue);
+  };
 
-      // Check if all complaint statuses are checked to set 'All' checkbox status
-      const allChecked = newState.resolved && newState.processing && newState.pending;
-      newState.all = allChecked;
-
-      if (!newState[status]) {
-        newState.all = false;
-      }
-
-      return newState;
-    });
+  const renderSelectedFilters = (filterType, options) => {
+    const selectedOptions = Array.isArray(activeFilters[filterType])
+      ? activeFilters[filterType]
+      : [];
+    return selectedOptions.length > 0 ? (
+      <div className="mt-2">
+        <strong>Selected {filterType.charAt(0).toUpperCase() + filterType.slice(1)}:</strong>
+        <ul className="list-disc ml-5">
+          {selectedOptions.map((option, index) => (
+            <li key={index}>{option}</li>
+          ))}
+        </ul>
+      </div>
+    ) : null;
   };
 
   return (
@@ -72,10 +63,9 @@ const Filters = () => {
                   <input
                     type="checkbox"
                     id={service}
-                    name={service}
                     className="mr-2 accent-black"
-                    checked={serviceType[service]}
-                    onChange={() => handleServiceTypeChange(service)}
+                    checked={activeFilters.duration && activeFilters.duration.includes(service)}
+                    onChange={() => handleFilterChange('duration', service)}
                   />
                   <label className="text-base font-normal" htmlFor={service}>
                     {service.charAt(0).toUpperCase() + service.slice(1)}
@@ -84,6 +74,7 @@ const Filters = () => {
               ))}
             </div>
           )}
+          {renderSelectedFilters(['Today', 'Yesterday', 'This Week', '1 Month', '2 Month'])}
         </div>
 
         {/* Service Type Dropdown */}
@@ -100,47 +91,65 @@ const Filters = () => {
           </h2>
           {activeDropdown === 'serviceType' && (
             <div className="px-5">
-              {/* 'All' Checkbox */}
-              <div className="mt-2">
+              {/* Select All Checkbox */}
+              <div className="mt-2.5">
                 <input
                   type="checkbox"
-                  id="all"
-                  name="serviceType"
+                  id="selectAllServiceType"
                   className="mr-2 accent-black"
-                  checked={serviceType.all}
-                  onChange={() => {
-                    const newState = Object.keys(serviceType).reduce((acc, key) => {
-                      if (key !== 'all') acc[key] = !serviceType.all;
-                      return acc;
-                    }, {});
-                    newState.all = !serviceType.all;
-                    setServiceType(newState);
-                  }}
+                  checked={[
+                    'House Cleaning',
+                    'Car Mechanic',
+                    'Painter',
+                    'Carpenter',
+                    'Plumber',
+                  ].every(
+                    (service) =>
+                      activeFilters.serviceType && activeFilters.serviceType.includes(service)
+                  )}
+                  onChange={() =>
+                    handleSelectAll('serviceType', [
+                      'House Cleaning',
+                      'Car Mechanic',
+                      'Painter',
+                      'Carpenter',
+                      'Plumber',
+                    ])
+                  }
                 />
-                <label className="text-base font-normal" htmlFor="all">
-                  All
+                <label className="text-base font-normal" htmlFor="selectAllServiceType">
+                  Select All
                 </label>
               </div>
-              {/* Service Type Options */}
-              {['houseCleaning', 'carMechanic', 'painter', 'carpenter', 'plumber'].map(
+
+              {['House Cleaning', 'Car Mechanic', 'Painter', 'Carpenter', 'Plumber'].map(
                 (service) => (
                   <div key={service} className="mt-2.5">
                     <input
                       type="checkbox"
                       id={service}
-                      name={service}
+                      name="serviceType"
                       className="mr-2 accent-black"
-                      checked={serviceType[service]}
-                      onChange={() => handleServiceTypeChange(service)}
+                      checked={
+                        activeFilters.serviceType && activeFilters.serviceType.includes(service)
+                      }
+                      onChange={() => handleFilterChange('serviceType', service)}
                     />
                     <label className="text-base font-normal" htmlFor={service}>
-                      {service.charAt(0).toUpperCase() + service.slice(1)}
+                      {service}
                     </label>
                   </div>
                 )
               )}
             </div>
           )}
+          {renderSelectedFilters([
+            'House Cleaning',
+            'Car Mechanic',
+            'Painter',
+            'Carpenter',
+            'Plumber',
+          ])}
         </div>
 
         {/* Complaint Status Dropdown */}
@@ -157,46 +166,47 @@ const Filters = () => {
           </h2>
           {activeDropdown === 'complaintStatus' && (
             <div className="px-5 pb-3">
-              {/* 'All' Checkbox */}
-              <div className="">
+              {/* Select All Checkbox */}
+              <div className="mt-2.5">
                 <input
                   type="checkbox"
-                  id="all"
-                  name="complaintStatus"
+                  id="selectAllComplaintStatus"
                   className="mr-2 accent-black"
-                  checked={complaintStatus.all}
-                  onChange={() => {
-                    const newState = {
-                      all: !complaintStatus.all,
-                      resolved: !complaintStatus.all,
-                      processing: !complaintStatus.all,
-                      pending: !complaintStatus.all,
-                    };
-                    setComplaintStatus(newState);
-                  }}
+                  checked={['Pending', 'Processing', 'Resolved'].every(
+                    (status) =>
+                      activeFilters.complaintStatus &&
+                      activeFilters.complaintStatus.includes(status)
+                  )}
+                  onChange={() =>
+                    handleSelectAll('complaintStatus', ['Pending', 'Processing', 'Resolved'])
+                  }
                 />
-                <label className="text-base font-normal" htmlFor="all">
-                  All
+                <label className="text-base font-normal" htmlFor="selectAllComplaintStatus">
+                  Select All
                 </label>
               </div>
-              {/* Status Options */}
-              {['resolved', 'processing', 'pending'].map((status) => (
+
+              {['Pending', 'Processing', 'Resolved'].map((status) => (
                 <div key={status} className="mt-2.5">
                   <input
                     type="checkbox"
                     id={status}
                     name="complaintStatus"
                     className="mr-2 accent-black"
-                    checked={complaintStatus[status]}
-                    onChange={() => handleComplaintStatusChange(status)}
+                    checked={
+                      activeFilters.complaintStatus &&
+                      activeFilters.complaintStatus.includes(status)
+                    }
+                    onChange={() => handleFilterChange('complaintStatus', status)}
                   />
                   <label className="text-base font-normal" htmlFor={status}>
-                    {status.charAt(0).toUpperCase() + status.slice(1)}
+                    {status}
                   </label>
                 </div>
               ))}
             </div>
           )}
+          {renderSelectedFilters(['Pending', 'Processing', 'Resolved'])}
         </div>
       </div>
     </div>

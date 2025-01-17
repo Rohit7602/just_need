@@ -116,7 +116,6 @@ export const Actiondata = [
     val5: 'Tire Change',
   },
   { val1: 'Car Wash', val2: 'Car Wash', val3: 'Car Wash', val4: 'Car Wash', val5: 'Car Wash' },
-  // Add more rows as needed
 ];
 
 export const customersDataList = [

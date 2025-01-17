@@ -431,7 +431,7 @@ export const Icon3 = () => {
 };
 export const MessageSendIcon = () => {
   return (
-    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="50" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect width="60" height="60" rx="30" fill="#50B848" />
       <g clip-path="url(#clip0_668_3824)">
         <path
@@ -449,7 +449,7 @@ export const MessageSendIcon = () => {
 };
 export const PepaerClikupIcon = () => {
   return (
-    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="50" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect width="60" height="60" rx="30" fill="white" />
       <rect
         x="1"

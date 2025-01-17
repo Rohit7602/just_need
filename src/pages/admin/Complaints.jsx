@@ -11,6 +11,13 @@ export const Complaints = () => {
   const [ShowFilter, setShowFilter] = useState(false);
   const filterRef = useRef(null);
 
+  // State to track active filters
+  const [activeFilters, setActiveFilters] = useState({
+    duration: 'Yesterday',
+    serviceType: 'House Cleaning',
+    complaintStatus: 'Pending',
+  });
+
   const Data = Array.from({ length: 10 }, (_, index) => ({
     id: (index + 1).toString(),
     Customer: `003244`,
@@ -22,6 +29,14 @@ export const Complaints = () => {
 
   const handleFilterToggle = () => {
     setShowFilter(!ShowFilter);
+  };
+
+  // Updating active filters
+  const handleActiveFilterChange = (filterType, value) => {
+    setActiveFilters((prevFilters) => ({
+      ...prevFilters,
+      [filterType]: value,
+    }));
   };
 
   useEffect(() => {
@@ -41,30 +56,25 @@ export const Complaints = () => {
       {location.pathname === `/dashboard/complaints/complaintsDetails/${val}` ? (
         <Outlet />
       ) : (
-        // Button for filter and search
         <div className="mt-3">
           <div className="lg:flex justify-between items-center px-4 py-2">
             <div className="flex items-center gap-4 flex-wrap md:flex-wrap">
-              <div className="flex items-center px-[10px] py-2 rounded-[10px] bg-[#F1F1F1] space-x-2">
-                <h2 className="lg:text-base sm:text-sm font-normal text-black">Yesterday</h2>
-                <a href="">
-                  {' '}
-                  <CloseIcon />
-                </a>
-              </div>
-              <div className="flex items-center px-[10px] py-2 rounded-[10px] bg-[#F1F1F1] space-x-2">
-                <h2 className="lg:text-base sm:text-sm font-normal text-black">House Cleaning</h2>
-                <a href="">
-                  {' '}
-                  <CloseIcon />
-                </a>
-              </div>
-              <div className="flex items-center px-[10px] py-2 rounded-[10px] bg-[#F1F1F1] space-x-2">
-                <h2 className="lg:text-base sm:text-sm font-normal text-black">Pending</h2>
-                <a href="">
-                  {' '}
-                  <CloseIcon />
-                </a>
+              <div className="flex items-center gap-4">
+                {Object.entries(activeFilters).map(
+                  ([key, value]) =>
+                    value && (
+                      <div
+                        key={key}
+                        className="flex items-center px-[10px] py-2 rounded-[10px] bg-[#F1F1F1] space-x-2">
+                        <h2 className="lg:text-base sm:text-sm font-normal text-black">{value}</h2>
+                        <button
+                          onClick={() => handleActiveFilterChange(key, '')}
+                          aria-label="Remove filter">
+                          <CloseIcon />
+                        </button>
+                      </div>
+                    )
+                )}
               </div>
             </div>
 
@@ -86,7 +96,10 @@ export const Complaints = () => {
                 </button>
                 {ShowFilter && (
                   <div className="absolute right-0 mt-2 z-10">
-                    <Filters />
+                    <Filters
+                      activeFilters={activeFilters}
+                      onFilterChange={handleActiveFilterChange}
+                    />
                   </div>
                 )}
               </div>
@@ -105,7 +118,9 @@ export const Complaints = () => {
                     Service Type
                   </th>
                   <th className="text-black text-sm font-medium py-3 px-4 border-b">Message</th>
-                  <th className="text-black text-sm font-medium py-3 px-4 border-b">Action</th>
+                  <th className="text-black text-sm font-medium py-3 px-4 border-b sticky right-0 bg-white">
+                    Action
+                  </th>
                 </tr>
                 <tr>
                   <td colSpan="9">
@@ -126,11 +141,10 @@ export const Complaints = () => {
                     </td>
                     <td className="text-black text-sm font-normal px-4">{item.name}</td>
                     <td className="text-black text-sm font-normal px-4">{item.serviceType}</td>
-                    <td className="text-black text-sm font-normal px-4">{item.message}</td>
+                    <td className="text-black text-sm font-normal px-4 ">{item.message}</td>
                     <a href="">
-                      {' '}
                       <td
-                        className={`text-sm font-normal py-3 px-4 ${
+                        className={`text-sm font-normal py-3 px-4 sticky right-0 bg-white ${
                           item.status === 'Open' ? 'text-[#3D9602]' : 'text-[#FF0000]'
                         }`}>
                         {item.status}
