@@ -1,11 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
-// Import icons and images
+import { useNavigate } from 'react-router-dom';
+
 import { BlackCloseIcon, ChatIcon, NotificationIcon, SearchIcon } from '../../assets/icon/Icon';
 import AdminImage from '../../assets/png/AdminImage.png';
 import { Link, useLocation } from 'react-router-dom';
 import { ArrowIcon, CloseIcon } from '../../assets/icon/Icons';
 
 function TopBar() {
+  const navigate = useNavigate();
+
   const [isInputVisible, setIsInputVisible] = useState(false);
   const location = useLocation();
   const searchRef = useRef(null);
@@ -26,6 +29,9 @@ function TopBar() {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+  const goBack = () => {
+    navigate(-1);
+  };
 
   const showArrowButton =
     /\/dashboard\/complaints\/complaintsDetails\/\d+$/.test(location.pathname) ||
@@ -38,7 +44,8 @@ function TopBar() {
         <div className="flex items-center">
           {showArrowButton && (
             <div className="flex items-center justify-center me-[15px]">
-              <button>
+              <button onClick={goBack}>
+                {' '}
                 <ArrowIcon />
               </button>
             </div>
