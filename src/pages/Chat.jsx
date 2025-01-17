@@ -117,7 +117,7 @@ const Chat = () => {
       </div>
 
       <div
-        className={`p-3 border rounded-lg lg:w-[60%] md:h-[60vh] lg:h-[80vh] flex flex-col ${
+        className={`p-3 border rounded-lg lg:w-[60%] md:h-[60vh] lg:h-[80vh] overflow-x-auto custom-scrollbar  flex flex-col ${
           selectedChat ? 'block' : 'hidden'
         } lg:block`}>
         <div className="flex justify-between items-center">
@@ -127,7 +127,7 @@ const Chat = () => {
           </button>
         </div>
 
-        <div className="overflow-y-auto flex-grow mb-3 pr-2 custom-scrollbar">
+        <div className="overflow-y-auto flex-grow mb-3 pr-2  custom-scrollbar">
           <div className="bg-gray-300 p-4 w-[60%]   rounded-t-xl rounded-br-xl">
             <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
           </div>
@@ -158,7 +158,7 @@ const Chat = () => {
           </div>
         </div>
         <h2 className=" text-black  font-normal text-xs text-end">Just Now</h2>
-        <div className="flex items-center gap-3 w-full border-t pt-4">
+        <div className="flex items-center gap-3 border-t pt-4 fixed bottom-0  md:w-[70%] lg:w-[43%] bg-white">
           <div className="flex-grow bg-gray-300 rounded-full px-4">
             <input
               type="text"
