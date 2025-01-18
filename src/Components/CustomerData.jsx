@@ -42,8 +42,8 @@ const CustomerData = ({ mapData }) => {
       <div className="overflow-x-auto scrollRemove">
         <table className="w-full text-left border-collapse whitespace-nowrap rounded-[10px]">
           <thead>
-            <tr className="py-2.5">
-              <th className="px-[19px] py-2.5 md:px-[24px]">
+            <tr className="py-[8px]">
+              <th className="px-[19px] py-[8px] md:px-[24px]">
                 <input
                   className="w-[16px] h-[16px]"
                   type="checkbox"
@@ -51,31 +51,31 @@ const CustomerData = ({ mapData }) => {
                   onChange={maincheckbox}
                 />
               </th>
-              <th className="px-[19px] py-2.5 md:px-[24px] font-medium text-sm md:text-base">
+              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">
                 Customer Id
               </th>
-              <th className="px-[19px] py-2.5 md:px-[24px] font-medium text-sm md:text-base">
+              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">
                 Full Name
               </th>
-              <th className="px-[19px] py-2.5 md:px-[24px] font-medium text-sm md:text-base">
+              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">
                 Email
               </th>
-              <th className="px-[19px] py-2.5 md:px-[24px] font-medium text-sm md:text-base">
+              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">
                 Mobile
               </th>
-              <th className="px-[19px] py-2.5 md:px-[24px] font-medium text-sm md:text-base w-[120px]">
+              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base w-[120px]">
                 Address
               </th>
-              <th className="px-[19px] py-2.5 md:px-[24px] font-medium text-sm md:text-base">
+              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">
                 Start Date
               </th>
-              <th className="px-[19px] py-2.5 md:px-[24px] font-medium text-sm md:text-base">
+              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">
                 End Date
               </th>
-              <th className="px-[19px] py-2.5 md:px-[24px] font-medium text-sm md:text-base">
+              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">
                 Status
               </th>
-              <th className="px-[19px] py-2.5 md:px-[24px] font-medium text-sm md:text-base sticky right-0 bg-white">
+              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base sticky right-0 bg-white">
                 Action
               </th>
             </tr>
@@ -88,7 +88,7 @@ const CustomerData = ({ mapData }) => {
           <tbody>
             {mapData.map((customer, index) => (
               <tr key={index}>
-                <td className="px-[19px] md:px-[24px] py-1.5">
+                <td className="px-[19px] md:px-[24px] py-[8px]">
                   <input
                     className="w-[16px] h-[16px]"
                     type="checkbox"
@@ -97,36 +97,36 @@ const CustomerData = ({ mapData }) => {
                     value={customer.id}
                   />
                 </td>
-                <td className="px-[19px] md:px-[24px] py-1.5 text-sm font-normal text-[#000000]">
+                <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
                   {customer.id}
                 </td>
                 <Link to={`/dashboard/usersList/userDetails/${customer.id}`}>
-                  <td className="px-[19px] md:px-[24px] text-[#6C4DEF] py-1.5 flex items-center gap-2 min-w-[160px]">
+                  <td className="px-[19px] md:px-[24px] text-[#6C4DEF] py-[8px] flex items-center gap-2 min-w-[160px]">
                     <img src={avatar} alt="avatar" className="w-8 h-8 rounded-full me-2" />
                     {customer.name}
                   </td>
                 </Link>
-                <td className="px-[19px] md:px-[24px] py-1.5 w-full text-sm font-normal text-[#000000]">
+                <td className="px-[19px] md:px-[24px] py-[8px] w-full text-sm font-normal text-[#000000]">
                   {customer.email}
                 </td>
-                <td className="px-[19px] md:px-[24px] py-1.5 text-sm font-normal text-[#000000]">
+                <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
                   {customer.phone}
                 </td>
-                <td className="px-[19px] md:px-[24px] py-1.5 text-sm font-normal text-[#000000] w-[120px] truncate">
+                <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000] w-[120px] truncate">
                   {customer.address}
                 </td>
-                <td className="px-[19px] md:px-[24px] py-1.5 text-sm font-normal text-[#000000]">
+                <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
                   {customer.start}
                 </td>
-                <td className="px-[19px] md:px-[24px] py-1.5 text-sm font-normal text-[#000000]">
+                <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
                   {customer.end}
                 </td>
                 <td
-                  className={`px-[19px] md:px-[24px] py-1.5 text-sm font-normal text-[#000000] ${customer.TextColor}`}>
+                  className={`px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000] ${customer.TextColor}`}>
                   {customer.status}
                 </td>
                 <td
-                  className="px-[19px] md:px-[24px] py-1.5 text-center sticky right-0 bg-white"
+                  className="px-[19px] md:px-[24px] py-[8px] text-center sticky right-0 bg-white"
                   onClick={handlePopup}>
                   <button className="text-2xl font-medium">&#8942;</button>
                 </td>

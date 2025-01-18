@@ -35,8 +35,13 @@ function TopBar() {
 
   const showArrowButton =
     /\/dashboard\/complaints\/complaintsDetails\/\d+$/.test(location.pathname) ||
-    /\/dashboard\/usersList\/userDetails\/\d+$/.test(location.pathname) ||
-    location.pathname === '/dashboard/setting';
+    /\/dashboard\/usersList\/userDetails\/userDetails\/\d+$/.test(location.pathname) ||
+    location.pathname === '/dashboard/setting/general' ||
+    location.pathname === '/dashboard/setting/legal' ||
+    location.pathname === '/dashboard/setting/keys' ||
+    location.pathname === '/dashboard/setting/keys&Credentials';
+
+  location.pathname === '/dashboard/setting';
 
   return (
     <div>

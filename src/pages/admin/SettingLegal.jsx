@@ -1,25 +1,21 @@
-import React, { useState } from "react";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import React, { useState } from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 function SettingLegal() {
-  const [serviceData, setServiceData] = useState(
-    "Terms of Services"
-  );
-  const [privacyData, setPrivacyData] = useState(
-    "Privacy Police"
-  );
+  const [serviceData, setServiceData] = useState('Terms of Services');
+  const [privacyData, setPrivacyData] = useState('Privacy Policy');
 
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, false] }],
       [{ font: [] }],
-      [{ list: "ordered" }, { list: "bullet" }],
-      ["bold", "italic", "underline", "strike"],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      ['bold', 'italic', 'underline', 'strike'],
       [{ align: [] }],
-      ["link", "blockquote", "code-block"],
+      ['link', 'blockquote', 'code-block'],
       [{ color: [] }, { background: [] }],
-      ["clean"],
+      ['clean'],
     ],
     history: {
       delay: 1000,
@@ -28,19 +24,19 @@ function SettingLegal() {
   };
 
   const formats = [
-    "header",
-    "font",
-    "list",
-    "bold",
-    "italic",
-    "underline",
-    "strike",
-    "align",
-    "link",
-    "blockquote",
-    "code-block",
-    "color",
-    "background",
+    'header',
+    'font',
+    'list',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'align',
+    'link',
+    'blockquote',
+    'code-block',
+    'color',
+    'background',
   ];
 
   return (
@@ -64,7 +60,7 @@ function SettingLegal() {
           modules={modules}
           formats={formats}
           theme="snow"
-          className="bg-white border  border-gray-300 rounded-lg min-h-[300px] max-h-[500px]"
+          style={{ minHeight: '300px', height: 'auto' }}
         />
       </div>
       <p className="text-base font-medium text-black mt-[15px]">Privacy Policy</p>
@@ -75,7 +71,7 @@ function SettingLegal() {
           modules={modules}
           formats={formats}
           theme="snow"
-          className="bg-white border  border-gray-300 rounded-lg  min-h-[300px] max-h-[500px]"
+          style={{ minHeight: '300px', height: 'auto' }}
         />
       </div>
     </div>
