@@ -119,7 +119,7 @@ const Provider_Detail = () => {
             galley of type and scrambled it to make a type specimen book.
           </p>
         </div>
-        <div className="w-full lg:w-[382px] md:w-[489px] border_gradient border-opacity-30 rounded-[10px] mt-4">
+        <div className="w-full lg:w-[382px] md:w-[489px] border-[1px] border-[#ebeaea] rounded-[10px]  mt-4">
           <img className="w-full rounded-[10px]" src={HouseCleaner} alt="House Cleaner" />
           <div className="p-3 flex items-center justify-between">
             <h3 className="font-medium text-base text-black">House Cleaner</h3>

@@ -38,16 +38,16 @@ function Aside() {
   const handleMonthClick = (monthIndex) => {
     const newDate = new Date(selectedMonth.getFullYear(), monthIndex);
     setSelectedMonth(newDate);
-    setIsCalendarOpen(false); // Close the popup after selection
+    setIsCalendarOpen(false);
   };
 
   const handleYearChange = (increment) => {
     setSelectedMonth((prev) => new Date(prev.getFullYear() + increment, prev.getMonth()));
   };
   return (
-    <div>
-      <div className="  px-[14px]">
-        <div className="flex flex-wrap mt-[16px] -mx-2">
+    <>
+      <div className="px-[14px] bg-white rounded-[10px] ">
+        <div className="flex flex-wrap mt-[16px] -mx-2 ">
           {cardData.map((card, index) => (
             <div key={index} className="w-full sm:w-[50%] xl:w-[25%] px-2 mb-4">
               <div className="relative z-[20] cursor-pointer h-full border-[#0000001A] rounded-[10px] px-[20px] py-[24px] hover:shadow-lg border-[1px] bg-[white] hover:bg-[#6C4DEF] hover:text-white group duration-500">
@@ -56,7 +56,7 @@ function Aside() {
                     {card.title}
                   </p>
                   {index === 3 ? (
-                    <div className="relative">
+                    <div className="relative ">
                       <button
                         onClick={() => setIsCalendarOpen(!isCalendarOpen)}
                         className="font-normal text-xs text-[#6C4DEF] group-hover:text-white">
@@ -135,7 +135,7 @@ function Aside() {
             </div>
           ))}
         </div>
-        <div className="flex flex-wrap justify-between mt-[15px] gap-y-[15px]">
+        <div className="flex flex-wrap  justify-between mt-[15px] gap-y-[15px]">
           {/* Overall Performance Section */}
           <div className="w-full lg:w-[75%]">
             <div className=" bg-[white] rounded-[15px] px-[13px] py-[15px] ">
@@ -179,43 +179,40 @@ function Aside() {
             </div>
           </div>
         </div>
-
-        <div>
-          <div>
-            <div className="flex justify-between items-center p-5 mt -[15px]">
-              <h2 className="text-base xl:text-[20px] font-medium text-[#000000] opacity-70">
-                Users List
-              </h2>
-              <div className="flex ">
-                <div className="flex rounded-[10px] items-center p-2 h-[42px] bg-[#F1F1F1] me-2 xl:me-[20px]">
-                  <CiSearch className="ms-2" />
-                  <input
-                    type="text"
-                    placeholder="Search task"
-                    className="ms-2.5 focus:outline-none focus:ring-gray-400 bg-[#F1F1F1]"
-                  />
-                </div>
-                <button
-                  className="bg-[#0832DE] text-white px-[15px] py-2 rounded-[10px] flex items-center"
-                  onClick={handleFilter}>
-                  <span>
-                    <CiFilter className="w-[24px] h-[24px] me-[12px]" />
-                  </span>{' '}
-                  Filter
-                </button>
-              </div>
-            </div>{' '}
-            <CustomerData mapData={customersDataList} />
-            {showfilterPopup && (
-              <UsersFilterPopUp
-                handleFilter={handleFilter}
-                handlefilterpopupclose={handlefilterpopupclose}
-              />
-            )}
-          </div>
-        </div>
       </div>
-    </div>
+      <div className=" mt-4 px-[14px] bg-white rounded-[10px] mb-4 ">
+        <div className="flex justify-between items-center p-5 mt -[15px]">
+          <h2 className="text-base xl:text-[20px] font-medium text-[#000000] opacity-70">
+            Users List
+          </h2>
+          <div className="flex ">
+            <div className="flex rounded-[10px] items-center p-2 h-[42px] bg-[#F1F1F1] me-2 xl:me-[20px]">
+              <CiSearch className="ms-2" />
+              <input
+                type="text"
+                placeholder="Search task"
+                className="ms-2.5 focus:outline-none focus:ring-gray-400 bg-[#F1F1F1]"
+              />
+            </div>
+            <button
+              className="bg-[#0832DE] text-white px-[15px] py-2 rounded-[10px] flex items-center"
+              onClick={handleFilter}>
+              <span>
+                <CiFilter className="w-[24px] h-[24px] me-[12px]" />
+              </span>{' '}
+              Filter
+            </button>
+          </div>
+        </div>{' '}
+        <CustomerData mapData={customersDataList} />
+        {showfilterPopup && (
+          <UsersFilterPopUp
+            handleFilter={handleFilter}
+            handlefilterpopupclose={handlefilterpopupclose}
+          />
+        )}
+      </div>
+    </>
   );
 }
 

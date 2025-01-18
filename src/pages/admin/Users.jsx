@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import CustomerData from "../../Components/CustomerData";
-import { customersDataList } from "../../Components/Common/Helper";
-import { CiSearch, CiFilter } from "react-icons/ci";
-import UsersFilterPopUp from "../../Components/Popups/UsersFilterPopUp";
-import { Outlet, useLocation } from "react-router-dom";
+import React, { useState } from 'react';
+import CustomerData from '../../Components/CustomerData';
+import { customersDataList } from '../../Components/Common/Helper';
+import { CiSearch, CiFilter } from 'react-icons/ci';
+import UsersFilterPopUp from '../../Components/Popups/UsersFilterPopUp';
+import { Outlet, useLocation } from 'react-router-dom';
 
 function Users() {
   const [showfilterPopup, setshowfilterPopup] = useState(false);
   const location = useLocation();
-  const isUserDetailsPage = location.pathname.includes("userDetails");
+  const isUserDetailsPage = location.pathname.includes('userDetails');
 
   function handleFilter() {
     setshowfilterPopup(!showfilterPopup);
@@ -37,8 +37,7 @@ function Users() {
               </div>
               <button
                 className="bg-[#0832DE] text-white px-[15px] py-2 rounded-[10px] flex items-center"
-                onClick={handleFilter}
-              >
+                onClick={handleFilter}>
                 <span>
                   <CiFilter className="w-[24px] h-[24px] me-[12px]" />
                 </span>
@@ -53,6 +52,9 @@ function Users() {
               handlefilterpopupclose={handlefilterpopupclose}
             />
           )}
+          <div>
+            <h2>Item per page</h2>
+          </div>
         </>
       )}
       <Outlet />
