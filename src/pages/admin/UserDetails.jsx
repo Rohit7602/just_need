@@ -1,35 +1,66 @@
 import React, { useState } from 'react';
+import { DisalbleIcon } from '../../assets/icon/Icon';
+import GalleryImg1 from '../../assets/png/galleryImg1.png';
+import MechanicImage from '../../assets/png/mechanicImage.png';
+import HouseCleaner from '../../assets/png/houseCleaner.png';
 import {
-  DisalbleIcon,
-
-} from "../../assets/icon/Icon";
-import GalleryImg1 from "../../assets/png/galleryImg1.png";
-import MechanicImage from "../../assets/png/mechanicImage.png";
-import HouseCleaner from "../../assets/png/houseCleaner.png"
-import { EmailIcon, LocationIcon, PhoneIcon, RatingStarIcon, DisableRedicon } from "../../assets/icon/Icons";
-import DisableProviderPopUp from "../../Components/Popups/DisableProviderPopUp";
-import DisablePopUp from "../../Components/Popups/DisablePopUp";
-import EnablePopUp from "../../Components/Popups/EnablePopUp";
-import ImagePreviewPopUp from "../../Components/Popups/ImagePreviewPopUp";
+  EmailIcon,
+  LocationIcon,
+  PhoneIcon,
+  RatingStarIcon,
+  DisableRedicon,
+} from '../../assets/icon/Icons';
+import DisableProviderPopUp from '../../Components/Popups/DisableProviderPopUp';
+import DisablePopUp from '../../Components/Popups/DisablePopUp';
+import EnablePopUp from '../../Components/Popups/EnablePopUp';
+import ImagePreviewPopUp from '../../Components/Popups/ImagePreviewPopUp';
 
 function UserDetails() {
   const [showPopupDisable, setShowPopupDisable] = useState(false);
-  const [showImagePreviewPopUp,setShowImagePreviewPupUp] = useState(false)
+  const [showImagePreviewPopUp, setShowImagePreviewPupUp] = useState(false);
 
   function handlePopupDisable() {
     setShowPopupDisable(!showPopupDisable);
   }
 
-  const handleImagePreviewPopUp = ()=>{
-    setShowImagePreviewPupUp(!showImagePreviewPopUp)
-    console.log("first")
-  }
+  const handleImagePreviewPopUp = () => {
+    setShowImagePreviewPupUp(!showImagePreviewPopUp);
+    console.log('first');
+  };
 
-   const [listings, setListings] = useState([
-    { id: 1, name: "House Cleaner", description: "Lorem ipsum...", rating: 4.2, reviews: 1452, isEnabled: true },
-    { id: 2, name: "Plumber", description: "Lorem ipsum...", rating: 4.5, reviews: 980, isEnabled: true },
-    { id: 3, name: "Electrician", description: "Lorem ipsum...", rating: 4.0, reviews: 870, isEnabled: true },
-    { id: 4, name: "Gardener", description: "Lorem ipsum...", rating: 4.3, reviews: 450, isEnabled: true },
+  const [listings, setListings] = useState([
+    {
+      id: 1,
+      name: 'House Cleaner',
+      description: 'Lorem ipsum...',
+      rating: 4.2,
+      reviews: 1452,
+      isEnabled: true,
+    },
+    {
+      id: 2,
+      name: 'Plumber',
+      description: 'Lorem ipsum...',
+      rating: 4.5,
+      reviews: 980,
+      isEnabled: true,
+    },
+    {
+      id: 3,
+      name: 'Electrician',
+      description: 'Lorem ipsum...',
+      rating: 4.0,
+      reviews: 870,
+      isEnabled: true,
+    },
+    {
+      id: 4,
+      name: 'Gardener',
+      description: 'Lorem ipsum...',
+      rating: 4.3,
+      reviews: 450,
+      isEnabled: true,
+    },
   ]);
 
   const [showPopup, setShowPopup] = useState(false);
@@ -59,12 +90,12 @@ function UserDetails() {
 
   return (
     <div className="px-4">
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-end">
         <button
           onClick={handlePopupDisable}
-          className="flex items-center gap-3 bg-[#0832DE] py-2.5 h-[42px] px-3 xl:px-[15px] rounded-[10px]">
-          <DisalbleIcon />
-          <span className="text-white font-normal text-base">Disable Provider</span>
+          className="flex items-center gap-3  py-2.5 h-[42px] px-3 xl:px-[15px] rounded-[10px]">
+          <DisableRedicon />
+          <span className="text-black font-normal text-base">Disable Provider</span>
         </button>
       </div>
       <div className="xl:flex mt-[30px]">
@@ -143,23 +174,28 @@ function UserDetails() {
             key={item.id}
             className="w-6/12 mt-3 xl:mt-[15px] xl:w-3/12 px-3"
             style={{ opacity: item.isEnabled ? 1 : 0.5 }}>
-            <div className="border-[0.5px] border-[#0000004D] rounded-[10px]">
-              <img className="rounded-[10px] w-full" src={HouseCleaner} alt="Listing" />
+            <div className="border-[1px] border-[#ebeaea] rounded-[10px] relative group">
+              <img
+                className="rounded-[10px] w-full group-hover:opacity-70"
+                src={HouseCleaner}
+                alt="Listing"
+              />
+              <div className="absolute top-0 right-0 p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <button onClick={() => handlePopup(item.id, item.isEnabled ? 'disable' : 'enable')}>
+                  {item.isEnabled ? (
+                    <DisableRedicon />
+                  ) : (
+                    <span className="text-xs font-normal text-[#0DA800] hover:opacity-100 opacity-100">
+                      Enable
+                    </span>
+                  )}
+                </button>
+              </div>
               <div className="p-2.5">
                 <div className="flex items-center justify-between">
                   <p className="font-medium text-sm text-black">{item.name}</p>
-                  <button
-                    onClick={() => handlePopup(item.id, item.isEnabled ? 'disable' : 'enable')}>
-                    {item.isEnabled ? (
-                      <DisableRedicon />
-                    ) : (
-                      <span className="text-xs font-normal text-[#0DA800] hover:opacity-100 opacity-100">
-                        Enable
-                      </span>
-                    )}
-                  </button>
                 </div>
-                <p className="font-normal text-[10px] text-[#00000099] mt-1">{item.description}</p>
+                <p className="font-normal text-[14px] text-[#00000099] mt-1">{item.description}</p>
                 <div className="flex items-center gap-1 mt-2">
                   <RatingStarIcon />
                   <h3 className="text-[#000F02] text-[10px] font-normal">
@@ -179,13 +215,9 @@ function UserDetails() {
         <div className="flex flex-row flex-wrap -mx-3">
           {[1, 2, 3, 4, 5, 6, 7].map((item, index) => {
             return (
-              <div key={index} className="w-[33%] xl:w-[20%] px-3 mt-4">
+              <div key={index} className=" px-3 mt-4 ">
                 <div onClick={handleImagePreviewPopUp} className="cursor-pointer">
-                  <img
-                    className="w-full"
-                    src={GalleryImg1}
-                    alt="image of provider"
-                  />
+                  <img className="w-[200px] h-[200px]" src={GalleryImg1} alt="image of provider" />
                 </div>
               </div>
             );
@@ -202,7 +234,12 @@ function UserDetails() {
           )}
         </div>
       )}
-      {showImagePreviewPopUp && (<ImagePreviewPopUp images={[GalleryImg1,GalleryImg1,GalleryImg1,GalleryImg1,GalleryImg1,GalleryImg1]} onCancel={handleImagePreviewPopUp}/>)}
+      {showImagePreviewPopUp && (
+        <ImagePreviewPopUp
+          images={[GalleryImg1, GalleryImg1, GalleryImg1, GalleryImg1, GalleryImg1, GalleryImg1]}
+          onCancel={handleImagePreviewPopUp}
+        />
+      )}
     </div>
   );
 }

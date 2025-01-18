@@ -9,14 +9,21 @@ const Filters = ({ activeFilters, onFilterChange }) => {
   };
 
   const handleFilterChange = (filterType, value) => {
-    const newValue = Array.isArray(activeFilters[filterType]) ? [...activeFilters[filterType]] : [];
-    if (newValue.includes(value)) {
-      const index = newValue.indexOf(value);
-      newValue.splice(index, 1);
+    if (filterType === 'duration') {
+      // For the 'duration' filter, only one value can be selected at a time.
+      onFilterChange(filterType, [value]);
     } else {
-      newValue.push(value);
+      const newValue = Array.isArray(activeFilters[filterType])
+        ? [...activeFilters[filterType]]
+        : [];
+      if (newValue.includes(value)) {
+        const index = newValue.indexOf(value);
+        newValue.splice(index, 1);
+      } else {
+        newValue.push(value);
+      }
+      onFilterChange(filterType, newValue);
     }
-    onFilterChange(filterType, newValue);
   };
 
   const handleSelectAll = (filterType, options) => {
@@ -143,7 +150,7 @@ const Filters = ({ activeFilters, onFilterChange }) => {
               )}
             </div>
           )}
-          {renderSelectedFilters([
+          {renderSelectedFilters('serviceType', [
             'House Cleaning',
             'Car Mechanic',
             'Painter',

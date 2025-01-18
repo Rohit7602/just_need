@@ -1,9 +1,9 @@
-import React from 'react'
+import React from 'react';
 
 function SettingKeysCredentials() {
   return (
-    <div className='p-[15px]'>
-          <div className="flex items-center justify-end">
+    <div className="p-[15px]">
+      <div className="flex items-center justify-end">
         <div>
           <button className="text-base font-normal text-black py-2.5 h-[42px] px-[28px] rounded-[10px] bg-[#F1F1F1] me-[15px]">
             Discard
@@ -18,62 +18,58 @@ function SettingKeysCredentials() {
         <div className="flex items-center justify-between gap-5">
           <label
             htmlFor="googleMapKey"
-            className="text-base font-normal text-[#000000] min-w-[160px] xl:min-w-[260px]"
-          >
-           Google Map Key:
+            className="text-base font-normal text-[#000000] min-w-[160px] xl:min-w-[260px]">
+            Google Map Key:
           </label>
           <input
             id="googleMapKey"
             name="googleMapKey"
-            placeholder="h9897G8Hoh80986960g8G98"
+            placeholder="Google Map Enter"
             className="px-4 py-2.5 h-[42px] placeholder:text-sm placeholder:font-normal text-sm font-normal outline-[#0832DE] w-full border-[1px] border-[#00000033] rounded-[10px]"
           />
         </div>
         <div className="flex items-center justify-between gap-5 mt-5">
           <label
             htmlFor="databaseUrl"
-            className="text-base font-normal text-[#000000] min-w-[160px] xl:min-w-[260px]"
-          >
+            className="text-base font-normal text-[#000000] min-w-[160px] xl:min-w-[260px]">
             Database Url:
           </label>
           <input
             id="databaseUrl"
             name="databaseUrl"
-            placeholder="https://www.amazon.com"
+            placeholder="Database Url Enter"
             className="px-4 py-2.5 h-[42px] placeholder:text-sm placeholder:font-normal text-sm font-normal outline-[#0832DE] w-full border-[1px] border-[#00000033] rounded-[10px]"
           />
         </div>
         <div className="flex items-center justify-between gap-5 mt-5">
           <label
             htmlFor="smsServiceUrl"
-            className="text-base font-normal text-[#000000] min-w-[160px] xl:min-w-[260px]"
-          >
+            className="text-base font-normal text-[#000000] min-w-[160px] xl:min-w-[260px]">
             SMS Service Url:
           </label>
           <input
             id="smsServiceUrl"
             name="smsServiceUrl"
-            placeholder="https://www.amazon.com"
+            placeholder="SMS Service Url Enter"
             className="px-4 py-2.5 h-[42px] placeholder:text-sm placeholder:font-normal text-sm font-normal outline-[#0832DE] w-full border-[1px] border-[#00000033] rounded-[10px]"
           />
         </div>
         <div className="flex items-center justify-between gap-5 mt-5">
           <label
             htmlFor="razorpayApiKey"
-            className="text-base font-normal text-[#000000] min-w-[160px] xl:min-w-[260px]"
-          >
+            className="text-base font-normal text-[#000000] min-w-[160px] xl:min-w-[260px]">
             Razorpay API Key:
           </label>
           <input
             id="razorpayApiKey"
             name="razorpayApiKey"
-            placeholder="JHG5876g5867809j6H5867GE5789h"
+            placeholder="Razorpay API Enter"
             className="px-4 py-2.5 h-[42px] placeholder:text-sm placeholder:font-normal text-sm font-normal outline-[#0832DE] w-full border-[1px] border-[#00000033] rounded-[10px]"
           />
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default SettingKeysCredentials
+export default SettingKeysCredentials;

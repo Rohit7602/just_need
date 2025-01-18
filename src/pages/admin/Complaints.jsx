@@ -10,12 +10,12 @@ export const Complaints = () => {
   const [val, setVal] = useState('');
   const [ShowFilter, setShowFilter] = useState(false);
   const filterRef = useRef(null);
+  const [storeData, setStoreData] = useState([]);
 
-  // State to track active filters
   const [activeFilters, setActiveFilters] = useState({
-    duration: 'Yesterday',
-    serviceType: 'House Cleaning',
-    complaintStatus: 'Pending',
+    duration: [],
+    serviceType: [],
+    complaintStatus: [],
   });
 
   const Data = Array.from({ length: 10 }, (_, index) => ({
@@ -31,13 +31,20 @@ export const Complaints = () => {
     setShowFilter(!ShowFilter);
   };
 
-  // Updating active filters
   const handleActiveFilterChange = (filterType, value) => {
     setActiveFilters((prevFilters) => ({
       ...prevFilters,
       [filterType]: value,
     }));
+
+    const concatdata = [...new Set([...storeData, ...value])];
+    setStoreData(concatdata.flat(Infinity));
   };
+
+  function handleActiveFilter(filterType) {
+    const filterdata = storeData.filter((value) => value !== filterType);
+    setStoreData(filterdata);
+  }
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -60,21 +67,21 @@ export const Complaints = () => {
           <div className="lg:flex justify-between items-center px-4 py-2">
             <div className="flex items-center gap-4 flex-wrap md:flex-wrap">
               <div className="flex items-center gap-4">
-                {Object.entries(activeFilters).map(
-                  ([key, value]) =>
-                    value && (
-                      <div
-                        key={key}
-                        className="flex items-center px-[10px] py-2 rounded-[10px] bg-[#F1F1F1] space-x-2">
-                        <h2 className="lg:text-base sm:text-sm font-normal text-black">{value}</h2>
+                {storeData.map((val, index) => {
+                  return (
+                    <div key={index}>
+                      <p className="flex items-center px-[10px] py-2 rounded-[10px] bg-[#F1F1F1] space-x-2">
+                        {val}
                         <button
-                          onClick={() => handleActiveFilterChange(key, '')}
+                          className="ms-4"
+                          onClick={() => handleActiveFilter(val)}
                           aria-label="Remove filter">
                           <CloseIcon />
                         </button>
-                      </div>
-                    )
-                )}
+                      </p>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 

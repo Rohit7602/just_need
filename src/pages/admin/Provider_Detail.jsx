@@ -37,22 +37,21 @@ const Provider_Detail = () => {
 
   return (
     <div className="">
-      {/* Complaints Details and Resolve Issue button */}
-      <div className="flex justify-end items-center flex-wrap gap-y-4 mt-5 md:mt-0">
+      <div className="flex justify-end relative items-center flex-wrap gap-y-4 mt-5 md:mt-0">
         <button
           onClick={togglePopup}
-          className="bg-[#0832DE] flex items-center text-white font-normal text-sm md:text-base px-3 md:px-4 py-2.5 h-[42px] rounded-[10px] relative mt-5 md:mt-0">
+          className="bg-[#0832DE] flex items-center text-white font-normal text-sm md:text-base px-3 md:px-4 py-2.5 h-[42px] rounded-[10px] mt-5 md:mt-0">
           <Resolve_Issue />
           <h5 className="ms-2 md:ms-3">Resolve Issue</h5>
         </button>
+        {popup && (
+          <div
+            onClick={handleClickOutside}
+            className=" absolute inset-0 top-[10px] flex justify-center items-center popup-container z-[100] ">
+            <ResolveIssuePopus onClose={() => setPopup(false)} />
+          </div>
+        )}
       </div>
-      {popup && (
-        <div
-          onClick={handleClickOutside}
-          className="fixed inset-0 sm:top-[-300px] top-[-40%] md:top-[-346px] lg:top-[-426px] flex justify-center items-center popup-container z-[100] ">
-          <ResolveIssuePopus onClose={() => setPopup(false)} />
-        </div>
-      )}
       <div className="lg:flex justify-between gap-5">
         <div className="bg-[#6C4DEF] p-5 rounded-[10px] mt-5 w-full md:w-[489px] lg:w-[379px]">
           <h2 className="font-medium text-sm lg:text-lg text-white">Customer Detail</h2>
@@ -120,7 +119,7 @@ const Provider_Detail = () => {
             galley of type and scrambled it to make a type specimen book.
           </p>
         </div>
-        <div className="w-full lg:w-[382px] md:w-[489px] border_gradient border-opacity-30 rounded-[10px] mt-4">
+        <div className="w-full lg:w-[382px] md:w-[489px] border-[1px] border-[#ebeaea] rounded-[10px]  mt-4">
           <img className="w-full rounded-[10px]" src={HouseCleaner} alt="House Cleaner" />
           <div className="p-3 flex items-center justify-between">
             <h3 className="font-medium text-base text-black">House Cleaner</h3>
@@ -142,7 +141,7 @@ const Provider_Detail = () => {
       <div className="w-full border-[0.5px] border-dashed border-black border-opacity-40 opacity-40 my-3"></div>
       <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 pt-5">
         {[img1, img2, img3, img4, img5, img6, img7].map((img, index) => (
-          <img key={index} className="w-full" src={img} alt={`img-${index + 1}`} />
+          <img key={index} className="w-[200px] h-[200px]" src={img} alt={`img-${index + 1}`} />
         ))}
       </div>
     </div>

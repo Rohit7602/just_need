@@ -91,99 +91,80 @@ function Services() {
         </div>
       </div>
 
-      <div className="flex flex-wrap mt-[16px] -mx-2">
+      <div className="grid gap-4 mt-[16px] grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
         {servicedata.map((items, index) => (
-          <div key={index} className={`w-full md:w-1/2 xl:w-1/3 px-2 mt-4`}>
-            <div
-              className={`relative z-[20] cursor-pointer h-full border-[#0000001A] rounded-[10px] p-[20px]  border-[1px] bg-[white] group 
-            duration-300 ${
-              disabledCards.includes(index)
-                ? ' text-[#0000002A] border-[#0000001A]'
-                : 'hover:bg-[#6C4DEF] hover:text-white hover:shadow-lg'
-            }`}>
-              <div className="flex items-center justify-between">
-                {editIndex === index ? (
-                  <input
-                    type="text"
-                    value={editData}
-                    onChange={handleInputChange}
-                    onBlur={() => handleBlur(index)}
-                    className="w-full bg-transparent border border-white focus:outline-none p-1 rounded-[10px]"
-                    autoFocus
-                  />
-                ) : (
-                  <p className="p-1 border border-transparent">{items.data}</p>
-                )}
-                <div className="flex items-center">
-                  {editIndex !== index ? (
-                    <>
-                      {!disabledCards.includes(index) ? (
-                        <div
-                          className={`${
-                            disabledCards.includes(index) ? ' opacity-20' : ' opacity-100'
-                          }`}
-                          onClick={() => handleEditClick(index, items.data)}>
-                          <Editicon disabledCards={disabledCards} index={index} />
-                        </div>
-                      ) : (
-                        <div
-                          className={`${
-                            disabledCards.includes(index) ? ' opacity-20' : ' opacity-100'
-                          }`}>
-                          <Editicon disabledCards={disabledCards} index={index} />
-                        </div>
-                      )}
+          <div
+            key={index}
+            className="relative z-[20] cursor-pointer border-[#0000001A] rounded-[10px] p-[20px] border-[1px] bg-[white] group duration-300">
+            <div className="flex items-center justify-between">
+              {editIndex === index ? (
+                <input
+                  type="text"
+                  value={editData}
+                  onChange={handleInputChange}
+                  onBlur={() => handleBlur(index)}
+                  className="w-full bg-transparent border border-white focus:outline-none p-1 rounded-[10px]"
+                  autoFocus
+                />
+              ) : (
+                <p className="p-1 border border-transparent">{items.data}</p>
+              )}
+              <div className="flex items-center">
+                {editIndex !== index ? (
+                  <>
+                    {!disabledCards.includes(index) ? (
                       <div
-                        className="ms-[20px] cursor-pointer opacity-100"
-                        onClick={() =>
-                          disabledCards.includes(index)
-                            ? handleEnableClick(index)
-                            : handleDisableClick(index)
-                        }>
-                        {disabledCards.includes(index) ? (
-                          <span className="text-xs font-normal text-[#0DA800] !opacity-100">
-                            Enable
-                          </span>
-                        ) : (
-                          <DisableRedicon />
-                        )}
+                        onClick={() => handleEditClick(index, items.data)}
+                        className={`cursor-pointer ${
+                          disabledCards.includes(index) ? 'opacity-20' : 'opacity-100'
+                        }`}>
+                        <Editicon disabledCards={disabledCards} index={index} />
                       </div>
-                    </>
-                  ) : (
-                    <div className="ms-[20px]">
-                      <Greenicon />
+                    ) : null}
+                    <div
+                      className="ms-[20px] cursor-pointer"
+                      onClick={() =>
+                        disabledCards.includes(index)
+                          ? handleEnableClick(index)
+                          : handleDisableClick(index)
+                      }>
+                      {disabledCards.includes(index) ? (
+                        <span className="text-xs font-normal text-[#0DA800]">Enable</span>
+                      ) : (
+                        <DisableRedicon />
+                      )}
                     </div>
-                  )}
-                </div>
+                  </>
+                ) : (
+                  <div className="ms-[20px]">
+                    <Greenicon />
+                  </div>
+                )}
               </div>
-              <div
-                className={`border-t border-dashed  ${
-                  disabledCards.includes(index) ? 'border-[#000000Ai]' : 'border-[#00000066]'
-                } my-[16px] ${
-                  disabledCards.includes(index) ? null : 'group-hover:border-[white]'
-                }`}></div>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="opacity-[60%] font-normal text-[12px] mb-[10px]">1. {items.val2}</p>
-                  <p className="opacity-[60%] font-normal text-[12px] mb-[10px]">2. {items.val3}</p>
-                  <p className="opacity-[60%] font-normal text-[12px]">3. {items.val4}</p>
-                </div>
-                <div>
-                  <p className="opacity-[60%] font-normal text-[12px] mb-[10px]">4. {items.val5}</p>
-                  <p className="opacity-[60%] font-normal text-[12px] mb-[10px]">5. {items.val6}</p>
-                  {disabledCards.includes(index) ? (
-                    <p className="font-normal text-[12px]">{items.val7}</p>
-                  ) : (
-                    <p className="font-normal text-[12px]" onClick={() => handleItemClick(items)}>
-                      {items.val7}
-                    </p>
-                  )}
-                </div>
+            </div>
+            <div className="border-t border-dashed my-[16px]"></div>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="opacity-[60%] font-normal text-[12px] mb-[10px]">1. {items.val2}</p>
+                <p className="opacity-[60%] font-normal text-[12px] mb-[10px]">2. {items.val3}</p>
+                <p className="opacity-[60%] font-normal text-[12px]">3. {items.val4}</p>
+              </div>
+              <div>
+                <p className="opacity-[60%] font-normal text-[12px] mb-[10px]">4. {items.val5}</p>
+                <p className="opacity-[60%] font-normal text-[12px] mb-[10px]">5. {items.val6}</p>
+                <p
+                  className={`font-normal text-[12px] ${
+                    disabledCards.includes(index) ? '' : 'cursor-pointer'
+                  }`}
+                  onClick={() => !disabledCards.includes(index) && handleItemClick(items)}>
+                  {items.val7}
+                </p>
               </div>
             </div>
           </div>
         ))}
       </div>
+
       {showPopup && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-[50] flex items-center justify-center"
@@ -202,7 +183,6 @@ function Services() {
           onCancel={() => setShowEnablePopup(false)}
         />
       )}
-
       {showDisablePopup && (
         <DisablePopUp
           onConfirm={() => toggleDisableCard(currentCardIndex, 'confirm')}

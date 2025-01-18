@@ -71,7 +71,7 @@ function SettinGeneral() {
               id="title"
               name="title"
               type="text"
-              placeholder="Just Need"
+              placeholder="Enter Application Title"
               className="py-3 h-[42px] px-[15px] w-full rounded-[10px] bg-[#F2F2F2] placeholder:text-sm placeholder:font-normal text-sm font-normal outline-[#0832DE] border-none"
             />
           </div>
@@ -158,9 +158,10 @@ function SettinGeneral() {
             Whatsapp Support:
           </label>
           <input
+            onInput={(e) => (e.target.value = e.target.value.replace(/[^0-9]/g, ''))}
             id="whatsapp"
             name="whatsapp"
-            placeholder="+91 "
+            placeholder="Enter Whatsapp Number "
             className="px-4 py-2.5 h-[42px] placeholder:text-sm placeholder:font-normal text-sm font-normal outline-[#0832DE] w-full border-[1px] border-[#00000033] rounded-[10px]"
           />
         </div>
@@ -173,8 +174,9 @@ function SettinGeneral() {
           <input
             id="tollFree"
             name="tollFree"
-            placeholder="+18"
+            placeholder="Enter Tollfree Number"
             className="px-4 py-2.5 h-[42px] placeholder:text-sm placeholder:font-normal text-sm font-normal outline-[#0832DE] w-full border-[1px] border-[#00000033] rounded-[10px]"
+            onInput={(e) => (e.target.value = e.target.value.replace(/[^0-9]/g, ''))}
           />
         </div>
         <div className="flex items-center justify-between gap-5 mt-5">
@@ -199,7 +201,7 @@ function SettinGeneral() {
           <input
             id="accountDeleteLink"
             name="accountDeleteLink"
-            placeholder="https://www.request_accountdelete@example.com"
+            placeholder="Enter Account Deletion Url"
             className="px-4 py-2.5 h-[42px] placeholder:text-sm placeholder:font-normal text-sm font-normal outline-[#0832DE] w-full border-[1px] border-[#00000033] rounded-[10px]"
           />
         </div>
