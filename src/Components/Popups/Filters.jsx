@@ -10,7 +10,6 @@ const Filters = ({ activeFilters, onFilterChange }) => {
 
   const handleFilterChange = (filterType, value) => {
     if (filterType === 'duration') {
-      // For the 'duration' filter, only one value can be selected at a time.
       onFilterChange(filterType, [value]);
     } else {
       const newValue = Array.isArray(activeFilters[filterType])
@@ -65,23 +64,22 @@ const Filters = ({ activeFilters, onFilterChange }) => {
           </h2>
           {activeDropdown === 'duration' && (
             <div className="px-5 pb-3">
-              {['Today', 'Yesterday', 'This Week', '1 Month', '2 Month'].map((service) => (
-                <div key={service} className="mt-2.5">
+              {['Today', 'Yesterday', 'This Week', '1 Month', '2 Month'].map((option) => (
+                <div key={option} className="mt-2.5">
                   <input
                     type="checkbox"
-                    id={service}
+                    id={option}
                     className="mr-2 accent-black"
-                    checked={activeFilters.duration && activeFilters.duration.includes(service)}
-                    onChange={() => handleFilterChange('duration', service)}
+                    checked={activeFilters.duration.includes(option)}
+                    onChange={() => handleFilterChange('duration', option)}
                   />
-                  <label className="text-base font-normal" htmlFor={service}>
-                    {service.charAt(0).toUpperCase() + service.slice(1)}
+                  <label className="text-base font-normal" htmlFor={option}>
+                    {option.charAt(0).toUpperCase() + option.slice(1)}
                   </label>
                 </div>
               ))}
             </div>
           )}
-          {renderSelectedFilters(['Today', 'Yesterday', 'This Week', '1 Month', '2 Month'])}
         </div>
 
         {/* Service Type Dropdown */}
@@ -150,7 +148,7 @@ const Filters = ({ activeFilters, onFilterChange }) => {
               )}
             </div>
           )}
-          {renderSelectedFilters('serviceType', [
+          {renderSelectedFilters([
             'House Cleaning',
             'Car Mechanic',
             'Painter',

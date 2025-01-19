@@ -40,7 +40,7 @@ function SettingLegal() {
   ];
 
   return (
-    <div className="p-[15px]">
+    <div className="p-[15px] bg-white rounded-[10px]">
       <div className="flex items-center justify-end">
         <div>
           <button className="text-base font-normal text-black py-2.5 h-[42px] px-[28px] rounded-[10px] bg-[#F1F1F1] me-[15px]">
@@ -53,25 +53,25 @@ function SettingLegal() {
       </div>
       <div className="my-[15px] border-t-[1px] border-[#00000033]"></div>
       <p className="text-base font-medium text-black">Terms of Services</p>
-      <div className="mt-[15px]">
+      <div className="mt-[15px] " style={{ maxHeight: '300px', overflowY: 'auto' }}>
         <ReactQuill
           value={serviceData}
           onChange={setServiceData}
           modules={modules}
           formats={formats}
           theme="snow"
-          style={{ minHeight: '300px', height: 'auto' }}
+          style={{ minHeight: '50px' }}
         />
       </div>
-      <p className="text-base font-medium text-black mt-[15px]">Privacy Policy</p>
-      <div className="mt-[15px]">
+      <p className="text-base font-medium text-black mt-[50px]">Privacy Policy</p>
+      <div className="mt-[15px] " style={{ maxHeight: '300px', overflowY: 'auto' }}>
         <ReactQuill
           value={privacyData}
           onChange={setPrivacyData}
           modules={modules}
           formats={formats}
           theme="snow"
-          style={{ minHeight: '300px', height: 'auto' }}
+          style={{ minHeight: '50px' }}
         />
       </div>
     </div>

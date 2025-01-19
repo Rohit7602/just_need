@@ -49,7 +49,7 @@ function SettinGeneral() {
   }, []);
 
   return (
-    <div className="p-[15px]">
+    <div className="p-[15px] bg-white rounded-[10px]">
       <div className="flex items-center justify-end">
         <div>
           <button className="text-base font-normal text-black py-2.5 h-[42px] px-[28px] rounded-[10px] bg-[#F1F1F1] me-[15px]">

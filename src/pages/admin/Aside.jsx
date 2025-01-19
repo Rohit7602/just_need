@@ -135,7 +135,7 @@ function Aside() {
             </div>
           ))}
         </div>
-        <div className="flex flex-wrap  justify-between mt-[15px] gap-y-[15px]">
+        <div className="flex flex-wrap  justify-between mt-[15px] gap-y-[15px] pb-6">
           {/* Overall Performance Section */}
           <div className="w-full lg:w-[75%]">
             <div className=" bg-[white] rounded-[15px] px-[13px] py-[15px] ">
