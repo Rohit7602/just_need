@@ -10,9 +10,8 @@ export const Complaints = () => {
   const [val, setVal] = useState('');
   const [showFilter, setShowFilter] = useState(false);
   const filterRef = useRef(null);
-  const [storeData, setStoreData] = useState([]);
   const [activeFilters, setActiveFilters] = useState({
-    duration: [],
+    duration: '',
     serviceType: [],
     complaintStatus: [],
   });
@@ -31,15 +30,17 @@ export const Complaints = () => {
   const handleActiveFilterChange = (filterType, value) => {
     setActiveFilters((prevFilters) => ({
       ...prevFilters,
-      [filterType]: value,
+      [filterType]: filterType === 'duration' ? value : value,
     }));
-
-    const combinedData = [...new Set([...storeData, ...value])];
-    setStoreData(combinedData);
   };
 
-  const removeFilter = (filter) => {
-    setStoreData(storeData.filter((item) => item !== filter));
+  const removeFilter = (filterType, filter) => {
+    setActiveFilters((prevFilters) => ({
+      ...prevFilters,
+      [filterType]: Array.isArray(prevFilters[filterType])
+        ? prevFilters[filterType].filter((item) => item !== filter)
+        : '',
+    }));
   };
 
   useEffect(() => {
@@ -62,19 +63,33 @@ export const Complaints = () => {
         <div className="mt-3">
           <div className="lg:flex justify-between items-center px-4 py-2">
             <div className="flex items-center gap-4 flex-wrap">
-              {storeData.map((filter, index) => (
-                <div
-                  key={index}
-                  className="flex items-center px-[10px] py-2 rounded-[10px] bg-[#F1F1F1] space-x-2">
-                  <span>{filter}</span>
-                  <button
-                    className="ms-4"
-                    onClick={() => removeFilter(filter)}
-                    aria-label="Remove filter">
-                    <CloseIcon />
-                  </button>
-                </div>
-              ))}
+              {Object.entries(activeFilters).map(([filterType, filters]) =>
+                Array.isArray(filters)
+                  ? filters.map((filter, index) => (
+                      <div
+                        key={`${filterType}-${index}`}
+                        className="flex items-center px-[10px] py-2 rounded-[10px] bg-[#F1F1F1] space-x-2">
+                        <span>{filter}</span>
+                        <button
+                          onClick={() => removeFilter(filterType, filter)}
+                          aria-label="Remove filter">
+                          <CloseIcon />
+                        </button>
+                      </div>
+                    ))
+                  : filters && (
+                      <div
+                        key={`${filterType}`}
+                        className="flex items-center px-[10px] py-2 rounded-[10px] bg-[#F1F1F1] space-x-2">
+                        <span>{filters}</span>
+                        <button
+                          onClick={() => removeFilter(filterType, filters)}
+                          aria-label="Remove filter">
+                          <CloseIcon />
+                        </button>
+                      </div>
+                    )
+              )}
             </div>
             <div className="flex items-center gap-4 mt-4 lg:mt-0">
               <div className="flex items-center h-[44px] px-4 bg-gray-200 rounded-lg w-[51vh] lg:w-[250px]">
@@ -104,7 +119,6 @@ export const Complaints = () => {
             </div>
           </div>
 
-          {/* Table */}
           <div className="overflow-x-auto mt-6">
             <table className="w-full text-left border-collapse whitespace-nowrap rounded-xl">
               <thead>
@@ -120,11 +134,6 @@ export const Complaints = () => {
                     Action
                   </th>
                 </tr>
-                <tr>
-                  <td colSpan="6">
-                    <div className="w-full border-[1px] border-opacity-40 border-dashed border-black"></div>
-                  </td>
-                </tr>
               </thead>
               <tbody>
                 {Data.map((item, index) => (
@@ -132,10 +141,10 @@ export const Complaints = () => {
                     <td className="text-black text-sm font-normal py-3 lg:py-4 px-4">
                       {index + 1}
                     </td>
-                    <td
-                      className="text-[#6C4DEF] text-sm font-normal px-4"
-                      onClick={() => setVal(item.id)}>
-                      <Link to={`/dashboard/complaints/complaintsDetails/${item.id}`}>
+                    <td className="text-[#6C4DEF] text-sm font-normal px-4">
+                      <Link
+                        to={`/dashboard/complaints/complaintsDetails/${item.id}`}
+                        onClick={() => setVal(item.id)}>
                         {item.Customer}
                       </Link>
                     </td>
@@ -152,19 +161,6 @@ export const Complaints = () => {
                 ))}
               </tbody>
             </table>
-
-            {/* Pagination */}
-            <div className="flex justify-between items-center mt-[60px]">
-              <span className="text-base font-normal">Showing 1 out of 5</span>
-              <div className="flex items-center">
-                <FaAngleDown className="-rotate-[90deg] me-[30px]" />
-                <span className="font-semibold py-[2px] px-[6px] bg-[#0832DE] text-white">1</span>
-                <span className="font-semibold py-[2px] px-[6px] text-black hover:bg-[#0832DE] hover:text-white ms-[26px]">
-                  2
-                </span>
-                <FaAngleDown className="-rotate-90 ms-[30px]" />
-              </div>
-            </div>
           </div>
         </div>
       )}
