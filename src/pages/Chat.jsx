@@ -7,7 +7,16 @@ import ChatImg4 from '../assets/png/chatImg4.png';
 import ChatImg5 from '../assets/png/chatImg5.png';
 import ChatImg6 from '../assets/png/chatImg6.png';
 import ChatImg7 from '../assets/png/chatImg7.png';
-import { Icon1, Icon3, MessageSendIcon, PepaerClikupIcon } from '../assets/icon/Icons';
+import {
+  Icon1,
+  Icon3,
+  MessageSendIcon,
+  PepaerClikupIcon,
+  VideoCollIcon,
+  SearchIconChat,
+  DoteedIconChat,
+} from '../assets/icon/Icons';
+import { BackArrowIcon } from '../assets/icon/Icon';
 
 const Chat = () => {
   const [selectedChat, setSelectedChat] = useState(null);
@@ -59,7 +68,8 @@ const Chat = () => {
       id: 7,
       imgSrc: ChatImg7,
       name: 'Sharuka Nijibum',
-      message: 'When a doctor doctors, a doctor does the ...',
+      message:
+        'When a doctor doctors, a doctor does the When a doctor doctors, a doctor does the When a doctor doctors, a doctor does the ...',
       time: 'Yesterday, 10 AM',
     },
   ];
@@ -71,12 +81,12 @@ const Chat = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-5">
+    <div className="flex flex-col lg:flex-row gap-5 bg-white rounded-[10px]">
       <div
-        className={`p-3 border rounded-lg overflow-x-auto custom-scrollbar w-full lg:w-[40%] md:h-[70vh] lg:h-[80vh] ${
+        className={`p-3 border rounded-lg overflow-y-auto  custom-scrollbar w-full lg:w-[35%] md:h-[70vh] lg:h-[80vh] ${
           selectedChat ? 'hidden lg:block' : 'block'
         }`}>
-        <div className="flex items-center sticky top-0 px-4 bg-white border border-opacity-30 border-gray-800 rounded-lg z-10">
+        <div className="flex items-center sticky top-0 px-4 bg-white z-10 border border-opacity-30 border-gray-800 rounded-lg  ">
           <UserIcon />
           <input
             type="text"
@@ -84,7 +94,7 @@ const Chat = () => {
             className="w-full outline-none bg-white ms-2.5 h-[40px] text-sm placeholder:text-gray-400"
           />
         </div>
-        <div className="border rounded-md border-gray-300 mt-5 h-[40px] bg-gray-100">
+        <div className="border rounded-md mt-3 border-gray-300 h-[40px] bg-gray-100">
           <div className="flex text-center">
             <h2 className="flex-1 font-normal pt-2 text-sm rounded-[7px] h-[40px] text-gray-700 hover:bg-blue-500 hover:text-white cursor-pointer">
               All
@@ -101,7 +111,7 @@ const Chat = () => {
           <div
             key={chat.id}
             onClick={() => setSelectedChat(chat)}
-            className="flex items-center mt-4 hover:bg-purple-100 px-3 py-3 cursor-pointer rounded-lg">
+            className="flex items-center mt-4 w-full ps-3 pe-5 hover:bg-purple-100 py-1 cursor-pointer rounded-lg">
             <div className="w-[40px] h-[40px] flex-shrink-0">
               <img src={chat.imgSrc} alt="Chat" className="h-full object-cover" />
             </div>
@@ -110,69 +120,90 @@ const Chat = () => {
               <p className="font-normal text-sm text-gray-600 pt-1 truncate">{chat.message}</p>
             </div>
             <div className="w-3/12 text-right flex flex-col justify-center">
-              <p className="font-normal text-xs whitespace-nowrap">{chat.time}</p>
+              <p className="font-normal text-[10px] whitespace-nowrap">{chat.time}</p>
             </div>
           </div>
         ))}
       </div>
 
       <div
-        className={`p-3 border rounded-lg w-full lg:w-[60%] md:h-[60vh] lg:h-[80vh] overflow-x-auto custom-scrollbar  flex flex-col ${
+        className={`border rounded-lg w-full lg:w-[65%] md:h-[60vh] relative lg:h-[80vh] overflow-x-auto custom-scrollbar flex flex-col ${
           selectedChat ? 'block' : 'hidden'
         } lg:block`}>
-        <div className="flex justify-between items-center">
-          <h2 className="font-bold text-lg ">{(selectedChat || defaultChat).name}</h2>
-          <button onClick={handleBackClick} className="text-blue-500 font-medium text-sm lg:hidden">
-            Back
-          </button>
+        <div className="flex justify-between sticky top-0 z-10  items-center bg-gray-300 py-3">
+          <div className="flex">
+            <button
+              onClick={handleBackClick}
+              className="text-blue-500 font-medium text-sm lg:hidden ps-3">
+              <BackArrowIcon />
+            </button>
+            <div className="flex items-center ps-3">
+              <img
+                src={(selectedChat || defaultChat).imgSrc}
+                alt={(selectedChat || defaultChat).name}
+                className="w-10 h-10 rounded-full object-cover mr-3"
+              />
+              <h2 className="font-bold text-lg">{(selectedChat || defaultChat).name}</h2>
+            </div>
+          </div>
+          <div className="flex items-center">
+            <a href="">
+              <VideoCollIcon />
+            </a>
+            <a className="pe-3 ps-3" href="">
+              <SearchIconChat />
+            </a>
+            <a className="pe-5" href="">
+              <DoteedIconChat />
+            </a>
+          </div>
+        </div>
+        <div className="p-3  h-[60vh]">
+          <div className="flex-grow mb-3 pr-2 custom-scrollbar">
+            <div className="bg-gray-300 p-2.5 px-3 w-[60%] max-w-[60%] rounded-t-xl rounded-br-xl relative">
+              <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
+              <p className="absolute bottom-1 right-3 text-xs text-black">
+                {(selectedChat || defaultChat).time}
+              </p>
+            </div>
+            <div className="bg-gray-300 p-2.5  mt-3 px-3 w-[60%] max-w-[60%] rounded-t-xl rounded-br-xl relative">
+              <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
+              <p className="absolute bottom-1 right-3 text-xs text-black">
+                {(selectedChat || defaultChat).time}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex-grow mb-3 pr-2 custom-scrollbar  flex justify-end">
+            <div className="bg-[#3D464D] p-2.5 px-3 w-[60%]  max-w-[60%] text-white rounded-t-xl rounded-tl-xl rounded-bl-xl relative">
+              <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
+              <p className="absolute bottom-1 right-3 text-xs text-white">
+                {(selectedChat || defaultChat).time}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex-grow mb-3 pr-2 custom-scrollbar">
+            <div className="bg-gray-300 p-2.5 px-3 w-[60%] max-w-[60%] rounded-t-xl rounded-br-xl relative">
+              <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
+              <p className="absolute bottom-1 right-3 text-xs text-black">
+                {(selectedChat || defaultChat).time}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex-grow mb-3 pr-2 custom-scrollbar flex justify-end">
+            <div className="bg-[#3D464D] p-2.5 px-3 w-[60%] max-w-[60%] text-white rounded-t-xl rounded-tl-xl rounded-bl-xl relative">
+              <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
+              <p className="absolute bottom-1 right-3 text-xs text-white">
+                {(selectedChat || defaultChat).time}
+              </p>
+            </div>
+          </div>
         </div>
 
-        <div className=" flex-grow mb-3 pr-2  custom-scrollbar">
-          <div className="bg-gray-300 p-4 w-[60%]   rounded-t-xl rounded-br-xl">
-            <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
-          </div>
-        </div>
-        <h2 className=" text-black font-normal text-xs">5 Min Ago</h2>
-
-        <div className=" flex-grow mb-3 pr-2 custom-scrollbar flex justify-end">
-          <div className="bg-[#3D464D] w-[60%] text-white p-4 rounded-t-xl rounded-br-xl">
-            <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
-          </div>
-        </div>
-        <h2 className=" text-black text-end font-normal text-xs">3 Min Ago</h2>
-        <div className="flex-grow mb-3 pr-2 custom-scrollbar">
-          <div className="bg-gray-300 p-4 w-[60%]   rounded-t-xl rounded-br-xl">
-            <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
-          </div>
-        </div>
-
-        <div className=" flex-grow mb-3 pr-2 custom-scrollbar">
-          <div className="bg-gray-300 p-4 w-[60%]   rounded-t-xl rounded-br-xl">
-            <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
-          </div>
-        </div>
-        <h2 className=" text-black  font-normal text-xs">2 Min Ago</h2>
-        <div className=" flex-grow mb-3 pr-2 custom-scrollbar flex justify-end">
-          <div className="bg-[#3D464D] w-[60%] text-white p-4 rounded-t-xl rounded-br-xl">
-            <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
-          </div>
-        </div>
-        <h2 className=" text-black  font-normal text-xs text-end">Just Now</h2>
-
-        <div className=" flex-grow mb-3 pr-2 custom-scrollbar">
-          <div className="bg-gray-300 p-4 w-[60%]   rounded-t-xl rounded-br-xl">
-            <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
-          </div>
-        </div>
-        <div className=" flex-grow mb-3 pr-2 custom-scrollbar flex justify-end">
-          <div className="bg-[#3D464D] w-[60%] text-white p-4 rounded-t-xl rounded-br-xl">
-            <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
-          </div>
-        </div>
-        <h2 className=" text-black lg:mb-[10%]   font-normal text-xs text-end">Just Now</h2>
-
-        <div className="flex items-center gap-3  border-t pt-4 fixed bottom-0  md:w-[70%] lg:w-[43%] bg-white">
-          <div className="flex-grow bg-gray-300 rounded-full px-4 ">
+        <div className="flex items-center gap-3 sticky bottom-0 bg-white mt-[15%]  w-full py-4 px-5">
+          <div className="flex-grow bg-gray-300 rounded-full px-4">
             <input
               type="text"
               placeholder="Enter your message"

@@ -26,7 +26,9 @@
 .scrollRemove::-webkit-scrollbar {
   display: none;
 }
-
+.ql-editor {
+  height: 200px !important;
+}
 .slick-prev:before,
 .slick-next:before {
   color: black !important;
