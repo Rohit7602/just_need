@@ -106,7 +106,7 @@ const Chat = () => {
     <div className="flex flex-col lg:flex-row gap-5 bg-white rounded-[10px]">
       {/* Left sidebar - Chat List */}
       <div
-        className={`p-5 border rounded-lg overflow-y-auto custom-scrollbar w-full lg:w-[35%] lg:h-[100vh] ${
+        className={`p-5 border rounded-lg overflow-y-auto custom-scrollbar w-full lg:w-[35%] lg:h-[80vh] ${
           selectedChat ? 'hidden lg:block' : 'block'
         }`}>
         <div className="flex items-center sticky top-0 px-4 bg-white z-10 border border-opacity-30 border-gray-800 rounded-lg">
