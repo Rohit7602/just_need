@@ -15,6 +15,8 @@ import {
   VideoCollIcon,
   SearchIconChat,
   DoteedIconChat,
+  DoumentIcon,
+  ImgaesIcon,
 } from '../assets/icon/Icons';
 import { BackArrowIcon } from '../assets/icon/Icon';
 
@@ -27,50 +29,50 @@ const Chat = () => {
       imgSrc: ChatImg1,
       name: 'Sharuka Nijibum',
       message: 'I have got a date at quarter to eight; I’LL...',
-      time: 'Yesterday, 10 AM',
+      time: 'Yesterday, 10:00 AM',
     },
     {
       id: 2,
       imgSrc: ChatImg2,
       name: 'Sharuka Nijibum',
       message: 'I have got a date at quarter to eight; I’LL...',
-      time: 'Yesterday, 10 AM',
+      time: 'Yesterday, 10:00 AM',
     },
     {
       id: 3,
       imgSrc: ChatImg3,
-      name: 'Urito Nisemuno',
+      name: 'Sharuka Nijibum',
       message: 'I have got a date at quarter to eight; I’LL...',
-      time: 'Yesterday, 10 AM',
+      time: 'Yesterday, 10:00 AM',
     },
     {
       id: 4,
       imgSrc: ChatImg4,
-      name: 'Abshini Thipano',
-      message: 'An anchor, right?',
-      time: 'Yesterday, 10 AM',
+      name: 'Sharuka Nijibum',
+      message: 'I have got a date at quarter to eight; I’LL...',
+      time: 'Yesterday, 10:00 AM',
     },
     {
       id: 5,
       imgSrc: ChatImg5,
-      name: 'Xiang ledepisipang',
-      message: 'A tree-toad loved she-toad who lived up in ..',
-      time: 'Yesterday, 10 AM',
+      name: 'Sharuka Nijibum',
+      message: 'I have got a date at quarter to eight; I’LL...',
+      time: 'Yesterday, 10:00 AM',
     },
     {
       id: 6,
       imgSrc: ChatImg6,
       name: 'Sharuka Nijibum',
-      message: 'When a doctor doctors, a doctor does the ...',
-      time: 'Yesterday, 10 AM',
+      message:
+        ' lorem ipsum dolor sit amet, consectetur adipiscing elit lorem ipsum dolor sit amet, consectetur adipiscing elit',
+      time: 'Yesterday, 10:00 AM',
     },
     {
       id: 7,
       imgSrc: ChatImg7,
       name: 'Sharuka Nijibum',
-      message:
-        'When a doctor doctors, a doctor does the When a doctor doctors, a doctor does the When a doctor doctors, a doctor does the ...',
-      time: 'Yesterday, 10 AM',
+      message: 'I have got a date at quarter to eight; I’LL...',
+      time: 'Yesterday, 10:00 AM',
     },
   ];
 
@@ -80,13 +82,34 @@ const Chat = () => {
     setSelectedChat(null);
   };
 
+  const extractTime = (dateTime) => {
+    const timePart = dateTime.split(', ')[1];
+    return timePart;
+  };
+  const [Tudo, setTudo] = useState(false);
+  const ClickMe = () => {
+    setTudo(!Tudo);
+  };
+  const openLocalFile = (event, type) => {
+    const file = event.target.files[0];
+    if (file) {
+      const fileURL = URL.createObjectURL(file);
+      if (type === 'document') {
+        window.open(fileURL, '_blank');
+      } else if (type === 'image') {
+        window.open(fileURL, '_blank');
+      }
+    }
+  };
+
   return (
     <div className="flex flex-col lg:flex-row gap-5 bg-white rounded-[10px]">
+      {/* Left sidebar - Chat List */}
       <div
-        className={`p-3 border rounded-lg overflow-y-auto  custom-scrollbar w-full lg:w-[35%] md:h-[70vh] lg:h-[80vh] ${
+        className={`p-5 border rounded-lg overflow-y-auto custom-scrollbar w-full lg:w-[35%] lg:h-[80vh] ${
           selectedChat ? 'hidden lg:block' : 'block'
         }`}>
-        <div className="flex items-center sticky top-0 px-4 bg-white z-10 border border-opacity-30 border-gray-800 rounded-lg  ">
+        <div className="flex items-center sticky top-0 px-4 bg-white z-10 border border-opacity-30 border-gray-800 rounded-lg">
           <UserIcon />
           <input
             type="text"
@@ -94,6 +117,7 @@ const Chat = () => {
             className="w-full outline-none bg-white ms-2.5 h-[40px] text-sm placeholder:text-gray-400"
           />
         </div>
+        {/* Chat Filter Tabs */}
         <div className="border rounded-md mt-3 border-gray-300 h-[40px] bg-gray-100">
           <div className="flex text-center">
             <h2 className="flex-1 font-normal pt-2 text-sm rounded-[7px] h-[40px] text-gray-700 hover:bg-blue-500 hover:text-white cursor-pointer">
@@ -107,6 +131,8 @@ const Chat = () => {
             </h2>
           </div>
         </div>
+
+        {/* Chat List */}
         {chatData.map((chat) => (
           <div
             key={chat.id}
@@ -120,7 +146,7 @@ const Chat = () => {
               <p className="font-normal text-sm text-gray-600 pt-1 truncate">{chat.message}</p>
             </div>
             <div className="w-3/12 text-right flex flex-col justify-center">
-              <p className="font-normal text-[10px] whitespace-nowrap">{chat.time}</p>
+              <p className="font-normal text-[10px] whitespace-nowrap">{extractTime(chat.time)}</p>
             </div>
           </div>
         ))}
@@ -130,7 +156,7 @@ const Chat = () => {
         className={`border rounded-lg w-full lg:w-[65%] md:h-[60vh] relative lg:h-[80vh] overflow-x-auto custom-scrollbar flex flex-col ${
           selectedChat ? 'block' : 'hidden'
         } lg:block`}>
-        <div className="flex justify-between sticky top-0 z-10  items-center bg-gray-300 py-3">
+        <div className="flex justify-between sticky top-0 z-10 items-center bg-gray-300 py-3">
           <div className="flex">
             <button
               onClick={handleBackClick}
@@ -158,51 +184,101 @@ const Chat = () => {
             </a>
           </div>
         </div>
-        <div className="p-3  h-[60vh]">
-          <div className="flex-grow mb-3 pr-2 custom-scrollbar">
-            <div className="bg-gray-300 p-2.5 px-3 w-[60%] max-w-[60%] rounded-t-xl rounded-br-xl relative">
+
+        <div className="flex-grow mb-3 pr-2 custom-scrollbar ps-2  flex flex-col space-y-3">
+          <div className="flex mb-3 pr-2 mt-3 ">
+            <div className="bg-gray-300 p-2.5 px-3 max-w-[60%]  text-black rounded-t-xl rounded-br-xl relative">
               <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
-              <p className="absolute bottom-1 right-3 text-xs text-black">
-                {(selectedChat || defaultChat).time}
-              </p>
-            </div>
-            <div className="bg-gray-300 p-2.5  mt-3 px-3 w-[60%] max-w-[60%] rounded-t-xl rounded-br-xl relative">
-              <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
-              <p className="absolute bottom-1 right-3 text-xs text-black">
-                {(selectedChat || defaultChat).time}
+              <p className="absolute bottom-0 right-3 text-xs text-black pt-4">
+                {extractTime((selectedChat || defaultChat).time)}
               </p>
             </div>
           </div>
 
-          <div className="flex-grow mb-3 pr-2 custom-scrollbar  flex justify-end">
-            <div className="bg-[#3D464D] p-2.5 px-3 w-[60%]  max-w-[60%] text-white rounded-t-xl rounded-tl-xl rounded-bl-xl relative">
+          <div className="flex mb-3 pr-2 justify-end">
+            <div className="bg-[#3D464D] p-2.5 px-3 max-w-[60%] text-white rounded-t-xl rounded-tl-xl rounded-bl-xl relative">
               <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
-              <p className="absolute bottom-1 right-3 text-xs text-white">
-                {(selectedChat || defaultChat).time}
+              <p className="absolute bottom-0 right-3 text-xs text-white">
+                {extractTime((selectedChat || defaultChat).time)}
               </p>
             </div>
           </div>
-
-          <div className="flex-grow mb-3 pr-2 custom-scrollbar">
-            <div className="bg-gray-300 p-2.5 px-3 w-[60%] max-w-[60%] rounded-t-xl rounded-br-xl relative">
+          <div className="flex mb-3 pr-2">
+            <div className="bg-gray-300 p-2.5 px-3 max-w-[60%] text-black rounded-t-xl rounded-br-xl relative">
               <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
-              <p className="absolute bottom-1 right-3 text-xs text-black">
-                {(selectedChat || defaultChat).time}
+              <p className="absolute bottom-0 right-3 text-xs text-black ">
+                {extractTime((selectedChat || defaultChat).time)}
               </p>
             </div>
           </div>
-
-          <div className="flex-grow mb-3 pr-2 custom-scrollbar flex justify-end">
-            <div className="bg-[#3D464D] p-2.5 px-3 w-[60%] max-w-[60%] text-white rounded-t-xl rounded-tl-xl rounded-bl-xl relative">
+          <div className="flex mb-3 pr-2 justify-end">
+            <div className="bg-[#3D464D] p-2.5 px-3 max-w-[60%] text-white rounded-t-xl rounded-tl-xl rounded-bl-xl relative">
               <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
-              <p className="absolute bottom-1 right-3 text-xs text-white">
-                {(selectedChat || defaultChat).time}
+              <p className="absolute bottom-0 right-3 text-xs text-white">
+                {extractTime((selectedChat || defaultChat).time)}
+              </p>
+            </div>
+          </div>
+          <div className="flex mb-3 pr-2">
+            <div className="bg-gray-300 p-2.5 px-3 max-w-[60%] text-black rounded-t-xl rounded-br-xl relative">
+              <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
+              <p className="absolute bottom-0 right-3 text-xs text-black">
+                {extractTime((selectedChat || defaultChat).time)}
+              </p>
+            </div>
+          </div>
+          <div className="flex mb-3 pr-2 justify-end">
+            <div className="bg-[#3D464D] p-2.5 px-3 max-w-[60%] text-white rounded-t-xl rounded-tl-xl rounded-bl-xl relative">
+              <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
+              <p className="absolute bottom-0 right-3 text-xs text-white">
+                {extractTime((selectedChat || defaultChat).time)}
+              </p>
+            </div>
+          </div>
+          <div className="flex mb-3 pr-2">
+            <div className="bg-gray-300 p-2.5 px-3 max-w-[60%] text-black rounded-t-xl rounded-br-xl relative">
+              <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
+              <p className="absolute bottom-0 right-3 text-xs text-black">
+                {extractTime((selectedChat || defaultChat).time)}
+              </p>
+            </div>
+          </div>
+          <div className="flex mb-3 pr-2 justify-end">
+            <div className="bg-[#3D464D] p-2.5 px-3 max-w-[60%] text-white rounded-t-xl rounded-tl-xl rounded-bl-xl relative">
+              <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
+              <p className="absolute bottom-0 right-3 text-xs text-white">
+                {extractTime((selectedChat || defaultChat).time)}
+              </p>
+            </div>
+          </div>
+          <div className="flex mb-3 pr-2">
+            <div className="bg-gray-300 p-2.5 px-3 max-w-[60%] text-black rounded-t-xl rounded-br-xl relative">
+              <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
+              <p className="absolute bottom-0 right-3 text-xs text-black">
+                {extractTime((selectedChat || defaultChat).time)}
+              </p>
+            </div>
+          </div>
+          <div className="flex mb-3 pr-2 justify-end">
+            <div className="bg-[#3D464D] p-2.5 px-3 max-w-[60%] text-white rounded-t-xl rounded-tl-xl rounded-bl-xl relative">
+              <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
+              <p className="absolute bottom-0 right-3 text-xs text-white">
+                {extractTime((selectedChat || defaultChat).time)}
+              </p>
+            </div>
+          </div>
+          <div className="flex mb-3 pr-2">
+            <div className="bg-gray-300 p-2.5 px-3 max-w-[60%] text-black rounded-t-xl rounded-br-xl relative">
+              <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
+              <p className="absolute bottom-0 right-3 text-xs text-black">
+                {extractTime((selectedChat || defaultChat).time)}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-3 sticky bottom-0 bg-white mt-[15%]  w-full py-4 px-5">
+        {/* Message Input Area */}
+        <div className="flex items-center gap-3 sticky bottom-0 bg-white py-4 px-5">
           <div className="flex-grow bg-gray-300 rounded-full px-4">
             <input
               type="text"
@@ -210,7 +286,35 @@ const Chat = () => {
               className="w-full outline-none bg-transparent py-4 placeholder:text-black text-sm"
             />
           </div>
-          <PepaerClikupIcon className="cursor-pointer" />
+
+          <span className="relative" onClick={ClickMe}>
+            <PepaerClikupIcon className="cursor-pointer" />
+            {Tudo && (
+              <div className="right-0 top-[-200%] bg-white absolute border-[1px] rounded-t-xl rounded-tl-xl rounded-bl-xl p-3 z-10 w-[200px]">
+                <label className="flex items-center pb-3 cursor-pointer">
+                  <DoumentIcon />
+                  <h2 className="font-medium text-base ps-2">Document</h2>
+                  <input
+                    type="file"
+                    accept=".pdf,.doc,.docx,.txt"
+                    style={{ display: 'none' }}
+                    onChange={(e) => openLocalFile(e, 'document')}
+                  />
+                </label>
+                <div className="border-[1px] w-[100px] border-black"></div>
+                <label className="flex items-center pt-2 cursor-pointer">
+                  <ImgaesIcon />
+                  <h2 className="font-medium text-base ps-3">Image</h2>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    onChange={(e) => openLocalFile(e, 'image')}
+                  />
+                </label>
+              </div>
+            )}
+          </span>
           <MessageSendIcon className="cursor-pointer" />
         </div>
       </div>

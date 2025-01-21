@@ -139,9 +139,14 @@ const Provider_Detail = () => {
       {/* Images Section */}
       <h2 className="font-medium text-lg pt-8">Images</h2>
       <div className="w-full border-[0.5px] border-dashed border-black border-opacity-40 opacity-40 my-3"></div>
-      <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-2 pt-5">
+      <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-[10px]  pt-5">
         {[img1, img2, img3, img4, img5, img6, img7].map((img, index) => (
-          <img key={index} className="w-[200px] h-[200px]" src={img} alt={`img-${index + 1}`} />
+          <img
+            key={index}
+            className="w-[200px] h-[200px] 2xl:w-full rounded-[10px] "
+            src={img}
+            alt={`img-${index + 1}`}
+          />
         ))}
       </div>
     </div>

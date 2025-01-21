@@ -95,7 +95,7 @@ function Services() {
         {servicedata.map((items, index) => (
           <div
             key={index}
-            className="relative z-[20] cursor-pointer border-[#0000001A] rounded-[10px] p-[20px] border-[1px] bg-[white] group duration-300">
+            className="relative z-[20]  cursor-pointer border-[#0000001A] rounded-[10px] p-[20px] border-[1px] bg-[white] group duration-300">
             <div className="flex items-center justify-between">
               {editIndex === index ? (
                 <input
@@ -116,7 +116,7 @@ function Services() {
                       <div
                         onClick={() => handleEditClick(index, items.data)}
                         className={`cursor-pointer ${
-                          disabledCards.includes(index) ? 'opacity-20' : 'opacity-100'
+                          disabledCards.includes(index) ? 'opacity-100' : 'opacity-100'
                         }`}>
                         <Editicon disabledCards={disabledCards} index={index} />
                       </div>

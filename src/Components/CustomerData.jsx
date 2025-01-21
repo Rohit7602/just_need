@@ -3,6 +3,13 @@ import avatar from '../assets/avatar.png';
 import { FaAngleDown } from 'react-icons/fa';
 import ActionUserPupUp from './Popups/ActionUserPupUp';
 import { Link } from 'react-router-dom';
+import {
+  DropdownIconChat,
+  SpikendCirclChat,
+  SpikStartCirclChat,
+  ArrowIconRigth,
+  ArrowIconLeft,
+} from '.././assets/icon/Icons';
 
 const CustomerData = ({ mapData }) => {
   const [showPopup, setShowPopup] = useState(false);
@@ -36,6 +43,19 @@ const CustomerData = ({ mapData }) => {
       setSelectitem(postids);
     }
   }
+
+  const [showItemsDropdown, setShowItemsDropdown] = useState(false);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+
+  const toggleItemsDropdown = () => {
+    setShowItemsDropdown(!showItemsDropdown);
+  };
+
+  const handleItemsSelect = (value) => {
+    setItemsPerPage(value);
+    setShowItemsDropdown(false);
+    console.log(`Items per page set to: ${value}`);
+  };
 
   return (
     <div className="bg-[#FFFFFF] p-5 rounded-[10px]">
@@ -136,15 +156,39 @@ const CustomerData = ({ mapData }) => {
         </table>
       </div>
 
-      <div className="flex justify-between items-center mt-[60px]">
-        <span className="text-base font-normal">Showing 1 out of 5</span>
-        <div className="flex items-center">
-          <FaAngleDown className="-rotate-[-90deg] me-[30px]" />
-          <span className="font-semibold py-[2px] px-[6px] bg-[#0832DE] text-white">1</span>
-          <span className="font-semibold py-[2px] px-[6px] text-black hover:bg-[#0832DE] hover:text-white ms-[26px]">
-            2
-          </span>
-          <FaAngleDown className="-rotate-90 ms-[30px]" />
+      <div className="p-4 bg-white rounded-[10px]">
+        {/* Existing code... */}
+        <div className="flex justify-between">
+          <div className="flex items-center">
+            <h2 className="me-3">Items per page:</h2>
+            <div
+              className="relative border-[1px] py-1 w-[70px] rounded-[10px] flex justify-center items-center cursor-pointer"
+              onClick={toggleItemsDropdown}>
+              <h2 className="pe-3 text-sm font-medium">{itemsPerPage}</h2>
+              <DropdownIconChat />
+              {showItemsDropdown && (
+                <div className="absolute top-full left-0 mt-1 bg-white border rounded shadow-lg w-full z-10">
+                  {[5, 10, 15, 20].map((item) => (
+                    <button
+                      key={item}
+                      onClick={() => handleItemsSelect(item)}
+                      className="w-full px-4 py-2 text-left hover:bg-gray-100">
+                      {item}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="flex justify-between items-center">
+            <h2 className="pe-9 text-sm font-medium">1-{itemsPerPage} of 0</h2>
+            <div className="pe-7 flex ">
+              <SpikStartCirclChat />
+              <ArrowIconLeft />
+            </div>
+            <ArrowIconRigth />
+            <SpikendCirclChat />
+          </div>
         </div>
       </div>
       {showPopup && <ActionUserPupUp handlePopup={handlePopup} />}

@@ -212,16 +212,22 @@ function UserDetails() {
         <p className="font-medium text-lg leading-[22px] text-black pb-2.5 border-b-[0.5px] border-dashed border-[#00000066]">
           Images
         </p>
-        <div className="flex flex-row flex-wrap -mx-3">
-          {[1, 2, 3, 4, 5, 6, 7].map((item, index) => {
-            return (
-              <div key={index} className=" px-3 mt-4 ">
-                <div onClick={handleImagePreviewPopUp} className="cursor-pointer">
-                  <img className="w-[200px] h-[200px]" src={GalleryImg1} alt="image of provider" />
+        <div>
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-[10px]  pt-5">
+            {[1, 2, 3, 4, 5, 6, 7].map((item, index) => {
+              return (
+                <div key={index} className="    ">
+                  <div onClick={handleImagePreviewPopUp} className="cursor-pointer">
+                    <img
+                      className="w-[200px] h-[200px] 2xl:w-full rounded-[10px] "
+                      src={GalleryImg1}
+                      alt="image of provider"
+                    />
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       </div>
       {showPopupDisable && <DisableProviderPopUp handlePopupDisable={handlePopupDisable} />}
