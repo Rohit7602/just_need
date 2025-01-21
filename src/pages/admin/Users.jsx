@@ -6,12 +6,18 @@ import UsersFilterPopUp from '../../Components/Popups/UsersFilterPopUp';
 import { Outlet, useLocation } from 'react-router-dom';
 
 function Users() {
-  const [showfilterPopup, setshowfilterPopup] = useState(false);
+  const [showfilterPopup, setShowfilterPopup] = useState(false);
   const location = useLocation();
   const isUserDetailsPage = location.pathname.includes('userDetails');
 
+  // Function to handle the filter popup toggle
   function handleFilter() {
-    setshowfilterPopup(!showfilterPopup);
+    setShowfilterPopup(!showfilterPopup);
+  }
+
+  // Function to handle closing the filter popup
+  function handleFilterPopupClose() {
+    setShowfilterPopup(false);
   }
 
   return (
@@ -45,7 +51,7 @@ function Users() {
           {showfilterPopup && (
             <UsersFilterPopUp
               handleFilter={handleFilter}
-              handlefilterpopupclose={handlefilterpopupclose}
+              handlefilterpopupclose={handleFilterPopupClose}
             />
           )}
         </>

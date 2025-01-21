@@ -7,6 +7,8 @@ import ChatImg4 from '../assets/png/chatImg4.png';
 import ChatImg5 from '../assets/png/chatImg5.png';
 import ChatImg6 from '../assets/png/chatImg6.png';
 import ChatImg7 from '../assets/png/chatImg7.png';
+
+import Logo from '../assets/png/Frame 1000004210.png';
 import {
   Icon1,
   Icon3,
@@ -34,21 +36,21 @@ const Chat = () => {
     {
       id: 2,
       imgSrc: ChatImg2,
-      name: 'Sharuka Nijibum',
+      name: 'Urito Nisemuno',
       message: 'I have got a date at quarter to eight; I’LL...',
       time: 'Yesterday, 10:00 AM',
     },
     {
       id: 3,
       imgSrc: ChatImg3,
-      name: 'Sharuka Nijibum',
+      name: 'Abshini Thipano',
       message: 'I have got a date at quarter to eight; I’LL...',
       time: 'Yesterday, 10:00 AM',
     },
     {
       id: 4,
       imgSrc: ChatImg4,
-      name: 'Sharuka Nijibum',
+      name: 'Xiang ledepisipang',
       message: 'I have got a date at quarter to eight; I’LL...',
       time: 'Yesterday, 10:00 AM',
     },
@@ -72,7 +74,7 @@ const Chat = () => {
       imgSrc: ChatImg7,
       name: 'Sharuka Nijibum',
       message: 'I have got a date at quarter to eight; I’LL...',
-      time: 'Yesterday, 10:00 AM',
+      time: 'Yesterday, 11:00 AM',
     },
   ];
 
@@ -90,10 +92,14 @@ const Chat = () => {
   const ClickMe = () => {
     setTudo(!Tudo);
   };
+  const [image, setImage] = useState(Logo);
   const openLocalFile = (event, type) => {
     const file = event.target.files[0];
+
     if (file) {
       const fileURL = URL.createObjectURL(file);
+      setImage(imageURL);
+
       if (type === 'document') {
         window.open(fileURL, '_blank');
       } else if (type === 'image') {
@@ -103,7 +109,7 @@ const Chat = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-5 bg-white rounded-[10px]">
+    <div className="flex flex-col lg:flex-row gap-5  bg-white rounded-[10px]">
       {/* Left sidebar - Chat List */}
       <div
         className={`p-5 border rounded-lg overflow-y-auto custom-scrollbar w-full lg:w-[35%] lg:h-[80vh] ${
