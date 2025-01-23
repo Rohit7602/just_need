@@ -216,13 +216,14 @@ function UserDetails() {
           <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-[10px]  pt-5">
             {[1, 2, 3, 4, 5, 6, 7].map((item, index) => {
               return (
-                <div key={index} className="    ">
+                <div key={index} className="relative group">
                   <div onClick={handleImagePreviewPopUp} className="cursor-pointer">
                     <img
-                      className="w-[200px] h-[200px] 2xl:w-full rounded-[10px] "
+                      className="w-[200px] h-[200px] 2xl:w-full rounded-[10px] group-hover:bg-black transition-all "
                       src={GalleryImg1}
                       alt="image of provider"
                     />
+                    <div className="absolute inset-0 bg-gray-200 opacity-0 group-hover:opacity-50 transition-opacity"></div>
                   </div>
                 </div>
               );
