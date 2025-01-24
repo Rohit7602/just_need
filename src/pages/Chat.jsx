@@ -7,6 +7,8 @@ import ChatImg4 from '../assets/png/chatImg4.png';
 import ChatImg5 from '../assets/png/chatImg5.png';
 import ChatImg6 from '../assets/png/chatImg6.png';
 import ChatImg7 from '../assets/png/chatImg7.png';
+
+import Logo from '../assets/png/Frame 1000004210.png';
 import {
   Icon1,
   Icon3,
@@ -29,35 +31,35 @@ const Chat = () => {
       imgSrc: ChatImg1,
       name: 'Sharuka Nijibum',
       message: 'I have got a date at quarter to eight; I’LL...',
-      time: 'Yesterday, 10:00 AM',
+      time: 'Yesterday, 2:00 AM',
     },
     {
       id: 2,
       imgSrc: ChatImg2,
-      name: 'Sharuka Nijibum',
+      name: 'Urito Nisemuno',
       message: 'I have got a date at quarter to eight; I’LL...',
-      time: 'Yesterday, 10:00 AM',
+      time: 'Yesterday, 11:00 AM',
     },
     {
       id: 3,
       imgSrc: ChatImg3,
-      name: 'Sharuka Nijibum',
+      name: 'Abshini Thipano',
       message: 'I have got a date at quarter to eight; I’LL...',
-      time: 'Yesterday, 10:00 AM',
+      time: 'Yesterday,  5:00 AM',
     },
     {
       id: 4,
       imgSrc: ChatImg4,
-      name: 'Sharuka Nijibum',
+      name: 'Xiang ledepisipang',
       message: 'I have got a date at quarter to eight; I’LL...',
-      time: 'Yesterday, 10:00 AM',
+      time: 'Yesterday,  9:00 AM',
     },
     {
       id: 5,
       imgSrc: ChatImg5,
       name: 'Sharuka Nijibum',
       message: 'I have got a date at quarter to eight; I’LL...',
-      time: 'Yesterday, 10:00 AM',
+      time: 'Yesterday,  6:00 AM',
     },
     {
       id: 6,
@@ -65,14 +67,14 @@ const Chat = () => {
       name: 'Sharuka Nijibum',
       message:
         ' lorem ipsum dolor sit amet, consectetur adipiscing elit lorem ipsum dolor sit amet, consectetur adipiscing elit',
-      time: 'Yesterday, 10:00 AM',
+      time: 'Yesterday,  10:00 AM',
     },
     {
       id: 7,
       imgSrc: ChatImg7,
       name: 'Sharuka Nijibum',
       message: 'I have got a date at quarter to eight; I’LL...',
-      time: 'Yesterday, 10:00 AM',
+      time: 'Yesterday, 12:33 AM',
     },
   ];
 
@@ -90,10 +92,14 @@ const Chat = () => {
   const ClickMe = () => {
     setTudo(!Tudo);
   };
+  const [image, setImage] = useState(Logo);
   const openLocalFile = (event, type) => {
     const file = event.target.files[0];
+
     if (file) {
       const fileURL = URL.createObjectURL(file);
+      setImage(imageURL);
+
       if (type === 'document') {
         window.open(fileURL, '_blank');
       } else if (type === 'image') {
@@ -103,10 +109,10 @@ const Chat = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-5 bg-white rounded-[10px]">
+    <div className="flex flex-col lg:flex-row p-5 bg-white rounded-[10px]">
       {/* Left sidebar - Chat List */}
       <div
-        className={`p-5 border rounded-lg overflow-y-auto custom-scrollbar w-full lg:w-[35%] lg:h-[80vh] ${
+        className={`pe-4 rounded-lg overflow-y-auto custom-scrollbar w-full lg:w-[35%] lg:h-[80vh] ${
           selectedChat ? 'hidden lg:block' : 'block'
         }`}>
         <div className="flex items-center sticky top-0 px-4 bg-white z-10 border border-opacity-30 border-gray-800 rounded-lg">
@@ -187,90 +193,90 @@ const Chat = () => {
 
         <div className="flex-grow mb-3 pr-2 custom-scrollbar ps-2  flex flex-col space-y-3">
           <div className="flex mb-3 pr-2 mt-3 ">
-            <div className="bg-gray-300 p-2.5 px-3 max-w-[60%]  text-black rounded-t-xl rounded-br-xl relative">
-              <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
-              <p className="absolute bottom-0 right-3 text-xs text-black pt-4">
+            <div className="bg-gray-300 p-2 px-4 max-w-[60%]  text-black rounded-t-xl rounded-br-xl relative">
+              <p className="font-normal text-sm pb-1">{(selectedChat || defaultChat).message}</p>
+              <p className="absolute bottom-0 right-3 text-[10px] text-black pt-4">
                 {extractTime((selectedChat || defaultChat).time)}
               </p>
             </div>
           </div>
 
           <div className="flex mb-3 pr-2 justify-end">
-            <div className="bg-[#3D464D] p-2.5 px-3 max-w-[60%] text-white rounded-t-xl rounded-tl-xl rounded-bl-xl relative">
-              <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
-              <p className="absolute bottom-0 right-3 text-xs text-white">
+            <div className="bg-[#3D464D] p-2 px-4 max-w-[60%] text-white rounded-t-xl rounded-tl-xl rounded-bl-xl relative">
+              <p className="font-normal text-sm pb-1">{(selectedChat || defaultChat).message}</p>
+              <p className="absolute bottom-0 right-3 text-[10px] text-white">
                 {extractTime((selectedChat || defaultChat).time)}
               </p>
             </div>
           </div>
           <div className="flex mb-3 pr-2">
-            <div className="bg-gray-300 p-2.5 px-3 max-w-[60%] text-black rounded-t-xl rounded-br-xl relative">
-              <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
-              <p className="absolute bottom-0 right-3 text-xs text-black ">
+            <div className="bg-gray-300 p-2 px-4 max-w-[60%] text-black rounded-t-xl rounded-br-xl relative">
+              <p className="font-normal text-sm pb-1">{(selectedChat || defaultChat).message}</p>
+              <p className="absolute bottom-0 right-3 text-[10px] text-black ">
                 {extractTime((selectedChat || defaultChat).time)}
               </p>
             </div>
           </div>
           <div className="flex mb-3 pr-2 justify-end">
-            <div className="bg-[#3D464D] p-2.5 px-3 max-w-[60%] text-white rounded-t-xl rounded-tl-xl rounded-bl-xl relative">
-              <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
-              <p className="absolute bottom-0 right-3 text-xs text-white">
+            <div className="bg-[#3D464D] p-2 px-4 max-w-[60%] text-white rounded-t-xl rounded-tl-xl rounded-bl-xl relative">
+              <p className="font-normal text-sm pb-1">{(selectedChat || defaultChat).message}</p>
+              <p className="absolute bottom-0 right-3 text-[10px] text-white">
                 {extractTime((selectedChat || defaultChat).time)}
               </p>
             </div>
           </div>
           <div className="flex mb-3 pr-2">
-            <div className="bg-gray-300 p-2.5 px-3 max-w-[60%] text-black rounded-t-xl rounded-br-xl relative">
-              <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
-              <p className="absolute bottom-0 right-3 text-xs text-black">
+            <div className="bg-gray-300 p-2 px-4 max-w-[60%] text-black rounded-t-xl rounded-br-xl relative">
+              <p className="font-normal text-sm pb-1">{(selectedChat || defaultChat).message}</p>
+              <p className="absolute bottom-0 right-3 text-[10px] text-black">
                 {extractTime((selectedChat || defaultChat).time)}
               </p>
             </div>
           </div>
           <div className="flex mb-3 pr-2 justify-end">
-            <div className="bg-[#3D464D] p-2.5 px-3 max-w-[60%] text-white rounded-t-xl rounded-tl-xl rounded-bl-xl relative">
-              <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
-              <p className="absolute bottom-0 right-3 text-xs text-white">
+            <div className="bg-[#3D464D] p-2 px-4 max-w-[60%] text-white rounded-t-xl rounded-tl-xl rounded-bl-xl relative">
+              <p className="font-normal text-sm pb-1">{(selectedChat || defaultChat).message}</p>
+              <p className="absolute bottom-0 right-3 text-[10px] text-white">
                 {extractTime((selectedChat || defaultChat).time)}
               </p>
             </div>
           </div>
           <div className="flex mb-3 pr-2">
-            <div className="bg-gray-300 p-2.5 px-3 max-w-[60%] text-black rounded-t-xl rounded-br-xl relative">
-              <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
-              <p className="absolute bottom-0 right-3 text-xs text-black">
+            <div className="bg-gray-300 p-2 px-4 max-w-[60%] text-black rounded-t-xl rounded-br-xl relative">
+              <p className="font-normal text-sm pb-1">{(selectedChat || defaultChat).message}</p>
+              <p className="absolute bottom-0 right-3 text-[10px] text-black">
                 {extractTime((selectedChat || defaultChat).time)}
               </p>
             </div>
           </div>
           <div className="flex mb-3 pr-2 justify-end">
-            <div className="bg-[#3D464D] p-2.5 px-3 max-w-[60%] text-white rounded-t-xl rounded-tl-xl rounded-bl-xl relative">
-              <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
-              <p className="absolute bottom-0 right-3 text-xs text-white">
+            <div className="bg-[#3D464D] p-2 px-4 max-w-[60%] text-white rounded-t-xl rounded-tl-xl rounded-bl-xl relative">
+              <p className="font-normal text-sm pb-1">{(selectedChat || defaultChat).message}</p>
+              <p className="absolute bottom-0 right-3 text-[10px] text-white">
                 {extractTime((selectedChat || defaultChat).time)}
               </p>
             </div>
           </div>
           <div className="flex mb-3 pr-2">
-            <div className="bg-gray-300 p-2.5 px-3 max-w-[60%] text-black rounded-t-xl rounded-br-xl relative">
-              <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
-              <p className="absolute bottom-0 right-3 text-xs text-black">
+            <div className="bg-gray-300 p-2 px-4 max-w-[60%] text-black rounded-t-xl rounded-br-xl relative">
+              <p className="font-normal text-sm pb-1">{(selectedChat || defaultChat).message}</p>
+              <p className="absolute bottom-0 right-3 text-[10px] text-black">
                 {extractTime((selectedChat || defaultChat).time)}
               </p>
             </div>
           </div>
           <div className="flex mb-3 pr-2 justify-end">
-            <div className="bg-[#3D464D] p-2.5 px-3 max-w-[60%] text-white rounded-t-xl rounded-tl-xl rounded-bl-xl relative">
-              <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
-              <p className="absolute bottom-0 right-3 text-xs text-white">
+            <div className="bg-[#3D464D] p-2 px-4 max-w-[60%] text-white rounded-t-xl rounded-tl-xl rounded-bl-xl relative">
+              <p className="font-normal text-sm pb-1">{(selectedChat || defaultChat).message}</p>
+              <p className="absolute bottom-0 right-3 text-[10px] text-white">
                 {extractTime((selectedChat || defaultChat).time)}
               </p>
             </div>
           </div>
           <div className="flex mb-3 pr-2">
-            <div className="bg-gray-300 p-2.5 px-3 max-w-[60%] text-black rounded-t-xl rounded-br-xl relative">
-              <p className="font-normal text-sm">{(selectedChat || defaultChat).message}</p>
-              <p className="absolute bottom-0 right-3 text-xs text-black">
+            <div className="bg-gray-300 p-2 px-4 max-w-[60%] text-black rounded-t-xl rounded-br-xl relative">
+              <p className="font-normal text-sm pb-1">{(selectedChat || defaultChat).message}</p>
+              <p className="absolute bottom-0 right-3 text-[10px] text-black">
                 {extractTime((selectedChat || defaultChat).time)}
               </p>
             </div>

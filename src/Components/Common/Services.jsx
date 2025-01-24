@@ -95,7 +95,7 @@ function Services() {
         {servicedata.map((items, index) => (
           <div
             key={index}
-            className="relative z-[20]  cursor-pointer border-[#0000001A] rounded-[10px] p-[20px] border-[1px] bg-[white] group duration-300">
+            className="relative z-[20] hover:bg-[#0832DE] hover:text-white  cursor-pointer border-[#0000001A] rounded-[10px] p-[20px] border-[1px] bg-[white] group duration-300">
             <div className="flex items-center justify-between">
               {editIndex === index ? (
                 <input

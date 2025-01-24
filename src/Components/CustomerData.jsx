@@ -158,16 +158,16 @@ const CustomerData = ({ mapData }) => {
 
       <div className="p-4 bg-white rounded-[10px]">
         {/* Existing code... */}
-        <div className="flex justify-between">
+        <div className="flex justify-end ">
           <div className="flex items-center">
             <h2 className="me-3">Items per page:</h2>
             <div
-              className="relative border-[1px] py-1 w-[70px] rounded-[10px] flex justify-center items-center cursor-pointer"
+              className="relative border-[1px] py-1 w-[70px] rounded-[10px] flex justify-center items-center cursor-pointer me-9"
               onClick={toggleItemsDropdown}>
               <h2 className="pe-3 text-sm font-medium">{itemsPerPage}</h2>
               <DropdownIconChat />
               {showItemsDropdown && (
-                <div className="absolute top-full left-0 mt-1 bg-white border rounded shadow-lg w-full z-10">
+                <div className="absolute top-full left-0 mt-1 bg-white border rounded shadow-lg w-full z-10 ">
                   {[5, 10, 15, 20].map((item) => (
                     <button
                       key={item}
@@ -181,12 +181,17 @@ const CustomerData = ({ mapData }) => {
             </div>
           </div>
           <div className="flex justify-between items-center">
-            <h2 className="pe-9 text-sm font-medium">1-{itemsPerPage} of 0</h2>
+            <h2 className="pe-3 text-sm font-medium">1-{itemsPerPage}</h2>
+            <span className=" pe-5">of 0</span>
             <div className="pe-7 flex ">
               <SpikStartCirclChat />
-              <ArrowIconLeft />
+              <div className=" ps-5">
+                <ArrowIconLeft />
+              </div>
             </div>
-            <ArrowIconRigth />
+            <div className=" pe-3">
+              <ArrowIconRigth />
+            </div>
             <SpikendCirclChat />
           </div>
         </div>
