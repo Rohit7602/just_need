@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 import SuscriptionPopUp from './Popups/SuscriptionPopUp';
 import { EditiconSubscription, RedDeleteIcon } from '../assets/icon/Icons';
+import ConfirmDeltePopUp from './Popups/ConfirmDeltePopUp';
 
 const Subscription = () => {
   const [showPopup, setShowPopup] = useState(false);
+  const [deletePopUp,setDeletePouUp] = useState(false)
   function handlePopup() {
     setShowPopup(!showPopup);
+  }
+  const handleDeletePopUp = ()=>{
+    setDeletePouUp(!deletePopUp)
   }
   return (
     <div className="w-full p-[15px] bg-white rounded-[10px]">
@@ -24,14 +29,12 @@ const Subscription = () => {
             <div className="flex items-center justify-between">
               <h1 className="text-xl xl:text-[26px] font-semibold text-white">STANDARD</h1>
               <div className="flex items-center gap-[15px] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <a href="">
-                  {' '}
+                <button onClick={handlePopup}>
                   <EditiconSubscription />
-                </a>
-                <a href="">
-                  {' '}
+                </button>
+                <button onClick={handleDeletePopUp}>
                   <RedDeleteIcon />
-                </a>
+                </button>
               </div>
             </div>
             <div className="border-t-[1px] border-dashed border-white my-2.5"></div>
@@ -84,15 +87,12 @@ const Subscription = () => {
             <div className="flex items-center justify-between">
               <h1 className="text-xl xl:text-[26px] font-semibold text-white">PREMIUM</h1>
               <div className="flex items-center gap-[15px] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <a href="">
-                  {' '}
+                <button onClick={handlePopup}>
                   <EditiconSubscription />
-                </a>
-
-                <a href="">
-                  {' '}
+                </button>
+                <button onClick={handleDeletePopUp}>
                   <RedDeleteIcon />
-                </a>
+                </button>
               </div>
             </div>
             <div className="border-t-[1px] border-dashed border-white my-2.5"></div>
@@ -141,6 +141,7 @@ const Subscription = () => {
         </div>
       </div>
       {showPopup && <SuscriptionPopUp handlePopup={handlePopup} />}
+      {deletePopUp && <ConfirmDeltePopUp onCancel={handleDeletePopUp}/>}
     </div>
   );
 };

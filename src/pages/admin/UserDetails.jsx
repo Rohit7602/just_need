@@ -25,7 +25,6 @@ function UserDetails() {
 
   const handleImagePreviewPopUp = () => {
     setShowImagePreviewPupUp(!showImagePreviewPopUp);
-    console.log('first');
   };
 
   const [listings, setListings] = useState([
