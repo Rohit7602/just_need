@@ -5,11 +5,13 @@ import { BlackCloseIcon, ChatIcon, NotificationIcon, SearchIcon } from '../../as
 import AdminImage from '../../assets/png/AdminImage.png';
 import { Link, useLocation } from 'react-router-dom';
 import { ArrowIcon, CloseIcon } from '../../assets/icon/Icons';
+import NotificationPopUp from '../Popups/NotificationPopUp';
 
 function TopBar() {
   const navigate = useNavigate();
 
   const [isInputVisible, setIsInputVisible] = useState(false);
+  const [notificationPopUp,setNotificationPopUp] = useState(false)
   const location = useLocation();
   const searchRef = useRef(null);
 
@@ -32,6 +34,10 @@ function TopBar() {
   const goBack = () => {
     navigate(-1);
   };
+
+ const handleNotificationPopUp=()=>{
+  setNotificationPopUp(!notificationPopUp)
+ }
 
   const showArrowButton =
     /\/dashboard\/complaints\/complaintsDetails\/\d+$/.test(location.pathname) ||
@@ -110,7 +116,7 @@ function TopBar() {
             state={'Plan, prioritize, and accomplish your tasks with ease.'}>
             <ChatIcon />
           </Link>
-          <button>
+          <button onClick={handleNotificationPopUp}>
             <NotificationIcon />
           </button>
           <div className="flex items-center">
@@ -126,6 +132,7 @@ function TopBar() {
           </div>
         </div>
       </div>
+      {notificationPopUp && <div><NotificationPopUp onCancel={handleNotificationPopUp}/></div>}
     </div>
   );
 }
