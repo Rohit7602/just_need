@@ -17,11 +17,14 @@ import SettinGeneral from '../../pages/admin/SettinGeneral';
 import SettingLegal from '../../pages/admin/SettingLegal';
 import SettingKeysCredentials from '../../pages/admin/SettingKeysCredentials';
 import Chat from '../../pages/Chat';
+import LoginPupUp from '../../Components/Popups/LoginPupUp';
+import ProtectedRoute from "../../Components/ProtectedRoute"
 
 function AdminRoutes() {
   return (
     <Routes>
-      <Route path="/dashboard" element={<AdminLayout />}>
+     <Route path="/login" element={<ProtectedRoute Children={LoginPupUp}/>}/>
+      <Route path="/dashboard" element={<ProtectedRoute Children={AdminLayout}/>}>
         <Route index element={<Aside />} />
         <Route path="usersList" element={<Users />}>
           <Route path="userDetails/:id" element={<UserDetails />} />

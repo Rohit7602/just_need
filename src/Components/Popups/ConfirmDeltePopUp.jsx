@@ -1,7 +1,18 @@
 import React from "react";
 import { RedDeleteIcon } from "../../assets/icon/Icon";
+import { useSubscriptionContext } from "../../store/SubscriptionContext";
 
-function ConfirmDeltePopUp({onCancel}) {
+function ConfirmDeltePopUp({onCancel , deleteId}) {
+ const {deletePlan} = useSubscriptionContext()
+const handleDeleteConfirm = ()=>{
+  if (deleteId) {
+    deletePlan(deleteId);
+    onCancel()
+  } else {
+    console.error("Delete ID is missing!");
+  }
+}
+
   return (
     <>
       <div
@@ -22,7 +33,7 @@ function ConfirmDeltePopUp({onCancel}) {
               >
                 No, Cancel
               </button>
-              <button
+              <button onClick={handleDeleteConfirm}
                 className="text-base font-normal text-white px-11 py-2.5 h-[42px] bg-[#0832DE] rounded-[10px]"
               >
                 Yes, Delete
