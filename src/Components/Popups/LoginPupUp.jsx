@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { EmailIcon, LockIcon, UnseenIcon } from "../../assets/icon/Icon";
-import { useAuthContext } from "../../store/authContext";
+import { useAuthContext } from "../../store/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 function LoginPupUp() {
@@ -8,16 +8,16 @@ function LoginPupUp() {
   const [password, setPassword] = useState("");
 
   const { signInWithEmail } = useAuthContext();
-  
-  const navigate = useNavigate()
+
+  const navigate = useNavigate();
 
   const handleLogIn = () => {
     signInWithEmail(email, password)
       .then((response) => {
         if (response.success) {
           console.log(response.response); // Corrected from response.data
-          localStorage.setItem("logIn","true");
-          navigate("/dashboard")
+          localStorage.setItem("logIn", "true");
+          navigate("/dashboard");
         } else {
           console.error(response.response); // Corrected from response.error
         }
