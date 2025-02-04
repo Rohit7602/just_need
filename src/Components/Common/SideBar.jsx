@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import CustomerServiceLogo from "../../assets/png/customerServiceLogo.png";
 import { NavLink, useLocation } from "react-router-dom";
 import {
@@ -13,10 +13,15 @@ import {
   VerticalVilotSettingSvg,
   VerticalVilotgSvg,
 } from "../../assets/icon/Icon";
+import LogOutPopUp from "../Popups/LogOutPopUp";
 
 function SideBar() {
+  const [showLogOutPopUp,setShowLogOutPopUp] = useState(false)
   const location = useLocation();
   const pathName = location.pathname;
+  const handleLogOutPopUp = ()=>{
+    setShowLogOutPopUp(!showLogOutPopUp)
+  }
   return (
     <div className="bg-white pt-[11px] pb-10  rounded-[10px] h-full overflow-y-auto scrollRemove">
       <div className="px-6 pb-[11px]">
@@ -187,8 +192,8 @@ function SideBar() {
         <VerticalVilotSettingSvg pathName={pathName} checkpath="/dashboard/logout"/>
          
           <NavLink
-            
-            state={"Plan, prioritize, and accomplish your tasks with ease."}
+            onClick={handleLogOutPopUp}
+            // state={"Plan, prioritize, and accomplish your tasks with ease."}
             to="/dashboard/logout"
             className="flex items-center py-2.5 px-2 xl:px-[15px] gap-3 xl:gap-5 ms-[5px] w-full"
           >
@@ -205,6 +210,7 @@ function SideBar() {
           </NavLink>
         </div>
       </div>
+      {showLogOutPopUp && <LogOutPopUp onCancle={handleLogOutPopUp}/>}
     </div>
   );
 }
