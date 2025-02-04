@@ -1,5 +1,5 @@
 import React from "react";
-import { useAuthContext } from "../../store/authContext";
+import { useAuthContext } from "../../store/AuthContext";
 
 function LogOutPopUp({ onCancle }) {
   const { handleLogOut } = useAuthContext();
@@ -11,7 +11,7 @@ function LogOutPopUp({ onCancle }) {
         console.error(response.response);
       }
     });
-    window.location.reload()
+    window.location.reload();
   };
   return (
     <>
