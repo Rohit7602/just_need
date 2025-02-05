@@ -24,6 +24,7 @@ import { BackArrowIcon } from "../assets/icon/Icon";
 
 const Chat = () => {
   const [selectedChat, setSelectedChat] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const chatData = [
     {
@@ -77,6 +78,7 @@ const Chat = () => {
       time: "Yesterday, 12:33 AM",
     },
   ];
+
   const [activeButton, setActiveButton] = useState("All");
 
   const handleButtonClick = (button) => {
@@ -93,17 +95,19 @@ const Chat = () => {
     const timePart = dateTime.split(", ")[1];
     return timePart;
   };
+
   const [Tudo, setTudo] = useState(false);
   const ClickMe = () => {
     setTudo(!Tudo);
   };
+
   const [image, setImage] = useState(Logo);
   const openLocalFile = (event, type) => {
     const file = event.target.files[0];
 
     if (file) {
       const fileURL = URL.createObjectURL(file);
-      setImage(imageURL);
+      setImage(fileURL);
 
       if (type === "document") {
         window.open(fileURL, "_blank");
@@ -112,6 +116,15 @@ const Chat = () => {
       }
     }
   };
+
+  // Filter chat data based on search query
+  const filteredChatData = chatData.filter((chat) => {
+    const lowerCaseQuery = searchQuery.toLowerCase();
+    return (
+      chat.name.toLowerCase().includes(lowerCaseQuery) ||
+      chat.message.toLowerCase().includes(lowerCaseQuery)
+    );
+  });
 
   return (
     <div className="flex flex-col lg:flex-row p-5 bg-white rounded-[10px]">
@@ -127,6 +140,8 @@ const Chat = () => {
             type="text"
             placeholder="People, Groups and Messages"
             className="w-full outline-none bg-white ms-2.5 h-[40px] text-sm placeholder:text-gray-400"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
         {/* Chat Filter Tabs */}
@@ -166,7 +181,7 @@ const Chat = () => {
         </div>
 
         {/* Chat List */}
-        {chatData.map((chat) => (
+        {filteredChatData.map((chat) => (
           <div
             key={chat.id}
             onClick={() => setSelectedChat(chat)}
@@ -231,9 +246,9 @@ const Chat = () => {
           </div>
         </div>
 
-        <div className="flex-grow mb-3 pr-2 custom-scrollbar ps-2  flex flex-col space-y-3">
+        <div className="flex-grow mb-3 pr-2 custom-scrollbar ps-2 flex flex-col space-y-3">
           <div className="flex mb-3 pr-2 mt-3 ">
-            <div className="bg-gray-300 p-2 px-4 max-w-[60%]  text-black rounded-t-xl rounded-br-xl relative">
+            <div className="bg-gray-300 p-2 px-4 max-w-[60%] text-black rounded-t-xl rounded-br-xl relative">
               <p className="font-normal text-sm pb-1">
                 {(selectedChat || defaultChat).message}
               </p>
@@ -253,12 +268,12 @@ const Chat = () => {
               </p>
             </div>
           </div>
-          <div className="flex mb-3 pr-2">
+          <div className="flex mb-3 pr-2 mt-3 ">
             <div className="bg-gray-300 p-2 px-4 max-w-[60%] text-black rounded-t-xl rounded-br-xl relative">
               <p className="font-normal text-sm pb-1">
                 {(selectedChat || defaultChat).message}
               </p>
-              <p className="absolute bottom-0 right-3 text-[10px] text-black ">
+              <p className="absolute bottom-0 right-3 text-[10px] text-black pt-4">
                 {extractTime((selectedChat || defaultChat).time)}
               </p>
             </div>
@@ -273,12 +288,12 @@ const Chat = () => {
               </p>
             </div>
           </div>
-          <div className="flex mb-3 pr-2">
+          <div className="flex mb-3 pr-2 mt-3 ">
             <div className="bg-gray-300 p-2 px-4 max-w-[60%] text-black rounded-t-xl rounded-br-xl relative">
               <p className="font-normal text-sm pb-1">
                 {(selectedChat || defaultChat).message}
               </p>
-              <p className="absolute bottom-0 right-3 text-[10px] text-black">
+              <p className="absolute bottom-0 right-3 text-[10px] text-black pt-4">
                 {extractTime((selectedChat || defaultChat).time)}
               </p>
             </div>
@@ -293,12 +308,12 @@ const Chat = () => {
               </p>
             </div>
           </div>
-          <div className="flex mb-3 pr-2">
+          <div className="flex mb-3 pr-2 mt-3 ">
             <div className="bg-gray-300 p-2 px-4 max-w-[60%] text-black rounded-t-xl rounded-br-xl relative">
               <p className="font-normal text-sm pb-1">
                 {(selectedChat || defaultChat).message}
               </p>
-              <p className="absolute bottom-0 right-3 text-[10px] text-black">
+              <p className="absolute bottom-0 right-3 text-[10px] text-black pt-4">
                 {extractTime((selectedChat || defaultChat).time)}
               </p>
             </div>
@@ -313,12 +328,12 @@ const Chat = () => {
               </p>
             </div>
           </div>
-          <div className="flex mb-3 pr-2">
+          <div className="flex mb-3 pr-2 mt-3 ">
             <div className="bg-gray-300 p-2 px-4 max-w-[60%] text-black rounded-t-xl rounded-br-xl relative">
               <p className="font-normal text-sm pb-1">
                 {(selectedChat || defaultChat).message}
               </p>
-              <p className="absolute bottom-0 right-3 text-[10px] text-black">
+              <p className="absolute bottom-0 right-3 text-[10px] text-black pt-4">
                 {extractTime((selectedChat || defaultChat).time)}
               </p>
             </div>
@@ -329,16 +344,6 @@ const Chat = () => {
                 {(selectedChat || defaultChat).message}
               </p>
               <p className="absolute bottom-0 right-3 text-[10px] text-white">
-                {extractTime((selectedChat || defaultChat).time)}
-              </p>
-            </div>
-          </div>
-          <div className="flex mb-3 pr-2">
-            <div className="bg-gray-300 p-2 px-4 max-w-[60%] text-black rounded-t-xl rounded-br-xl relative">
-              <p className="font-normal text-sm pb-1">
-                {(selectedChat || defaultChat).message}
-              </p>
-              <p className="absolute bottom-0 right-3 text-[10px] text-black">
                 {extractTime((selectedChat || defaultChat).time)}
               </p>
             </div>
@@ -346,7 +351,7 @@ const Chat = () => {
         </div>
 
         {/* Message Input Area */}
-        <div className="flex items-center gap-3 sticky bottom-0 bg-white py-4 px-5">
+        <div className="flex items-center gap-3 sticky top-full bg-white py-4 px-5 z-50">
           <div className="flex-grow bg-gray-300 rounded-full px-4">
             <input
               type="text"

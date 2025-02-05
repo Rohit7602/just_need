@@ -21,6 +21,7 @@ export const Complaints = () => {
     Customer: '003244',
     name: 'John Deo',
     serviceType: 'House Cleaning',
+    subject:'Work Pending',
     message: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry...',
     status: index % 7 === 0 || index % 7 >= 5 ? 'Open' : 'Closed',
   }));
@@ -129,6 +130,9 @@ export const Complaints = () => {
                   <th className="text-black text-sm font-medium py-3 px-4 border-b">
                     Service Type
                   </th>
+                  <th className="text-black text-sm font-medium py-3 px-4 border-b">
+                    Subject
+                  </th>
                   <th className="text-black text-sm font-medium py-3 px-4 border-b">Message</th>
                   <th className="text-black text-sm font-medium py-3 px-4 border-b sticky right-0 bg-white">
                     Action
@@ -150,6 +154,7 @@ export const Complaints = () => {
                     </td>
                     <td className="text-black text-sm font-normal px-4">{item.name}</td>
                     <td className="text-black text-sm font-normal px-4">{item.serviceType}</td>
+                    <td className="text-black text-sm font-normal px-4">{item.subject}</td>
                     <td className="text-black text-sm font-normal px-4">{item.message}</td>
                     <td
                       className={`text-sm font-normal py-3 px-4 sticky right-0 bg-white ${

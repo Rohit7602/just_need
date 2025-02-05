@@ -194,7 +194,7 @@ function SideBar() {
           <NavLink
             onClick={handleLogOutPopUp}
             // state={"Plan, prioritize, and accomplish your tasks with ease."}
-            to="/dashboard/logout"
+            // to="/dashboard/logout"
             className="flex items-center py-2.5 px-2 xl:px-[15px] gap-3 xl:gap-5 ms-[5px] w-full"
           >
             <LogoutSvg pathName={pathName} />
