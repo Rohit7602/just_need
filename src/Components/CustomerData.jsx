@@ -1,20 +1,34 @@
-import React, { useState } from 'react';
-import avatar from '../assets/avatar.png';
-import { FaAngleDown } from 'react-icons/fa';
-import ActionUserPupUp from './Popups/ActionUserPupUp';
-import { Link } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from "react";
+import avatar from "../assets/avatar.png";
+import { FaAngleDown } from "react-icons/fa";
+import ActionUserPupUp from "./Popups/ActionUserPupUp";
+import { Link, useLocation } from "react-router-dom";
+import UsersFilterPopUp from "../Components/Popups/UsersFilterPopUp";
+import { CiSearch, CiFilter } from "react-icons/ci";
 import {
   DropdownIconChat,
   SpikendCirclChat,
   SpikStartCirclChat,
   ArrowIconRigth,
   ArrowIconLeft,
-} from '.././assets/icon/Icons';
+} from ".././assets/icon/Icons";
 
 const CustomerData = ({ mapData }) => {
   const [showPopup, setShowPopup] = useState(false);
   const [mainCheckbox, setMaincheckbox] = useState(false);
   const [selectitem, setSelectitem] = useState([]);
+  const [showfilterPopup, setshowfilterPopup] = useState(false);
+  const [searchTerm, setSearchTerm] = useState(""); // State for search term
+
+  function handleFilter() {
+    setshowfilterPopup(!showfilterPopup);
+  }
+
+  function handlefilterpopupclose() {
+    setshowfilterPopup();
+  }
+
+  const location = useLocation();
 
   function handleMainCheckboxChange() {
     setMaincheckbox(!mainCheckbox);
@@ -43,34 +57,93 @@ const CustomerData = ({ mapData }) => {
       setSelectitem(postids);
     }
   }
-
+  // pagination dropdown
   const [showItemsDropdown, setShowItemsDropdown] = useState(false);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [dropdownPosition, setDropdownPosition] = useState("bottom");
+  const dropdownRef = useRef(null);
 
   const toggleItemsDropdown = () => {
-    setShowItemsDropdown(!showItemsDropdown);
+    if (dropdownRef.current) {
+      const rect = dropdownRef.current.getBoundingClientRect();
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const spaceAbove = rect.top;
+
+      if (spaceBelow < 150 && spaceAbove > spaceBelow) {
+        setDropdownPosition("top");
+      } else {
+        setDropdownPosition("bottom");
+      }
+    }
+    setShowItemsDropdown((prev) => !prev);
   };
 
   const handleItemsSelect = (value) => {
     setItemsPerPage(value);
     setShowItemsDropdown(false);
-    console.log(`Items per page set to: ${value}`);
   };
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowItemsDropdown(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Filtered data based on search term
+  const filteredData = mapData.filter((customer) => {
+    return (
+      customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      customer.phone.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      customer.address.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  });
 
   return (
     <div className="bg-[#FFFFFF] p-5 rounded-[10px]">
-      <div className="overflow-x-auto scrollRemove">
+      <div className="flex justify-between items-center mt -[15px]">
+        <h2 className="text-base xl:text-[20px] font-medium text-[#000000] opacity-70">
+          Users List
+        </h2>
+        <div className="flex ">
+          <div className="flex rounded-[10px] items-center p-2 h-[42px] bg-[#F1F1F1] me-2 xl:me-[20px]">
+            <CiSearch className="ms-2" />
+            <input
+              type="text"
+              placeholder="Search by name, email, mobile, address"
+              className="ms-2.5 focus:outline-none focus:ring-gray-400 bg-[#F1F1F1]"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)} // Update search term
+            />
+          </div>
+          <button
+            className="bg-[#0832DE] text-white px-[15px] py-2 rounded-[10px] flex items-center"
+            onClick={handleFilter}
+          >
+            <span>
+              <CiFilter className="w-[24px] h-[24px] me-[12px]" />
+            </span>{" "}
+            Filter
+          </button>
+        </div>
+      </div>
+      <div className="overflow-x-auto scrollRemove mt-5">
         <table className="w-full text-left border-collapse whitespace-nowrap rounded-[10px]">
           <thead>
             <tr className="py-[8px]">
-              <th className="px-[19px] py-[8px] md:px-[24px]">
-                <input
-                  className="w-[16px] h-[16px]"
-                  type="checkbox"
-                  checked={mapData.length === selectitem.length}
-                  onChange={maincheckbox}
-                />
-              </th>
+              {location.pathname === "/dashboard" ? null : (
+                <th className="px-[19px] py-[8px] md:px-[24px]">
+                  <input
+                    className="w-[16px] h-[16px]"
+                    type="checkbox"
+                    checked={mapData.length === selectitem.length}
+                    onChange={maincheckbox}
+                  />
+                </th>
+              )}
               <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">
                 Customer Id
               </th>
@@ -95,9 +168,11 @@ const CustomerData = ({ mapData }) => {
               <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">
                 Status
               </th>
-              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base sticky right-0 bg-white">
-                Action
-              </th>
+              {location.pathname === "/dashboard/usersList" ? null : (
+                <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base sticky right-0 bg-white">
+                  Action
+                </th>
+              )}
             </tr>
             <tr>
               <td colSpan="10">
@@ -106,23 +181,29 @@ const CustomerData = ({ mapData }) => {
             </tr>
           </thead>
           <tbody>
-            {mapData.map((customer, index) => (
+            {filteredData.map((customer, index) => (
               <tr key={index}>
-                <td className="px-[19px] md:px-[24px] py-[8px]">
-                  <input
-                    className="w-[16px] h-[16px]"
-                    type="checkbox"
-                    onChange={checkhandler}
-                    checked={selectitem.includes(customer.id)}
-                    value={customer.id}
-                  />
-                </td>
+                {location.pathname === "/dashboard" ? null : (
+                  <td className="px-[19px] md:px-[24px] py-[8px]">
+                    <input
+                      className="w-[16px] h-[16px]"
+                      type="checkbox"
+                      onChange={checkhandler}
+                      checked={selectitem.includes(customer.id)}
+                      value={customer.id}
+                    />
+                  </td>
+                )}
                 <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
                   {customer.id}
                 </td>
                 <Link to={`/dashboard/usersList/userDetails/${customer.id}`}>
                   <td className="px-[19px] md:px-[24px] text-[#6C4DEF] py-[8px] flex items-center gap-2 min-w-[160px]">
-                    <img src={avatar} alt="avatar" className="w-8 h-8 rounded-full me-2" />
+                    <img
+                      src={avatar}
+                      alt="avatar"
+                      className="w-8 h-8 rounded-full me-2"
+                    />
                     {customer.name}
                   </td>
                 </Link>
@@ -142,47 +223,61 @@ const CustomerData = ({ mapData }) => {
                   {customer.end}
                 </td>
                 <td
-                  className={`px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000] ${customer.TextColor}`}>
+                  className={`px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000] ${customer.TextColor}`}
+                >
                   {customer.status}
                 </td>
-                <td
-                  className="px-[19px] md:px-[24px] py-[8px] text-center sticky right-0 bg-white"
-                  onClick={handlePopup}>
-                  <button className="text-2xl font-medium">&#8942;</button>
-                </td>
+                {location.pathname === "/dashboard/usersList" ? null : (
+                  <td
+                    className="px-[19px] md:px-[24px] py-[8px] text-center sticky right-0 bg-white"
+                    onClick={handlePopup}
+                  >
+                    <button className="text-2xl font-medium">&#8942;</button>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-
       <div className="p-4 bg-white rounded-[10px]">
         {/* Existing code... */}
         <div className="flex justify-end ">
           <div className="flex items-center">
             <h2 className="me-3">Items per page:</h2>
-            <div
-              className="relative border-[1px] py-1 w-[70px] rounded-[10px] flex justify-center items-center cursor-pointer me-9"
-              onClick={toggleItemsDropdown}>
-              <h2 className="pe-3 text-sm font-medium">{itemsPerPage}</h2>
-              <DropdownIconChat />
-              {showItemsDropdown && (
-                <div className="absolute top-full left-0 mt-1 bg-white border rounded shadow-lg w-full z-10 ">
-                  {[5, 10, 15, 20].map((item) => (
-                    <button
-                      key={item}
-                      onClick={() => handleItemsSelect(item)}
-                      className="w-full px-4 py-2 text-left hover:bg-gray-100">
-                      {item}
-                    </button>
-                  ))}
-                </div>
-              )}
+            <div className="relative">
+              <div
+                className="relative border-[1px] py-1 w-[70px] rounded-[10px] flex justify-center items-center cursor-pointer me-9"
+                onClick={toggleItemsDropdown}
+                ref={dropdownRef}
+              >
+                <h2 className="pe-3 text-sm font-medium">{itemsPerPage}</h2>
+                <span>▼</span>
+                {showItemsDropdown && (
+                  <div
+                    className={`absolute ${
+                      dropdownPosition === "top"
+                        ? "bottom-full mb-1"
+                        : "top-full mt-1"
+                    } bg-white border rounded shadow-lg w-full z-10`}
+                  >
+                    {[5, 10, 15, 20].map((item) => (
+                      <button
+                        key={item}
+                        onClick={() => handleItemsSelect(item)}
+                        className="w-full px-4 py-2 text-left hover:bg-gray-100"
+                      >
+                        {item}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
           <div className="flex justify-between items-center">
             <h2 className="pe-3 text-sm font-medium">1-{itemsPerPage}</h2>
-            <span className=" pe-5">of 0</span>
+            <span className=" pe-5">of {filteredData.length}</span>
             <div className="pe-7 flex ">
               <SpikStartCirclChat />
               <div className=" ps-5">
@@ -197,6 +292,12 @@ const CustomerData = ({ mapData }) => {
         </div>
       </div>
       {showPopup && <ActionUserPupUp handlePopup={handlePopup} />}
+      {showfilterPopup && (
+        <UsersFilterPopUp
+          handleFilter={handleFilter}
+          handlefilterpopupclose={handlefilterpopupclose}
+        />
+      )}
     </div>
   );
 };

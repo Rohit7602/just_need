@@ -16,6 +16,7 @@ function Services() {
   const [showEnablePopup, setShowEnablePopup] = useState(false);
   const [showDisablePopup, setShowDisablePopup] = useState(false);
   const [currentCardIndex, setCurrentCardIndex] = useState(null);
+  const [searchQuery, setSearchQuery] = useState(''); // State for search query
 
   function handleNewServicePopUp() {
     setShowNewServicePopUp(!showNewServicePopUp);
@@ -68,6 +69,11 @@ function Services() {
     setShowEnablePopup(true);
   };
 
+  // Filter servicedata based on search query
+  const filteredServiceData = servicedata.filter((item) =>
+    item.data.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="p-[14px] rounded-[10px] shadow-md bg-white">
       <div className="xl:flex-row flex-col flex xl:items-center justify-end">
@@ -79,6 +85,8 @@ function Services() {
                 className="text-[16px] font-normal outline-none ms-[10px] bg-transparent"
                 type="text"
                 placeholder="Search Task"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)} // Update search query
               />
             </div>
           </div>
@@ -91,11 +99,11 @@ function Services() {
         </div>
       </div>
 
-      <div className="grid gap-4 mt-[16px] grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-        {servicedata.map((items, index) => (
+      <div className="grid gap-4 mt-[16px] grid-cols-1 sm:grid -cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+        {filteredServiceData.map((items, index) => (
           <div
             key={index}
-            className="relative z-[20] hover:bg-[#0832DE] hover:text-white  cursor-pointer border-[#0000001A] rounded-[10px] p-[20px] border-[1px] bg-[white] group duration-300">
+            className="relative z-[20] hover:bg-[#0832DE] hover:text-white cursor-pointer border-[#0000001A] rounded-[10px] p-[20px] border-[1px] bg-[white] group duration-300">
             <div className="flex items-center justify-between">
               {editIndex === index ? (
                 <input

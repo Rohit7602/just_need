@@ -10,7 +10,8 @@ function SuscriptionPopUp({ handlePopup, updateItemId }) {
     currency: "",
   };
 
-  const [color, setColor] = useState("");
+
+  const [color, setColor] = useState("#0832DE");
   const [subscriptionData, setSubscriptionData] = useState(initialData);
   const [primaryColor, setPrimaryColor] = useState("#000000");
   const [showPrimaryPicker, setShowPrimaryPicker] = useState(false);
@@ -49,10 +50,9 @@ function SuscriptionPopUp({ handlePopup, updateItemId }) {
     }
     setSubscriptionData(initialData);
     setColor("");
-    handlePopup()
   };
 
-  useEffect(() => {
+  useEffect(() => {    
     if (updateItemId) {
       const existingPlan = plans.find((plan) => plan.planId === updateItemId);
       if (existingPlan) {
@@ -81,7 +81,7 @@ function SuscriptionPopUp({ handlePopup, updateItemId }) {
   return (
     <>
       <div
-        onClick={() => handlePopup()}
+        onClick={handlePopup}
         className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50"
       ></div>
       <div className="fixed inset-0 flex items-center justify-center z-50 h-[458px] w-[500px] xl:w-[694px] m-auto">
@@ -128,7 +128,8 @@ function SuscriptionPopUp({ handlePopup, updateItemId }) {
                 onChange={handleOnChange}
                 value={subscriptionData.price}
                 placeholder="₹000.00"
-                className="w-full px-3 py-[12px] rounded-[7px] bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-base placeholder:font-normal"
+                onWheel={(e) => e.target.blur()}
+                className="w-full px-3 py-[12px] rounded-[7px] bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-base placeholder:font-normal appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               />
             </div>
             <div className="w-[48%]">
@@ -145,7 +146,8 @@ function SuscriptionPopUp({ handlePopup, updateItemId }) {
                 onChange={handleOnChange}
                 value={subscriptionData.durationInDays}
                 placeholder="0"
-                className="w-full px-3 py-[12px] rounded-[7px] bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-base placeholder:font-normal"
+                onWheel={(e) => e.target.blur()}
+                className="w-full px-3 py-[12px] rounded-[7px] bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-base placeholder:font-normal appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               />
             </div>
           </div>

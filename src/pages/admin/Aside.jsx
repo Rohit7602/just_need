@@ -6,18 +6,9 @@ import Piechart from '../../Components/Common/Piechart';
 import blur from '../../assets/Images/Png/blur.png';
 import { cardData, customersDataList } from '../../Components/Common/Helper';
 import CustomerData from '../../Components/CustomerData';
-import UsersFilterPopUp from '../../Components/Popups/UsersFilterPopUp';
-import { CiSearch, CiFilter } from 'react-icons/ci';
 import RevenueGraph from '../../assets/png/revenueGraph.png';
 
 function Aside() {
-  const [showfilterPopup, setshowfilterPopup] = useState(false);
-  function handleFilter() {
-    setshowfilterPopup(!showfilterPopup);
-  }
-  function handlefilterpopupclose() {
-    setshowfilterPopup();
-  }
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [selectedMonth, setSelectedMonth] = useState(new Date());
   const months = [
@@ -181,36 +172,7 @@ function Aside() {
         </div>
       </div>
       <div className=" mt-4 px-[14px] bg-white rounded-[10px] mb-4 ">
-        <div className="flex justify-between items-center p-5 mt -[15px]">
-          <h2 className="text-base xl:text-[20px] font-medium text-[#000000] opacity-70">
-            Users List
-          </h2>
-          <div className="flex ">
-            <div className="flex rounded-[10px] items-center p-2 h-[42px] bg-[#F1F1F1] me-2 xl:me-[20px]">
-              <CiSearch className="ms-2" />
-              <input
-                type="text"
-                placeholder="Search task"
-                className="ms-2.5 focus:outline-none focus:ring-gray-400 bg-[#F1F1F1]"
-              />
-            </div>
-            <button
-              className="bg-[#0832DE] text-white px-[15px] py-2 rounded-[10px] flex items-center"
-              onClick={handleFilter}>
-              <span>
-                <CiFilter className="w-[24px] h-[24px] me-[12px]" />
-              </span>{' '}
-              Filter
-            </button>
-          </div>
-        </div>{' '}
         <CustomerData mapData={customersDataList} />
-        {showfilterPopup && (
-          <UsersFilterPopUp
-            handleFilter={handleFilter}
-            handlefilterpopupclose={handlefilterpopupclose}
-          />
-        )}
       </div>
     </>
   );

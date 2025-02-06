@@ -36,7 +36,7 @@ export const servicedata = [
     val7: '+15 More',
   },
   {
-    data: 'profession',
+    data: 'furniture',
     val2: 'oil Change',
     val3: 'parts Repair',
     val4: 'Tyre Change',
