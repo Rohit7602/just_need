@@ -6,14 +6,17 @@ import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import AuthProvider from "./store/AuthContext.jsx";
 import SubscriptionProvider from "./store/SubscriptionContext.jsx";
+import ServiceContext from "./store/serviceContext.jsx";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <SubscriptionProvider>
-      <AuthProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </AuthProvider>
-    </SubscriptionProvider>
+    <ServiceContext>
+      <SubscriptionProvider>
+        <AuthProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </AuthProvider>
+      </SubscriptionProvider>
+    </ServiceContext>
   </StrictMode>
 );

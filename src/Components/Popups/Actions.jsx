@@ -1,44 +1,51 @@
-import React, { useState } from 'react';
-import { Crossicon, EditiconActionPopUp, Greenicon, Redcrossicon } from '../../assets/icon/Icons';
-import { Actiondata } from '../Common/Helper';
+import React, { useState } from "react";
+import {
+  Crossicon,
+  EditiconActionPopUp,
+  Greenicon,
+  Redcrossicon,
+} from "../../assets/icon/Icons";
 
 function Actions({ selectedItem, handleOverlayClick }) {
   const [showRedIcons, setShowRedIcons] = useState(false);
-  const [editingIndex, setEditingIndex] = useState(null);
-  const [editField, setEditField] = useState(null);
-  const [inputValues, setInputValues] = useState({});
+  const [editingIndex, setEditingIndex] = useState(null); // Track which item is being edited
+  const [inputValues, setInputValues] = useState({}); // Store input values for each item
 
-  const handleEditClick = (index, field, value) => {
-    if (editingIndex === index && editField === field) {
+  // Handle edit icon click
+  const handleEditClick = (index, value) => {
+    if (editingIndex === index) {
+      // If already editing, stop editing
       setEditingIndex(null);
-      setEditField(null);
     } else {
+      // Start editing and set the input value
       setEditingIndex(index);
-      setEditField(field);
       setInputValues((prev) => ({
         ...prev,
-        [`${index}-${field}`]: value,
+        [index]: value, // Store the value for the specific index
       }));
     }
   };
 
-  const handleInputChange = (index, field, event) => {
+  // Handle input change
+  const handleInputChange = (index, event) => {
     setInputValues((prev) => ({
       ...prev,
-      [`${index}-${field}`]: event.target.value,
+      [index]: event.target.value, // Update the value for the specific index
     }));
   };
 
+  // Handle save click
   const handleSaveClick = () => {
-    console.log('Updated Values:', inputValues);
-    setEditingIndex(null);
-    setEditField(null);
+    console.log("Updated Values:", inputValues);
+    setEditingIndex(null); // Stop editing
   };
 
+  // Handle delete click
   const handleDeleteClick = () => {
     setShowRedIcons(true);
   };
 
+  // Handle cancel click
   const handleCancelClick = () => {
     setShowRedIcons(false);
   };
@@ -49,7 +56,11 @@ function Actions({ selectedItem, handleOverlayClick }) {
     <div>
       <div className="w-[700px] bg-white absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 border border-gray-300 p-4 rounded-lg shadow-lg">
         <div className="text-end">
-          <button onClick={handleOverlayClick} className="mb-5" aria-label="Close">
+          <button
+            onClick={handleOverlayClick}
+            className="mb-5"
+            aria-label="Close"
+          >
             &#10005;
           </button>
         </div>
@@ -58,61 +69,68 @@ function Actions({ selectedItem, handleOverlayClick }) {
           {showRedIcons ? (
             <div
               className="rounded-[10px] bg-[#0832DE] text-white px-[16px] py-2.5 h-[42px] font-normal text-[16px] cursor-pointer"
-              onClick={handleCancelClick}>
+              onClick={handleCancelClick}
+            >
               Cancel
             </div>
           ) : (
             <div
               className="bg-[#0832DE] py-2.5 h-[42px]  px-[15px] flex items-center rounded-[10px] cursor-pointer gap-3"
-              onClick={handleDeleteClick}>
+              onClick={handleDeleteClick}
+            >
               <Crossicon className="bg-white" />
-              <p className="font-normal text-white text-[16px] leading-[24px]">Delete</p>
+              <p className="font-normal text-white text-[16px] leading-[24px]">
+                Delete
+              </p>
             </div>
           )}
         </div>
 
-        <div className="flex flex-row justify-between mt-[30px]">
-          {Actiondata.map((item, index) => (
-            <div key={index} className="flex flex-col">
-              {['val1', 'val2', 'val3', 'val4', 'val5'].map((field, i) => {
-                return (
-                  <div key={i} className="flex items-center mt-[30px]">
-                    <p className="me-[12px] font-normal text-[16px]">{continuousIndex++}.</p>
-                    {editingIndex === index && editField === field ? (
-                      <input
-                        type="text"
-                        value={inputValues[`${index}-${field}`] || item[field]}
-                        onChange={(e) => handleInputChange(index, field, e)}
-                        className="font-normal text-[16px] me-[12px] cursor-pointer border border-[#000] rounded-[10px] py-[5px] px-[10px] w-[120px]"
-                      />
+        <div className="flex -mx-3 flex-row flex-wrap justify-between">
+          {selectedItem.map((item, index) => (
+            <div key={index} className="w-4/12 px-3">
+              <div className="flex items-center mt-[30px]">
+                <p className="me-[12px] font-normal text-[16px]">
+                  {continuousIndex++}.
+                </p>
+                {editingIndex === index ? ( // Show input field if editing
+                  <input
+                    type="text"
+                    value={inputValues[index] || item.subCategoryName} // Pre-fill with selected item's value
+                    onChange={(e) => handleInputChange(index, e)} // Handle input change
+                    className="font-normal text-[16px] me-[12px] cursor-pointer border border-[#000] rounded-[10px] py-[5px] px-[10px] w-[120px]"
+                  />
+                ) : (
+                  <p className="font-normal text-[16px] me-[12px] border border-transparent py-[5px] w-[120px]">
+                    {item.subCategoryName}
+                  </p>
+                )}
+                {showRedIcons ? (
+                  <button>
+                    <Redcrossicon />
+                  </button>
+                ) : (
+                  <span
+                    onClick={() =>
+                      handleEditClick(index , item.subCategoryName)
+                    }
+                  >
+                    {editingIndex === index ? ( // Show green icon if editing
+                      <Greenicon />
                     ) : (
-                      <p className="font-normal text-[16px] me-[12px] border border-transparent py-[5px] w-[120px]">
-                        {item[field]}
-                      </p>
+                      <EditiconActionPopUp />
                     )}
-                    {showRedIcons ? (
-                      <button>
-                        <Redcrossicon />
-                      </button>
-                    ) : (
-                      <span onClick={() => handleEditClick(index, field, item[field])}>
-                        {editingIndex === index && editField === field ? (
-                          <Greenicon />
-                        ) : (
-                          <EditiconActionPopUp />
-                        )}
-                      </span>
-                    )}
-                  </div>
-                );
-              })}
+                  </span>
+                )}
+              </div>
             </div>
           ))}
         </div>
 
         <button
           onClick={handleSaveClick}
-          className="rounded-[10px] bg-[#0832DE] text-white w-full py-2.5 h-[42px] mt-[16px] font-normal text-[16px]">
+          className="rounded-[10px] bg-[#0832DE] text-white w-full py-2.5 h-[42px] mt-[16px] font-normal text-[16px]"
+        >
           Update status
         </button>
       </div>

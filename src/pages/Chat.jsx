@@ -351,7 +351,7 @@ const Chat = () => {
         </div>
 
         {/* Message Input Area */}
-        <div className="flex items-center gap-3 sticky top-full bg-white py-4 px-5 z-50">
+        <div className="flex items-center gap-3 sticky top-full bg-white py-4 px-5">
           <div className="flex-grow bg-gray-300 rounded-full px-4">
             <input
               type="text"

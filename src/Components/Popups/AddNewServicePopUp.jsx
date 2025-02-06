@@ -1,21 +1,34 @@
 import React, { useState } from "react";
 import { Plusicon, Redcrossicon } from "../../assets/icon/Icons";
+import { useServiceContext } from "../../store/serviceContext";
 
 function AddNewServicePopUp({ handleNewServicePopUp }) {
-  const [serviceName, setServiceName] = useState("");
-  const [subCategories, setSubCategories] = useState("");
+  const [categoryName, setCategoryName] = useState("");
+  const [subCategoriesName, setSubCategoriesName] = useState("");
   const [serviceData, setServiceData] = useState([]);
 
-  const handleAddMore=()=>{
-    if(subCategories){
-      setServiceData((prev)=>[...prev,subCategories])
-      setSubCategories("")
-    }
-  }
+  // Get the addCategoriesSubCategories function from context
+  const { addCategoriesSubCategories } = useServiceContext();
 
- const deleteSubCategories=(item)=>{
-   setServiceData((prev)=>prev.filter((val)=>val!==item))
- }
+  const handleAddMore = () => {
+    if (subCategoriesName) {
+      setServiceData((prev) => [...prev, subCategoriesName]);
+      setSubCategoriesName("");
+    }
+  };
+
+  const deleteSubCategories = (item) => {
+    setServiceData((prev) => prev.filter((val) => val !== item));
+  };
+
+  const handleSaveDetails = async () => {
+    if (categoryName && serviceData.length > 0) {
+      await addCategoriesSubCategories(categoryName, serviceData);
+      handleNewServicePopUp(); // Close the popup after saving
+    } else {
+      alert("Please enter a category name and at least one subcategory.");
+    }
+  };
 
   return (
     <>
@@ -43,8 +56,8 @@ function AddNewServicePopUp({ handleNewServicePopUp }) {
               Service Name
             </label>
             <input
-              value={serviceName}
-              onChange={(e) => setServiceName(e.target.value)}
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
               id="serviceName"
               name="serviceName"
               type="text"
@@ -60,8 +73,8 @@ function AddNewServicePopUp({ handleNewServicePopUp }) {
               Sub Categories
             </label>
             <input
-              value={subCategories}
-              onChange={(e) => setSubCategories(e.target.value)}
+              value={subCategoriesName}
+              onChange={(e) => setSubCategoriesName(e.target.value)}
               id="subCategories"
               name="subCategories"
               type="text"
@@ -70,7 +83,10 @@ function AddNewServicePopUp({ handleNewServicePopUp }) {
             />
           </div>
           <div className="flex justify-end mt-[15px]">
-            <button onClick={handleAddMore} className="bg-[#0832DE] flex items-center px-[16px] py-2.5 h-[42px] rounded-[10px]">
+            <button
+              onClick={handleAddMore}
+              className="bg-[#0832DE] flex items-center px-[16px] py-2.5 h-[42px] rounded-[10px]"
+            >
               <Plusicon />
               <p className="font-normal text-[16px] text-white ms-[12px]">
                 Add More
@@ -89,7 +105,7 @@ function AddNewServicePopUp({ handleNewServicePopUp }) {
                   <span className="text-base font-normal text-black">
                     {item}
                   </span>
-                  <button onClick={()=>deleteSubCategories(item)}>
+                  <button onClick={() => deleteSubCategories(item)}>
                     <Redcrossicon />
                   </button>
                 </div>
@@ -97,7 +113,10 @@ function AddNewServicePopUp({ handleNewServicePopUp }) {
             ))}
           </div>
 
-          <button className="w-full bg-[#0832DE] text-base text-white font-medium h-[42px] py-2.5 rounded-[10px] mt-[15px]">
+          <button
+            onClick={handleSaveDetails}
+            className="w-full bg-[#0832DE] text-base text-white font-medium h-[42px] py-2.5 rounded-[10px] mt-[15px]"
+          >
             Save Details
           </button>
         </div>

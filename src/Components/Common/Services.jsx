@@ -1,14 +1,21 @@
-import React, { useState } from 'react';
-import { Editicon, Greenicon, Plusicon, DisableRedicon, Searchicon } from '../../assets/icon/Icons';
-import { servicedata } from '../../Components/Common/Helper';
-import Actions from '../Popups/Actions';
-import AddNewServicePopUp from '../Popups/AddNewServicePopUp';
-import EnablePopUp from '../Popups/EnablePopUp';
-import DisablePopUp from '../Popups/DisablePopUp';
+import React, { useState } from "react";
+import {
+  Editicon,
+  Greenicon,
+  Plusicon,
+  DisableRedicon,
+  Searchicon,
+} from "../../assets/icon/Icons";
+import { servicedata } from "../../Components/Common/Helper";
+import Actions from "../Popups/Actions";
+import AddNewServicePopUp from "../Popups/AddNewServicePopUp";
+import EnablePopUp from "../Popups/EnablePopUp";
+import DisablePopUp from "../Popups/DisablePopUp";
+import { useServiceContext } from "../../store/serviceContext";
 
 function Services() {
   const [editIndex, setEditIndex] = useState(null);
-  const [editData, setEditData] = useState('');
+  const [editData, setEditData] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [disabledCards, setDisabledCards] = useState([]);
@@ -16,7 +23,10 @@ function Services() {
   const [showEnablePopup, setShowEnablePopup] = useState(false);
   const [showDisablePopup, setShowDisablePopup] = useState(false);
   const [currentCardIndex, setCurrentCardIndex] = useState(null);
-  const [searchQuery, setSearchQuery] = useState(''); // State for search query
+  const [searchQuery, setSearchQuery] = useState(""); // State for search query
+
+  const { categories } = useServiceContext();
+  console.log(categories);
 
   function handleNewServicePopUp() {
     setShowNewServicePopUp(!showNewServicePopUp);
@@ -32,7 +42,7 @@ function Services() {
   };
 
   const handleBlur = (index) => {
-    if (editData.trim() !== '') {
+    if (editData.trim() !== "") {
       servicedata[index].data = editData;
     }
     setEditIndex(null);
@@ -49,9 +59,11 @@ function Services() {
   };
 
   const toggleDisableCard = (index, action) => {
-    if (action === 'confirm') {
+    if (action === "confirm") {
       setDisabledCards((prev) =>
-        prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
+        prev.includes(index)
+          ? prev.filter((i) => i !== index)
+          : [...prev, index]
       );
     }
     setShowEnablePopup(false);
@@ -70,8 +82,8 @@ function Services() {
   };
 
   // Filter servicedata based on search query
-  const filteredServiceData = servicedata.filter((item) =>
-    item.data.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredCategoriesData = categories.filter((item) =>
+    item.categoryName.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -92,18 +104,22 @@ function Services() {
           </div>
           <div
             onClick={() => handleNewServicePopUp()}
-            className="whitespace-nowrap cursor-pointer bg-[#0832DE] flex items-center h-[42px] px-[16px] py-2.5 rounded-[10px] ms-[20px]">
+            className="whitespace-nowrap cursor-pointer bg-[#0832DE] flex items-center h-[42px] px-[16px] py-2.5 rounded-[10px] ms-[20px]"
+          >
             <Plusicon />
-            <p className="font-normal text-[16px] text-white ms-[12px]">Add New Service</p>
+            <p className="font-normal text-[16px] text-white ms-[12px]">
+              Add New Service
+            </p>
           </div>
         </div>
       </div>
 
       <div className="grid gap-4 mt-[16px] grid-cols-1 sm:grid -cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-        {filteredServiceData.map((items, index) => (
+        {filteredCategoriesData.map((items, index) => (
           <div
             key={index}
-            className="relative z-[20] hover:bg-[#0832DE] hover:text-white cursor-pointer border-[#0000001A] rounded-[10px] p-[20px] border-[1px] bg-[white] group duration-300">
+            className="relative z-[20] hover:bg-[#0832DE] hover:text-white cursor-pointer border-[#0000001A] rounded-[10px] p-[20px] border-[1px] bg-[white] group duration-300"
+          >
             <div className="flex items-center justify-between">
               {editIndex === index ? (
                 <input
@@ -115,7 +131,9 @@ function Services() {
                   autoFocus
                 />
               ) : (
-                <p className="p-1 border border-transparent">{items.data}</p>
+                <p className="p-1 border border-transparent">
+                  {items.categoryName}
+                </p>
               )}
               <div className="flex items-center">
                 {editIndex !== index ? (
@@ -124,8 +142,11 @@ function Services() {
                       <div
                         onClick={() => handleEditClick(index, items.data)}
                         className={`cursor-pointer ${
-                          disabledCards.includes(index) ? 'opacity-100' : 'opacity-100'
-                        }`}>
+                          disabledCards.includes(index)
+                            ? "opacity-100"
+                            : "opacity-100"
+                        }`}
+                      >
                         <Editicon disabledCards={disabledCards} index={index} />
                       </div>
                     ) : null}
@@ -135,9 +156,12 @@ function Services() {
                         disabledCards.includes(index)
                           ? handleEnableClick(index)
                           : handleDisableClick(index)
-                      }>
+                      }
+                    >
                       {disabledCards.includes(index) ? (
-                        <span className="text-xs font-normal text-[#0DA800]">Enable</span>
+                        <span className="text-xs font-normal text-[#0DA800]">
+                          Enable
+                        </span>
                       ) : (
                         <DisableRedicon />
                       )}
@@ -151,23 +175,31 @@ function Services() {
               </div>
             </div>
             <div className="border-t border-dashed my-[16px]"></div>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="opacity-[60%] font-normal text-[12px] mb-[10px]">1. {items.val2}</p>
-                <p className="opacity-[60%] font-normal text-[12px] mb-[10px]">2. {items.val3}</p>
-                <p className="opacity-[60%] font-normal text-[12px]">3. {items.val4}</p>
-              </div>
-              <div>
-                <p className="opacity-[60%] font-normal text-[12px] mb-[10px]">4. {items.val5}</p>
-                <p className="opacity-[60%] font-normal text-[12px] mb-[10px]">5. {items.val6}</p>
-                <p
-                  className={`font-normal text-[12px] ${
-                    disabledCards.includes(index) ? '' : 'cursor-pointer'
-                  }`}
-                  onClick={() => !disabledCards.includes(index) && handleItemClick(items)}>
-                  {items.val7}
-                </p>
-              </div>
+            <div className="flex -mx-3 items-center flex-wrap justify-between">
+              {items.subcategories.map((item, index) => {
+                return (
+                  <div className="w-6/12 px-3" key={index}>
+                    {index < 5 && (
+                      <p className="opacity-[60%] font-normal text-[12px] mb-[10px]">
+                        {index + 1}. {item.subCategoryName}
+                      </p>
+                    )}
+                    {index === 5 && items.subcategories.length > 5 && (
+                      <p
+                        onClick={() =>
+                          !disabledCards.includes(index) &&
+                          handleItemClick(items.subcategories)
+                        }
+                        className={`font-normal text-[12px] ${
+                          disabledCards.includes(index) ? "" : "cursor-pointer"
+                        }`}
+                      >
+                        +{items.subcategories.length - 5} more
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
         ))}
@@ -176,24 +208,31 @@ function Services() {
       {showPopup && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-[50] flex items-center justify-center"
-          onClick={handleOverlayClick}>
+          onClick={handleOverlayClick}
+        >
           <div
             className="bg-white p-4 rounded-lg shadow-lg max-w-lg w-full"
-            onClick={(e) => e.stopPropagation()}>
-            <Actions selectedItem={selectedItem} handleOverlayClick={handleOverlayClick} />
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Actions
+              selectedItem={selectedItem}
+              handleOverlayClick={handleOverlayClick}
+            />
           </div>
         </div>
       )}
-      {showNewServicePopUp && <AddNewServicePopUp handleNewServicePopUp={handleNewServicePopUp} />}
+      {showNewServicePopUp && (
+        <AddNewServicePopUp handleNewServicePopUp={handleNewServicePopUp} />
+      )}
       {showEnablePopup && (
         <EnablePopUp
-          onConfirm={() => toggleDisableCard(currentCardIndex, 'confirm')}
+          onConfirm={() => toggleDisableCard(currentCardIndex, "confirm")}
           onCancel={() => setShowEnablePopup(false)}
         />
       )}
       {showDisablePopup && (
         <DisablePopUp
-          onConfirm={() => toggleDisableCard(currentCardIndex, 'confirm')}
+          onConfirm={() => toggleDisableCard(currentCardIndex, "confirm")}
           onCancel={() => setShowDisablePopup(false)}
         />
       )}
