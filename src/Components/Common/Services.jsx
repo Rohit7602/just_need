@@ -11,7 +11,7 @@ import Actions from "../Popups/Actions";
 import AddNewServicePopUp from "../Popups/AddNewServicePopUp";
 import EnablePopUp from "../Popups/EnablePopUp";
 import DisablePopUp from "../Popups/DisablePopUp";
-import { useServiceContext } from "../../store/serviceContext";
+import { useServiceContext } from "../../store/ServiceContext";
 
 function Services() {
   const [editIndex, setEditIndex] = useState(null);
