@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Plusicon, Redcrossicon } from "../../assets/icon/Icons";
-import { useServiceContext } from "../../store/serviceContext";
+import { useServiceContext } from "../../store/ServiceContext";
 
 function AddNewServicePopUp({ handleNewServicePopUp }) {
   const [categoryName, setCategoryName] = useState("");
