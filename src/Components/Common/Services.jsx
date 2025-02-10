@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Editicon,
   Greenicon,
@@ -24,7 +24,15 @@ function Services() {
   const [currentCardIndex, setCurrentCardIndex] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const { categories, updateCategoryName, toggleCategoryStatus } = useServiceContext();
+  const {
+    categories,
+    updateCategoryName,
+    toggleCategoryStatus,
+    getCategoriesWithSubcategories,
+  } = useServiceContext();
+  useEffect(() => {
+    getCategoriesWithSubcategories();
+  }, []);
 
   const handleNewServicePopUp = () => {
     setShowNewServicePopUp(!showNewServicePopUp);
@@ -77,7 +85,6 @@ function Services() {
     setShowDisablePopup(false);
     setCurrentCardIndex(null);
   };
-  
 
   const filteredCategoriesData = categories.filter((item) =>
     item.categoryName.toLowerCase().includes(searchQuery.toLowerCase())

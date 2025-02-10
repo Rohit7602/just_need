@@ -26,7 +26,7 @@ function Actions({ selectedItem, handleOverlayClick }) {
       }));
     }
   };
-
+  console.log(allSubcategories)
   const handleInputChange = (index, event) => {
     const value = event.target.value;
 
@@ -38,7 +38,7 @@ function Actions({ selectedItem, handleOverlayClick }) {
     // Update selectedItem array immediately in state
     setAllSubCategories((prevItems) =>
       prevItems.map((item, i) =>
-        i === index ? { ...item, subCategoryName: value } : item
+        i === index ? { ...item, subCategoryName: value,id:item.id } : item
       )
     );
   };
@@ -82,6 +82,9 @@ function Actions({ selectedItem, handleOverlayClick }) {
     );
   };
 
+
+  
+
   let continuousIndex = 1;
 
   return (
@@ -119,7 +122,7 @@ function Actions({ selectedItem, handleOverlayClick }) {
         </div>
 
         <div className="flex -mx-3 flex-row flex-wrap justify-between">
-          {allSubcategories.map((item, index) => (
+          {allSubcategories.filter((value)=>value.isMarkedForDeletion !== true).map((item, index) => (
             <div key={index} className="w-4/12 px-3">
               <div className="flex items-center mt-[30px]">
                 <p className="me-[12px] font-normal text-[16px]">
