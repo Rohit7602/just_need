@@ -7,7 +7,7 @@ export const useServiceContext = () => useContext(serviceProvider);
 
 function ServiceContext({ children }) {
   const [categories, setCategories] = useState([]);
-   const [loading, setLoading] = useState(true); 
+   const [loading, setLoading] = useState(false); 
 
    async function getCategoriesWithSubcategories() {
     setLoading(true)

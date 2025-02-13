@@ -35,7 +35,7 @@ function LoginPupUp() {
         className="fixed inset-0  bg-opacity-50 z-50 opacity-15"
       >
       </div>
-      <div className="flex items-center justify-center text-black py-6 opacity-100"><img src={Logo}/></div>
+      <div className="flex items-center justify-center text-black py-2 opacity-100"><img src={Logo}/></div>
       <div className="bg-[#0000001A] h-[1px] opacity-100"></div>
       <div className="fixed inset-0 flex items-center justify-center z-50 h-[443px] w-[545px] m-auto">
         <div className="w-full max-w-md bg-[#FFFFFF99] rounded-lg shadow-lg p-5 relative">
