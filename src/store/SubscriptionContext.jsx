@@ -8,7 +8,7 @@ export const useSubscriptionContext = () => useContext(SubscriptionContext);
 function SubscriptionProvider({ children }) {
   const [plans, setPlans] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(false); 
 
   useEffect(() => {
     async function fetchSubscriptionPlans() {

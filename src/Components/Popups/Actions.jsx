@@ -5,50 +5,85 @@ import {
   Greenicon,
   Redcrossicon,
 } from "../../assets/icon/Icons";
+import { useServiceContext } from "../../store/ServiceContext";
 
 function Actions({ selectedItem, handleOverlayClick }) {
   const [showRedIcons, setShowRedIcons] = useState(false);
-  const [editingIndex, setEditingIndex] = useState(null); // Track which item is being edited
-  const [inputValues, setInputValues] = useState({}); // Store input values for each item
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [inputValues, setInputValues] = useState({});
+  const [allSubcategories, setAllSubCategories] = useState(selectedItem);
 
-  // Handle edit icon click
+  const { handleDeleteSubCategory, handleEditSubCategory } = useServiceContext();
+
   const handleEditClick = (index, value) => {
     if (editingIndex === index) {
-      // If already editing, stop editing
       setEditingIndex(null);
     } else {
-      // Start editing and set the input value
       setEditingIndex(index);
       setInputValues((prev) => ({
         ...prev,
-        [index]: value, // Store the value for the specific index
+        [index]: value,
       }));
     }
   };
-
-  // Handle input change
+  console.log(allSubcategories)
   const handleInputChange = (index, event) => {
+    const value = event.target.value;
+
     setInputValues((prev) => ({
       ...prev,
-      [index]: event.target.value, // Update the value for the specific index
+      [index]: value,
     }));
+
+    // Update selectedItem array immediately in state
+    setAllSubCategories((prevItems) =>
+      prevItems.map((item, i) =>
+        i === index ? { ...item, subCategoryName: value,id:item.id } : item
+      )
+    );
   };
 
-  // Handle save click
-  const handleSaveClick = () => {
-    console.log("Updated Values:", inputValues);
-    setEditingIndex(null); // Stop editing
+  const handleSaveClick = async () => {
+    // Update all edited subcategories
+    for (const index in inputValues) {
+      const id = allSubcategories[index].id; // Assuming each item has an id
+      const updatedName = inputValues[index] || allSubcategories[index].subCategoryName;
+      await handleEditSubCategory(id, updatedName);
+    }
+
+    // Delete subcategories marked for deletion
+    const subCategoryIdsToDelete = allSubcategories
+      .filter((item) => item.isMarkedForDeletion) // Assuming you have a way to mark for deletion
+      .map((item) => item.id);
+
+    for (const subCategoryId of subCategoryIdsToDelete) {
+      await handleDeleteSubCategory(subCategoryId);
+    }
+
+    // Reset states
+    setEditingIndex(null);
+    setInputValues({});
+    handleOverlayClick(); // Close the overlay
   };
 
-  // Handle delete click
   const handleDeleteClick = () => {
     setShowRedIcons(true);
   };
 
-  // Handle cancel click
   const handleCancelClick = () => {
     setShowRedIcons(false);
   };
+
+  const handleMarkForDeletion = (index) => {
+    setAllSubCategories((prevItems) =>
+      prevItems.map((item, i) =>
+        i === index ? { ...item, isMarkedForDeletion: true } : item
+      )
+    );
+  };
+
+
+  
 
   let continuousIndex = 1;
 
@@ -87,17 +122,21 @@ function Actions({ selectedItem, handleOverlayClick }) {
         </div>
 
         <div className="flex -mx-3 flex-row flex-wrap justify-between">
-          {selectedItem.map((item, index) => (
+          {allSubcategories.filter((value)=>value.isMarkedForDeletion !== true).map((item, index) => (
             <div key={index} className="w-4/12 px-3">
               <div className="flex items-center mt-[30px]">
                 <p className="me-[12px] font-normal text-[16px]">
                   {continuousIndex++}.
                 </p>
-                {editingIndex === index ? ( // Show input field if editing
+                {editingIndex === index ? (
                   <input
                     type="text"
-                    value={inputValues[index] || item.subCategoryName} // Pre-fill with selected item's value
-                    onChange={(e) => handleInputChange(index, e)} // Handle input change
+                    value={
+                      inputValues[index] !== undefined
+                        ? inputValues[index]
+                        : item.subCategoryName
+                    }
+                    onChange={(e) => handleInputChange(index, e)}
                     className="font-normal text-[16px] me-[12px] cursor-pointer border border-[#000] rounded-[10px] py-[5px] px-[10px] w-[120px]"
                   />
                 ) : (
@@ -106,19 +145,30 @@ function Actions({ selectedItem, handleOverlayClick }) {
                   </p>
                 )}
                 {showRedIcons ? (
-                  <button>
+                  <button onClick={() => handleMarkForDeletion(index)}>
                     <Redcrossicon />
                   </button>
                 ) : (
                   <span
-                    onClick={() =>
-                      handleEditClick(index , item.subCategoryName)
-                    }
+                    onClick={() => handleEditClick(index, item.subCategoryName)}
                   >
-                    {editingIndex === index ? ( // Show green icon if editing
-                      <Greenicon />
+                    {editingIndex === index ? (
+                      <button
+                        onClick={() =>
+                          handleEditSubCategory(
+                            item.id,
+                            inputValues[index] || item.subCategoryName
+                          )
+                        }
+                      >
+                        <Greenicon />
+                      </button>
                     ) : (
-                      <EditiconActionPopUp />
+                      <EditiconActionPopUp
+                        onClick={() =>
+                          handleEditClick(index, item.subCategoryName)
+                        }
+                      />
                     )}
                   </span>
                 )}
