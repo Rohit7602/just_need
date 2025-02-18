@@ -30,6 +30,7 @@ function Services() {
     toggleCategoryStatus,
     getCategoriesWithSubcategories,
   } = useServiceContext();
+  
   useEffect(() => {
     getCategoriesWithSubcategories();
   }, []);
