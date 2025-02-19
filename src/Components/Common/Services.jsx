@@ -30,7 +30,9 @@ function Services() {
     toggleCategoryStatus,
     getCategoriesWithSubcategories,
   } = useServiceContext();
-  
+
+  // console.log(categories,"data will be come here")
+
   useEffect(() => {
     getCategoriesWithSubcategories();
   }, []);
@@ -120,83 +122,90 @@ function Services() {
       </div>
 
       <div className="grid gap-4 mt-[16px] grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-        {filteredCategoriesData.map((items, index) => (
-          <div
-            key={index}
-            className="relative z-[20] hover:bg-[#0832DE] hover:text-white cursor-pointer border-[#0000001A] rounded-[10px] p-[20px] border-[1px] bg-[white] group duration-300"
-          >
-            <div className="flex items-center justify-between">
-              {editIndex === index ? (
-                <input
-                  type="text"
-                  value={editData}
-                  onChange={handleInputChange}
-                  className="w-full bg-transparent border border-black me-2 focus:outline-none p-1 rounded-[10px]"
-                  autoFocus
-                />
-              ) : (
-                <p className="p-1 border border-transparent">
-                  {items.categoryName}
-                </p>
-              )}
-              <div className="flex items-center">
-                {editIndex === index ? (
-                  <div
-                    className="cursor-pointer"
-                    onClick={() => handleSaveEdit(items.id)}
-                  >
-                    <Greenicon />
+        {filteredCategoriesData.map(
+          (items, index) => (
+            console.log(items, "item of array"),
+            (
+              <div
+                key={index}
+                className="relative z-[20] hover:bg-[#0832DE] hover:text-white cursor-pointer border-[#0000001A] rounded-[10px] p-[20px] border-[1px] bg-[white] group duration-300"
+              >
+                <div className="flex items-center justify-between">
+                  {editIndex === index ? (
+                    <input
+                      type="text"
+                      value={editData}
+                      onChange={handleInputChange}
+                      className="w-full bg-transparent border border-black me-2 focus:outline-none p-1 rounded-[10px]"
+                      autoFocus
+                    />
+                  ) : (
+                    <p className="p-1 border border-transparent">
+                      {items.categoryName}
+                    </p>
+                  )}
+                  <div className="flex items-center">
+                    {editIndex === index ? (
+                      <div
+                        className="cursor-pointer"
+                        onClick={() => handleSaveEdit(items.id)}
+                      >
+                        <Greenicon />
+                      </div>
+                    ) : (
+                      <>
+                        <div
+                          onClick={() =>
+                            handleEditClick(index, items.categoryName)
+                          }
+                          className="cursor-pointer"
+                        >
+                          <Editicon />
+                        </div>
+                        <div
+                          className="ms-[20px] cursor-pointer"
+                          onClick={() =>
+                            items.isActive
+                              ? handleDisableClick(index)
+                              : handleEnableClick(index)
+                          }
+                        >
+                          {items.isActive ? (
+                            <DisableRedicon />
+                          ) : (
+                            <span className="text-xs font-normal text-[#0DA800]">
+                              Enable
+                            </span>
+                          )}
+                        </div>
+                      </>
+                    )}
                   </div>
-                ) : (
-                  <>
-                    <div
-                      onClick={() => handleEditClick(index, items.categoryName)}
-                      className="cursor-pointer"
-                    >
-                      <Editicon />
-                    </div>
-                    <div
-                      className="ms-[20px] cursor-pointer"
-                      onClick={() =>
-                        items.isActive
-                          ? handleDisableClick(index)
-                          : handleEnableClick(index)
-                      }
-                    >
-                      {items.isActive ? (
-                        <DisableRedicon />
-                      ) : (
-                        <span className="text-xs font-normal text-[#0DA800]">
-                          Enable
-                        </span>
+                </div>
+                <div className="border-t border-dashed my-[16px]"></div>
+                <div
+                  className="flex -mx-3 items-center flex-wrap justify-between"
+                  onClick={() => handleItemClick(items.subcategories)}
+                >
+                  {items.subcategory.map((item, index) => (
+                    <div className="w-6/12 px-3" key={index}>
+                      {index < 5 && (
+                        <p className="opacity-[60%] font-normal text-[12px] mb-[10px]">
+                          {index + 1}. {item.categoryName}
+                        </p>
+                      )}
+                      {index === 5 && items.subcategories.length > 5 && (
+                        <p className="font-normal text-[12px] cursor-pointer">
+                          +{items.subcategories.length - 5} more
+                        </p>
                       )}
                     </div>
-                  </>
-                )}
-              </div>
-            </div>
-            <div className="border-t border-dashed my-[16px]"></div>
-            <div className="flex -mx-3 items-center flex-wrap justify-between">
-              {items.subcategories.map((item, index) => (
-                <div className="w-6/12 px-3" key={index}>
-                  {index < 5 && (
-                    <p className="opacity-[60%] font-normal text-[12px] mb-[10px]">
-                      {index + 1}. {item.subCategoryName}
-                    </p>
-                  )}
-                  {index === 5 && items.subcategories.length > 5 && (
-                    <p
-                      onClick={() => handleItemClick(items.subcategories)}
-                      className="font-normal text-[12px] cursor-pointer"
-                    >
-                      +{items.subcategories.length - 5} more
-                    </p>
-                  )}
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
-        ))}
+              </div>
+            )
+          )
+        )}
       </div>
 
       {showPopup && (

@@ -9,27 +9,28 @@ function ServiceContext({ children }) {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  console.log(categories, "categories main here");
+
   async function getCategoriesWithSubcategories() {
     setLoading(true);
 
     try {
-      //  Fetch categories with subcategories
-      const { data, error } = await supabase.from("categories").select(`
-          id,
-          categoryName,
-          isActive,
-          featured,
-          metadata,
-          subcategories(*)
-        `);
+      // Fetch data from the `catview` view
+      const { data, error } = await supabase.from("catview").select("*");
 
       if (error) throw error;
 
-      console.log("Categories with subcategories fetched:", data);
+      // console.log(" Categories with subcategories fetched:", data);
 
-      setCategories(data); // Store data in state
+      // Ensure subcategories are always an array
+      const formattedData = data.map((category) => ({
+        ...category,
+        subcategories: category.subcategories ?? [], //  Always ensure an array
+      }));
+
+      setCategories(formattedData); // Store formatted data in state
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error(" Error fetching data:", error);
     } finally {
       setLoading(false);
     }
@@ -37,73 +38,68 @@ function ServiceContext({ children }) {
 
   const addCategoriesSubCategories = async (categoryName, subCategories) => {
     try {
-      // Step 1: Insert Category
+      // ✅ Insert Category
       const { data: category, error: categoryError } = await supabase
         .from("categories")
         .insert([
           {
-            categoryName: categoryName,
+            categoryName,
             isActive: true,
             featured: false,
-            metadata: JSON.stringify({
+            metadatas: {
               totalListings: 0,
               averageRating: 0,
               totalFavorites: 0,
               tags: [],
-            }),
+            },
           },
         ])
         .select()
-        .single(); // Ensure we get a single category object
+        .single();
 
       if (categoryError) throw categoryError;
       if (!category) throw new Error("Category insertion failed.");
 
-      console.log("Category inserted:", category);
+      console.log(" Category inserted:", category);
 
-      //  Step 2: Prepare and Insert Subcategories
-      if (subCategories.length === 0) {
-        console.log("No subcategories to insert.");
-        return;
-      }
+      //  Ensure subCategories exist
+      if (!subCategories?.length) return;
 
-      const subcategoryData = subCategories.map((subCategoryName) => ({
-        parentsCategoryId: category.id, // Link to category ID
-        subCategoryName: subCategoryName,
-        description: "",
-        isActive: true,
+      // Insert Subcategories
+      console.log(subCategories, "subcategories here");
+
+      const subcategoryData = subCategories.map((name) => ({
+        parentsCategoryId: categories.id,
+        subCategoryName: name,
+        description: subCategories.description,
+        isActive: subCategories.isActive,
       }));
 
-      console.log("Inserting subcategories...");
+      const { data: insertedSubcategories, error: subCategoryError } =
+        await supabase.from("subcategories").insert(subcategoryData).select();
 
-      const { data: subcategories, error: subcategoryError } = await supabase
-        .from("subcategories")
-        .insert(subcategoryData)
-        .select();
+      if (subCategoryError) throw subCategoryError;
 
-      if (subcategoryError) throw subcategoryError;
-      if (!subcategories) throw new Error("Subcategory insertion failed.");
+      console.log(" Subcategories inserted:", insertedSubcategories);
 
-      console.log("✅ Subcategories inserted:", subcategories);
+      // Update State Correctly
+      setCategories((prevCategories) =>
+        prevCategories.map((cat) =>
+          cat.id === category.id
+            ? {
+                ...cat,
+                subcategories: [
+                  ...(cat.subcategories || []),
+                  ...insertedSubcategories,
+                ],
+              }
+            : cat
+        )
+      );
 
-      //  Step 3: Update State with New Data
-      setCategories((prevCategories) => [
-        ...prevCategories,
-        {
-          ...category, // Use actual category data
-          subcategories: subcategories.map((sub) => ({
-            id: sub.id,
-            subCategoryName: sub.subCategoryName,
-            description: sub.description,
-            isActive: sub.isActive,
-            parentsCategoryId: sub.parentsCategoryId,
-          })),
-        },
-      ]);
-
-      console.log("✅ Data successfully added to state.");
+      console.log(" Data successfully added to state.");
     } catch (error) {
-      console.error("Error inserting category and subcategories:", error);
+      console.error(" Error inserting category and subcategories:", error);
     }
   };
 

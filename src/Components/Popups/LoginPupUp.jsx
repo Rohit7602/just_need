@@ -16,6 +16,11 @@ function LoginPupUp() {
 
   const navigate = useNavigate();
 
+  function handleForgotPassword() {
+    setResetPassword(!resetPassoword);
+    navigate("/resetPassword");
+  }
+
   const handleLogIn = () => {
     signInWithEmail(email, password)
       .then((response) => {
@@ -82,7 +87,7 @@ function LoginPupUp() {
             </div>
             <div className="text-end">
               <button
-                onClick={() => setResetPassword(!resetPassoword)}
+                onClick={handleForgotPassword}
                 className="text-sm font-normal text-[#FF0000] mt-2 "
               >
                 Forgot Password?
