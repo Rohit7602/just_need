@@ -144,7 +144,7 @@ function Actions({ selectedItem, handleOverlayClick }) {
                         />
                       ) : (
                         <p className="font-normal text-[16px] me-[12px] border border-transparent py-[5px] w-[120px]">
-                          {item.subCategoryName}
+                          {item.categoryName}
                         </p>
                       )}
                       {showRedIcons ? (
