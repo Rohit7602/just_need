@@ -438,7 +438,7 @@ export const RedDeleteIcon = () => {
         height="100"
         rx="50"
         fill="#FF0000"
-        fill-opacity="0.05"
+        fillOpacity="0.05"
       />
       <path
         fillRule="evenodd"

@@ -12,10 +12,7 @@ function ServiceContext({ children }) {
   console.log(categories, "categories main here");
 
   async function getCategoriesWithSubcategories() {
-    setLoading(true);
-
     try {
-      // Fetch data from the `catview` view
       const { data, error } = await supabase.from("catview").select("*");
 
       if (error) throw error;
@@ -38,7 +35,7 @@ function ServiceContext({ children }) {
 
   const addCategoriesSubCategories = async (categoryName, subCategories) => {
     try {
-      // ✅ Insert Category
+      //  Insert Category
       const { data: category, error: categoryError } = await supabase
         .from("categories")
         .insert([
@@ -58,22 +55,23 @@ function ServiceContext({ children }) {
         .single();
 
       if (categoryError) throw categoryError;
-      if (!category) throw new Error("Category insertion failed.");
+      if (!category) throw new Error(" Category insertion failed.");
 
       console.log(" Category inserted:", category);
 
       //  Ensure subCategories exist
       if (!subCategories?.length) return;
 
-      // Insert Subcategories
-      console.log(subCategories, "subcategories here");
-
+      //  Correcting Data Mapping
       const subcategoryData = subCategories.map((name) => ({
-        parentsCategoryId: categories.id,
-        subCategoryName: name,
-        description: subCategories.description,
-        isActive: subCategories.isActive,
+        catId: category.id,
+        categoryName: name?.categoryName ?? name,
+        description: name?.description ?? "",
+        isActive: name?.isActive ?? false,
+        createdAt: name?.createdAt ?? Date.now(),
       }));
+
+      console.log(subcategoryData, " Subcategory data before insert");
 
       const { data: insertedSubcategories, error: subCategoryError } =
         await supabase.from("subcategories").insert(subcategoryData).select();
@@ -82,7 +80,7 @@ function ServiceContext({ children }) {
 
       console.log(" Subcategories inserted:", insertedSubcategories);
 
-      // Update State Correctly
+      //  Update State Correctly
       setCategories((prevCategories) =>
         prevCategories.map((cat) =>
           cat.id === category.id

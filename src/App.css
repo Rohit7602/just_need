@@ -14,7 +14,7 @@
 .group_hover:hover svg path,
 .group_hover:hover span {
   fill: #6c4def;
-  fill-opacity: 1;
+  fillOpacity: 1;
   color: #6c4def;
   opacity: 1;
 }
