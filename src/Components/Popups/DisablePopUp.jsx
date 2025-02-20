@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import React from 'react';
-import { BlackDisableIcon } from '../../assets/icon/Icon';
+import { useState } from "react";
+import React from "react";
+import { BlackDisableIcon } from "../../assets/icon/Icon";
 
 function DisablePopUp({ onConfirm, onCancel }) {
   const [isEnabled, setIsEnabled] = useState(false);
@@ -8,7 +8,8 @@ function DisablePopUp({ onConfirm, onCancel }) {
     <>
       <div
         onClick={onCancel}
-        className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50"></div>
+        className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50"
+      ></div>
       <div className="fixed inset-0 flex items-center justify-center z-50 h-[224px] w-[400px] m-auto">
         <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-6 relative">
           <div className="w-full flex flex-col items-center justify-center">
@@ -19,7 +20,8 @@ function DisablePopUp({ onConfirm, onCancel }) {
             <div className="flex items-center gap-3 mt-[15px]">
               <button
                 onClick={onCancel}
-                className="text-base font-normal text-black px-11 py-2.5 h-[42px] bg-[#EDEDED] rounded-[10px]">
+                className="text-base font-normal text-black px-11 py-2.5 h-[42px] bg-[#EDEDED] rounded-[10px]"
+              >
                 No, Cancel
               </button>
               <button
@@ -27,8 +29,9 @@ function DisablePopUp({ onConfirm, onCancel }) {
                   onConfirm();
                   setIsEnabled((prev) => !prev);
                 }}
-                className="text-base font-normal text-white px-11 py-2.5 h-[42px] bg-[#0832DE] rounded-[10px]">
-                {isEnabled ? 'NO, Disable' : 'No, Enable'}
+                className="text-base font-normal text-white px-11 py-2.5 h-[42px] bg-[#0832DE] rounded-[10px]"
+              >
+                {isEnabled ? "NO, Disable" : "Yes, Enable"}
               </button>
             </div>
           </div>

@@ -12,6 +12,7 @@ import {
   ArrowIconRigth,
   ArrowIconLeft,
 } from ".././assets/icon/Icons";
+import { supabase } from "../store/supabaseCreateClient";
 
 const CustomerData = ({ mapData }) => {
   const [showPopup, setShowPopup] = useState(false);
@@ -20,6 +21,22 @@ const CustomerData = ({ mapData }) => {
   const [showfilterPopup, setshowfilterPopup] = useState(false);
   const [searchTerm, setSearchTerm] = useState(""); // State for search term
 
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const { data, error } = await supabase.from("users").select("*");
+      if (error) {
+        console.error("Error fetching users:", error);
+      } else {
+        setUsers(data);
+      }
+      setLoading(false);
+    };
+    fetchUsers();
+  }, []);
+  console.log(users, "users");
   function handleFilter() {
     setshowfilterPopup(!showfilterPopup);
   }
@@ -93,12 +110,12 @@ const CustomerData = ({ mapData }) => {
   }, []);
 
   // Filtered data based on search term
-  const filteredData = mapData.filter((customer) => {
+  const filteredData = users.filter((customer) => {
     return (
-      customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      customer.phone.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      customer.address.toLowerCase().includes(searchTerm.toLowerCase())
+      customer.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      customer.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      customer.phone?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      customer.address?.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
 
@@ -200,9 +217,9 @@ const CustomerData = ({ mapData }) => {
                 <Link to={`/dashboard/usersList/userDetails/${customer.id}`}>
                   <td className="px-[19px] md:px-[24px] text-[#6C4DEF] py-[8px] flex items-center gap-2 min-w-[160px]">
                     <img
-                      src={avatar}
+                      src={customer.image}
                       alt="avatar"
-                      className="w-8 h-8 rounded-full me-2"
+                      className="w-8 h-8 rounded-full me-2 object-cover"
                     />
                     {customer.name}
                   </td>
@@ -211,13 +228,13 @@ const CustomerData = ({ mapData }) => {
                   {customer.email}
                 </td>
                 <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
-                  {customer.phone}
+                  {customer.mobile_number}
                 </td>
                 <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000] w-[120px] truncate">
                   {customer.address}
                 </td>
                 <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
-                  {customer.start}
+                  {customer.created_at}
                 </td>
                 <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
                   {customer.end}
