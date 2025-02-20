@@ -1,17 +1,21 @@
 import React from "react";
 import { useAuthContext } from "../../store/AuthContext";
+import { toast } from "react-toastify";
 
 function LogOutPopUp({ onCancle }) {
   const { handleLogOut } = useAuthContext();
   const handleYes = () => {
     handleLogOut().then((response) => {
       if (response.success) {
-        console.log("logout successfully");
+        console.log("logout successfully !");
+        toast.success("logout successfully !");
       } else {
         console.error(response.response);
       }
     });
-    window.location.reload();
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
   };
   return (
     <>

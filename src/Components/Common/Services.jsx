@@ -30,6 +30,9 @@ function Services() {
     toggleCategoryStatus,
     getCategoriesWithSubcategories,
   } = useServiceContext();
+
+  // console.log(categories,"data will be come here")
+
   useEffect(() => {
     getCategoriesWithSubcategories();
   }, []);
@@ -55,6 +58,7 @@ function Services() {
   };
 
   const handleItemClick = (item) => {
+    console.log(item, "item");
     setSelectedItem(item);
     setShowPopup(true);
   };
@@ -175,19 +179,19 @@ function Services() {
               </div>
             </div>
             <div className="border-t border-dashed my-[16px]"></div>
-            <div className="flex -mx-3 items-center flex-wrap justify-between">
-              {items.subcategories.map((item, index) => (
+            <div
+              className="flex -mx-3 items-center flex-wrap justify-between"
+              onClick={() => handleItemClick(items.subcategory)}
+            >
+              {items.subcategory.map((item, index) => (
                 <div className="w-6/12 px-3" key={index}>
                   {index < 5 && (
                     <p className="opacity-[60%] font-normal text-[12px] mb-[10px]">
-                      {index + 1}. {item.subCategoryName}
+                      {index + 1}. {item.categoryName}
                     </p>
                   )}
                   {index === 5 && items.subcategories.length > 5 && (
-                    <p
-                      onClick={() => handleItemClick(items.subcategories)}
-                      className="font-normal text-[12px] cursor-pointer"
-                    >
+                    <p className="font-normal text-[12px] cursor-pointer">
                       +{items.subcategories.length - 5} more
                     </p>
                   )}

@@ -13,7 +13,8 @@ function Actions({ selectedItem, handleOverlayClick }) {
   const [inputValues, setInputValues] = useState({});
   const [allSubcategories, setAllSubCategories] = useState(selectedItem);
 
-  const { handleDeleteSubCategory, handleEditSubCategory } = useServiceContext();
+  const { handleDeleteSubCategory, handleEditSubCategory } =
+    useServiceContext();
 
   const handleEditClick = (index, value) => {
     if (editingIndex === index) {
@@ -26,7 +27,9 @@ function Actions({ selectedItem, handleOverlayClick }) {
       }));
     }
   };
-  console.log(allSubcategories)
+
+  console.log(allSubcategories);
+
   const handleInputChange = (index, event) => {
     const value = event.target.value;
 
@@ -36,9 +39,10 @@ function Actions({ selectedItem, handleOverlayClick }) {
     }));
 
     // Update selectedItem array immediately in state
-    setAllSubCategories((prevItems) =>
+    setAllSubCategories(
+      (prevItems) => console.log(prevItems, "prev Items"),
       prevItems.map((item, i) =>
-        i === index ? { ...item, subCategoryName: value,id:item.id } : item
+        i === index ? { ...item, subCategoryName: value, id: item.id } : item
       )
     );
   };
@@ -47,7 +51,8 @@ function Actions({ selectedItem, handleOverlayClick }) {
     // Update all edited subcategories
     for (const index in inputValues) {
       const id = allSubcategories[index].id; // Assuming each item has an id
-      const updatedName = inputValues[index] || allSubcategories[index].subCategoryName;
+      const updatedName =
+        inputValues[index] || allSubcategories[index].subCategoryName;
       await handleEditSubCategory(id, updatedName);
     }
 
@@ -81,9 +86,6 @@ function Actions({ selectedItem, handleOverlayClick }) {
       )
     );
   };
-
-
-  
 
   let continuousIndex = 1;
 
@@ -122,59 +124,64 @@ function Actions({ selectedItem, handleOverlayClick }) {
         </div>
 
         <div className="flex -mx-3 flex-row flex-wrap justify-between">
-          {allSubcategories.filter((value)=>value.isMarkedForDeletion !== true).map((item, index) => (
-            <div key={index} className="w-4/12 px-3">
-              <div className="flex items-center mt-[30px]">
-                <p className="me-[12px] font-normal text-[16px]">
-                  {continuousIndex++}.
-                </p>
-                {editingIndex === index ? (
-                  <input
-                    type="text"
-                    value={
-                      inputValues[index] !== undefined
-                        ? inputValues[index]
-                        : item.subCategoryName
-                    }
-                    onChange={(e) => handleInputChange(index, e)}
-                    className="font-normal text-[16px] me-[12px] cursor-pointer border border-[#000] rounded-[10px] py-[5px] px-[10px] w-[120px]"
-                  />
-                ) : (
-                  <p className="font-normal text-[16px] me-[12px] border border-transparent py-[5px] w-[120px]">
-                    {item.subCategoryName}
-                  </p>
-                )}
-                {showRedIcons ? (
-                  <button onClick={() => handleMarkForDeletion(index)}>
-                    <Redcrossicon />
-                  </button>
-                ) : (
-                  <span
-                    onClick={() => handleEditClick(index, item.subCategoryName)}
-                  >
-                    {editingIndex === index ? (
-                      <button
-                        onClick={() =>
-                          handleEditSubCategory(
-                            item.id,
-                            inputValues[index] || item.subCategoryName
-                          )
-                        }
-                      >
-                        <Greenicon />
-                      </button>
-                    ) : (
-                      <EditiconActionPopUp
-                        onClick={() =>
-                          handleEditClick(index, item.subCategoryName)
-                        }
-                      />
-                    )}
-                  </span>
-                )}
-              </div>
-            </div>
-          ))}
+          {allSubcategories
+            .filter((value) => !value.isMarkedForDeletion)
+            .map(
+              (item, index) => (
+                console.log(item.categoryName, "item Name"),
+                (
+                  <div key={index} className="w-4/12 px-3">
+                    <div className="flex items-center mt-[30px]">
+                      <p className="me-[12px] font-normal text-[16px]">
+                        {continuousIndex++}.
+                      </p>
+                      {editingIndex === index ? (
+                        <input
+                          type="text"
+                          value={item.categoryName}
+                          onChange={(e) => handleInputChange(index, e)}
+                          className="font-normal text-[16px] me-[12px] cursor-pointer border border-[#000] rounded-[10px] py-[5px] px-[10px] w-[120px]"
+                        />
+                      ) : (
+                        <p className="font-normal text-[16px] me-[12px] border border-transparent py-[5px] w-[120px]">
+                          {item.categoryName}
+                        </p>
+                      )}
+                      {showRedIcons ? (
+                        <button onClick={() => handleMarkForDeletion(index)}>
+                          <Redcrossicon />
+                        </button>
+                      ) : (
+                        <span
+                          onClick={() =>
+                            handleEditClick(index, item.subCategoryName)
+                          }
+                        >
+                          {editingIndex === index ? (
+                            <button
+                              onClick={() =>
+                                handleEditSubCategory(
+                                  item.id,
+                                  inputValues[index] || item.subCategoryName
+                                )
+                              }
+                            >
+                              <Greenicon />
+                            </button>
+                          ) : (
+                            <EditiconActionPopUp
+                              onClick={() =>
+                                handleEditClick(index, item.subCategoryName)
+                              }
+                            />
+                          )}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )
+              )
+            )}
         </div>
 
         <button
