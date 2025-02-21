@@ -63,12 +63,11 @@ function ServiceContext({ children }) {
       //  Ensure subCategories exist
       if (!subCategories?.length) return;
 
-      //  Correcting Data Mapping
       const subcategoryData = subCategories.map((name) => ({
-        catId: category.id,
-        categoryName: name?.categoryName ?? name,
-        description: name?.description ?? "",
-        isActive: name?.isActive ?? false,
+        catId: selectedCategoryId, // Use selectedCategoryId instead of category.id
+        categoryName: name,
+        description: "",
+        isActive: true,
         createdAt: name?.createdAt ?? Date.now(),
       }));
 

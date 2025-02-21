@@ -24,7 +24,7 @@ function LoginPupUp() {
 
   const handleLogIn = () => {
     setLoading(true);
-    signInWithEmail(email, password)
+    signInWithEmail(email, password)  
       .then((response) => {
         if (response.success) {
           let accessToken = response.response.session.access_token;
