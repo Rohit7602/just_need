@@ -12,6 +12,7 @@ function ServiceContext({ children }) {
   console.log(categories, "categories main here");
 
   async function getCategoriesWithSubcategories() {
+    setLoading(true);
     try {
       const { data, error } = await supabase.from("catview").select("*");
 

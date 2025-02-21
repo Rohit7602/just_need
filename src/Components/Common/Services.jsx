@@ -100,6 +100,7 @@ function Services() {
         <div className="flex items-center mt-[20px] xl:mt-[0px]">
           <div className="bg-[#F1F1F1] w-[337px] px-[16px] py-2.5 h-[42px] rounded-[10px]">
             <div className="flex items-center">
+              {/* h1 */}
               <Searchicon />
               <input
                 className="text-[16px] font-normal outline-none ms-[10px] bg-transparent"
@@ -139,7 +140,7 @@ function Services() {
                 />
               ) : (
                 <p className="p-1 border border-transparent">
-                  {items.categoryName}
+                  {items.categoryName} // header name
                 </p>
               )}
               <div className="flex items-center">

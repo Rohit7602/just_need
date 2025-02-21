@@ -38,13 +38,14 @@ function Actions({ selectedItem, handleOverlayClick }) {
       [index]: value,
     }));
 
-    // Update selectedItem array immediately in state
-    setAllSubCategories(
-      (prevItems) => console.log(prevItems, "prev Items"),
-      prevItems.map((item, i) =>
+    // Correct way to update the state
+    setAllSubCategories((prevItems) => {
+      console.log(prevItems, "prev Items"); // Logs before updating
+
+      return prevItems.map((item, i) =>
         i === index ? { ...item, subCategoryName: value, id: item.id } : item
-      )
-    );
+      );
+    });
   };
 
   const handleSaveClick = async () => {
