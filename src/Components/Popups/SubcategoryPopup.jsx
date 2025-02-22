@@ -1,35 +1,46 @@
 import React, { useState } from "react";
 import { Plusicon, Redcrossicon } from "../../assets/icon/Icons";
 import { useServiceContext } from "../../store/ServiceContext";
+import { toast } from "react-toastify";
 
 function AddSubCategoryPopUp({ handleClose, selectedCategoryId }) {
   const [subCategoryName, setSubCategoryName] = useState("");
   const [subCategories, setSubCategories] = useState([]);
 
   // Get the function from context
-  const { addCategoriesSubCategories } = useServiceContext();
+  const { getsubcategoriesData } = useServiceContext();
 
   // Add subcategory to list
   const handleAddMore = () => {
     if (subCategoryName.trim()) {
-      setSubCategories((prev) => [...prev, subCategoryName]);
+      setSubCategories((prev) => [
+        ...prev,
+        { categoryName: subCategoryName, createdAt: Date.now() },
+      ]);
       setSubCategoryName("");
     }
   };
 
   // Remove subcategory
   const deleteSubCategory = (item) => {
-    setSubCategories((prev) => prev.filter((val) => val !== item));
+    setSubCategories((prev) =>
+      prev.filter((val) => val.categoryName !== item.categoryName)
+    );
   };
 
   // Save subcategories
   const handleSaveDetails = async () => {
     if (subCategories.length > 0) {
-      await addCategoriesSubCategories(categoryName, subCategories);
+      if (!selectedCategoryId) {
+        toast.error("Category ID is required to add subcategories.");
+        return;
+      }
 
+      await getsubcategoriesData(null, selectedCategoryId, subCategories);
+      toast.success("Subcategories added successfully!");
       handleClose(); // Close the popup
     } else {
-      alert("Please add at least one subcategory.");
+      toast.info("Please add at least one subcategory.");
     }
   };
 
@@ -94,7 +105,7 @@ function AddSubCategoryPopUp({ handleClose, selectedCategoryId }) {
                     {index + 1}.
                   </span>
                   <span className="text-base font-normal text-black">
-                    {item}
+                    {item.categoryName}
                   </span>
                   <button onClick={() => deleteSubCategory(item)}>
                     <Redcrossicon />

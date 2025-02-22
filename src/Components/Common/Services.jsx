@@ -6,7 +6,6 @@ import {
   DisableRedicon,
   Searchicon,
 } from "../../assets/icon/Icons";
-import { servicedata } from "../../Components/Common/Helper";
 import Actions from "../Popups/Actions";
 import AddNewServicePopUp from "../Popups/AddNewServicePopUp";
 import EnablePopUp from "../Popups/EnablePopUp";
@@ -26,15 +25,16 @@ function Services() {
   const [currentCardIndex, setCurrentCardIndex] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("");
-  const [subcategory, setSubCategory] = useState(false);
+  const [subcategorypopup, setSubCategoryPopup] = useState(false);
 
   const {
     categories,
-    updateCategoryName,
-    toggleCategoryStatus,
+    updateSubcategoryName,
+    toggleSubcategoryStatus,
     getCategoriesWithSubcategories,
   } = useServiceContext();
 
+  const [selectedCategory, setSelectedCategory] = useState(categories);
   // console.log(categories,"data will be come here")
 
   useEffect(() => {
@@ -46,10 +46,11 @@ function Services() {
   };
 
   function handleSubcategory() {
-    setSubCategory(!subcategory);
+    setSubCategoryPopup(!subcategorypopup);
   }
 
   const handleEditClick = (index, categoryName) => {
+    // console.log(index,categoryName) getting index or name of subcategory ===============
     setEditIndex(index);
     setEditData(categoryName);
   };
@@ -58,10 +59,10 @@ function Services() {
     setEditData(e.target.value);
   };
 
-  const handleSaveEdit = (categoryId) => {
+  const handleSaveEdit = (subcategoryId) => {
     if (editData.trim() !== "") {
-      updateCategoryName(categoryId, editData);
-      setEditIndex(null);
+      updateSubcategoryName(subcategoryId, editData); // Use the correct function
+      setEditIndex(null); // Exit edit mode
     }
   };
 
@@ -76,26 +77,25 @@ function Services() {
     setSelectedItem(null);
   };
 
-  const handleDisableClick = (index) => {
-    setCurrentCardIndex(index);
+  const handleDisableClick = (subcategoryId) => {
+    setCurrentCardIndex(subcategoryId);
     setShowDisablePopup(true);
   };
 
-  const handleEnableClick = (index) => {
-    setCurrentCardIndex(index);
+  const handleEnableClick = (subcategoryId) => {
+    setCurrentCardIndex(subcategoryId);
     setShowEnablePopup(true);
   };
 
-  const toggleDisableCard = (index, action) => {
+  const toggleDisableCard = (subcategoryId, newStatus, action) => {
     if (action === "confirm") {
-      const categoryId = categories[index]?.id;
-      if (categoryId) {
-        toggleCategoryStatus(categoryId, !categories[index].isActive);
-      }
+      toggleSubcategoryStatus(subcategoryId, newStatus); // Update status in context
     }
+
     setShowEnablePopup(false);
     setShowDisablePopup(false);
     setCurrentCardIndex(null);
+    // window.location.reload();
   };
 
   const filteredCategoriesData = categories.filter((item) =>
@@ -181,7 +181,7 @@ function Services() {
           .flatMap((item) => item.subcategory)
           .map((sub, index) => (
             <div
-              key={sub.id}
+              key={index}
               className="group hover:bg-[#6C4DEF1A] hover:border-[#6C4DEF1A] border border-[#0000001A] p-5 rounded-[10px] h-full transition"
             >
               <div className="flex items-center justify-between">
@@ -217,7 +217,11 @@ function Services() {
                       </div>
                       <div
                         className="ms-[20px] cursor-pointer"
-                        onClick={() => toggleDisableCard(sub.id, sub.isActive)}
+                        onClick={() =>
+                          !sub.isActive
+                            ? handleDisableClick(sub.id)
+                            : handleEnableClick(sub.id)
+                        }
                       >
                         {sub.isActive ? (
                           <DisableRedicon />
@@ -266,22 +270,25 @@ function Services() {
         <AddNewServicePopUp handleNewServicePopUp={handleNewServicePopUp} />
       )}
 
-      {subcategory && (
+      {subcategorypopup && (
         <AddSubCategoryPopUp
           handleClose={handleSubcategory}
-          selectedCategoryId={activeTab}
+          setSelectedCategory={selectedCategory?.id}
         />
       )}
 
       {showEnablePopup && (
         <EnablePopUp
-          onConfirm={() => toggleDisableCard(currentCardIndex, "confirm")}
+          onConfirm={() => toggleDisableCard(currentCardIndex, true, "confirm")}
           onCancel={() => setShowEnablePopup(false)}
         />
       )}
+
       {showDisablePopup && (
         <DisablePopUp
-          onConfirm={() => toggleDisableCard(currentCardIndex, "confirm")}
+          onConfirm={() =>
+            toggleDisableCard(currentCardIndex, false, "confirm")
+          }
           onCancel={() => setShowDisablePopup(false)}
         />
       )}

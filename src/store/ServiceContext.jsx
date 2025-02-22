@@ -34,6 +34,54 @@ function ServiceContext({ children }) {
     }
   }
 
+  // subcategories wala function ===================
+
+  async function getsubcategoriesData() {
+    try {
+      if (!selectedCategoryId || !subCategories?.length) {
+        console.error("Category ID or Subcategories missing!");
+        return;
+      }
+
+      const subcategoryData = categories.map((sub) => ({
+        catId: selectedCategoryId,
+        categoryName: sub.categoryName || sub, // Ensure proper naming
+        description: sub.description || "",
+        isActive: sub.isActive ?? true,
+        createdAt: sub.createdAt || Date.now(),
+      }));
+
+      console.log("🔍 Subcategory data before insert:", subcategoryData);
+
+      // Insert into Supabase
+      const { data: insertedSubcategories, error } = await supabase
+        .from("subcategories")
+        .insert(subcategoryData)
+        .select();
+
+      if (error) throw error;
+
+      console.log(" Subcategories inserted:", insertedSubcategories);
+
+      // **Update State Without Resetting Other Data**
+      setCategories((prevCategories) =>
+        prevCategories.map((cat) =>
+          cat.id === selectedCategoryId
+            ? {
+                ...cat,
+                subcategories: [
+                  ...(cat.subcategories || []),
+                  ...insertedSubcategories,
+                ],
+              }
+            : cat
+        )
+      );
+    } catch (error) {
+      console.error(" Error inserting subcategories:", error);
+    }
+  }
+
   const addCategoriesSubCategories = async (categoryName, subCategories) => {
     try {
       //  Insert Category
@@ -63,11 +111,12 @@ function ServiceContext({ children }) {
       //  Ensure subCategories exist
       if (!subCategories?.length) return;
 
+      //  Correcting Data Mapping
       const subcategoryData = subCategories.map((name) => ({
-        catId: selectedCategoryId, // Use selectedCategoryId instead of category.id
-        categoryName: name,
-        description: "",
-        isActive: true,
+        catId: category.id,
+        categoryName: name?.categoryName ?? name,
+        description: name?.description ?? "",
+        isActive: name?.isActive ?? false,
         createdAt: name?.createdAt ?? Date.now(),
       }));
 
@@ -101,41 +150,49 @@ function ServiceContext({ children }) {
     }
   };
 
-  const updateCategoryName = async (categoryId, updatedName) => {
+  const updateSubcategoryName = async (subcategoryId, updatedName) => {
     setLoading(true);
     const { data, error } = await supabase
-      .from("categories")
-      .update({ categoryName: updatedName })
-      .eq("id", categoryId)
+      .from("subcategories") // Update the correct table
+      .update({ categoryName: updatedName }) // Ensure the column name matches your database
+      .eq("id", subcategoryId) // Match the subcategory ID
       .select();
 
     if (error) {
-      console.error("Error updating category:", error);
+      console.error("Error updating subcategory:", error);
     } else {
       setCategories((prevCategories) =>
-        prevCategories.map((cat) =>
-          cat.id === categoryId ? { ...cat, categoryName: updatedName } : cat
-        )
+        prevCategories.map((cat) => ({
+          ...cat,
+          subcategories: cat.subcategories.map((sub) =>
+            sub.id === subcategoryId
+              ? { ...sub, categoryName: updatedName }
+              : sub
+          ),
+        }))
       );
     }
     setLoading(false);
   };
 
-  const toggleCategoryStatus = async (categoryId, isActive) => {
+  const toggleSubcategoryStatus = async (subcategoryId, isActive) => {
     setLoading(true);
     const { data, error } = await supabase
-      .from("categories")
-      .update({ isActive: isActive })
-      .eq("id", categoryId)
+      .from("subcategories") // Update the correct table
+      .update({ isActive: !isActive }) // Toggle the status
+      .eq("id", subcategoryId) // Match the subcategory ID
       .select();
 
     if (error) {
-      console.error("Error toggling category status:", error);
+      console.error("Error toggling subcategory status:", error);
     } else {
       setCategories((prevCategories) =>
-        prevCategories.map((cat) =>
-          cat.id === categoryId ? { ...cat, isActive: isActive } : cat
-        )
+        prevCategories.map((cat) => ({
+          ...cat,
+          subcategories: cat.subcategories.map((sub) =>
+            sub.id === subcategoryId ? { ...sub, isActive: !isActive } : sub
+          ),
+        }))
       );
     }
     setLoading(false);
@@ -204,11 +261,12 @@ function ServiceContext({ children }) {
       value={{
         categories,
         addCategoriesSubCategories,
-        updateCategoryName,
-        toggleCategoryStatus,
+        updateSubcategoryName,
+        toggleSubcategoryStatus,
         handleEditSubCategory,
         handleDeleteSubCategory,
         getCategoriesWithSubcategories,
+        getsubcategoriesData,
       }}
     >
       {children}
