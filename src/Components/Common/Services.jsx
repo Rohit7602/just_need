@@ -10,7 +10,7 @@ import Actions from "../Popups/Actions";
 import AddNewServicePopUp from "../Popups/AddNewServicePopUp";
 import EnablePopUp from "../Popups/EnablePopUp";
 import DisablePopUp from "../Popups/DisablePopUp";
-import overlay from "../../../public/overlay.png";
+// import overlay from "../../../public/overlay.png";
 import { useServiceContext } from "../../store/ServiceContext";
 import AddSubCategoryPopUp from "../Popups/SubcategoryPopup";
 
@@ -129,6 +129,7 @@ function Services() {
   const handleCategoryClick = (index, subcategories) => {
     setActiveTab(index);
     setSelectedSubcategories(subcategories);
+    setSelectedCategoryId(categories[index].id);
   };
 
   const handleCategoryEdit = (index, catName, e) => {
@@ -240,6 +241,7 @@ function Services() {
 
       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 justify-between gap-[18px] mt-6 flex-wrap whitespace-nowrap cursor-pointer">
         {selectedSubcategories.map((sub, index) => (
+          // console.log(sub, "hey bro"),
           <div
             key={index}
             className="group hover:bg-[#6C4DEF1A] hover:border-[#6C4DEF1A] border border-[#0000001A] p-5 rounded-[10px] h-full transition"
@@ -261,9 +263,11 @@ function Services() {
 
               <div className="flex gap-2">
                 {editIndex === index ? (
-                  <div className="cursor-pointer">
-                    <Greenicon />
+                  <div
+                    className="cursor-pointer"
                     onClick={() => handleSaveEdit(sub.id)}
+                  >
+                    <Greenicon />
                   </div>
                 ) : (
                   <>
@@ -329,7 +333,10 @@ function Services() {
         <AddNewServicePopUp handleNewServicePopUp={handleNewServicePopUp} />
       )}
       {subcategorypopup && (
-        <AddSubCategoryPopUp handleClose={handleSubcategory} />
+        <AddSubCategoryPopUp
+          handleClose={handleSubcategory}
+          selectedCategoryId={selectedCategoryId?.id}
+        />
       )}
       {showEnablePopup && (
         <EnablePopUp
