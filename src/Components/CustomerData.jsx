@@ -36,7 +36,7 @@ const CustomerData = ({ mapData }) => {
     };
     fetchUsers();
   }, []);
-  console.log(users, "users");
+
   function handleFilter() {
     setshowfilterPopup(!showfilterPopup);
   }
@@ -231,7 +231,7 @@ const CustomerData = ({ mapData }) => {
                   {customer.mobile_number}
                 </td>
                 <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000] w-[120px] truncate">
-                  {customer.address}
+                  {customer.city}/{customer.state}
                 </td>
                 <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
                   {customer.created_at}

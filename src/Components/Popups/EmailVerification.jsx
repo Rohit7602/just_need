@@ -1,14 +1,43 @@
 import React, { useState, useRef } from "react";
 import LoginBg from "../../assets/Images/Png/loginBg.png";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../../store/supabaseCreateClient";
+import { toast } from "react-toastify";
 
 const EmailVerification = () => {
-  const [otp, setOtp] = useState(["", "", "", ""]);
+  const [otp, setOtp] = useState(["", "", "", "","",""]);
   const navigate = useNavigate();
   const inputRefs = useRef([]);
 
-  const handleVerifyOtp = () => {
-    navigate("/createPassword");
+  const handleVerifyOtp = async () => {
+    const enteredOtp = otp.join(""); // Convert array to string
+
+    if (enteredOtp.length !== 6) {
+      toast.error("Please enter the complete 6-digit OTP.");
+      return;
+    }
+
+    const email = localStorage.getItem("email"); // Retrieve email from localStorage
+
+    if (!email) {
+      toast.error("Session expired. Please request OTP again.");
+      navigate("/resetPassword");
+      return;
+    }
+
+    const { error } = await supabase.auth.verifyOtp({
+      email,
+      token: enteredOtp,
+      type: "magiclink", // For email OTP login
+    });
+
+    if (error) {
+      toast.error("Invalid OTP. Please try again.");
+    } else {
+      toast.success("OTP Verified! Redirecting...");
+      localStorage.removeItem("otpSent"); // Remove OTP flag after successful verification
+      setTimeout(() => navigate("/createPassword"), 2000);
+    }
   };
 
   const handleOtpChange = (e, index) => {
@@ -19,7 +48,6 @@ const EmailVerification = () => {
     newOtp[index] = value;
     setOtp(newOtp);
 
-    // Move focus to next input if value is entered
     if (value && index < inputRefs.current.length - 1) {
       inputRefs.current[index + 1].focus();
     }
@@ -50,10 +78,8 @@ const EmailVerification = () => {
           <h2 className="text-xl font-semibold text-black text-center">
             Email Verification
           </h2>
-
           <p className="text-[#00000099] text-center text-base font-normal mt-2">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum.
+            Enter the 6-digit OTP sent to your email.
           </p>
           <div className="flex justify-center mt-6">
             {otp.map((digit, index) => (
@@ -71,8 +97,8 @@ const EmailVerification = () => {
             ))}
           </div>
           <p className="text-[#00000099] text-center text-base font-normal mt-4">
-            Don’t Receive any code?{" "}
-            <span className="text-clr-blue border-b-2 border-clr-blue">
+            Didn’t receive any code?{" "}
+            <span className="text-clr-blue border-b-2 border-clr-blue cursor-pointer">
               Resend code
             </span>
           </p>

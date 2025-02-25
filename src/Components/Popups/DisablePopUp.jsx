@@ -1,9 +1,7 @@
-import { useState } from "react";
 import React from "react";
 import { BlackDisableIcon } from "../../assets/icon/Icon";
 
 function DisablePopUp({ onConfirm, onCancel }) {
-  const [isEnabled, setIsEnabled] = useState(false);
   return (
     <>
       <div
@@ -15,7 +13,7 @@ function DisablePopUp({ onConfirm, onCancel }) {
           <div className="w-full flex flex-col items-center justify-center">
             <BlackDisableIcon />
             <p className="mt-[15px] text-black text-sm font-normal">
-              Are you sure, You want to disable the Listing
+              Are you sure, You want to disable the Listing?
             </p>
             <div className="flex items-center gap-3 mt-[15px]">
               <button
@@ -25,13 +23,10 @@ function DisablePopUp({ onConfirm, onCancel }) {
                 No, Cancel
               </button>
               <button
-                onClick={() => {
-                  onConfirm();
-                  setIsEnabled((prev) => !prev);
-                }}
+                onClick={onConfirm}
                 className="text-base font-normal text-white px-11 py-2.5 h-[42px] bg-[#0832DE] rounded-[10px]"
               >
-                {isEnabled ? "NO, Disable" : "Yes, Enable"}
+                Yes, Disable
               </button>
             </div>
           </div>

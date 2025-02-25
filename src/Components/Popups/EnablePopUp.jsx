@@ -13,7 +13,7 @@ function EnablePopUp({ onConfirm, onCancel }) {
           <div className="w-full flex flex-col items-center justify-center">
             <BlackEnableIcon />
             <p className="mt-[15px] text-black text-sm font-normal">
-              Are you sure, You want to disable the Listing
+              Are you sure, You want to enable the Listing?
             </p>
             <div className="flex items-center gap-3 mt-[15px]">
               <button
