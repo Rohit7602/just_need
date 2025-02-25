@@ -13,7 +13,7 @@ function DisablePopUp({ onConfirm, onCancel }) {
           <div className="w-full flex flex-col items-center justify-center">
             <BlackDisableIcon />
             <p className="mt-[15px] text-black text-sm font-normal">
-              Are you sure, You want to disable the Listing?
+              Are you sure, You want to disable the service
             </p>
             <div className="flex items-center gap-3 mt-[15px]">
               <button
