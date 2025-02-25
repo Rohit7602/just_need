@@ -363,7 +363,7 @@ export const DropdownIcon = () => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g clip-path="url(#clip0_676_2141)">
+      <g clipPath="url(#clip0_676_2141)">
         <path
           fillRule="evenodd"
           clipRule="evenodd"

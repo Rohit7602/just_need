@@ -9,8 +9,6 @@ function ServiceContext({ children }) {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  console.log(categories, "categories main here");
-
   async function getCategoriesWithSubcategories() {
     setLoading(true);
     try {
@@ -175,6 +173,30 @@ function ServiceContext({ children }) {
     setLoading(false);
   };
 
+  const updateCategoryName = async (categoryId, newName) => {
+    console.log(categoryId, newName, "hello bhai");
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("categories")
+      .update({ categoryName: newName })
+      .eq("id", categoryId); // Assuming 'id' is the primary key
+
+    if (error) {
+      console.error("Error updating category:", error);
+      setLoading(false);
+      return false;
+    }
+
+    // Update local state to reflect the change
+    setCategories((prevCategories) =>
+      prevCategories.map((cat, index) =>
+        index === categoryId ? { ...cat, categoryName: newName } : cat
+      )
+    );
+    setLoading(false);
+    return true;
+  };
+
   const toggleSubcategoryStatus = async (subcategoryId, isActive) => {
     setLoading(true);
     const { data, error } = await supabase
@@ -266,7 +288,8 @@ function ServiceContext({ children }) {
         handleEditSubCategory,
         handleDeleteSubCategory,
         getCategoriesWithSubcategories,
-        getsubcategoriesData,
+        updateCategoryName,
+        // getsubcategoriesData,
       }}
     >
       {children}

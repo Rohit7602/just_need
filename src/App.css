@@ -21,7 +21,7 @@
 .group_hover:hover .setting_svg path {
   stroke: #6c4def !important;
   fill: transparent !important;
-  stroke-opacity: 1;
+  strokeOpacity: 1;
 }
 .scrollRemove::-webkit-scrollbar {
   display: none;

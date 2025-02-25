@@ -4,6 +4,7 @@ import { useServiceContext } from "../../store/ServiceContext";
 import { toast } from "react-toastify";
 
 function AddSubCategoryPopUp({ handleClose, selectedCategoryId }) {
+  console.log(selectedCategoryId, "id here");
   const [subCategoryName, setSubCategoryName] = useState("");
   const [subCategories, setSubCategories] = useState([]);
 
@@ -36,9 +37,14 @@ function AddSubCategoryPopUp({ handleClose, selectedCategoryId }) {
         return;
       }
 
-      await getsubcategoriesData(null, selectedCategoryId, subCategories);
-      toast.success("Subcategories added successfully!");
-      handleClose(); // Close the popup
+      try {
+        await getsubcategoriesData(selectedCategoryId, subCategories);
+        toast.success("Subcategories added successfully!");
+        handleClose(); // Close the popup
+      } catch (error) {
+        toast.error("Failed to add subcategories.");
+        console.error("Error inserting subcategories:", error);
+      }
     } else {
       toast.info("Please add at least one subcategory.");
     }
