@@ -174,29 +174,20 @@ function ServiceContext({ children }) {
   };
 
   const updateCategoryName = async (categoryId, newName) => {
-    console.log(categoryId, newName, "hello bhai");
-    setLoading(true);
-    const { data, error } = await supabase
-      .from("categories")
-      .update({ categoryName: newName })
-      .eq("id", categoryId); // Assuming 'id' is the primary key
-
-    if (error) {
-      console.error("Error updating category:", error);
-      setLoading(false);
+    try {
+      // Make API call to update category name
+      const response = await api.updateCategoryName(categoryId, newName);
+      if (response.success) {
+        // Update local state if needed
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.error("Error updating category name:", error);
       return false;
     }
-
-    // Update local state to reflect the change
-    setCategories((prevCategories) =>
-      prevCategories.map((cat, index) =>
-        index === categoryId ? { ...cat, categoryName: newName } : cat
-      )
-    );
-    setLoading(false);
-    return true;
   };
-
   const toggleSubcategoryStatus = async (subcategoryId, isActive) => {
     setLoading(true);
     const { data, error } = await supabase

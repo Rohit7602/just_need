@@ -21,6 +21,20 @@ const CustomerData = ({ mapData }) => {
   const [showfilterPopup, setshowfilterPopup] = useState(false);
   const [searchTerm, setSearchTerm] = useState(""); // State for search term
 
+  const formatDate = (milliseconds) => {
+    const date = new Date(milliseconds);
+    const day = date.getDate();
+    const month = date.toLocaleString("default", { month: "short" });
+    const year = date.getFullYear();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? "PM" : "AM";
+    const formattedHours = hours % 12 || 12; // Convert to 12-hour format
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes; // Add leading zero if needed
+
+    return `${day} ${month} ${year} | ${formattedHours}:${formattedMinutes} ${ampm}`;
+  };
+
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -161,9 +175,9 @@ const CustomerData = ({ mapData }) => {
                   />
                 </th>
               )}
-              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">
+              {/* <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">
                 Customer Id
-              </th>
+              </th> */}
               <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">
                 Full Name
               </th>
@@ -211,9 +225,9 @@ const CustomerData = ({ mapData }) => {
                     />
                   </td>
                 )}
-                <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
+                {/* <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
                   {customer.id}
-                </td>
+                </td> */}
                 <Link to={`/dashboard/usersList/userDetails/${customer.id}`}>
                   <td className="px-[19px] md:px-[24px] text-[#6C4DEF] py-[8px] flex items-center gap-2 min-w-[160px]">
                     <img
@@ -234,7 +248,7 @@ const CustomerData = ({ mapData }) => {
                   {customer.city}/{customer.state}
                 </td>
                 <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
-                  {customer.created_at}
+                  {formatDate(customer.created_at)}
                 </td>
                 <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
                   {customer.end}

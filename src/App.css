@@ -21,7 +21,7 @@
 .group_hover:hover .setting_svg path {
   stroke: #6c4def !important;
   fill: transparent !important;
-  strokeOpacity: 1;
+  strokeopacity: 1;
 }
 .scrollRemove::-webkit-scrollbar {
   display: none;
@@ -51,4 +51,38 @@
   scrollbar-width: none;
   width: 100%;
   border-bottom: 1px solid gray;
+}
+
+.custom-radio {
+  position: relative;
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+}
+
+.custom-radio input[type="radio"] {
+  appearance: none;
+  width: 100%;
+  height: 100%;
+  border: 2px solid #999999;
+  border-radius: 50%;
+  background-color: white;
+  cursor: pointer;
+  position: relative;
+}
+
+.custom-radio input[type="radio"]:checked {
+  background-color: white;
+}
+
+.custom-radio input[type="radio"]:checked::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background-color: #999999;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

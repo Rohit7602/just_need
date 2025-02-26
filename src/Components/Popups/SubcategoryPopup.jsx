@@ -1,19 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Plusicon, Redcrossicon } from "../../assets/icon/Icons";
 import { useServiceContext } from "../../store/ServiceContext";
 import { toast } from "react-toastify";
 
-function AddSubCategoryPopUp({ handleClose, selectedCategoryId }) {
-  console.log(selectedCategoryId, "id here");
+function AddSubCategoryPopUp({
+  handleClose,
+  selectedCategoryId,
+  isEditMode = false,
+  initialData = null,
+}) {
   const [subCategoryName, setSubCategoryName] = useState("");
   const [subCategories, setSubCategories] = useState([]);
 
-  // Get the function from context
-  const { getsubcategoriesData } = useServiceContext();
+  const { getsubcategoriesData, updateSubcategoryName } = useServiceContext();
 
-  // Add subcategory to list
+  // Pre-fill input if in edit mode
+  useEffect(() => {
+    if (isEditMode && initialData) {
+      setSubCategoryName(initialData.categoryName); // Pre-fill with existing subcategory name
+    }
+  }, [isEditMode, initialData]);
+
+  // Add subcategory to list (only for add mode)
   const handleAddMore = () => {
-    if (subCategoryName.trim()) {
+    if (subCategoryName.trim() && !isEditMode) {
       setSubCategories((prev) => [
         ...prev,
         { categoryName: subCategoryName, createdAt: Date.now() },
@@ -22,31 +32,49 @@ function AddSubCategoryPopUp({ handleClose, selectedCategoryId }) {
     }
   };
 
-  // Remove subcategory
+  // Remove subcategory (only for add mode)
   const deleteSubCategory = (item) => {
-    setSubCategories((prev) =>
-      prev.filter((val) => val.categoryName !== item.categoryName)
-    );
+    if (!isEditMode) {
+      setSubCategories((prev) =>
+        prev.filter((val) => val.categoryName !== item.categoryName)
+      );
+    }
   };
 
-  // Save subcategories
+  // Save or update subcategories
   const handleSaveDetails = async () => {
-    if (subCategories.length > 0) {
-      if (!selectedCategoryId) {
-        toast.error("Category ID is required to add subcategories.");
-        return;
-      }
-
-      try {
-        await getsubcategoriesData(selectedCategoryId, subCategories);
-        toast.success("Subcategories added successfully!");
-        handleClose(); // Close the popup
-      } catch (error) {
-        toast.error("Failed to add subcategories.");
-        console.error("Error inserting subcategories:", error);
+    if (isEditMode) {
+      // Update existing subcategory
+      if (subCategoryName.trim() && initialData?.id) {
+        try {
+          await updateSubcategoryName(initialData.id, subCategoryName);
+          toast.success("Subcategory updated successfully!");
+          handleClose();
+        } catch (error) {
+          toast.error("Failed to update subcategory.");
+          console.error("Error updating subcategory:", error);
+        }
+      } else {
+        toast.info("Please enter a subcategory name.");
       }
     } else {
-      toast.info("Please add at least one subcategory.");
+      // Add new subcategories
+      if (subCategories.length > 0) {
+        if (!selectedCategoryId) {
+          toast.error("Category ID is required to add subcategories.");
+          return;
+        }
+        try {
+          await getsubcategoriesData(selectedCategoryId, subCategories);
+          toast.success("Subcategories added successfully!");
+          handleClose();
+        } catch (error) {
+          toast.error("Failed to add subcategories.");
+          console.error("Error inserting subcategories:", error);
+        }
+      } else {
+        toast.info("Please add at least one subcategory.");
+      }
     }
   };
 
@@ -67,12 +95,12 @@ function AddSubCategoryPopUp({ handleClose, selectedCategoryId }) {
             className="absolute top-2 right-2 text-gray-600 hover:text-black"
             aria-label="Close"
           >
-            &#10005;
+            ✕
           </button>
 
           {/* Popup Title */}
           <p className="font-normal text-lg text-black text-center pb-[15px] border-b border-dashed border-gray-400">
-            Add Subcategory
+            {isEditMode ? "Edit Subcategory" : "Add Subcategory"}
           </p>
 
           {/* Subcategory Input */}
@@ -89,44 +117,48 @@ function AddSubCategoryPopUp({ handleClose, selectedCategoryId }) {
             />
           </div>
 
-          {/* Add More Button */}
-          <div className="flex justify-end mt-[15px]">
-            <button
-              onClick={handleAddMore}
-              className="bg-[#0832DE] flex items-center px-[16px] py-2.5 h-[42px] rounded-[10px]"
-            >
-              <Plusicon />
-              <p className="font-normal text-[16px] text-white ms-[12px]">
-                Add More
-              </p>
-            </button>
-          </div>
+          {/* Add More Button (only visible in add mode) */}
+          {!isEditMode && (
+            <div className="flex justify-end mt-[15px]">
+              <button
+                onClick={handleAddMore}
+                className="bg-[#0832DE] flex items-center px-[16px] py-2.5 h-[42px] rounded-[10px]"
+              >
+                <Plusicon />
+                <p className="font-normal text-[16px] text-white ms-[12px]">
+                  Add More
+                </p>
+              </button>
+            </div>
+          )}
 
-          {/* Subcategories List */}
-          <div className="flex flex-wrap -mx-3 mt-[15px]">
-            {subCategories.map((item, index) => (
-              <div key={index} className="w-4/12 px-3 mb-[15px]">
-                <div className="flex gap-3 items-center">
-                  <span className="text-base font-normal text-black">
-                    {index + 1}.
-                  </span>
-                  <span className="text-base font-normal text-black">
-                    {item.categoryName}
-                  </span>
-                  <button onClick={() => deleteSubCategory(item)}>
-                    <Redcrossicon />
-                  </button>
+          {/* Subcategories List (only visible in add mode) */}
+          {!isEditMode && (
+            <div className="flex flex-wrap -mx-3 mt-[15px]">
+              {subCategories.map((item, index) => (
+                <div key={index} className="w-4/12 px-3 mb-[15px]">
+                  <div className="flex gap-3 items-center">
+                    <span className="text-base font-normal text-black">
+                      {index + 1}.
+                    </span>
+                    <span className="text-base font-normal text-black">
+                      {item.categoryName}
+                    </span>
+                    <button onClick={() => deleteSubCategory(item)}>
+                      <Redcrossicon />
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
 
           {/* Save Button */}
           <button
             onClick={handleSaveDetails}
             className="w-full bg-[#0832DE] text-base text-white font-medium h-[42px] py-2.5 rounded-[10px] mt-[15px]"
           >
-            Save Subcategories
+            {isEditMode ? "Update Subcategory" : "Save Subcategories"}
           </button>
         </div>
       </div>
