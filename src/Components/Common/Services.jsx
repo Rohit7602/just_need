@@ -67,6 +67,7 @@ function Services() {
   };
 
   const handleSubcategory = () => {
+    setEditingSubcategoryId(null); // Reset editingSubcategoryId when adding a new subcategory
     setSubCategoryPopup(!subcategorypopup);
   };
 
@@ -200,7 +201,9 @@ function Services() {
               <div
                 key={index}
                 className={`flex items-center pb-2 border-b-2 px-5 ${
-                  activeTab === index ? "border-blue-500" : "border-transparent"
+                  activeTab === index
+                    ? "border-blue-500 text-blue-500"
+                    : "border-transparent"
                 }`}
                 onClick={() => handleCategoryClick(index, items.subcategory)}
               >
