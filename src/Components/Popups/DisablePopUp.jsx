@@ -1,7 +1,9 @@
 import React from "react";
 import { BlackDisableIcon } from "../../assets/icon/Icon";
 
-function DisablePopUp({ onConfirm, onCancel }) {
+function DisablePopUp({ onConfirm, onCancel, isActive }) {
+  const actionText = isActive ? "Disable" : "Enable"; // Toggle text based on isActive
+
   return (
     <>
       <div
@@ -13,7 +15,7 @@ function DisablePopUp({ onConfirm, onCancel }) {
           <div className="w-full flex flex-col items-center justify-center">
             <BlackDisableIcon />
             <p className="mt-[15px] text-black text-sm font-normal">
-              Are you sure, You want to disable the service
+              Are you sure, You want to {actionText.toLowerCase()} the service?
             </p>
             <div className="flex items-center gap-3 mt-[15px]">
               <button
@@ -26,7 +28,7 @@ function DisablePopUp({ onConfirm, onCancel }) {
                 onClick={onConfirm}
                 className="text-base font-normal text-white px-11 py-2.5 h-[42px] bg-[#0832DE] rounded-[10px]"
               >
-                Yes, Disable
+                Yes, {actionText}
               </button>
             </div>
           </div>
