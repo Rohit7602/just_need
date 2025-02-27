@@ -19,7 +19,7 @@ const CustomerData = ({ mapData }) => {
   const [mainCheckbox, setMaincheckbox] = useState(false);
   const [selectitem, setSelectitem] = useState([]);
   const [showfilterPopup, setshowfilterPopup] = useState(false);
-  const [searchTerm, setSearchTerm] = useState(""); // State for search term
+  const [searchTerm, setSearchTerm] = useState("");
 
   const formatDate = (milliseconds) => {
     const date = new Date(milliseconds);
@@ -29,8 +29,8 @@ const CustomerData = ({ mapData }) => {
     const hours = date.getHours();
     const minutes = date.getMinutes();
     const ampm = hours >= 12 ? "PM" : "AM";
-    const formattedHours = hours % 12 || 12; // Convert to 12-hour format
-    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes; // Add leading zero if needed
+    const formattedHours = hours % 12 || 12;
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
 
     return `${day} ${month} ${year} | ${formattedHours}:${formattedMinutes} ${ampm}`;
   };
@@ -88,7 +88,7 @@ const CustomerData = ({ mapData }) => {
       setSelectitem(postids);
     }
   }
-  // pagination dropdown
+
   const [showItemsDropdown, setShowItemsDropdown] = useState(false);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [dropdownPosition, setDropdownPosition] = useState("bottom");
@@ -113,6 +113,7 @@ const CustomerData = ({ mapData }) => {
     setItemsPerPage(value);
     setShowItemsDropdown(false);
   };
+
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -123,7 +124,6 @@ const CustomerData = ({ mapData }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Filtered data based on search term
   const filteredData = users.filter((customer) => {
     return (
       customer.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -147,7 +147,7 @@ const CustomerData = ({ mapData }) => {
               placeholder="Search by name, email, mobile, address"
               className="ms-2.5 focus:outline-none focus:ring-gray-400 bg-[#F1F1F1]"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)} // Update search term
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
           <button
@@ -175,9 +175,6 @@ const CustomerData = ({ mapData }) => {
                   />
                 </th>
               )}
-              {/* <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">
-                Customer Id
-              </th> */}
               <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">
                 Full Name
               </th>
@@ -225,13 +222,10 @@ const CustomerData = ({ mapData }) => {
                     />
                   </td>
                 )}
-                {/* <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
-                  {customer.id}
-                </td> */}
                 <Link to={`/dashboard/usersList/userDetails/${customer.id}`}>
                   <td className="px-[19px] md:px-[24px] text-[#6C4DEF] py-[8px] flex items-center gap-2 min-w-[160px]">
                     <img
-                      src={customer.image}
+                      src={customer.image || avatar}
                       alt="avatar"
                       className="w-8 h-8 rounded-full me-2 object-cover"
                     />
@@ -263,7 +257,7 @@ const CustomerData = ({ mapData }) => {
                     className="px-[19px] md:px-[24px] py-[8px] text-center sticky right-0 bg-white"
                     onClick={handlePopup}
                   >
-                    <button className="text-2xl font-medium">&#8942;</button>
+                    <button className="text-2xl font-medium">⋮</button>
                   </td>
                 )}
               </tr>
@@ -272,7 +266,6 @@ const CustomerData = ({ mapData }) => {
         </table>
       </div>
       <div className="p-4 bg-white rounded-[10px]">
-        {/* Existing code... */}
         <div className="flex justify-end ">
           <div className="flex items-center">
             <h2 className="me-3">Items per page:</h2>

@@ -1,17 +1,22 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-import { BlackCloseIcon, ChatIcon, NotificationIcon, SearchIcon } from '../../assets/icon/Icon';
-import AdminImage from '../../assets/png/AdminImage.png';
-import { Link, useLocation } from 'react-router-dom';
-import { ArrowIcon, CloseIcon } from '../../assets/icon/Icons';
-import NotificationPopUp from '../Popups/NotificationPopUp';
+import {
+  BlackCloseIcon,
+  ChatIcon,
+  NotificationIcon,
+  SearchIcon,
+} from "../../assets/icon/Icon";
+import AdminImage from "../../assets/png/AdminImage.png";
+import { Link, useLocation } from "react-router-dom";
+import { ArrowIcon, CloseIcon } from "../../assets/icon/Icons";
+import NotificationPopUp from "../Popups/NotificationPopUp";
 
 function TopBar() {
   const navigate = useNavigate();
 
   const [isInputVisible, setIsInputVisible] = useState(false);
-  const [notificationPopUp,setNotificationPopUp] = useState(false)
+  const [notificationPopUp, setNotificationPopUp] = useState(false);
   const location = useLocation();
   const searchRef = useRef(null);
 
@@ -26,28 +31,32 @@ function TopBar() {
   };
 
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
   const goBack = () => {
     navigate(-1);
   };
 
- const handleNotificationPopUp=()=>{
-  setNotificationPopUp(!notificationPopUp)
- }
+  const handleNotificationPopUp = () => {
+    setNotificationPopUp(!notificationPopUp);
+  };
 
   const showArrowButton =
-    /\/dashboard\/complaints\/complaintsDetails\/\d+$/.test(location.pathname) ||
-    /\/dashboard\/usersList\/userDetails\/userDetails\/\d+$/.test(location.pathname) ||
-    location.pathname === '/dashboard/setting/general' ||
-    location.pathname === '/dashboard/setting/legal' ||
-    location.pathname === '/dashboard/setting/keys' ||
-    location.pathname === '/dashboard/setting/keys&Credentials';
+    /\/dashboard\/complaints\/complaintsDetails\/\d+$/.test(
+      location.pathname
+    ) ||
+    /\/dashboard\/usersList\/userDetails\/userDetails\/\d+$/.test(
+      location.pathname
+    ) ||
+    location.pathname === "/dashboard/setting/general" ||
+    location.pathname === "/dashboard/setting/legal" ||
+    location.pathname === "/dashboard/setting/keys" ||
+    location.pathname === "/dashboard/setting/keys&Credentials";
 
-  location.pathname === '/dashboard/setting';
+  location.pathname === "/dashboard/setting";
 
   return (
     <div>
@@ -56,34 +65,39 @@ function TopBar() {
           {showArrowButton && (
             <div className="flex items-center justify-center me-[15px]">
               <button onClick={goBack}>
-                {' '}
+                {" "}
                 <ArrowIcon />
               </button>
             </div>
           )}
           <div>
-            <p className={'font-medium text-lg xl:text-[22px] capitalize'}>
-              {location.pathname.startsWith('/dashboard/setting/') ? (
+            <p className="font-medium text-lg xl:text-[22px] capitalize">
+              {location.pathname.startsWith("/dashboard/setting/") ? (
                 <p className="text-[#00000099] font-medium text-lg xl:text-[22px] capitalize">
                   setting /
                   <span className="text-black ms-1">
-                    {location.pathname.replace('/dashboard/setting/', '').replace('&', ' & ')}
+                    {location.pathname
+                      .replace("/dashboard/setting/", "")
+                      .replace("&", " & ")}
                   </span>
                 </p>
+              ) : location.pathname.includes(
+                  "/dashboard/usersList/userDetails/"
+                ) ? (
+                "User's Details"
               ) : (
-                <p>
-                  {location.pathname
-                    .replace('/', '')
-                    .replace('dashboard/', '')
-                    .replace(/usersList\/userDetails\/\d+/, "User's Details")
-                    .replace(/complaints\/complaintsDetails\/\d+/, 'Complaints Details')
-                    .replace('&', ' & ')
-                    .replace('/', ' / ')
-                    .replace('usersList', 'Users List')}
-                </p>
+                location.pathname
+                  .replace("/", "")
+                  .replace("dashboard/", "")
+                  .replace(
+                    /complaints\/complaintsDetails\/\d+/,
+                    "Complaints Details"
+                  )
+                  .replace("&", " & ")
+                  .replace("/", " / ")
+                  .replace("usersList", "Users List")
               )}
             </p>
-            <p className={'font-normal text-xs xl:text-[14px] opacity-[70%]'}>{location.state}</p>
           </div>
         </div>
 
@@ -91,11 +105,15 @@ function TopBar() {
           <div
             ref={searchRef}
             className={`flex items-center h-[40px] rounded-[50px] bg-[#F1F1F1] ${
-              isInputVisible ? 'w-[185px] lg:max-w-[330px] xl:w-[330px]' : 'max-w-[40px]'
-            } transition-all duration-300`}>
+              isInputVisible
+                ? "w-[185px] lg:max-w-[330px] xl:w-[330px]"
+                : "max-w-[40px]"
+            } transition-all duration-300`}
+          >
             <div
               onClick={toggleSearchInput}
-              className="cursor-pointer w-[40px] flex items-center justify-center">
+              className="cursor-pointer w-[40px] flex items-center justify-center"
+            >
               <SearchIcon />
             </div>
             {isInputVisible && (
@@ -112,8 +130,9 @@ function TopBar() {
             )}
           </div>
           <Link
-            to={'/dashboard/chat'}
-            state={'Plan, prioritize, and accomplish your tasks with ease.'}>
+            to={"/dashboard/chat"}
+            state={"Plan, prioritize, and accomplish your tasks with ease."}
+          >
             <ChatIcon />
           </Link>
           <button onClick={handleNotificationPopUp}>
@@ -132,7 +151,11 @@ function TopBar() {
           </div>
         </div>
       </div>
-      {notificationPopUp && <div><NotificationPopUp onCancel={handleNotificationPopUp}/></div>}
+      {notificationPopUp && (
+        <div>
+          <NotificationPopUp onCancel={handleNotificationPopUp} />
+        </div>
+      )}
     </div>
   );
 }

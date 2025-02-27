@@ -218,11 +218,11 @@ function Services() {
 
   const handleCategoryClick = useCallback(
     (index, subcategories) => {
-      if (!isEditing) {
+      // if (!isEditing) {
         setActiveTab(index);
         setSelectedSubcategories(subcategories || []);
         setSelectedCategoryId(categories[index]?.id || null);
-      }
+      // }
     },
     [isEditing, categories]
   );
@@ -487,11 +487,17 @@ function Services() {
                     key={index}
                     className="flex justify-between items-center py-2"
                   >
-                    <div className="flex items-center">
+                    <div
+                      className={`flex items-center ${
+                        index === 1 ? "mt-2" : ""
+                      }`}
+                    >
                       <label className="custom-radio">
                         <input type="radio" name="blockedService" />
                       </label>
-                      <span className="text-[#999999] font-normal text-base px-2.5">
+                      <span
+                        className={`text-[#999999] font-normal text-base px-2.5 `}
+                      >
                         {item}
                       </span>
                     </div>
