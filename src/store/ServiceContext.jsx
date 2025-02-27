@@ -13,76 +13,60 @@ function ServiceContext({ children }) {
     setLoading(true);
     try {
       const { data, error } = await supabase.from("catview").select("*");
-
       if (error) throw error;
 
-      // console.log(" Categories with subcategories fetched:", data);
-
-      // Ensure subcategories are always an array
       const formattedData = data.map((category) => ({
         ...category,
-        subcategories: category.subcategories ?? [], //  Always ensure an array
+        subcategory: category.subcategory ?? [],
       }));
 
-      setCategories(formattedData); // Store formatted data in state
+      setCategories(formattedData);
     } catch (error) {
-      console.error(" Error fetching data:", error);
+      console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
     }
   }
 
-  // subcategories wala function ===================
-
-  async function getsubcategoriesData() {
+  async function addSubcategory(categoryId, subcategoryName) {
+    setLoading(true);
     try {
-      if (!selectedCategoryId || !subCategories?.length) {
-        console.error("Category ID or Subcategories missing!");
-        return;
-      }
-
-      const subcategoryData = categories.map((sub) => ({
-        catId: selectedCategoryId,
-        categoryName: sub.categoryName || sub, // Ensure proper naming
-        description: sub.description || "",
-        isActive: sub.isActive ?? true,
-        createdAt: sub.createdAt || Date.now(),
-      }));
-
-      console.log("🔍 Subcategory data before insert:", subcategoryData);
-
-      // Insert into Supabase
-      const { data: insertedSubcategories, error } = await supabase
+      const { data, error } = await supabase
         .from("subcategories")
-        .insert(subcategoryData)
-        .select();
+        .insert([
+          {
+            catId: categoryId,
+            categoryName: subcategoryName,
+            isActive: true, // Default to active
+            createdAt: Date.now(),
+          },
+        ])
+        .select()
+        .single();
 
       if (error) throw error;
 
-      console.log(" Subcategories inserted:", insertedSubcategories);
-
-      // **Update State Without Resetting Other Data**
+      // Update local state with the new subcategory
       setCategories((prevCategories) =>
         prevCategories.map((cat) =>
-          cat.id === selectedCategoryId
+          cat.id === categoryId
             ? {
                 ...cat,
-                subcategories: [
-                  ...(cat.subcategories || []),
-                  ...insertedSubcategories,
-                ],
+                subcategory: [...(cat.subcategory || []), data],
               }
             : cat
         )
       );
     } catch (error) {
-      console.error(" Error inserting subcategories:", error);
+      console.error("Error adding subcategory:", error);
+      throw error; // Propagate error to caller
+    } finally {
+      setLoading(false);
     }
   }
 
   const addCategoriesSubCategories = async (categoryName, subCategories) => {
     try {
-      //  Insert Category
       const { data: category, error: categoryError } = await supabase
         .from("categories")
         .insert([
@@ -102,14 +86,10 @@ function ServiceContext({ children }) {
         .single();
 
       if (categoryError) throw categoryError;
-      if (!category) throw new Error(" Category insertion failed.");
+      if (!category) throw new Error("Category insertion failed.");
 
-      console.log(" Category inserted:", category);
-
-      //  Ensure subCategories exist
       if (!subCategories?.length) return;
 
-      //  Correcting Data Mapping
       const subcategoryData = subCategories.map((name) => ({
         catId: category.id,
         categoryName: name?.categoryName ?? name,
@@ -118,155 +98,150 @@ function ServiceContext({ children }) {
         createdAt: name?.createdAt ?? Date.now(),
       }));
 
-      console.log(subcategoryData, " Subcategory data before insert");
-
       const { data: insertedSubcategories, error: subCategoryError } =
         await supabase.from("subcategories").insert(subcategoryData).select();
 
       if (subCategoryError) throw subCategoryError;
 
-      console.log(" Subcategories inserted:", insertedSubcategories);
-
-      //  Update State Correctly
-      setCategories((prevCategories) =>
-        prevCategories.map((cat) =>
-          cat.id === category.id
-            ? {
-                ...cat,
-                subcategories: [
-                  ...(cat.subcategories || []),
-                  ...insertedSubcategories,
-                ],
-              }
-            : cat
-        )
-      );
-
-      console.log(" Data successfully added to state.");
+      setCategories((prevCategories) => [
+        ...prevCategories,
+        { ...category, subcategory: insertedSubcategories },
+      ]);
     } catch (error) {
-      console.error(" Error inserting category and subcategories:", error);
+      console.error("Error inserting category and subcategories:", error);
     }
   };
 
   const updateSubcategoryName = async (subcategoryId, updatedName) => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from("subcategories") // Update the correct table
-      .update({ categoryName: updatedName }) // Ensure the column name matches your database
-      .eq("id", subcategoryId) // Match the subcategory ID
-      .select();
+    try {
+      const { data, error } = await supabase
+        .from("subcategories")
+        .update({ categoryName: updatedName })
+        .eq("id", subcategoryId)
+        .select();
 
-    if (error) {
-      console.error("Error updating subcategory:", error);
-    } else {
+      if (error) throw error;
+
       setCategories((prevCategories) =>
         prevCategories.map((cat) => ({
           ...cat,
-          subcategories: cat.subcategories.map((sub) =>
+          subcategory: cat.subcategory.map((sub) =>
             sub.id === subcategoryId
               ? { ...sub, categoryName: updatedName }
               : sub
           ),
         }))
       );
+      return true;
+    } catch (error) {
+      console.error("Error updating subcategory:", error);
+      return false;
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const updateCategoryName = async (categoryId, newName) => {
     try {
-      // Make API call to update category name
-      const response = await api.updateCategoryName(categoryId, newName);
-      if (response.success) {
-        // Update local state if needed
-        return true;
-      } else {
-        return false;
-      }
+      const { data, error } = await supabase
+        .from("categories")
+        .update({ categoryName: newName })
+        .eq("id", categoryId)
+        .select();
+      if (error) throw error;
+      setCategories((prev) =>
+        prev.map((cat) =>
+          cat.id === categoryId ? { ...cat, categoryName: newName } : cat
+        )
+      );
+      return true;
     } catch (error) {
-      console.error("Error updating category name:", error);
+      console.error("Error updating category:", error);
       return false;
     }
   };
+
   const toggleSubcategoryStatus = async (subcategoryId, isActive) => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from("subcategories") // Update the correct table
-      .update({ isActive: !isActive }) // Toggle the status
-      .eq("id", subcategoryId) // Match the subcategory ID
-      .select();
+    try {
+      const { data, error } = await supabase
+        .from("subcategories")
+        .update({ isActive: !isActive })
+        .eq("id", subcategoryId)
+        .select();
 
-    if (error) {
-      console.error("Error toggling subcategory status:", error);
-    } else {
+      if (error) throw error;
+
       setCategories((prevCategories) =>
         prevCategories.map((cat) => ({
           ...cat,
-          subcategories: cat.subcategories.map((sub) =>
+          subcategory: cat.subcategory.map((sub) =>
             sub.id === subcategoryId ? { ...sub, isActive: !isActive } : sub
           ),
         }))
       );
+    } catch (error) {
+      console.error("Error toggling subcategory status:", error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleDeleteSubCategory = async (subCategoryId) => {
     setLoading(true);
-    const { error } = await supabase
-      .from("subcategories")
-      .delete()
-      .eq("id", subCategoryId);
+    try {
+      const { error } = await supabase
+        .from("subcategories")
+        .delete()
+        .eq("id", subCategoryId);
 
-    if (error) {
-      console.error("Error deleting subcategory:", error);
-    } else {
-      console.log("Subcategory deleted successfully");
+      if (error) throw error;
 
       setCategories((prevCategories) =>
         prevCategories.map((category) => ({
           ...category,
-          subcategories: category.subcategories.filter(
+          subcategory: category.subcategory.filter(
             (sub) => sub.id !== subCategoryId
           ),
         }))
       );
+    } catch (error) {
+      console.error("Error deleting subcategory:", error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleEditSubCategory = async (subCategoryId, updatedName) => {
     if (!subCategoryId) {
       console.error("Error: subCategoryId is undefined or invalid");
-      console.log(subCategoryId);
       return;
     }
-
     setLoading(true);
+    try {
+      const { error } = await supabase
+        .from("subcategories")
+        .update({ categoryName: updatedName })
+        .eq("id", subCategoryId);
 
-    const { error } = await supabase
-      .from("subcategories")
-      .update({ subCategoryName: updatedName })
-      .eq("id", subCategoryId);
-
-    if (error) {
-      console.error("Error updating subcategory:", error);
-    } else {
-      console.log("Subcategory updated successfully");
+      if (error) throw error;
 
       setCategories((prevCategories) =>
         prevCategories.map((category) => ({
           ...category,
-          subcategories: category.subcategories.map((sub) =>
+          subcategory: category.subcategory.map((sub) =>
             sub.id === subCategoryId
-              ? { ...sub, subCategoryName: updatedName }
+              ? { ...sub, categoryName: updatedName }
               : sub
           ),
         }))
       );
+    } catch (error) {
+      console.error("Error updating subcategory:", error);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
@@ -280,7 +255,7 @@ function ServiceContext({ children }) {
         handleDeleteSubCategory,
         getCategoriesWithSubcategories,
         updateCategoryName,
-        // getsubcategoriesData,
+        addSubcategory,
       }}
     >
       {children}
