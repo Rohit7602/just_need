@@ -10,7 +10,6 @@ import {
   Plusicon,
   DisableRedicon,
   Searchicon,
-  ArowImage,
   EnableRedIcon,
 } from "../../assets/icon/Icons";
 import Actions from "../Popups/Actions";
@@ -19,6 +18,7 @@ import DisablePopUp from "../Popups/DisablePopUp";
 import { useServiceContext } from "../../store/ServiceContext";
 import AddSubCategoryPopUp from "../Popups/SubcategoryPopup";
 import { AiOutlineClose } from "react-icons/ai";
+import { toast } from "react-toastify";
 
 function Services() {
   const [editIndex, setEditIndex] = useState(null);
@@ -53,7 +53,7 @@ function Services() {
   useEffect(() => {
     getCategoriesWithSubcategories().catch((error) => {
       console.error("Failed to fetch categories:", error);
-      alert("Failed to load categories. Please refresh the page.");
+      toast.error("Failed to load categories. Please refresh the page.");
     });
   }, [getCategoriesWithSubcategories]);
 
@@ -112,13 +112,14 @@ function Services() {
                     : sub
                 )
               );
+              toast.success("Subcategory updated successfully!");
             } else {
-              alert("Failed to update subcategory.");
+              toast.error("Failed to update subcategory.");
             }
           })
           .catch((error) => {
             console.error("Error updating subcategory:", error);
-            alert("An error occurred while updating the subcategory.");
+            toast.error("An error occurred while updating the subcategory.");
           });
       }
     },
@@ -131,7 +132,7 @@ function Services() {
 
   const handleSaveEditPopup = useCallback(async () => {
     if (categoryName.trim() === "") {
-      alert("Name cannot be empty.");
+      toast.error("Name cannot be empty.");
       return;
     }
     try {
@@ -155,8 +156,9 @@ function Services() {
             setSelectedCategoryId(updatedCategories[updatedIndex]?.id || null);
           }
           toggle();
+          toast.success("Category updated successfully!");
         } else {
-          alert("Failed to update category.");
+          toast.error("Failed to update category.");
         }
       } else if (editingSubcategoryId) {
         const success = await updateSubcategoryName(
@@ -170,13 +172,14 @@ function Services() {
             )
           );
           toggle();
+          toast.success("Subcategory updated successfully!");
         } else {
-          alert("Failed to update subcategory.");
+          toast.error("Failed to update subcategory.");
         }
       }
     } catch (error) {
       console.error("Error in handleSaveEditPopup:", error);
-      alert("An error occurred while saving.");
+      toast.error("An error occurred while saving.");
     }
   }, [
     categoryName,
@@ -204,10 +207,17 @@ function Services() {
                 sub.id === subcategoryId ? { ...sub, isActive: newStatus } : sub
               )
             );
+            toast.success(
+              newStatus
+                ? "Subcategory enabled successfully!"
+                : "Subcategory disabled successfully!"
+            );
           })
           .catch((error) => {
             console.error("Error toggling subcategory status:", error);
-            alert("Failed to toggle subcategory status: " + error.message);
+            toast.error(
+              "Failed to toggle subcategory status: " + error.message
+            );
           });
       }
       setShowDisablePopup(false);
@@ -218,13 +228,11 @@ function Services() {
 
   const handleCategoryClick = useCallback(
     (index, subcategories) => {
-      // if (!isEditing) {
-        setActiveTab(index);
-        setSelectedSubcategories(subcategories || []);
-        setSelectedCategoryId(categories[index]?.id || null);
-      // }
+      setActiveTab(index);
+      setSelectedSubcategories(subcategories || []);
+      setSelectedCategoryId(categories[index]?.id || null);
     },
-    [isEditing, categories]
+    [categories]
   );
 
   const handleCategoryEdit = useCallback((categoryId, currentName, e) => {
@@ -274,6 +282,17 @@ function Services() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [showForm, toggle]);
+
+  // Assuming AddNewServicePopUp and AddSubCategoryPopUp call these on success
+  const handleNewServiceSuccess = () => {
+    toast.success("New service added successfully!");
+    handleNewServicePopUp();
+  };
+
+  const handleSubcategorySuccess = () => {
+    toast.success("Subcategory added successfully!");
+    handleSubcategory();
+  };
 
   return (
     <div className="p-[14px] rounded-[10px] shadow-md bg-white">
@@ -422,7 +441,10 @@ function Services() {
         </div>
       )}
       {showNewServicePopUp && (
-        <AddNewServicePopUp handleNewServicePopUp={handleNewServicePopUp} />
+        <AddNewServicePopUp
+          handleNewServicePopUp={handleNewServicePopUp}
+          onSuccess={handleNewServiceSuccess}
+        />
       )}
       {subcategoryPopup && (
         <AddSubCategoryPopUp
@@ -430,6 +452,7 @@ function Services() {
           selectedCategoryId={selectedCategoryId}
           isEditMode={false}
           initialData={null}
+          onSuccess={handleSubcategorySuccess}
         />
       )}
       {showDisablePopup && (
@@ -461,7 +484,7 @@ function Services() {
               className="w-[401px] bg-white shadow-lg rounded-lg flex flex-col"
             >
               <div className="fixed z-10 w-[400px]">
-                <div className="p-4 bg-[#EEEEEE] flex justify-between items-center rounded-t-lg ">
+                <div className="p-4 bg-[#EEEEEE] flex justify-between items-center rounded-t-lg">
                   <span className="font-normal text-base">
                     Blocked Services
                   </span>
@@ -473,7 +496,7 @@ function Services() {
                   </button>
                 </div>
               </div>
-              <div className="py-2.5 px-5  h-[250px] overflow-y-scroll">
+              <div className="py-2.5 px-5 h-[250px] overflow-y-scroll">
                 {[
                   "Profession",
                   "Profession",
@@ -496,7 +519,7 @@ function Services() {
                         <input type="radio" name="blockedService" />
                       </label>
                       <span
-                        className={`text-[#999999] font-normal text-base px-2.5 `}
+                        className={`text-[#999999] font-normal text-base px-2.5`}
                       >
                         {item}
                       </span>
