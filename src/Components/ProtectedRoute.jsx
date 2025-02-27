@@ -6,11 +6,10 @@ const ProtectedRoute = ({ Children }) => {
   const pathname = useLocation();
   useEffect(() => {
     const isAuthenticated = localStorage.getItem("logIn") === "true";
-
     if (!isAuthenticated) {
       navigate("/login");
     } else {
-      navigate(pathname.path);
+      navigate(pathname.path === "/login" ? "/dashboard" : pathname.path);
     }
   }, []);
   return <div>{<Children />}</div>;

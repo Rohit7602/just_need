@@ -232,7 +232,7 @@ const CustomerData = ({ mapData }) => {
                     {customer.name}
                   </td>
                 </Link>
-                <td className="px-[19px] md:px-[24px] py-[8px] w-full text-sm font-normal text-[#000000]">
+                <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
                   {customer.email}
                 </td>
                 <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
