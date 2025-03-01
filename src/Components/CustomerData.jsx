@@ -12,13 +12,44 @@ import {
   ArrowIconRigth,
   ArrowIconLeft,
 } from ".././assets/icon/Icons";
+import { supabase } from "../store/supabaseCreateClient";
 
 const CustomerData = ({ mapData }) => {
   const [showPopup, setShowPopup] = useState(false);
   const [mainCheckbox, setMaincheckbox] = useState(false);
   const [selectitem, setSelectitem] = useState([]);
   const [showfilterPopup, setshowfilterPopup] = useState(false);
-  const [searchTerm, setSearchTerm] = useState(""); // State for search term
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const formatDate = (milliseconds) => {
+    const date = new Date(milliseconds);
+    const day = date.getDate();
+    const month = date.toLocaleString("default", { month: "short" });
+    const year = date.getFullYear();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? "PM" : "AM";
+    const formattedHours = hours % 12 || 12;
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+
+    return `${day} ${month} ${year} | ${formattedHours}:${formattedMinutes} ${ampm}`;
+  };
+
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const { data, error } = await supabase.from("users").select("*");
+      if (error) {
+        console.error("Error fetching users:", error);
+      } else {
+        setUsers(data);
+      }
+      setLoading(false);
+    };
+    fetchUsers();
+  }, []);
 
   function handleFilter() {
     setshowfilterPopup(!showfilterPopup);
@@ -57,7 +88,7 @@ const CustomerData = ({ mapData }) => {
       setSelectitem(postids);
     }
   }
-  // pagination dropdown
+
   const [showItemsDropdown, setShowItemsDropdown] = useState(false);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [dropdownPosition, setDropdownPosition] = useState("bottom");
@@ -82,6 +113,7 @@ const CustomerData = ({ mapData }) => {
     setItemsPerPage(value);
     setShowItemsDropdown(false);
   };
+
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -92,13 +124,14 @@ const CustomerData = ({ mapData }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Filtered data based on search term
-  const filteredData = mapData.filter((customer) => {
+  console.log(users, "users table");
+
+  const filteredData = users.filter((customer) => {
     return (
-      customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      customer.phone.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      customer.address.toLowerCase().includes(searchTerm.toLowerCase())
+      customer.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      customer.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      customer.phone?.toLowerCase().includes(searchTerm.toLowerCase())
+      // customer.address?.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
 
@@ -116,7 +149,7 @@ const CustomerData = ({ mapData }) => {
               placeholder="Search by name, email, mobile, address"
               className="ms-2.5 focus:outline-none focus:ring-gray-400 bg-[#F1F1F1]"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)} // Update search term
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
           <button
@@ -144,9 +177,6 @@ const CustomerData = ({ mapData }) => {
                   />
                 </th>
               )}
-              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">
-                Customer Id
-              </th>
               <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">
                 Full Name
               </th>
@@ -181,7 +211,7 @@ const CustomerData = ({ mapData }) => {
             </tr>
           </thead>
           <tbody>
-            {filteredData.map((customer, index) => (
+            {users.map((customer, index) => (
               <tr key={index}>
                 {location.pathname === "/dashboard" ? null : (
                   <td className="px-[19px] md:px-[24px] py-[8px]">
@@ -194,45 +224,42 @@ const CustomerData = ({ mapData }) => {
                     />
                   </td>
                 )}
-                <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
-                  {customer.id}
-                </td>
                 <Link to={`/dashboard/usersList/userDetails/${customer.id}`}>
                   <td className="px-[19px] md:px-[24px] text-[#6C4DEF] py-[8px] flex items-center gap-2 min-w-[160px]">
                     <img
-                      src={avatar}
+                      src={customer.image || avatar}
                       alt="avatar"
-                      className="w-8 h-8 rounded-full me-2"
+                      className="w-8 h-8 rounded-full me-2 object-cover"
                     />
-                    {customer.name}
+                    {customer.firstName} {customer.lastName}
                   </td>
                 </Link>
-                <td className="px-[19px] md:px-[24px] py-[8px] w-full text-sm font-normal text-[#000000]">
-                  {customer.email}
+                <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
+                  {customer.useremail}
                 </td>
                 <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
-                  {customer.phone}
+                  {customer.mobile_number}
                 </td>
                 <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000] w-[120px] truncate">
-                  {customer.address}
+                  {customer.address.map((item) => `${item.city}/${item.state}`)}
                 </td>
                 <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
-                  {customer.start}
+                  {formatDate(customer.created_at)}
                 </td>
                 <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
-                  {customer.end}
+                  {customer.updated_at}
                 </td>
                 <td
                   className={`px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000] ${customer.TextColor}`}
                 >
-                  {customer.status}
+                  {customer.accountStatus}
                 </td>
                 {location.pathname === "/dashboard/usersList" ? null : (
                   <td
                     className="px-[19px] md:px-[24px] py-[8px] text-center sticky right-0 bg-white"
                     onClick={handlePopup}
                   >
-                    <button className="text-2xl font-medium">&#8942;</button>
+                    <button className="text-2xl font-medium">⋮</button>
                   </td>
                 )}
               </tr>
@@ -241,7 +268,6 @@ const CustomerData = ({ mapData }) => {
         </table>
       </div>
       <div className="p-4 bg-white rounded-[10px]">
-        {/* Existing code... */}
         <div className="flex justify-end ">
           <div className="flex items-center">
             <h2 className="me-3">Items per page:</h2>

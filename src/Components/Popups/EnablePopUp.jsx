@@ -1,39 +1,63 @@
-import React from "react";
-import { BlackEnableIcon } from "../../assets/icon/Icon";
+import React, { useState, useEffect } from "react";
+import { useServiceContext } from "../../store/ServiceContext";
 
-function EnablePopUp({ onConfirm, onCancel }) {
+function AddSubCategoryPopUp({
+  handleClose,
+  selectedCategoryId,
+  initialData,
+  isEditMode,
+}) {
+  const [name, setName] = useState("");
+  const { updateSubcategoryName, addSubcategory } = useServiceContext(); // Assume addSubcategory exists
+
+  useEffect(() => {
+    if (isEditMode && initialData) {
+      setName(initialData.categoryName); // Pre-fill with existing name
+    }
+  }, [initialData, isEditMode]);
+
+  const handleSubmit = () => {
+    if (name.trim() !== "") {
+      if (isEditMode) {
+        updateSubcategoryName(initialData.id, name); // Update existing subcategory
+      } else {
+        // Assuming addSubcategory is a function in your context to add a new subcategory
+        addSubcategory(selectedCategoryId, name);
+      }
+      handleClose(); // Close the popup
+    }
+  };
+
   return (
-    <>
-      <div
-        onClick={onCancel}
-        className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50"
-      ></div>
-      <div className="fixed inset-0 flex items-center justify-center z-50 h-[224px] w-[400px] m-auto">
-        <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-6 relative">
-          <div className="w-full flex flex-col items-center justify-center">
-            <BlackEnableIcon />
-            <p className="mt-[15px] text-black text-sm font-normal">
-              Are you sure, You want to disable the Listing
-            </p>
-            <div className="flex items-center gap-3 mt-[15px]">
-              <button
-                onClick={onCancel}
-                className="text-base font-normal text-black px-11 py-2.5 h-[42px] bg-[#EDEDED] rounded-[10px]"
-              >
-                No, Cancel
-              </button>
-              <button
-                onClick={onConfirm}
-                className="text-base font-normal text-white px-11 py-2.5 h-[42px] bg-[#0832DE] rounded-[10px]"
-              >
-                Yes, Enable
-              </button>
-            </div>
-          </div>
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-[50] flex items-center justify-center">
+      <div className="bg-white p-4 rounded-lg shadow-lg max-w-lg w-full">
+        <h2 className="text-lg font-medium">
+          {isEditMode ? "Edit Subcategory" : "Add Subcategory"}
+        </h2>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Subcategory Name"
+          className="w-full border p-2 rounded-[10px] mt-2 focus:outline-none"
+        />
+        <div className="flex justify-end mt-4">
+          <button
+            onClick={handleClose}
+            className="mr-2 text-gray-500 px-4 py-2 rounded-[10px]"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleSubmit}
+            className="bg-[#0832DE] text-white px-4 py-2 rounded-[10px]"
+          >
+            {isEditMode ? "Save" : "Add"}
+          </button>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
-export default EnablePopUp;
+export default AddSubCategoryPopUp;
