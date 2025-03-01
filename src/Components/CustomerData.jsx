@@ -42,7 +42,6 @@ const CustomerData = ({ mapData }) => {
     const fetchUsers = async () => {
       try {
         setLoading(true);
-
         const { data, error } = await supabase.from("users").select("*");
         if (error) throw error;
         setUsers(data || []); // Ensure we always set an array
@@ -185,16 +184,16 @@ const CustomerData = ({ mapData }) => {
               <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">
                 Email
               </th>
-              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">
+              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base w-[150px]">
                 Mobile
               </th>
-              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base w-[120px]">
+              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base w-[250px]">
                 Address
               </th>
-              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">
+              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base w-[200px]">
                 Start Date
               </th>
-              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">
+              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base w-[200px]">
                 End Date
               </th>
               <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">
