@@ -16,7 +16,7 @@ function ServiceContext({ children }) {
       const { data, error } = await supabase.from("catview").select("*");
 
       if (error) throw error;
-
+      
       // console.log(" Categories with subcategories fetched:", data);
 
       // Ensure subcategories are always an array
