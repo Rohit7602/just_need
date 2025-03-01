@@ -640,6 +640,7 @@ function Services() {
                             {sub.categoryName || "Unnamed Subcategory"}
                           </span>
                         </div>
+                        <DisableRedicon />
                       </div>
                     ))
                   )}
