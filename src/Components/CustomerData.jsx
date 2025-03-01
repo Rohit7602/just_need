@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import avatar from "../assets/avatar.png";
+import avatar from "../assets/Images/Png/dummyimage.jpg";
 import { FaAngleDown } from "react-icons/fa";
 import ActionUserPupUp from "./Popups/ActionUserPupUp";
 import { Link, useLocation } from "react-router-dom";
@@ -190,6 +190,9 @@ const CustomerData = ({ mapData }) => {
               <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base w-[250px]">
                 Address
               </th>
+              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base w-[100px]">
+                User Type
+              </th>
               <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base w-[200px]">
                 Start Date
               </th>
@@ -213,6 +216,7 @@ const CustomerData = ({ mapData }) => {
           </thead>
           <tbody>
             {users.map((customer, index) => (
+              console.log(customer.userType, "customer table"),
               <tr key={index}>
                 {location.pathname === "/dashboard" ? null : (
                   <td className="px-[19px] md:px-[24px] py-[8px]">
@@ -244,11 +248,14 @@ const CustomerData = ({ mapData }) => {
                 <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000] w-[120px] truncate">
                   {customer.address.map((item) => `${item.city}/${item.state}`)}
                 </td>
+                <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000] w-[50px] truncate">
+                  {customer.userType}
+                </td>
                 <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
                   {formatDate(customer.created_at)}
                 </td>
                 <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
-                  {customer.updated_at}
+                  {formatDate(customer.updated_at)}
                 </td>
                 <td
                   className={`px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000] ${customer.TextColor}`}

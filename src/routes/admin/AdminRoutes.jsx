@@ -55,6 +55,7 @@ function AdminRoutes() {
         </Route>
         <Route path="serviceRequest" element={<ServiceRequest />} />
         <Route path="services" element={<Services />} />
+        <Route path="bannerDetail" element={<Services />} />
         <Route path="complaints" element={<Complaints />}>
           <Route path="complaintsDetails/:id" element={<Provider_Detail />} />
         </Route>

@@ -9,7 +9,7 @@ import {
   DisableRedicon,
   EnableRedIcon,
 } from "../../assets/icon/Icons";
-import MechanicImage from "../../assets/png/mechanicImage.png";
+import MechanicImage from "../../assets/Images/Png/dummyimage.jpg";
 import DisableProviderPopUp from "../../Components/Popups/DisableProviderPopUp";
 import DisablePopUp from "../../Components/Popups/DisablePopUp";
 import EnablePopUp from "../../Components/Popups/EnablePopUp";
@@ -304,7 +304,7 @@ function UserDetails() {
           )}
         </div>
       )}
-      
+
       {showImagePreviewPopUp && (
         <ImagePreviewPopUp
           images={[
