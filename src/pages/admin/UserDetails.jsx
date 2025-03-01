@@ -111,6 +111,9 @@ function UserDetails() {
   if (loading) return <div>Loading...</div>;
   if (!user) return <div>User not found</div>;
 
+  let addr = user.address.map((item) => `${item.city}/${item.state}`);
+  console.log(addr);
+
   return (
     <div className="px-4">
       <div className="flex items-center justify-end">
@@ -135,10 +138,10 @@ function UserDetails() {
                   alt="image of user"
                 />
                 <h1 className="font-medium lg:text-base xl:text-lg text-white mt-2.5 text-center">
-                  {user.name}
+                  {user.firstName}
                 </h1>
                 <h2 className="text-sm font-normal text-white mt-1 text-center">
-                  Mechanic
+                  {user.category}
                 </h2>
               </div>
               <div className="ps-5">
@@ -151,12 +154,14 @@ function UserDetails() {
                 <div className="flex gap-2.5 items-center mt-2.5">
                   <EmailIcon />
                   <h3 className="text-sm font-normal text-white">
-                    {user.email}
+                    {user.useremail}
                   </h3>
                 </div>
                 <div className="flex gap-2.5 items-center mt-2.5">
                   <LocationIcon />
-                  <h3 className="text-sm font-normal text-white">{`${user.city}, ${user.state}`}</h3>
+                  <h3 className="text-sm font-normal text-white">
+                    {user.address.map((item)=>`${item.city}/${item.state}`)}
+                  </h3>
                 </div>
               </div>
             </div>

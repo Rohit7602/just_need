@@ -162,32 +162,16 @@ function ServiceContext({ children }) {
     }
   };
 
-  const toggleSubcategoryStatus = async (subcategoryId, isActive) => {
-    setLoading(true);
-    try {
-      const { data, error } = await supabase
-        .from("subcategories")
-        .update({ isActive: !isActive })
-        .eq("id", subcategoryId)
-        .select();
-
-      if (error) throw error;
-
-      setCategories((prevCategories) =>
-        prevCategories.map((cat) => ({
-          ...cat,
-          subcategory: cat.subcategory.map((sub) =>
-            sub.id === subcategoryId ? { ...sub, isActive: !isActive } : sub
-          ),
-        }))
-      );
-    } catch (error) {
-      console.error("Error toggling subcategory status:", error);
-    } finally {
-      setLoading(false);
-    }
+  const toggleSubcategoryStatus = async (subcategoryId, newStatus) => {
+    const { error } = await supabase
+      .from("subcategories")
+      .update({ isActive: newStatus })
+      .eq("id", subcategoryId);
+    if (error) throw error;
+    return true;
   };
 
+  
   const handleDeleteSubCategory = async (subCategoryId) => {
     setLoading(true);
     try {

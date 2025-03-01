@@ -10,7 +10,6 @@ import {
   Plusicon,
   DisableRedicon,
   Searchicon,
-  ArowImage,
   EnableRedIcon,
 } from "../../assets/icon/Icons";
 import Actions from "../Popups/Actions";
@@ -19,6 +18,7 @@ import DisablePopUp from "../Popups/DisablePopUp";
 import { useServiceContext } from "../../store/ServiceContext";
 import AddSubCategoryPopUp from "../Popups/SubcategoryPopup";
 import { AiOutlineClose } from "react-icons/ai";
+import { toast } from "react-toastify";
 
 function Services() {
   const [editIndex, setEditIndex] = useState(null);
@@ -53,7 +53,7 @@ function Services() {
   useEffect(() => {
     getCategoriesWithSubcategories().catch((error) => {
       console.error("Failed to fetch categories:", error);
-      alert("Failed to load categories. Please refresh the page.");
+      toast.error("Failed to load categories. Please refresh the page.");
     });
   }, [getCategoriesWithSubcategories]);
 
@@ -98,31 +98,55 @@ function Services() {
   }, []);
 
   const handleSaveEdit = useCallback(
-    (subcategoryId) => {
+    async (subcategoryId) => {
       if (editData.trim() !== "") {
-        updateSubcategoryName(subcategoryId, editData)
-          .then((success) => {
-            if (success) {
-              setEditIndex(null);
-              setEditData("");
-              setSelectedSubcategories((prev) =>
-                prev.map((sub) =>
-                  sub.id === subcategoryId
-                    ? { ...sub, categoryName: editData }
-                    : sub
-                )
-              );
-            } else {
-              alert("Failed to update subcategory.");
-            }
-          })
-          .catch((error) => {
-            console.error("Error updating subcategory:", error);
-            alert("An error occurred while updating the subcategory.");
-          });
+        try {
+          const currentSubcategory = selectedSubcategories.find(
+            (sub) => sub.id === subcategoryId
+          );
+          const newStatus = !currentSubcategory?.isActive;
+
+          const nameSuccess = await updateSubcategoryName(
+            subcategoryId,
+            editData
+          );
+          const statusSuccess = await toggleSubcategoryStatus(
+            subcategoryId,
+            newStatus
+          );
+
+          if (nameSuccess && statusSuccess) {
+            setEditIndex(null);
+            setEditData("");
+            setSelectedSubcategories((prev) =>
+              prev.map((sub) =>
+                sub.id === subcategoryId
+                  ? { ...sub, categoryName: editData, isActive: newStatus }
+                  : sub
+              )
+            );
+            await getCategoriesWithSubcategories();
+            toast.success(
+              `Subcategory updated and ${
+                newStatus ? "enabled" : "disabled"
+              } successfully!`
+            );
+          } else {
+            toast.error("Failed to update subcategory or toggle status.");
+          }
+        } catch (error) {
+          console.error("Error updating subcategory:", error);
+          toast.error("An error occurred while updating the subcategory.");
+        }
       }
     },
-    [editData, updateSubcategoryName]
+    [
+      editData,
+      updateSubcategoryName,
+      toggleSubcategoryStatus,
+      selectedSubcategories,
+      getCategoriesWithSubcategories,
+    ]
   );
 
   const handleCategoryInputChange = useCallback((e) => {
@@ -131,7 +155,7 @@ function Services() {
 
   const handleSaveEditPopup = useCallback(async () => {
     if (categoryName.trim() === "") {
-      alert("Name cannot be empty.");
+      toast.error("Name cannot be empty.");
       return;
     }
     try {
@@ -155,28 +179,48 @@ function Services() {
             setSelectedCategoryId(updatedCategories[updatedIndex]?.id || null);
           }
           toggle();
+          await getCategoriesWithSubcategories();
+          toast.success("Category updated successfully!");
         } else {
-          alert("Failed to update category.");
+          toast.error("Failed to update category.");
         }
       } else if (editingSubcategoryId) {
-        const success = await updateSubcategoryName(
+        const currentSubcategory = selectedSubcategories.find(
+          (sub) => sub.id === editingSubcategoryId
+        );
+        const newStatus = !currentSubcategory?.isActive;
+
+        const nameSuccess = await updateSubcategoryName(
           editingSubcategoryId,
           categoryName
         );
-        if (success) {
+        const statusSuccess = await toggleSubcategoryStatus(
+          editingSubcategoryId,
+          newStatus
+        );
+
+        if (nameSuccess && statusSuccess) {
           setSelectedSubcategories((prev) =>
             prev.map((sub) =>
-              sub.id === editingSubcategoryId ? { ...sub, categoryName } : sub
+              sub.id === editingSubcategoryId
+                ? { ...sub, categoryName, isActive: newStatus }
+                : sub
             )
           );
           toggle();
+          await getCategoriesWithSubcategories();
+          toast.success(
+            `Subcategory updated and ${
+              newStatus ? "enabled" : "disabled"
+            } successfully!`
+          );
         } else {
-          alert("Failed to update subcategory.");
+          toast.error("Failed to update subcategory or toggle status.");
         }
       }
     } catch (error) {
       console.error("Error in handleSaveEditPopup:", error);
-      alert("An error occurred while saving.");
+      toast.error("An error occurred while saving.");
     }
   }, [
     categoryName,
@@ -185,6 +229,9 @@ function Services() {
     categories,
     updateCategoryName,
     updateSubcategoryName,
+    toggleSubcategoryStatus,
+    selectedSubcategories,
+    getCategoriesWithSubcategories,
     toggle,
   ]);
 
@@ -194,37 +241,47 @@ function Services() {
   }, []);
 
   const toggleDisableCard = useCallback(
-    (subcategoryId, currentStatus, action) => {
+    async (subcategoryId, currentStatus, action) => {
       if (action === "confirm") {
+        // Close the disable popup immediately before the async operation
+        setShowDisablePopup(false);
+        setCurrentCardIndex(null);
+        if (showForm) toggle(); // Close the edit popup if open
+
         const newStatus = !currentStatus;
-        toggleSubcategoryStatus(subcategoryId, newStatus)
-          .then(() => {
-            setSelectedSubcategories((prev) =>
-              prev.map((sub) =>
-                sub.id === subcategoryId ? { ...sub, isActive: newStatus } : sub
-              )
-            );
-          })
-          .catch((error) => {
-            console.error("Error toggling subcategory status:", error);
-            alert("Failed to toggle subcategory status: " + error.message);
-          });
+        try {
+          await toggleSubcategoryStatus(subcategoryId, newStatus);
+          setSelectedSubcategories((prev) =>
+            prev.map((sub) =>
+              sub.id === subcategoryId ? { ...sub, isActive: newStatus } : sub
+            )
+          );
+          await getCategoriesWithSubcategories();
+          toast.success(
+            newStatus
+              ? "Subcategory enabled successfully!"
+              : "Subcategory disabled successfully!"
+          );
+        } catch (error) {
+          console.error("Error toggling subcategory status:", error);
+          toast.error("Failed to toggle subcategory status: " + error.message);
+        }
+      } else {
+        // If action is not "confirm" (e.g., cancel), just close the popup
+        setShowDisablePopup(false);
+        setCurrentCardIndex(null);
       }
-      setShowDisablePopup(false);
-      setCurrentCardIndex(null);
     },
-    [toggleSubcategoryStatus]
+    [toggleSubcategoryStatus, getCategoriesWithSubcategories, showForm, toggle]
   );
 
   const handleCategoryClick = useCallback(
     (index, subcategories) => {
-      // if (!isEditing) {
-        setActiveTab(index);
-        setSelectedSubcategories(subcategories || []);
-        setSelectedCategoryId(categories[index]?.id || null);
-      // }
+      setActiveTab(index);
+      setSelectedSubcategories(subcategories || []);
+      setSelectedCategoryId(categories[index]?.id || null);
     },
-    [isEditing, categories]
+    [categories]
   );
 
   const handleCategoryEdit = useCallback((categoryId, currentName, e) => {
@@ -244,10 +301,14 @@ function Services() {
     setShowForm(true);
   }, []);
 
-  const handleDisableClick = useCallback((subcategoryId) => {
-    setCurrentCardIndex(subcategoryId);
-    setShowDisablePopup(true);
-  }, []);
+  const handleDisableClick = useCallback(
+    (subcategoryId) => {
+      setCurrentCardIndex(subcategoryId);
+      setShowDisablePopup(true);
+      if (showForm) toggle(); // Close the edit popup when enable/disable is clicked
+    },
+    [showForm, toggle]
+  );
 
   const toggleOptionsVisibility = useCallback(() => {
     setIsVisible((prev) => !prev);
@@ -258,6 +319,12 @@ function Services() {
       item?.categoryName?.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [categories, searchQuery]);
+
+  const blockedSubcategories = useMemo(() => {
+    return categories
+      .flatMap((category) => category.subcategory || [])
+      .filter((sub) => sub.isActive === false);
+  }, [categories]);
 
   const popupRef = useRef();
 
@@ -274,6 +341,18 @@ function Services() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [showForm, toggle]);
+
+  const handleNewServiceSuccess = async () => {
+    toast.success("New service added successfully!");
+    await getCategoriesWithSubcategories();
+    handleNewServicePopUp();
+  };
+
+  const handleSubcategorySuccess = async () => {
+    toast.success("Subcategory added successfully!");
+    await getCategoriesWithSubcategories();
+    handleSubcategory();
+  };
 
   return (
     <div className="p-[14px] rounded-[10px] shadow-md bg-white">
@@ -346,7 +425,7 @@ function Services() {
               className="text-[#6C4DEF] font-normal text-base"
               onClick={toggleOptionsVisibility}
             >
-              View Blocked list
+              View Blocked List
             </button>
           </div>
         </div>
@@ -400,7 +479,7 @@ function Services() {
         >
           <Plusicon />
           <p className="font-normal text-[16px] text-white ms-[12px]">
-            Add Sub Category
+            Add New Service
           </p>
         </div>
       </div>
@@ -422,7 +501,10 @@ function Services() {
         </div>
       )}
       {showNewServicePopUp && (
-        <AddNewServicePopUp handleNewServicePopUp={handleNewServicePopUp} />
+        <AddNewServicePopUp
+          handleNewServicePopUp={handleNewServicePopUp}
+          onSuccess={handleNewServiceSuccess}
+        />
       )}
       {subcategoryPopup && (
         <AddSubCategoryPopUp
@@ -430,6 +512,7 @@ function Services() {
           selectedCategoryId={selectedCategoryId}
           isEditMode={false}
           initialData={null}
+          onSuccess={handleSubcategorySuccess}
         />
       )}
       {showDisablePopup && (
@@ -461,7 +544,7 @@ function Services() {
               className="w-[401px] bg-white shadow-lg rounded-lg flex flex-col"
             >
               <div className="fixed z-10 w-[400px]">
-                <div className="p-4 bg-[#EEEEEE] flex justify-between items-center rounded-t-lg ">
+                <div className="p-4 bg-[#EEEEEE] flex justify-between items-center rounded-t-lg">
                   <span className="font-normal text-base">
                     Blocked Services
                   </span>
@@ -473,39 +556,35 @@ function Services() {
                   </button>
                 </div>
               </div>
-              <div className="py-2.5 px-5  h-[250px] overflow-y-scroll">
-                {[
-                  "Profession",
-                  "Profession",
-                  "Profession",
-                  "Profession",
-                  "Profession",
-                  "Profession",
-                  "Profession",
-                ].map((item, index) => (
-                  <div
-                    key={index}
-                    className="flex justify-between items-center py-2"
-                  >
+              <div className="py-2.5 px-5 h-[250px] overflow-y-scroll">
+                {blockedSubcategories.length === 0 ? (
+                  <p className="text-[#999999] font-normal text-base py-2">
+                    No blocked subcategories found.
+                  </p>
+                ) : (
+                  blockedSubcategories.map((sub, index) => (
                     <div
-                      className={`flex items-center ${
-                        index === 1 ? "mt-2" : ""
-                      }`}
+                      key={sub.id}
+                      className="flex justify-between items-center py-2"
                     >
-                      <label className="custom-radio">
-                        <input type="radio" name="blockedService" />
-                      </label>
-                      <span
-                        className={`text-[#999999] font-normal text-base px-2.5 `}
+                      <div
+                        className={`flex items-center ${
+                          index === 1 ? "mt-3" : ""
+                        }`}
                       >
-                        {item}
-                      </span>
+                        <label className="custom-radio">
+                          <input type="radio" name="blockedService" />
+                        </label>
+                        <span className="text-[#999999] font-normal text-base px-2.5">
+                          {sub.categoryName || "Unnamed Subcategory"}
+                        </span>
+                      </div>
+                      <div>
+                        <DisableRedicon />
+                      </div>
                     </div>
-                    <div>
-                      <DisableRedicon />
-                    </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
           </div>
