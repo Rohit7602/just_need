@@ -40,13 +40,16 @@ const CustomerData = ({ mapData }) => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const { data, error } = await supabase.from("users").select("*");
-      if (error) {
-        console.error("Error fetching users:", error);
-      } else {
-        setUsers(data);
+      try {
+        setLoading(true);
+        const { data, error } = await supabase.from("users").select("*");
+        if (error) throw error;
+        setUsers(data || []); // Ensure we always set an array
+      } catch (err) {
+        console.error("Error fetching users:", err);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
     fetchUsers();
   }, []);
@@ -124,8 +127,6 @@ const CustomerData = ({ mapData }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  console.log(users, "users table");
-
   const filteredData = users.filter((customer) => {
     return (
       customer.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -183,16 +184,16 @@ const CustomerData = ({ mapData }) => {
               <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">
                 Email
               </th>
-              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">
+              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base w-[150px]">
                 Mobile
               </th>
-              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base w-[120px]">
+              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base w-[250px]">
                 Address
               </th>
-              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">
+              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base w-[200px]">
                 Start Date
               </th>
-              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">
+              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base w-[200px]">
                 End Date
               </th>
               <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">

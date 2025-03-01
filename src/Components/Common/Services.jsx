@@ -19,6 +19,7 @@ import { useServiceContext } from "../../store/ServiceContext";
 import AddSubCategoryPopUp from "../Popups/SubcategoryPopup";
 import { AiOutlineClose } from "react-icons/ai";
 import { toast } from "react-toastify";
+import { DisalbleIcon } from "../../assets/icon/Icon";
 
 function Services() {
   const [editIndex, setEditIndex] = useState(null);
@@ -49,6 +50,62 @@ function Services() {
     addSubcategory,
     loading,
   } = useServiceContext();
+
+
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const handleClick = () => {
+    if (isAllChecked) {
+      setIsPopupOpen(true);
+      setIsVisible(false);
+    } else {
+      setIsVisible(false);
+    }
+  };
+
+  const handleYes = () => {
+    setIsPopupOpen(false);
+    console.log("User clicked Yes");
+  };
+
+  const handleNo = () => {
+    setIsPopupOpen(false);
+    console.log("User clicked No");
+  };
+
+
+  const [isAllChecked, setIsAllChecked] = useState(false);
+  const [checkedItems, setCheckedItems] = useState({});
+
+  // Handle Parent Checkbox
+  const handleParentCheckbox = () => {
+    const newCheckedState = !isAllChecked;
+    setIsAllChecked(newCheckedState);
+
+    // Update all child checkboxes
+    const updatedCheckedItems = {};
+    blockedSubcategories.forEach(sub => {
+      updatedCheckedItems[sub.id] = newCheckedState;
+    });
+
+    setCheckedItems(updatedCheckedItems);
+  };
+
+  // Handle Individual Child Checkbox
+  const handleChildCheckbox = (id) => {
+    setCheckedItems(prev => {
+      const updated = { ...prev, [id]: !prev[id] };
+
+      // If all checkboxes are checked, set parent checkbox to true
+      const allChecked = Object.values(updated).every(Boolean);
+      setIsAllChecked(allChecked);
+
+      return updated;
+    });
+  };
+
+
+
 
   useEffect(() => {
     getCategoriesWithSubcategories().catch((error) => {
@@ -533,7 +590,9 @@ function Services() {
         />
       )}
 
-        <div className="flex justify-center items-center">
+      <div className="flex justify-center items-center">
+        <div>
+
           {isVisible && (
             <div
               className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center"
@@ -543,43 +602,43 @@ function Services() {
                 onClick={(e) => e.stopPropagation()}
                 className="w-[401px] bg-white shadow-lg rounded-lg flex flex-col"
               >
+                {/* Header with Parent Checkbox */}
                 <div className="fixed z-10 w-[400px]">
                   <div className="p-4 bg-[#EEEEEE] flex justify-between items-center rounded-t-lg">
-                    <span className=" font-normal text-base">
-                      Blocked Services
-                    </span>
-                    <button
-                      onClick={() => setIsVisible(false)}
-                      className="focus:outline-none me-1"
-                    >
-                      <AiOutlineClose size={20} />
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        className="custom-checkbox"
+                        checked={isAllChecked}
+                        onChange={handleParentCheckbox}
+                      />
+                      <span className="font-normal text-base px-2">Blocked Services</span>
+                    </div>
+                    <button onClick={handleClick} className="focus:outline-none me-1">
+                      {isAllChecked ? "Checked" : <AiOutlineClose />}
                     </button>
                   </div>
                 </div>
-                <div className="py-2.5 px-5 h-[250px] overflow-y-scroll">
+
+                <div className="py-2.5 px-5 h-[250px] overflow-y-scroll mt-12">
+                  {/* Child Checkboxes */}
                   {blockedSubcategories.length === 0 ? (
                     <p className="text-[#999999] font-normal text-base py-2">
                       No blocked subcategories found.
                     </p>
                   ) : (
-                    blockedSubcategories.map((sub, index) => (
-                      <div
-                        key={sub.id}
-                        className="flex justify-between items-center py-2"
-                      >
-                        <div
-                          className={`flex items-center ${index === 1 ? "mt-3" : ""
-                            }`}
-                        >
-                          <label className="custom-radio">
-                            <input type="radio" name="blockedService" />
-                          </label>
+                    blockedSubcategories.map((sub) => (
+                      <div key={sub.id} className="flex justify-between items-center py-2">
+                        <div className="flex items-center">
+                          <input
+                            type="checkbox"
+                            className="custom-checkbox"
+                            checked={checkedItems[sub.id] || false}
+                            onChange={() => handleChildCheckbox(sub.id)}
+                          />
                           <span className="text-[#999999] font-normal text-base px-2.5">
                             {sub.categoryName || "Unnamed Subcategory"}
                           </span>
-                        </div>
-                        <div>
-                          <DisableRedicon />
                         </div>
                       </div>
                     ))
@@ -589,49 +648,64 @@ function Services() {
             </div>
           )}
 
-          {showForm && (
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 z-50">
-              <div
-                ref={popupRef}
-                className="bg-white p-6 rounded-lg w-[649px] shadow-lg relative"
-              >
-                <div className="flex justify-center items-center border-b pb-6">
-                  <h2 className="text-lg font-semibold">
-                    {editingCategoryId ? "Edit Category" : "Edit Subcategory"}
-                  </h2>
-                  <button
-                    onClick={toggle}
-                    className="text-gray-600 hover:text-black absolute right-6 top-4"
-                  >
-                    <AiOutlineClose size={20} />
-                  </button>
+          {/* Yes/No Pop-up */}
+          {isPopupOpen && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+              <div className="bg-white p-6 rounded-lg shadow-lg text-center w-[400px] h-[200px] flex flex-col justify-center">
+                <p className="text-xl font-semibold">Are you sure?</p>
+                <div className="mt-6 flex justify-center gap-6">
+                  <button onClick={handleYes} className="bg-green-500 text-white px-10 py-3 rounded text-lg">Yes</button>
+                  <button onClick={handleNo} className="bg-red-500 text-white px-10 py-3 rounded text-lg">No</button>
                 </div>
-                <div className="mt-6">
-                  <label className="block text-base font-normal text-[#000000]">
-                    {editingCategoryId ? "Category Name" : "Subcategory Name"}
-                  </label>
-                  <input
-                    type="text"
-                    value={categoryName}
-                    onChange={handleCategoryInputChange}
-                    className="w-full mt-[10px] p-2 border rounded text-[#000000] focus:outline-none"
-                    placeholder={
-                      editingCategoryId
-                        ? "Enter category name"
-                        : "Enter subcategory name"
-                    }
-                  />
-                </div>
-                <button
-                  onClick={handleSaveEditPopup}
-                  className="w-full bg-[#0832DE] font-normal text-base text-white mt-6 py-2 rounded-[10px]"
-                >
-                  Save Details
-                </button>
               </div>
             </div>
           )}
         </div>
+
+        {showForm && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 z-50">
+            <div
+              ref={popupRef}
+              className="bg-white p-6 rounded-lg w-[649px] shadow-lg relative"
+            >
+              <div className="flex justify-center items-center border-b pb-6">
+                <h2 className="text-lg font-semibold">
+                  {editingCategoryId ? "Edit Category" : "Edit Subcategory"}
+                </h2>
+                <button
+                  onClick={toggle}
+                  className="text-gray-600 hover:text-black absolute right-6 top-4"
+                >
+                  <AiOutlineClose size={20} />
+                </button>
+              </div>
+              <div className="mt-6">
+                <label className="block text-base font-normal text-[#000000]">
+                  {editingCategoryId ? "Category Name" : "Subcategory Name"}
+                </label>
+                <input
+                  type="text"
+                  value={categoryName}
+                  onChange={handleCategoryInputChange}
+                  className="w-full mt-[10px] p-2 border rounded text-[#000000] focus:outline-none"
+                  placeholder={
+                    editingCategoryId
+                      ? "Enter category name"
+                      : "Enter subcategory name"
+                  }
+                />
+              </div>
+              <button
+                onClick={handleSaveEditPopup}
+                className="w-full bg-[#0832DE] font-normal text-base text-white mt-6 py-2 rounded-[10px]"
+              >
+                Save Details
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
     </div>
   );
 }
