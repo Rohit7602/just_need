@@ -40,13 +40,17 @@ const CustomerData = ({ mapData }) => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const { data, error } = await supabase.from("users").select("*");
-      if (error) {
-        console.error("Error fetching users:", error);
-      } else {
-        setUsers(data);
+      try {
+        setLoading(true);
+
+        const { data, error } = await supabase.from("users").select("*");
+        if (error) throw error;
+        setUsers(data || []); // Ensure we always set an array
+      } catch (err) {
+        console.error("Error fetching users:", err);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
     fetchUsers();
   }, []);
@@ -123,8 +127,6 @@ const CustomerData = ({ mapData }) => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
-  console.log(users, "users table");
 
   const filteredData = users.filter((customer) => {
     return (

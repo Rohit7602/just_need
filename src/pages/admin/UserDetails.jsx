@@ -7,6 +7,7 @@ import {
   PhoneIcon,
   RatingStarIcon,
   DisableRedicon,
+  EnableRedIcon,
 } from "../../assets/icon/Icons";
 import MechanicImage from "../../assets/png/mechanicImage.png";
 import DisableProviderPopUp from "../../Components/Popups/DisableProviderPopUp";
@@ -102,17 +103,18 @@ function UserDetails() {
       )
     );
     setShowPopup(false);
+    setPopupType("");
+    setCurrentListingId(null);
   };
 
   const handleCancel = () => {
     setShowPopup(false);
+    setPopupType(""); // Reset the popup type
+    setCurrentListingId(null);
   };
 
   if (loading) return <div>Loading...</div>;
   if (!user) return <div>User not found</div>;
-
-  let addr = user.address.map((item) => `${item.city}/${item.state}`);
-  console.log(addr);
 
   return (
     <div className="px-4">
@@ -160,7 +162,7 @@ function UserDetails() {
                 <div className="flex gap-2.5 items-center mt-2.5">
                   <LocationIcon />
                   <h3 className="text-sm font-normal text-white">
-                    {user.address.map((item)=>`${item.city}/${item.state}`)}
+                    {user.address.map((item) => `${item.city}/${item.state}`)}
                   </h3>
                 </div>
               </div>
@@ -241,7 +243,7 @@ function UserDetails() {
                     <DisableRedicon />
                   ) : (
                     <span className="text-xs font-normal text-[#0DA800] hover:opacity-100 opacity-100">
-                      Enable
+                      <EnableRedIcon />
                     </span>
                   )}
                 </button>
@@ -292,8 +294,9 @@ function UserDetails() {
       {showPopupDisable && (
         <DisableProviderPopUp handlePopupDisable={handlePopupDisable} />
       )}
+
       {showPopup && (
-        <div>
+        <div className="popup-container">
           {popupType === "disable" ? (
             <DisablePopUp onConfirm={handleConfirm} onCancel={handleCancel} />
           ) : (
@@ -301,6 +304,7 @@ function UserDetails() {
           )}
         </div>
       )}
+      
       {showImagePreviewPopUp && (
         <ImagePreviewPopUp
           images={[
