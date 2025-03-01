@@ -124,12 +124,14 @@ const CustomerData = ({ mapData }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  console.log(users, "users table");
+
   const filteredData = users.filter((customer) => {
     return (
       customer.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       customer.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      customer.phone?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      customer.address?.toLowerCase().includes(searchTerm.toLowerCase())
+      customer.phone?.toLowerCase().includes(searchTerm.toLowerCase())
+      // customer.address?.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
 
@@ -209,7 +211,7 @@ const CustomerData = ({ mapData }) => {
             </tr>
           </thead>
           <tbody>
-            {filteredData.map((customer, index) => (
+            {users.map((customer, index) => (
               <tr key={index}>
                 {location.pathname === "/dashboard" ? null : (
                   <td className="px-[19px] md:px-[24px] py-[8px]">
@@ -229,28 +231,28 @@ const CustomerData = ({ mapData }) => {
                       alt="avatar"
                       className="w-8 h-8 rounded-full me-2 object-cover"
                     />
-                    {customer.name}
+                    {customer.firstName} {customer.lastName}
                   </td>
                 </Link>
                 <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
-                  {customer.email}
+                  {customer.useremail}
                 </td>
                 <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
                   {customer.mobile_number}
                 </td>
                 <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000] w-[120px] truncate">
-                  {customer.city}/{customer.state}
+                  {customer.address.map((item) => `${item.city}/${item.state}`)}
                 </td>
                 <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
                   {formatDate(customer.created_at)}
                 </td>
                 <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
-                  {customer.end}
+                  {customer.updated_at}
                 </td>
                 <td
                   className={`px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000] ${customer.TextColor}`}
                 >
-                  {customer.status}
+                  {customer.accountStatus}
                 </td>
                 {location.pathname === "/dashboard/usersList" ? null : (
                   <td
