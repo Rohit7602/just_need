@@ -23,6 +23,7 @@ import emailVerification from "../../Components/Popups/EmailVerification";
 import createPassword from "../../Components/Popups/CreatePassword";
 import passwordchanged from "../../Components/Popups/PasswordChanged";
 import ProtectedRoute from "../../Components/ProtectedRoute";
+import BannerDetails from "../../pages/admin/BannerDetails";
 
 function AdminRoutes() {
   return (
@@ -55,7 +56,7 @@ function AdminRoutes() {
         </Route>
         <Route path="serviceRequest" element={<ServiceRequest />} />
         <Route path="services" element={<Services />} />
-        <Route path="bannerDetail" element={<Services />} />
+        <Route path="bannerDetail" element={<BannerDetails />} />
         <Route path="complaints" element={<Complaints />}>
           <Route path="complaintsDetails/:id" element={<Provider_Detail />} />
         </Route>
