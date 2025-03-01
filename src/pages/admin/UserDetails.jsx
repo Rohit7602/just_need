@@ -169,52 +169,55 @@ function UserDetails() {
             </div>
           </div>
         </div>
-        <div className="w-full lg:w-7/12 xl:w-[646px] xl:ps-2.5 mt-3 xl:mt-0 flex">
-          <div className="bg-[#F1F1F1] rounded-[10px] p-[15px] pb-7 flex-grow flex flex-col">
-            <p className="font-medium text-lg leading-[22px] text-black pb-2.5 border-b-[0.5px] border-dashed border-[#00000066]">
-              Business details
-            </p>
-            <div className="flex items-center mt-3 xl:mt-[15px]">
-              <div className=" w-4/12">
-                <h2 className="font-medium text-sm xl:text-base text-black">
-                  Business Name:
-                </h2>
+
+        {!user.userType && (
+          <div className="w-full lg:w-7/12 xl:w-[646px] xl:ps-2.5 mt-3 xl:mt-0 flex">
+            <div className="bg-[#F1F1F1] rounded-[10px] p-[15px] pb-7 flex-grow flex flex-col">
+              <p className="font-medium text-lg leading-[22px] text-black pb-2.5 border-b-[0.5px] border-dashed border-[#00000066]">
+                Business details
+              </p>
+              <div className="flex items-center mt-3 xl:mt-[15px]">
+                <div className=" w-4/12">
+                  <h2 className="font-medium text-sm xl:text-base text-black">
+                    Business Name:
+                  </h2>
+                </div>
+                <div className=" w-10/12">
+                  <h2 className="text-[#000000B2] text-sm xl:text-base font-normal">
+                    John Car Solutions
+                  </h2>
+                </div>
               </div>
-              <div className=" w-10/12">
-                <h2 className="text-[#000000B2] text-sm xl:text-base font-normal">
-                  John Car Solutions
-                </h2>
+              <div className="flex items-center mt-3 xl:mt-[15px]">
+                <div className="w-4/12">
+                  <h2 className="font-medium text-sm xl:text-base text-black">
+                    Service Name:
+                  </h2>
+                </div>
+                <div className=" w-10/12">
+                  <h2 className="text-[#000000B2] text-sm xl:text-base font-normal">
+                    Mechanic
+                  </h2>
+                </div>
               </div>
-            </div>
-            <div className="flex items-center mt-3 xl:mt-[15px]">
-              <div className="w-4/12">
-                <h2 className="font-medium text-sm xl:text-base text-black">
-                  Service Name:
-                </h2>
-              </div>
-              <div className=" w-10/12">
-                <h2 className="text-[#000000B2] text-sm xl:text-base font-normal">
-                  Mechanic
-                </h2>
-              </div>
-            </div>
-            <div className="flex items-center mt-3 ">
-              <div className=" w-4/12">
-                <h2 className="font-medium text-sm xl:text-base text-black">
-                  Categories:
-                </h2>
-              </div>
-              <div className=" w-10/12">
-                <h2 className="text-[#000000B2] text-sm xl:text-base font-normal">
-                  1.Oil Change{" "}
-                  <span className=" ps-[10px]">2.Parts Repair</span>{" "}
-                  <span className=" ps-[10px]">3.AC Service</span>{" "}
-                  <span className=" ps-[10px]">+ 4 More</span>
-                </h2>
+              <div className="flex items-center mt-3 ">
+                <div className=" w-4/12">
+                  <h2 className="font-medium text-sm xl:text-base text-black">
+                    Categories:
+                  </h2>
+                </div>
+                <div className=" w-10/12">
+                  <h2 className="text-[#000000B2] text-sm xl:text-base font-normal">
+                    1.Oil Change{" "}
+                    <span className=" ps-[10px]">2.Parts Repair</span>{" "}
+                    <span className=" ps-[10px]">3.AC Service</span>{" "}
+                    <span className=" ps-[10px]">+ 4 More</span>
+                  </h2>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
 
       <p className="font-medium text-lg leading-[22px] text-black pb-2.5 border-b-[0.5px] border-dashed border-[#00000066] mt-[30px]">
