@@ -107,8 +107,7 @@ export function Editicon({ disabledCards = [], index }) {
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        className={`${
-          Array.isArray(disabledCards) && disabledCards.includes(index)
+        className={`${Array.isArray(disabledCards) && disabledCards.includes(index)
             ? ""
             : "group-hover:stroke-[blue]"
         }`}
