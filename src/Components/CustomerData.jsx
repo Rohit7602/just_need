@@ -215,71 +215,62 @@ const CustomerData = ({ mapData }) => {
             </tr>
           </thead>
           <tbody>
-            {users.map(
-              (customer, index) => (
-                console.log(customer.userType, "customer table"),
-                (
-                  <tr key={index}>
-                    {location.pathname === "/dashboard" ? null : (
-                      <td className="px-[19px] md:px-[24px] py-[8px]">
-                        <input
-                          className="w-[16px] h-[16px]"
-                          type="checkbox"
-                          onChange={checkhandler}
-                          checked={selectitem.includes(customer.id)}
-                          value={customer.id}
-                        />
-                      </td>
-                    )}
-                    <Link
-                      to={`/dashboard/usersList/userDetails/${customer.id}`}
-                    >
-                      <td className="px-[19px] md:px-[24px] text-[#6C4DEF] py-[8px] flex items-center gap-2 min-w-[160px]">
-                        <img
-                          src={customer.image || avatar}
-                          alt="avatar"
-                          className="w-8 h-8 rounded-full me-2 object-cover"
-                        />
-                        {customer.firstName} {customer.lastName}
-                      </td>
-                    </Link>
-                    <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
-                      {customer.useremail}
-                    </td>
-                    <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
-                      {customer.mobile_number}
-                    </td>
-                    <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000] w-[120px] truncate">
-                      {customer.address.map(
-                        (item) => `${item.city}/${item.state}`
-                      )}
-                    </td>
-                    <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000] w-[50px] truncate">
-                      {customer.userType === true ? "Consumer" : "Provider"}
-                    </td>
-                    <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
-                      {formatDate(customer.created_at)}
-                    </td>
-                    <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
-                      {formatDate(customer.updated_at)}
-                    </td>
-                    <td
-                      className={`px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000] ${customer.TextColor}`}
-                    >
-                      {customer.accountStatus}
-                    </td>
-                    {location.pathname === "/dashboard/usersList" ? null : (
-                      <td
-                        className="px-[19px] md:px-[24px] py-[8px] text-center sticky right-0 bg-white"
-                        onClick={handlePopup}
-                      >
-                        <button className="text-2xl font-medium">⋮</button>
-                      </td>
-                    )}
-                  </tr>
-                )
-              )
-            )}
+            {users.map((customer, index) => (
+              <tr key={index}>
+                {location.pathname === "/dashboard" ? null : (
+                  <td className="px-[19px] md:px-[24px] py-[8px]">
+                    <input
+                      className="w-[16px] h-[16px]"
+                      type="checkbox"
+                      onChange={checkhandler}
+                      checked={selectitem.includes(customer.id)}
+                      value={customer.id}
+                    />
+                  </td>
+                )}
+                <Link to={`/dashboard/usersList/userDetails/${customer.id}`}>
+                  <td className="px-[19px] md:px-[24px] text-[#6C4DEF] py-[8px] flex items-center gap-2 min-w-[160px]">
+                    <img
+                      src={customer.image || avatar}
+                      alt="avatar"
+                      className="w-8 h-8 rounded-full me-2 object-cover"
+                    />
+                    {customer.firstName} {customer.lastName}
+                  </td>
+                </Link>
+                <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
+                  {customer.useremail}
+                </td>
+                <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
+                  {customer.mobile_number}
+                </td>
+                <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000] w-[120px] truncate">
+                  {customer.address.map((item) => `${item.city}/${item.state}`)}
+                </td>
+                <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000] w-[50px] truncate">
+                  {customer.userType === true ? "Consumer" : "Provider"}
+                </td>
+                <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
+                  {formatDate(customer.created_at)}
+                </td>
+                <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
+                  {formatDate(customer.updated_at)}
+                </td>
+                <td
+                  className={`px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000] ${customer.TextColor}`}
+                >
+                  {customer.accountStatus}
+                </td>
+                {location.pathname === "/dashboard/usersList" ? null : (
+                  <td
+                    className="px-[19px] md:px-[24px] py-[8px] text-center sticky right-0 bg-white"
+                    onClick={handlePopup}
+                  >
+                    <button className="text-2xl font-medium">⋮</button>
+                  </td>
+                )}
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
