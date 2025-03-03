@@ -31,13 +31,9 @@ function BannerProvider({ children }) {
     }
   };
 
-  function handleEdit(id) {
-    console.log("object", id);
-  }
-
   return (
     <bannerContext.Provider
-      value={{ offer, setOffer, handleDelete, handleEdit, fetchOffer }}
+      value={{ offer, setOffer, handleDelete, fetchOffer }}
     >
       {children}
     </bannerContext.Provider>

@@ -616,14 +616,14 @@ export const EditSvg = () => {
         <path
           d="M9.00117 9H8.40117C8.08291 9 7.77769 9.12643 7.55264 9.35147C7.3276 9.57652 7.20117 9.88174 7.20117 10.2V15.6C7.20117 15.9183 7.3276 16.2235 7.55264 16.4485C7.77769 16.6736 8.08291 16.8 8.40117 16.8H13.8012C14.1194 16.8 14.4247 16.6736 14.6497 16.4485C14.8747 16.2235 15.0012 15.9183 15.0012 15.6V15"
           stroke="#515151"
-          stroke-width="0.96"
+          strokeWidth="0.96"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
         <path
           d="M14.4012 7.79967L16.2012 9.59967M17.0322 8.75067C17.2685 8.51437 17.4012 8.19386 17.4012 7.85967C17.4012 7.52548 17.2685 7.20498 17.0322 6.96867C16.7959 6.73237 16.4754 6.59961 16.1412 6.59961C15.807 6.59961 15.4865 6.73237 15.2502 6.96867L10.2012 11.9997V13.7997H12.0012L17.0322 8.75067Z"
           stroke="#515151"
-          stroke-width="0.96"
+          strokeWidth="0.96"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
@@ -661,14 +661,14 @@ export const PlusIcon = () => {
       <path
         d="M3.75 9H14.25"
         stroke="#E03F3F"
-        stroke-width="1.5"
+        strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
         d="M9 3.75V14.25"
         stroke="#E03F3F"
-        stroke-width="1.5"
+        strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />

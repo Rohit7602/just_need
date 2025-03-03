@@ -122,6 +122,8 @@ function UserDetails() {
 
   const isActive = user.accountStatus === "active";
 
+  console.log(user);
+
   return (
     <div className="px-4">
       <div className="flex items-center justify-end">
@@ -201,7 +203,7 @@ function UserDetails() {
                 </div>
                 <div className="w-10/12">
                   <h2 className="text-[#000000B2] text-sm xl:text-base font-normal">
-                    John Car Solutions
+                    {user?.business?.businessName}
                   </h2>
                 </div>
               </div>
@@ -213,7 +215,7 @@ function UserDetails() {
                 </div>
                 <div className="w-10/12">
                   <h2 className="text-[#000000B2] text-sm xl:text-base font-normal">
-                    Mechanic
+                    {user?.business?.businessType}
                   </h2>
                 </div>
               </div>

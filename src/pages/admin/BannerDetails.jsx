@@ -7,7 +7,6 @@ import {
   PlusIcon,
   PluswhiteIcon,
 } from "../../assets/icon/Icon";
-import { useNavigate } from "react-router-dom";
 
 function BannerDetails() {
   const [image, setImage] = useState(null);
@@ -20,8 +19,6 @@ function BannerDetails() {
   const [service, setService] = useState("");
   const [description, setDescription] = useState("");
   const [editingOffer, setEditingOffer] = useState(null);
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetchOffer();
