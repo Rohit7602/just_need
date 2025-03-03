@@ -7,14 +7,17 @@ import { BrowserRouter } from "react-router-dom";
 import AuthProvider from "./store/AuthContext.jsx";
 import SubscriptionProvider from "./store/SubscriptionContext.jsx";
 import ServiceContext from "./store/ServiceContext.jsx";
+import PolicyProvider from "./store/PrivacyPolicy.jsx";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <ServiceContext>
       <SubscriptionProvider>
         <AuthProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
+          <PolicyProvider>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </PolicyProvider>
         </AuthProvider>
       </SubscriptionProvider>
     </ServiceContext>
