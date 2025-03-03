@@ -1,71 +1,210 @@
-// import React from "react";
-// // import girl from "../../assets/Images/Png/gitl.png";
-// // import Driver from "../../assets/images/png/Driver.png";
-import banner from "../../assets/Images/Png/banner.png";
-import { DeleteSvg, EditSvg } from "../../assets/icon/Icon";
-
-// function BannerDetails() {
-//   return (
-//     <>
-//       <div className=" bg-white rounded-[10px] h-[calc(100vh-135px)]">
-//         <div className="flex items-center justify-between ">
-//           <div className="w-6/12 p-5">
-//             <img src={banner} alt="" />
-//           </div>
-
-//           <div className="w-6/12 pe-5"></div>
-//         </div>
-//       </div>
-//     </>
-//   );
-// }
-
-// export default BannerDetails;
-
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { supabase } from "../../store/supabaseCreateClient";
+import { toast } from "react-toastify";
+import {
+  DeleteSvg,
+  EditSvg,
+  PlusIcon,
+  PluswhiteIcon,
+} from "../../assets/icon/Icon";
+import { useNavigate } from "react-router-dom";
 
 function BannerDetails() {
   const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
+  const [imageName, setImageName] = useState(""); // New state for image name
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [offer, setOffer] = useState([]);
+  const [tag, setTag] = useState("");
+  const [discount, setDiscount] = useState("");
+  const [service, setService] = useState("");
+  const [description, setDescription] = useState("");
+  const [editingOffer, setEditingOffer] = useState(null);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchOffer();
+  }, []);
+
+  const fetchOffer = async () => {
+    try {
+      const { data, error } = await supabase.from("offers").select("*");
+      if (error) throw error;
+      setOffer(data);
+    } catch (error) {
+      toast.error("Error fetching Offers");
+      console.error(error);
+    }
+  };
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
       setImage(file);
+      setImageUrl(URL.createObjectURL(file));
+      setImageName(file.name); // Set the new image name
     }
   };
 
+  const handleSubmit = async () => {
+    if (!tag || !discount || !service || !description) {
+      toast.error("Please fill all fields");
+      return;
+    }
+
+    if (!editingOffer && !image) {
+      toast.error("Please upload an image for new banners");
+      return;
+    }
+
+    try {
+      let uploadedImageUrl = editingOffer ? editingOffer.image : "";
+
+      if (image) {
+        const fileExt = image.name.split(".").pop();
+        const fileName = `${Date.now()}_${Math.random()
+          .toString(36)
+          .substring(2)}.${fileExt}`;
+        const filePath = `banners/${fileName}`;
+
+        const { data: imageData, error: imageError } = await supabase.storage
+          .from("just_need")
+          .upload(filePath, image, {
+            cacheControl: "3600",
+            upsert: false,
+          });
+
+        if (imageError) {
+          throw new Error("Image upload failed: " + imageError.message);
+        }
+
+        const { data: publicUrlData } = supabase.storage
+          .from("just_need")
+          .getPublicUrl(imageData.path);
+
+        if (!publicUrlData?.publicUrl) {
+          throw new Error("Failed to get public URL");
+        }
+
+        uploadedImageUrl = publicUrlData.publicUrl;
+      }
+
+      if (editingOffer) {
+        const { error } = await supabase
+          .from("offers")
+          .update({
+            tagOffer: tag,
+            discount,
+            service,
+            description,
+            image: uploadedImageUrl,
+          })
+          .eq("id", editingOffer.id);
+
+        if (error) throw error;
+        toast.success("Banner updated successfully!");
+      } else {
+        const { error } = await supabase.from("offers").insert([
+          {
+            tagOffer: tag,
+            discount,
+            service,
+            description,
+            image: uploadedImageUrl,
+          },
+        ]);
+
+        if (error) throw error;
+        toast.success("Banner added successfully!");
+      }
+
+      fetchOffer();
+      setIsModalOpen(false);
+      resetForm();
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.message || "Something went wrong");
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const { error } = await supabase.from("offers").delete().eq("id", id);
+      if (error) throw error;
+      toast.success("Banner deleted successfully!");
+      fetchOffer();
+    } catch (error) {
+      toast.error("Error deleting banner");
+      console.error(error);
+    }
+  };
+
+  const handleEdit = (item) => {
+    setEditingOffer(item);
+    setTag(item.tagOffer || "");
+    setDiscount(item.discount || "");
+    setService(item.service || "");
+    setDescription(item.description || "");
+    setImageUrl(item.image || "");
+
+    // Extract filename from the image URL
+    const imagePath = item.image ? item.image.split("/").pop() : "";
+    setImageName(imagePath || "Existing Image"); // Set the name from URL or fallback
+    setImage(null); // Reset the file input
+    setIsModalOpen(true);
+  };
+
+  const resetForm = () => {
+    setTag("");
+    setDiscount("");
+    setService("");
+    setDescription("");
+    setImage(null);
+    setImageUrl("");
+    setImageName(""); // Reset image name
+    setEditingOffer(null);
+  };
+
+  function handleAddNew() {
+    resetForm(); // Reset all fields including editingOffer
+    setIsModalOpen(true);
+  }
+
   return (
-    <div className="bg-white">
+    <div className="bg-white min-h-screen">
       <div className="mt-5 flex justify-end mx-10">
         <button
-          onClick={() => setIsModalOpen(true)}
-          className="bg-[#0832DE] text-white rounded-[10px] py-2 px-[15px]"
+          onClick={handleAddNew}
+          className="bg-[#0832DE] text-white rounded-[10px] py-2 px-4 flex items-center gap-2"
         >
-          <span className="me-4 text-xl">+</span> Add New Banner
+          <PluswhiteIcon />
+          Add New Banner
         </button>
       </div>
 
-      <div className="flex items-center justify-between mx-5 my-5">
-        <div className="w-6/12 pe-5 relative">
-          <img src={banner} alt="" />
-          <div className="absolute top-[10px] right-[29.8px] cursor-pointer">
-            <DeleteSvg />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mx-5 my-5">
+        {offer.map((item) => (
+          <div className="relative" key={item.id}>
+            <img
+              src={item.image}
+              alt="Banner"
+              className="w-full h-48 object-cover rounded-lg"
+            />
+            <div
+              className="absolute top-2 right-2 cursor-pointer"
+              onClick={() => handleDelete(item.id)}
+            >
+              <DeleteSvg />
+            </div>
+            <div
+              className="absolute top-2 right-10 cursor-pointer"
+              onClick={() => handleEdit(item)}
+            >
+              <EditSvg />
+            </div>
           </div>
-          <div className="absolute top-[10px] right-[61px] cursor-pointer">
-            <EditSvg />
-          </div>
-        </div>
-
-        <div className="w-6/12 pe-5 relative">
-          <img src={banner} alt="" />
-          <div className="absolute top-[10px] right-[29.8px]">
-            <DeleteSvg />
-          </div>
-          <div className="absolute top-[10px] right-[61px]">
-            <EditSvg />
-          </div>
-        </div>
+        ))}
       </div>
 
       {isModalOpen && (
@@ -73,9 +212,14 @@ function BannerDetails() {
           onClick={() => setIsModalOpen(false)}
           className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
         >
-          <div className="bg-white w-[500px] p-6 rounded-lg shadow-lg relative">
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white w-[500px] p-6 rounded-lg shadow-lg relative"
+          >
             <div className="flex justify-center items-center mb-4">
-              <h2 className="text-lg font-medium">Add Service</h2>
+              <h2 className="text-lg font-medium">
+                {editingOffer ? "Edit Banner" : "Add Banner"}
+              </h2>
               <button
                 onClick={() => setIsModalOpen(false)}
                 className="text-3xl font-light absolute top-1.5 right-5"
@@ -85,12 +229,14 @@ function BannerDetails() {
             </div>
             <div className="border-b border-gray-300 mb-4"></div>
 
-            <label className="text-gray-600 block mb-2">No Image Chosen</label>
-            <div className="flex justify-between items-center gap-2 bg-[#F2F2F2] rounded-lg">
+            <label className="text-gray-600 block mb-2">
+              {editingOffer ? "Update Image (optional)" : "Upload Image"}
+            </label>
+            <div className="flex items-center gap-2 bg-[#F2F2F2] rounded-lg p-2">
               <input
                 type="text"
-                value={image ? image.name : "No Image Chosen"}
-                className="px-4 py-2 border rounded-lg border-none text-gray-500"
+                value={image ? image.name : imageName || "No Image Chosen"}
+                className="flex-1 px-4 py-2 bg-transparent border-none text-gray-500"
                 disabled
               />
               <input
@@ -102,60 +248,72 @@ function BannerDetails() {
               />
               <label
                 htmlFor="fileUpload"
-                className="px-4 py-1 me-2 my-2 border border-[#E03F3F] text-[#E03F3F] text-base font-normal rounded-lg cursor-pointer"
+                className="px-2.5 py-1 border border-[#E03F3F] text-[#E03F3F] rounded-lg cursor-pointer flex items-center"
               >
-                + Upload Image
+                <PlusIcon className="mr-1" />
+                Upload
               </label>
             </div>
 
             <div className="grid grid-cols-2 gap-4 mt-4">
               <div>
-                <label className="text-gray-600 block font-normal text-base mb-2">
+                <label className="text-gray-600 block text-base mb-2">
                   Tag
                 </label>
                 <input
                   type="text"
-                  value="Best Offer"
+                  placeholder="Enter Tag Name"
+                  value={tag}
+                  onChange={(e) => setTag(e.target.value)}
                   className="w-full px-4 py-2 border rounded-lg bg-[#F2F2F2] text-gray-600"
-                  disabled
                 />
               </div>
               <div>
-                <label className="text-gray-600 block font-normal text-base mb-2">
+                <label className="text-gray-600 block text-base mb-2">
                   Discount %
                 </label>
                 <input
                   type="text"
-                  value="15 % off"
+                  value={discount}
+                  placeholder="Discount"
+                  onChange={(e) => setDiscount(e.target.value)}
                   className="w-full px-4 py-2 border rounded-lg bg-[#F2F2F2] text-gray-600"
-                  disabled
                 />
               </div>
             </div>
 
             <div className="mt-4">
-              <label className="text-gray-600 font-normal text-base block mb-2">
+              <label className="text-gray-600 block text-base mb-2">
                 Select Service
               </label>
-              <select className="w-full px-4 py-2 border rounded-lg bg-[#F2F2F2] text-gray-600">
-                <option>Painting</option>
-                <option>Dress</option>
+              <select
+                className="w-full px-4 py-2 border rounded-lg bg-[#F2F2F2] text-gray-600"
+                value={service}
+                onChange={(e) => setService(e.target.value)}
+              >
+                <option value="Painting">Painting</option>
+                <option value="Dress">Dress</option>
               </select>
             </div>
 
             <div className="mt-4">
-              <label className="text-gray-600 block font-normal text-base mb-2">
+              <label className="text-gray-600 block text-base mb-2">
                 Description
               </label>
               <textarea
                 className="w-full px-4 py-2 border rounded-lg bg-[#F2F2F2] text-gray-600"
                 placeholder="Type Here"
-                disabled
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows={4}
               ></textarea>
             </div>
 
-            <button className="w-full mt-4 bg-[#0832DE] font-normal text-base text-white py-2 rounded-lg">
-              Save Details
+            <button
+              onClick={handleSubmit}
+              className="w-full mt-4 bg-[#0832DE] text-white py-2 rounded-lg"
+            >
+              {editingOffer ? "Update Details" : "Save Details"}
             </button>
           </div>
         </div>

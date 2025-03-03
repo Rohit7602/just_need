@@ -245,7 +245,7 @@ const CustomerData = ({ mapData }) => {
                   {customer.mobile_number}
                 </td>
                 <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000] w-[120px] truncate">
-                  {customer.address.map((item) => `${item.city}/${item.state}`)}
+                  {customer?.address?.map((item) => `${item.city}/${item.state}`)}
                 </td>
                 <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000] w-[50px] truncate">
                   {customer.userType === true ? "Consumer" : "Provider"}
