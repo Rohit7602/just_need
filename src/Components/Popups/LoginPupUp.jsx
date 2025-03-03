@@ -31,9 +31,9 @@ function LoginPupUp() {
           localStorage.setItem("logIn", "true");
           localStorage.setItem("Access-token", accessToken);
           toast.success("Login successfully!");
-          setTimeout(() => {
+
             navigate("/dashboard");
-          }, 2000);
+
         } else {
           toast.error(response.response.message);
         }
