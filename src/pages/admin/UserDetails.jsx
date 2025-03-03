@@ -179,7 +179,7 @@ function UserDetails() {
                 <div className="flex gap-2.5 items-center mt-2.5">
                   <LocationIcon />
                   <h3 className="text-sm font-normal text-white">
-                    {user.address.map((item) => `${item.city}/${item.state}`)}
+                    {user?.address?.map((item) => `${item.city}/${item.state}`)}
                   </h3>
                 </div>
               </div>
