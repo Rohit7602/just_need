@@ -162,6 +162,30 @@ function ServiceContext({ children }) {
     }
   };
 
+  const toggleCategoryStatus = async (categoryId, newStatus) => {
+    setLoading(true);
+    try {
+      const { error } = await supabase
+        .from("categories")
+        .update({ isActive: newStatus })
+        .eq("id", categoryId);
+
+      if (error) throw error;
+
+      setCategories((prevCategories) =>
+        prevCategories.map((cat) =>
+          cat.id === categoryId ? { ...cat, isActive: newStatus } : cat
+        )
+      );
+      return true;
+    } catch (error) {
+      console.error("Error toggling category status:", error.message);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const toggleSubcategoryStatus = async (subcategoryId, newStatus) => {
     const { error } = await supabase
       .from("subcategories")
@@ -171,7 +195,6 @@ function ServiceContext({ children }) {
     return true;
   };
 
-  
   const handleDeleteSubCategory = async (subCategoryId) => {
     setLoading(true);
     try {
@@ -239,11 +262,12 @@ function ServiceContext({ children }) {
         handleDeleteSubCategory,
         getCategoriesWithSubcategories,
         updateCategoryName,
+        toggleCategoryStatus,
         addSubcategory,
       }}
     >
       {children}
-      {loading && <Loader />}
+      {/* {loading && <Loader />} */}
     </serviceProvider.Provider>
   );
 }

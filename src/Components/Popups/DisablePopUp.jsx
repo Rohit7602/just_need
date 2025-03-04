@@ -1,7 +1,7 @@
 import React from "react";
 import { BlackDisableIcon } from "../../assets/icon/Icon";
 
-function DisablePopUp({ onConfirm, onCancel, isActive }) {
+function DisablePopUp({ onConfirm, onCancel, isActive, confirmText = "Yes" }) {
   const actionText = isActive ? "Disable" : "Enable"; // Toggle text based on isActive
 
   return (
