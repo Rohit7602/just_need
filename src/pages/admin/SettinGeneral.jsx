@@ -3,6 +3,7 @@ import { ChromePicker } from "react-color";
 import Logo from "../../assets/logo.png"; // Default logo image
 import { toast } from "react-toastify";
 import { supabase } from "../../store/supabaseCreateClient"; // Supabase client
+import { DiscardIcon, UpdateIcon } from "../../assets/icon/Icon";
 
 function SettinGeneral() {
   // State for form fields
@@ -17,6 +18,8 @@ function SettinGeneral() {
   const [tollFree, setTollFree] = useState(""); // Toll-free number
   const [supportEmail, setSupportEmail] = useState(""); // Support email
   const [accountDeleteLink, setAccountDeleteLink] = useState(""); // Account deletion URL
+  const [discardPopup, setDiscardPopup] = useState(false); // New state for discard confirmation
+  const [updatePopup, setUpdatePopup] = useState(false); // New state for update confirmation
 
   // Refs for color picker elements to detect outside clicks
   const primaryColorPickerRef = useRef(null);
@@ -60,7 +63,7 @@ function SettinGeneral() {
   };
 
   // Update configuration in Supabase
-  const handleUpdate = async () => {
+  const handleUpdateConfirm = async () => {
     try {
       const newConfig = {
         title: title,
@@ -87,14 +90,20 @@ function SettinGeneral() {
 
       toast.success("Data updated in Supabase successfully!");
       console.log("Updated Data:", newConfig);
+      setUpdatePopup(false); // Close popup after update
     } catch (error) {
       toast.error("Error updating data: " + error.message);
       console.error("Update Error:", error);
+      setUpdatePopup(false); // Close popup even on error
     }
   };
 
+  const handleUpdate = () => {
+    setUpdatePopup(true); // Show confirmation popup
+  };
+
   // Reset all fields to their initial/default values
-  const handleDiscard = () => {
+  const handleDiscardConfirm = () => {
     setImage(Logo); // Reset to default logo
     setPrimaryColor("#6C4DEF"); // Reset to default primary color
     setSecondaryColor("#F1F1F1"); // Reset to default secondary color
@@ -107,6 +116,11 @@ function SettinGeneral() {
     setShowPrimaryPicker(false); // Close primary color picker
     setShowSecondaryPicker(false); // Close secondary color picker
     toast.info("All fields have been reset."); // Optional: Notify user
+    setDiscardPopup(false); // Close popup after discard
+  };
+
+  const handleDiscard = () => {
+    setDiscardPopup(true); // Show confirmation popup
   };
 
   // Handle outside clicks to close color pickers
@@ -137,13 +151,13 @@ function SettinGeneral() {
       <div className="flex items-center justify-end">
         <div>
           <button
-            onClick={handleDiscard} // Attach discard handler
+            onClick={handleDiscard} // Trigger discard popup
             className="text-base font-normal text-black py-2.5 h-[42px] px-[28px] rounded-[10px] bg-[#F1F1F1] me-[15px]"
           >
             Discard
           </button>
           <button
-            onClick={handleUpdate}
+            onClick={handleUpdate} // Trigger update popup
             className="text-base font-normal text-white py-2.5 h-[42px] px-[28px] rounded-[10px] bg-[#0832DE]"
           >
             Update
@@ -197,7 +211,7 @@ function SettinGeneral() {
           </p>
           <div className="border-[1px] border-[#00000033] rounded-[10px] w-[222px] h-[64px]">
             <img
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover rounded-[]"
               src={image}
               alt="Platform Logo"
             />
@@ -362,6 +376,76 @@ function SettinGeneral() {
           />
         </div>
       </div>
+
+      {/* Discard Confirmation Popup */}
+      {discardPopup && (
+        <div
+          onClick={() => setDiscardPopup(false)}
+          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+        >
+          <div className="bg-white p-6 rounded-lg shadow-lg w-[369px]">
+            <div className="flex justify-center">
+              <DiscardIcon />
+            </div>
+            <p className="text-black font-semibold text-xl mt-6 text-center">
+              Are you sure you want to discard your changes?
+            </p>
+            <p className="font-normal text-base text-[#00000099] mt-3 text-center mb-10">
+              Lorem Ipsum is simply dummy text of the printing and typesetting
+              industry.
+            </p>
+            <div className="flex  gap-4">
+              <button
+                onClick={handleDiscardConfirm} // Confirm discard
+                className="px-4 py-2 bg-[#0832DE] text-white rounded-lg w-full"
+              >
+                Discard
+              </button>
+              <button
+                onClick={() => setDiscardPopup(false)} // Cancel discard
+                className="px-4 py-2 bg-[#F1F1F1] font-normal text-base rounded-lg w-full"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Update Confirmation Popup */}
+      {updatePopup && (
+        <div
+          onClick={() => setUpdatePopup(false)}
+          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+        >
+          <div className="bg-white p-6 rounded-lg shadow-lg w-[369px]">
+            <div className="flex justify-center">
+              <UpdateIcon />
+            </div>
+            <p className="text-black font-semibold text-xl mt-6 text-center">
+              Are you sure you want to save all changes?
+            </p>
+            <p className="font-normal text-base text-[#00000099] mt-3 text-center mb-10">
+              Lorem Ipsum is simply dummy text of the printing and typesetting
+              industry.
+            </p>
+            <div className="flex gap-4">
+              <button
+                onClick={handleUpdateConfirm} // Confirm update
+                className="px-4 py-2 bg-[#0832DE] w-full text-white rounded-lg"
+              >
+                Update
+              </button>
+              <button
+                onClick={() => setUpdatePopup(false)} // Cancel update
+                className="px-4 w-full py-2 bg-[#F1F1F1] font-normal text-base text-black rounded-lg"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
