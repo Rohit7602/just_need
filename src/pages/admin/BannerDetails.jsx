@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { supabase } from "../../store/supabaseCreateClient";
 import { toast } from "react-toastify";
 import {
@@ -12,18 +12,20 @@ import {
 function BannerDetails() {
   const [image, setImage] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
-  const [imageName, setImageName] = useState(""); // New state for image name
+  const [imageName, setImageName] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [offer, setOffer] = useState([]);
-  const [tags, setTags] = useState([]); // Changed to array for multiple tags
-  const [tagInput, setTagInput] = useState(""); // Temporary input for adding tags
+  const [tags, setTags] = useState([]);
+  const [tagInput, setTagInput] = useState("");
   const [discount, setDiscount] = useState("");
   const [service, setService] = useState("");
   const [description, setDescription] = useState("");
   const [editingOffer, setEditingOffer] = useState(null);
   const [deletePopup, setDeletePopup] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-  const [savePopup, setSavePopup] = useState(false); // New state for save confirmation
+  const [savePopup, setSavePopup] = useState(false);
+  const [loadedImages, setLoadedImages] = useState({}); // Track loaded state for each image
+  const imageRefs = useRef({}); // Ref to track image elements
 
   useEffect(() => {
     fetchOffer();
@@ -34,6 +36,19 @@ function BannerDetails() {
       const { data, error } = await supabase.from("offers").select("*");
       if (error) throw error;
       setOffer(data);
+      // Initialize all images as not loaded
+      const initialLoadedState = data.reduce((acc, item) => {
+        acc[item.id] = false;
+        return acc;
+      }, {});
+      setLoadedImages(initialLoadedState);
+
+      // Check if images are already loaded (e.g., from cache)
+      data.forEach((item) => {
+        if (imageRefs.current[item.id]?.complete) {
+          setLoadedImages((prev) => ({ ...prev, [item.id]: true }));
+        }
+      });
     } catch (error) {
       toast.error("Error fetching Offers");
       console.error(error);
@@ -43,7 +58,7 @@ function BannerDetails() {
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const maxSizeInBytes = 1 * 1024 * 1024; // 1 MB in bytes (1,048,576 bytes)
+      const maxSizeInBytes = 1 * 1024 * 1024; // 1 MB
       if (file.size > maxSizeInBytes) {
         toast.error("Image size exceeds 1 MB. Please upload a smaller file.");
         return;
@@ -54,16 +69,14 @@ function BannerDetails() {
     }
   };
 
-  // Add a tag when pressing Enter or clicking a button
   const handleAddTag = (e) => {
     if (e.key === "Enter" && tagInput.trim()) {
-      e.preventDefault(); // Prevent form submission
+      e.preventDefault();
       setTags([...tags, tagInput.trim()]);
-      setTagInput(""); // Clear input after adding
+      setTagInput("");
     }
   };
 
-  // Remove a tag
   const handleRemoveTag = (tagToRemove) => {
     setTags(tags.filter((tag) => tag !== tagToRemove));
   };
@@ -73,20 +86,16 @@ function BannerDetails() {
       toast.error("Please fill all fields (at least one tag required)");
       return;
     }
-
     if (!editingOffer && !image) {
       toast.error("Please upload an image for new banners");
       return;
     }
-
-    // Show confirmation popup instead of directly saving
     setSavePopup(true);
   };
 
   const handleSaveConfirm = async () => {
     try {
       let uploadedImageUrl = editingOffer ? editingOffer.image : "";
-
       if (image) {
         const fileExt = image.name.split(".").pop();
         const fileName = `${Date.now()}_${Math.random()
@@ -101,17 +110,15 @@ function BannerDetails() {
             upsert: false,
           });
 
-        if (imageError) {
+        if (imageError)
           throw new Error("Image upload failed: " + imageError.message);
-        }
 
         const { data: publicUrlData } = supabase.storage
           .from("just_need")
           .getPublicUrl(imageData.path);
 
-        if (!publicUrlData?.publicUrl) {
+        if (!publicUrlData?.publicUrl)
           throw new Error("Failed to get public URL");
-        }
 
         uploadedImageUrl = publicUrlData.publicUrl;
       }
@@ -120,7 +127,7 @@ function BannerDetails() {
         const { error } = await supabase
           .from("offers")
           .update({
-            tagOffer: tags, // Store as array
+            tagOffer: tags,
             discount,
             service,
             description,
@@ -133,7 +140,7 @@ function BannerDetails() {
       } else {
         const { error } = await supabase.from("offers").insert([
           {
-            tagOffer: tags, // Store as array
+            tagOffer: tags,
             discount,
             service,
             description,
@@ -148,11 +155,11 @@ function BannerDetails() {
       fetchOffer();
       setIsModalOpen(false);
       resetForm();
-      setSavePopup(false); // Close popup after saving
+      setSavePopup(false);
     } catch (error) {
       console.error("Error:", error);
       toast.error(error.message || "Something went wrong");
-      setSavePopup(false); // Close popup even on error
+      setSavePopup(false);
     }
   };
 
@@ -182,7 +189,6 @@ function BannerDetails() {
 
   const handleEdit = (item) => {
     setEditingOffer(item);
-    // Ensure tags is always an array
     setTags(
       Array.isArray(item.tagOffer)
         ? item.tagOffer
@@ -201,8 +207,8 @@ function BannerDetails() {
   };
 
   const resetForm = () => {
-    setTags([]); // Reset to empty array
-    setTagInput(""); // Reset tag input
+    setTags([]);
+    setTagInput("");
     setDiscount("");
     setService("");
     setDescription("");
@@ -216,6 +222,11 @@ function BannerDetails() {
     resetForm();
     setIsModalOpen(true);
   }
+
+  // Handle image load completion
+  const handleImageLoad = (id) => {
+    setLoadedImages((prev) => ({ ...prev, [id]: true }));
+  };
 
   return (
     <div className="bg-white min-h-screen">
@@ -232,10 +243,19 @@ function BannerDetails() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mx-5 my-5">
         {offer.map((item) => (
           <div className="relative" key={item.id}>
+            {!loadedImages[item.id] && (
+              <div className="aspect-video rounded-lg flex items-center justify-center bg-gray-200">
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#0832DE]"></div>
+              </div>
+            )}
             <img
+              ref={(el) => (imageRefs.current[item.id] = el)} // Store image ref
               src={item.image}
               alt="Banner"
-              className="aspect-video object-cover rounded-lg"
+              className={`aspect-video object-cover rounded-lg ${
+                loadedImages[item.id] ? "block" : "hidden"
+              }`}
+              onLoad={() => handleImageLoad(item.id)}
             />
             <div
               className="absolute top-2 right-2 cursor-pointer"
@@ -260,7 +280,7 @@ function BannerDetails() {
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="bg-white w-[694px] p-6 rounded-lg shadow-lg relative "
+            className="bg-white w-[694px] p-6 rounded-lg shadow-lg relative"
           >
             <div className="flex justify-center items-center mb-4">
               <h2 className="text-lg font-medium">
@@ -318,7 +338,7 @@ function BannerDetails() {
                   placeholder="Enter Tag Name"
                   value={tagInput}
                   onChange={(e) => setTagInput(e.target.value)}
-                  onKeyDown={handleAddTag} // Add tag on Enter key
+                  onKeyDown={handleAddTag}
                   className="w-full px-4 py-2 border rounded-lg bg-[#F2F2F2] text-gray-600 outline-none"
                 />
                 <div className="flex flex-wrap gap-2 mt-2">
@@ -361,6 +381,7 @@ function BannerDetails() {
                 value={service}
                 onChange={(e) => setService(e.target.value)}
               >
+                <option value="">select value</option>
                 <option value="Painting">Painting</option>
                 <option value="Dress">Dress</option>
               </select>
@@ -412,13 +433,13 @@ function BannerDetails() {
             </p>
             <div className="flex justify-end gap-4">
               <button
-                onClick={() => setSavePopup(false)} // Cancel save/update
+                onClick={() => setSavePopup(false)}
                 className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg"
               >
                 Cancel
               </button>
               <button
-                onClick={handleSaveConfirm} // Confirm save/update
+                onClick={handleSaveConfirm}
                 className="px-4 py-2 bg-[#6C4DEF] text-white rounded-lg"
               >
                 {editingOffer ? "Update" : "Save"}

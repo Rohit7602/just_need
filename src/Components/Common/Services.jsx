@@ -75,6 +75,34 @@ function Services() {
     }
   }, [categories, loading, selectedSubcategories]);
 
+  // Your provided filteredCategoriesData logic
+  const filteredCategoriesData = useMemo(() => {
+    if (!searchQuery.trim()) return categories;
+
+    return categories
+      .map((category) => {
+        const categoryMatches = category?.categoryName
+          ?.toLowerCase()
+          .includes(searchQuery.toLowerCase());
+        const filteredSubcategories = (category.subcategory || []).filter(
+          (sub) =>
+            sub?.categoryName?.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
+        if (categoryMatches || filteredSubcategories.length > 0) {
+          return {
+            ...category,
+            subcategory:
+              filteredSubcategories.length > 0 || categoryMatches
+                ? category.subcategory
+                : [],
+          };
+        }
+        return null;
+      })
+      .filter((cat) => cat !== null);
+  }, [categories, searchQuery]);
+
   const toggle = useCallback(() => {
     setShowForm((prev) => {
       if (!prev) {
@@ -337,14 +365,17 @@ function Services() {
   );
 
   const handleCategoryClick = useCallback(
-    (index, subcategories) => {
-      if (categories[index].isActive) {
+    (index) => {
+      const sourceArray = searchQuery.trim()
+        ? filteredCategoriesData
+        : categories;
+      if (sourceArray[index]?.isActive) {
         setActiveTab(index);
-        setSelectedSubcategories(subcategories || []);
-        setSelectedCategoryId(categories[index]?.id || null);
+        setSelectedSubcategories(sourceArray[index]?.subcategory || []);
+        setSelectedCategoryId(sourceArray[index]?.id || null);
       }
     },
-    [categories]
+    [categories, filteredCategoriesData, searchQuery] // Updated dependencies
   );
 
   const handleCategoryEdit = useCallback((categoryId, currentName, e) => {
@@ -388,34 +419,6 @@ function Services() {
     setIsVisible((prev) => !prev);
   }, []);
 
-  // Enhanced filtering to include subcategories and fix filter logic
-  const filteredCategoriesData = useMemo(() => {
-    if (!searchQuery.trim()) return categories;
-
-    return categories
-      .map((category) => {
-        const categoryMatches = category?.categoryName
-          ?.toLowerCase()
-          .includes(searchQuery.toLowerCase());
-        const filteredSubcategories = (category.subcategory || []).filter(
-          (sub) =>
-            sub?.categoryName?.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-
-        if (categoryMatches || filteredSubcategories.length > 0) {
-          return {
-            ...category,
-            subcategory:
-              filteredSubcategories.length > 0 || categoryMatches
-                ? category.subcategory
-                : [],
-          };
-        }
-        return null;
-      })
-      .filter((cat) => cat !== null);
-  }, [categories, searchQuery]);
-
   const blockedSubcategories = useMemo(() => {
     return categories
       .flatMap((category) => category.subcategory || [])
@@ -450,7 +453,6 @@ function Services() {
     handleSubcategory();
   };
 
-  // Function to highlight matching text
   const highlightText = (text, query) => {
     if (!query || !text) return text;
     const regex = new RegExp(`(${query})`, "gi");
@@ -471,7 +473,6 @@ function Services() {
         <div className="flex items-center justify-center min-h-[200px]">
           <div className="text-center">
             <Loader />
-            {/* change */}
           </div>
         </div>
       )}
@@ -516,9 +517,7 @@ function Services() {
                         ? "border-blue-500 text-blue-500"
                         : "border-transparent text-gray-700"
                     } ${!items.isActive ? "opacity-50" : ""}`}
-                    onClick={() =>
-                      handleCategoryClick(index, items.subcategory)
-                    }
+                    onClick={() => handleCategoryClick(index)}
                   >
                     <p className="font-normal text-base transition mx-[5px]">
                       {highlightText(
