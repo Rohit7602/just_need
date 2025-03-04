@@ -66,6 +66,7 @@ function ServiceContext({ children }) {
   }
 
   const addCategoriesSubCategories = async (categoryName, subCategories) => {
+    setLoading(true);
     try {
       const { data: category, error: categoryError } = await supabase
         .from("categories")
@@ -88,7 +89,10 @@ function ServiceContext({ children }) {
       if (categoryError) throw categoryError;
       if (!category) throw new Error("Category insertion failed.");
 
-      if (!subCategories?.length) return;
+      if (!subCategories?.length) {
+        setLoading(false); // ✅ Ensure loader stops
+        return;
+      }
 
       const subcategoryData = subCategories.map((name) => ({
         catId: category.id,
@@ -109,6 +113,8 @@ function ServiceContext({ children }) {
       ]);
     } catch (error) {
       console.error("Error inserting category and subcategories:", error);
+    } finally {
+      setLoading(false); // ✅ Always stops loading
     }
   };
 
@@ -143,6 +149,7 @@ function ServiceContext({ children }) {
   };
 
   const updateCategoryName = async (categoryId, newName) => {
+    setLoading(true);
     try {
       const { data, error } = await supabase
         .from("categories")
@@ -159,6 +166,8 @@ function ServiceContext({ children }) {
     } catch (error) {
       console.error("Error updating category:", error);
       return false;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -187,12 +196,30 @@ function ServiceContext({ children }) {
   };
 
   const toggleSubcategoryStatus = async (subcategoryId, newStatus) => {
-    const { error } = await supabase
-      .from("subcategories")
-      .update({ isActive: newStatus })
-      .eq("id", subcategoryId);
-    if (error) throw error;
-    return true;
+    setLoading(true);
+    try {
+      const { error } = await supabase
+        .from("subcategories")
+        .update({ isActive: newStatus })
+        .eq("id", subcategoryId);
+
+      if (error) throw error;
+
+      setCategories((prevCategories) =>
+        prevCategories.map((category) => ({
+          ...category,
+          subcategory: category.subcategory.map((sub) =>
+            sub.id === subcategoryId ? { ...sub, isActive: newStatus } : sub
+          ),
+        }))
+      );
+      return true;
+    } catch (error) {
+      console.error("Error toggling subcategory status:", error.message);
+      return false;
+    } finally {
+      setLoading(false); // ✅ Ensure loading stops
+    }
   };
 
   const handleDeleteSubCategory = async (subCategoryId) => {
@@ -221,11 +248,11 @@ function ServiceContext({ children }) {
   };
 
   const handleEditSubCategory = async (subCategoryId, updatedName) => {
+    setLoading(true);
     if (!subCategoryId) {
       console.error("Error: subCategoryId is undefined or invalid");
       return;
     }
-    setLoading(true);
     try {
       const { error } = await supabase
         .from("subcategories")
@@ -267,7 +294,7 @@ function ServiceContext({ children }) {
       }}
     >
       {children}
-      {/* {loading && <Loader />} */}
+      
     </serviceProvider.Provider>
   );
 }

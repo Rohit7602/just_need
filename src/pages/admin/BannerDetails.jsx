@@ -274,7 +274,6 @@ function BannerDetails() {
               </button>
             </div>
             <div className="border-b border-gray-300 mb-4"></div>
-
             <label className="text-black block mb-2">
               {!editingOffer ? "No Image Chosen" : "Upload Image"}
             </label>
@@ -301,7 +300,7 @@ function BannerDetails() {
               </label>
             </div>
 
-            {editingOffer && (
+            {imageUrl && (
               <img
                 className="w-[58px] h-[58px] object-cover mt-2.5 rounded-[10px]"
                 src={imageUrl}
@@ -353,7 +352,6 @@ function BannerDetails() {
                 />
               </div>
             </div>
-
             <div>
               <label className="text-gray-600 block text-base mb-2">
                 Select Service
@@ -367,7 +365,6 @@ function BannerDetails() {
                 <option value="Dress">Dress</option>
               </select>
             </div>
-
             <button
               onClick={handleSubmit}
               className="w-full mt-4 bg-[#0832DE] text-white py-2 rounded-lg"

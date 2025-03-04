@@ -19,6 +19,7 @@ import { useServiceContext } from "../../store/ServiceContext";
 import AddSubCategoryPopUp from "../Popups/SubcategoryPopup";
 import { AiOutlineClose } from "react-icons/ai";
 import { toast } from "react-toastify";
+import Loader from "./Loader";
 
 function Services() {
   const [editIndex, setEditIndex] = useState(null);
@@ -469,10 +470,7 @@ function Services() {
       {loading && (
         <div className="flex items-center justify-center min-h-[200px]">
           <div className="text-center">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#0832DE]"></div>
-            <p className="mt-2 text-[#000000] opacity-70">
-              Loading services...
-            </p>
+            <Loader />
           </div>
         </div>
       )}
