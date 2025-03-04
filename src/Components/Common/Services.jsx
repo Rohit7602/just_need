@@ -387,10 +387,32 @@ function Services() {
     setIsVisible((prev) => !prev);
   }, []);
 
+  // Enhanced filtering to include subcategories and fix filter logic
   const filteredCategoriesData = useMemo(() => {
-    return categories.filter((item) =>
-      item?.categoryName?.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    if (!searchQuery.trim()) return categories;
+
+    return categories
+      .map((category) => {
+        const categoryMatches = category?.categoryName
+          ?.toLowerCase()
+          .includes(searchQuery.toLowerCase());
+        const filteredSubcategories = (category.subcategory || []).filter(
+          (sub) =>
+            sub?.categoryName?.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
+        if (categoryMatches || filteredSubcategories.length > 0) {
+          return {
+            ...category,
+            subcategory:
+              filteredSubcategories.length > 0 || categoryMatches
+                ? category.subcategory
+                : [],
+          };
+        }
+        return null;
+      })
+      .filter((cat) => cat !== null);
   }, [categories, searchQuery]);
 
   const blockedSubcategories = useMemo(() => {
@@ -425,6 +447,21 @@ function Services() {
     toast.success("Subcategory added successfully!");
     await getCategoriesWithSubcategories();
     handleSubcategory();
+  };
+
+  // Function to highlight matching text
+  const highlightText = (text, query) => {
+    if (!query || !text) return text;
+    const regex = new RegExp(`(${query})`, "gi");
+    return text.split(regex).map((part, index) =>
+      regex.test(part) ? (
+        <span key={index} className="bg-yellow-200">
+          {part}
+        </span>
+      ) : (
+        part
+      )
+    );
   };
 
   return (
@@ -485,7 +522,10 @@ function Services() {
                     }
                   >
                     <p className="font-normal text-base transition mx-[5px]">
-                      {items?.categoryName || "Unnamed Category"}
+                      {highlightText(
+                        items?.categoryName || "Unnamed Category",
+                        searchQuery
+                      )}
                     </p>
                     <span className="font-normal text-xs flex justify-center items-center w-[25px] h-[17px] bg-[#0000000F] rounded-[60px] py-1 px-1.5 me-1">
                       {items?.subcategory?.length || 0}
@@ -548,7 +588,10 @@ function Services() {
                     />
                   ) : (
                     <p className="font-normal text-sm text-[#00000099] mx-[5px] transition group-hover:text-[#6C4DEF]">
-                      {sub?.categoryName || "Unnamed Subcategory"}
+                      {highlightText(
+                        sub?.categoryName || "Unnamed Subcategory",
+                        searchQuery
+                      )}
                     </p>
                   )}
                   <div className="flex gap-4">
@@ -687,7 +730,10 @@ function Services() {
                               <input type="radio" name="blockedService" />
                             </label>
                             <span className="text-[#999999] font-normal text-base px-2.5">
-                              {sub.categoryName || "Unnamed Subcategory"}
+                              {highlightText(
+                                sub.categoryName || "Unnamed Subcategory",
+                                searchQuery
+                              )}
                             </span>
                           </div>
                           <div>
@@ -751,5 +797,3 @@ function Services() {
 }
 
 export default Services;
-
-// subcategory updatedat key handle
