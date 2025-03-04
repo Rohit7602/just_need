@@ -227,10 +227,11 @@ function UserDetails() {
                 </div>
                 <div className="w-10/12">
                   <h2 className="text-[#000000B2] text-sm xl:text-base font-normal">
-                    1.Oil Change{" "}
+                    {/* 1.Oil Change{" "}
                     <span className="ps-[10px]">2.Parts Repair</span>{" "}
                     <span className="ps-[10px]">3.AC Service</span>{" "}
-                    <span className="ps-[10px]">+ 4 More</span>
+                    <span className="ps-[10px]">+ 4 More</span> */}
+                    {user?.business?.businessType}
                   </h2>
                 </div>
               </div>
