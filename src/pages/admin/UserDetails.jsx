@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-
 import {
   EmailIcon,
   LocationIcon,
   PhoneIcon,
   RatingStarIcon,
   DisableRedicon,
+  EnableRedIcon,
 } from "../../assets/icon/Icons";
-import MechanicImage from "../../assets/png/mechanicImage.png";
+import MechanicImage from "../../assets/Images/Png/dummyimage.jpg";
 import DisableProviderPopUp from "../../Components/Popups/DisableProviderPopUp";
 import DisablePopUp from "../../Components/Popups/DisablePopUp";
 import EnablePopUp from "../../Components/Popups/EnablePopUp";
@@ -18,30 +18,35 @@ import { supabase } from "../../store/supabaseCreateClient";
 
 function UserDetails() {
   const { id } = useParams();
+
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showPopupDisable, setShowPopupDisable] = useState(false);
   const [showImagePreviewPopUp, setShowImagePreviewPopUp] = useState(false);
 
+  const fetchUser = async () => {
+    const { data, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("id", id)
+      .single();
+    if (error) {
+      console.error("Error fetching user:", error);
+    } else {
+      setUser(data);
+    }
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const fetchUser = async () => {
-      const { data, error } = await supabase
-        .from("users")
-        .select("*")
-        .eq("id", id)
-        .single();
-      if (error) {
-        console.error("Error fetching user:", error);
-      } else {
-        setUser(data);
-      }
-      setLoading(false);
-    };
     fetchUser();
   }, [id]);
 
   function handlePopupDisable() {
     setShowPopupDisable(!showPopupDisable);
+    if (showPopupDisable) {
+      fetchUser(); // Refresh user data when popup closes
+    }
   }
 
   const handleImagePreviewPopUp = () => {
@@ -102,17 +107,22 @@ function UserDetails() {
       )
     );
     setShowPopup(false);
+    setPopupType("");
+    setCurrentListingId(null);
   };
 
   const handleCancel = () => {
     setShowPopup(false);
+    setPopupType("");
+    setCurrentListingId(null);
   };
 
   if (loading) return <div>Loading...</div>;
   if (!user) return <div>User not found</div>;
 
-  let addr = user.address.map((item) => `${item.city}/${item.state}`);
-  console.log(addr);
+  const isActive = user.accountStatus === "active";
+
+  console.log(user);
 
   return (
     <div className="px-4">
@@ -121,10 +131,21 @@ function UserDetails() {
           onClick={handlePopupDisable}
           className="flex items-center gap-3 py-2.5 h-[42px] px-3 xl:px-[15px] rounded-[10px]"
         >
-          <DisableRedicon />
-          <span className="text-black font-normal text-base">
-            Disable Provider
-          </span>
+          {isActive ? (
+            <>
+              <DisableRedicon />
+              <span className="text-black font-normal text-base">
+                Disable Provider
+              </span>
+            </>
+          ) : (
+            <>
+              <EnableRedIcon />
+              <span className="text-black font-normal text-base">
+                Enable Provider
+              </span>
+            </>
+          )}
         </button>
       </div>
       <div className="xl:flex mt-[30px]">
@@ -160,59 +181,62 @@ function UserDetails() {
                 <div className="flex gap-2.5 items-center mt-2.5">
                   <LocationIcon />
                   <h3 className="text-sm font-normal text-white">
-                    {user.address.map((item)=>`${item.city}/${item.state}`)}
+                    {user?.address?.map((item) => `${item.city}/${item.state}`)}
                   </h3>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div className="w-full lg:w-7/12 xl:w-[646px] xl:ps-2.5 mt-3 xl:mt-0 flex">
-          <div className="bg-[#F1F1F1] rounded-[10px] p-[15px] pb-7 flex-grow flex flex-col">
-            <p className="font-medium text-lg leading-[22px] text-black pb-2.5 border-b-[0.5px] border-dashed border-[#00000066]">
-              Business details
-            </p>
-            <div className="flex items-center mt-3 xl:mt-[15px]">
-              <div className=" w-4/12">
-                <h2 className="font-medium text-sm xl:text-base text-black">
-                  Business Name:
-                </h2>
+
+        {!user.userType && (
+          <div className="w-full lg:w-7/12 xl:w-[646px] xl:ps-2.5 mt-3 xl:mt-0 flex">
+            <div className="bg-[#F1F1F1] rounded-[10px] p-[15px] pb-7 flex-grow flex flex-col">
+              <p className="font-medium text-lg leading-[22px] text-black pb-2.5 border-b-[0.5px] border-dashed border-[#00000066]">
+                Business details
+              </p>
+              <div className="flex items-center mt-3 xl:mt-[15px]">
+                <div className="w-4/12">
+                  <h2 className="font-medium text-sm xl:text-base text-black">
+                    Business Name:
+                  </h2>
+                </div>
+                <div className="w-10/12">
+                  <h2 className="text-[#000000B2] text-sm xl:text-base font-normal">
+                    {user?.business?.businessName}
+                  </h2>
+                </div>
               </div>
-              <div className=" w-10/12">
-                <h2 className="text-[#000000B2] text-sm xl:text-base font-normal">
-                  John Car Solutions
-                </h2>
+              <div className="flex items-center mt-3 xl:mt-[15px]">
+                <div className="w-4/12">
+                  <h2 className="font-medium text-sm xl:text-base text-black">
+                    Service Name:
+                  </h2>
+                </div>
+                <div className="w-10/12">
+                  <h2 className="text-[#000000B2] text-sm xl:text-base font-normal">
+                    {user?.business?.businessType}
+                  </h2>
+                </div>
               </div>
-            </div>
-            <div className="flex items-center mt-3 xl:mt-[15px]">
-              <div className="w-4/12">
-                <h2 className="font-medium text-sm xl:text-base text-black">
-                  Service Name:
-                </h2>
-              </div>
-              <div className=" w-10/12">
-                <h2 className="text-[#000000B2] text-sm xl:text-base font-normal">
-                  Mechanic
-                </h2>
-              </div>
-            </div>
-            <div className="flex items-center mt-3 ">
-              <div className=" w-4/12">
-                <h2 className="font-medium text-sm xl:text-base text-black">
-                  Categories:
-                </h2>
-              </div>
-              <div className=" w-10/12">
-                <h2 className="text-[#000000B2] text-sm xl:text-base font-normal">
-                  1.Oil Change{" "}
-                  <span className=" ps-[10px]">2.Parts Repair</span>{" "}
-                  <span className=" ps-[10px]">3.AC Service</span>{" "}
-                  <span className=" ps-[10px]">+ 4 More</span>
-                </h2>
+              <div className="flex items-center mt-3">
+                <div className="w-4/12">
+                  <h2 className="font-medium text-sm xl:text-base text-black">
+                    Categories:
+                  </h2>
+                </div>
+                <div className="w-10/12">
+                  <h2 className="text-[#000000B2] text-sm xl:text-base font-normal">
+                    1.Oil Change{" "}
+                    <span className="ps-[10px]">2.Parts Repair</span>{" "}
+                    <span className="ps-[10px]">3.AC Service</span>{" "}
+                    <span className="ps-[10px]">+ 4 More</span>
+                  </h2>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
 
       <p className="font-medium text-lg leading-[22px] text-black pb-2.5 border-b-[0.5px] border-dashed border-[#00000066] mt-[30px]">
@@ -241,7 +265,7 @@ function UserDetails() {
                     <DisableRedicon />
                   ) : (
                     <span className="text-xs font-normal text-[#0DA800] hover:opacity-100 opacity-100">
-                      Enable
+                      <EnableRedIcon />
                     </span>
                   )}
                 </button>
@@ -290,10 +314,14 @@ function UserDetails() {
         </div>
       </div>
       {showPopupDisable && (
-        <DisableProviderPopUp handlePopupDisable={handlePopupDisable} />
+        <DisableProviderPopUp
+          handlePopupDisable={handlePopupDisable}
+          userId={id}
+        />
       )}
+
       {showPopup && (
-        <div>
+        <div className="popup-container">
           {popupType === "disable" ? (
             <DisablePopUp onConfirm={handleConfirm} onCancel={handleCancel} />
           ) : (
@@ -301,6 +329,7 @@ function UserDetails() {
           )}
         </div>
       )}
+
       {showImagePreviewPopUp && (
         <ImagePreviewPopUp
           images={[
