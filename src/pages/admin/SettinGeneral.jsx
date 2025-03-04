@@ -93,26 +93,42 @@ function SettinGeneral() {
     }
   };
 
+  // Reset all fields to their initial/default values
+  const handleDiscard = () => {
+    setImage(Logo); // Reset to default logo
+    setPrimaryColor("#6C4DEF"); // Reset to default primary color
+    setSecondaryColor("#F1F1F1"); // Reset to default secondary color
+    setTitle(""); // Clear title
+    setEmail(""); // Clear email
+    setWhatsapp(""); // Clear WhatsApp
+    setTollFree(""); // Clear toll-free number
+    setSupportEmail(""); // Clear support email
+    setAccountDeleteLink(""); // Clear account deletion link
+    setShowPrimaryPicker(false); // Close primary color picker
+    setShowSecondaryPicker(false); // Close secondary color picker
+    toast.info("All fields have been reset."); // Optional: Notify user
+  };
+
   // Handle outside clicks to close color pickers
   useEffect(() => {
     const handleOutsideClick = (e) => {
-      // Close primary picker if click is outside
       if (
         primaryColorPickerRef.current &&
-        !primaryColorPickerRef.current.contains(e.target)
+        !primaryColorPickerRef.current.contains(e.target) &&
+        !e.target.closest(".chrome-picker") // Exclude clicks within the picker itself
       ) {
         setShowPrimaryPicker(false);
       }
-      // Close secondary picker if click is outside
       if (
         secondaryColorPickerRef.current &&
-        !secondaryColorPickerRef.current.contains(e.target)
+        !secondaryColorPickerRef.current.contains(e.target) &&
+        !e.target.closest(".chrome-picker") // Exclude clicks within the picker itself
       ) {
         setShowSecondaryPicker(false);
       }
     };
-    document.addEventListener("click", handleOutsideClick);
-    return () => document.removeEventListener("click", handleOutsideClick); // Cleanup on unmount
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick); // Cleanup on unmount
   }, []);
 
   return (
@@ -120,7 +136,10 @@ function SettinGeneral() {
       {/* Action Buttons */}
       <div className="flex items-center justify-end">
         <div>
-          <button className="text-base font-normal text-black py-2.5 h-[42px] px-[28px] rounded-[10px] bg-[#F1F1F1] me-[15px]">
+          <button
+            onClick={handleDiscard} // Attach discard handler
+            className="text-base font-normal text-black py-2.5 h-[42px] px-[28px] rounded-[10px] bg-[#F1F1F1] me-[15px]"
+          >
             Discard
           </button>
           <button
@@ -136,7 +155,6 @@ function SettinGeneral() {
       {/* General Settings Section */}
       <div className="py-5 mt-[15px]">
         <div className="flex items-center flex-wrap justify-between">
-          {/* Title Input */}
           <div className="flex items-center justify-between lg:w-[48%] gap-5">
             <label
               htmlFor="title"
@@ -154,7 +172,6 @@ function SettinGeneral() {
               className="py-3 h-[42px] px-[15px] w-full rounded-[10px] bg-[#F2F2F2] placeholder:text-sm placeholder:font-normal text-sm font-normal outline-[#0832DE] border-none"
             />
           </div>
-          {/* Email Input */}
           <div className="flex items-center justify-between lg:w-[48%] gap-5 mt-4 lg:mt-0">
             <label
               htmlFor="email"
@@ -174,7 +191,6 @@ function SettinGeneral() {
           </div>
         </div>
 
-        {/* Platform Logo Upload */}
         <div className="flex flex-col gap-5 lg:flex-row lg:items-center mt-[30px]">
           <p className="min-w-[160px] text-base font-normal text-black">
             Platform Logo:
@@ -209,25 +225,30 @@ function SettinGeneral() {
           </label>
         </div>
 
-        {/* Platform Appearance (Color Pickers) */}
         <div className="flex flex-col lg:flex-row gap-5 lg:items-center mt-[30px]">
           <p className="min-w-[160px] text-base font-normal text-black">
             Platform Appearance:
           </p>
-          {/* Primary Color */}
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2.5 relative">
             <p className="min-w-[160px] text-base font-normal text-black">
               Primary Colour
             </p>
             <button
               className="px-[50px] lg:px-[15px] xl:px-[50px] py-3 h-[42px] rounded-[10px] text-white text-sm font-normal"
               style={{ backgroundColor: primaryColor }}
-              onClick={() => setShowPrimaryPicker(!showPrimaryPicker)}
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent event bubbling to document
+                setShowPrimaryPicker(!showPrimaryPicker);
+              }}
             >
               {primaryColor}
             </button>
             {showPrimaryPicker && (
-              <div ref={primaryColorPickerRef} className="absolute z-10">
+              <div
+                ref={primaryColorPickerRef}
+                className="absolute z-10"
+                style={{ top: "50px", left: "0" }} // Position below the button
+              >
                 <ChromePicker
                   color={primaryColor}
                   onChange={(color) => setPrimaryColor(color.hex)}
@@ -235,20 +256,26 @@ function SettinGeneral() {
               </div>
             )}
           </div>
-          {/* Secondary Color */}
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2.5 relative">
             <p className="min-w-[160px] text-base font-normal text-black">
               Secondary Colour
             </p>
             <button
               className="px-[50px] lg:px-[15px] xl:px-[50px] py-3 h-[42px] rounded-[10px] text-black text-sm font-normal"
               style={{ backgroundColor: secondaryColor }}
-              onClick={() => setShowSecondaryPicker(!showSecondaryPicker)}
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent event bubbling to document
+                setShowSecondaryPicker(!showSecondaryPicker);
+              }}
             >
               {secondaryColor}
             </button>
             {showSecondaryPicker && (
-              <div ref={secondaryColorPickerRef} className="absolute z-10">
+              <div
+                ref={secondaryColorPickerRef}
+                className="absolute z-10"
+                style={{ top: "50px", left: "0" }} // Position below the button
+              >
                 <ChromePicker
                   color={secondaryColor}
                   onChange={(color) => setSecondaryColor(color.hex)}
@@ -259,7 +286,6 @@ function SettinGeneral() {
         </div>
       </div>
 
-      {/* Support and Assistance Section */}
       <div className="my-[15px] border-t-[1px] border-[#00000033]"></div>
       <h1 className="font-medium text-xl text-black leading-[35px]">
         Support and Assistance
@@ -268,7 +294,6 @@ function SettinGeneral() {
         Manage your platform Appearance
       </p>
       <div className="py-5 mt-[15px]">
-        {/* WhatsApp Support */}
         <div className="flex items-center justify-between gap-5">
           <label
             htmlFor="whatsapp"
@@ -277,8 +302,8 @@ function SettinGeneral() {
             Whatsapp Support:
           </label>
           <input
-            onInput={
-              (e) => (e.target.value = e.target.value.replace(/[^0-9]/g, "")) // Allow only numbers
+            onInput={(e) =>
+              (e.target.value = e.target.value.replace(/[^0-9]/g, ""))
             }
             id="whatsapp"
             name="whatsapp"
@@ -288,7 +313,6 @@ function SettinGeneral() {
             className="px-4 py-2.5 h-[42px] placeholder:text-sm placeholder:font-normal text-sm font-normal outline-[#0832DE] w-full border-[1px] border-[#00000033] rounded-[10px]"
           />
         </div>
-        {/* Toll-Free Number */}
         <div className="flex items-center justify-between gap-5 mt-5">
           <label
             htmlFor="tollFree"
@@ -305,7 +329,6 @@ function SettinGeneral() {
             className="px-4 py-2.5 h-[42px] placeholder:text-sm placeholder:font-normal text-sm font-normal outline-[#0832DE] w-full border-[1px] border-[#00000033] rounded-[10px]"
           />
         </div>
-        {/* Support Email */}
         <div className="flex items-center justify-between gap-5 mt-5">
           <label
             htmlFor="supportEmail"
@@ -322,7 +345,6 @@ function SettinGeneral() {
             className="px-4 py-2.5 h-[42px] placeholder:text-sm placeholder:font-normal text-sm font-normal outline-[#0832DE] w-full border-[1px] border-[#00000033] rounded-[10px]"
           />
         </div>
-        {/* Account Deletion Link */}
         <div className="flex items-center justify-between gap-5 mt-5">
           <label
             htmlFor="accountDeleteLink"
