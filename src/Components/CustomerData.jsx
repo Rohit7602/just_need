@@ -59,13 +59,20 @@ const CustomerData = ({ mapData }) => {
   }
 
   function handlefilterpopupclose() {
-    setshowfilterPopup();
+    setshowfilterPopup(false); // Fixed to properly close popup
   }
 
   const location = useLocation();
 
   function handleMainCheckboxChange() {
-    setMaincheckbox(!mainCheckbox);
+    const newCheckedState = !mainCheckbox;
+    setMaincheckbox(newCheckedState);
+    if (newCheckedState) {
+      const postids = filteredData.map((items) => items.id); // Use filteredData for consistency with display
+      setSelectitem(postids);
+    } else {
+      setSelectitem([]);
+    }
   }
 
   function handlePopup() {
@@ -73,22 +80,25 @@ const CustomerData = ({ mapData }) => {
   }
 
   function checkhandler(e) {
-    const isselected = e.target.checked;
+    const isSelected = e.target.checked;
     const value = parseInt(e.target.value);
 
-    if (isselected) {
+    if (isSelected) {
       setSelectitem([...selectitem, value]);
     } else {
       setSelectitem((prevdata) => prevdata.filter((id) => id !== value));
+      setMaincheckbox(false); // Uncheck main checkbox if any sub-checkbox is unchecked
     }
   }
 
   function maincheckbox() {
-    if (mapData.length === selectitem.length) {
+    if (filteredData.length === selectitem.length) {
       setSelectitem([]);
+      setMaincheckbox(false);
     } else {
-      const postids = mapData.map((items) => items.id);
+      const postids = filteredData.map((items) => items.id); // Use filteredData instead of mapData
       setSelectitem(postids);
+      setMaincheckbox(true);
     }
   }
 
@@ -165,7 +175,7 @@ const CustomerData = ({ mapData }) => {
         </div>
       </div>
       <div className="overflow-x-auto scrollRemove mt-5">
-        <table className="w-full text-left border-collapse whitespace-nowrap rounded-[10px]">
+        <table className="w-full text-left border-separate border-spacing-4 whitespace-nowrap rounded-[10px] ">
           <thead>
             <tr className="py-[8px]">
               {location.pathname === "/dashboard" ? null : (
@@ -173,8 +183,8 @@ const CustomerData = ({ mapData }) => {
                   <input
                     className="w-[16px] h-[16px]"
                     type="checkbox"
-                    checked={mapData.length === selectitem.length}
-                    onChange={maincheckbox}
+                    checked={mainCheckbox}
+                    onChange={handleMainCheckboxChange}
                   />
                 </th>
               )}
@@ -194,10 +204,10 @@ const CustomerData = ({ mapData }) => {
                 User Type
               </th>
               <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base w-[200px]">
-                Start Date
+                Registered At
               </th>
               <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base w-[200px]">
-                End Date
+                Sub. Exp. Date
               </th>
               <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">
                 Status
@@ -218,7 +228,7 @@ const CustomerData = ({ mapData }) => {
             {users.map((customer, index) => (
               <tr key={index}>
                 {location.pathname === "/dashboard" ? null : (
-                  <td className="px-[19px] md:px-[24px] py-[8px]">
+                  <td className="px-[19px] md:px-[24px] ">
                     <input
                       className="w-[16px] h-[16px]"
                       type="checkbox"
@@ -229,7 +239,7 @@ const CustomerData = ({ mapData }) => {
                   </td>
                 )}
                 <Link to={`/dashboard/usersList/userDetails/${customer.id}`}>
-                  <td className="px-[19px] md:px-[24px] text-[#6C4DEF] py-[8px] flex items-center gap-2 min-w-[160px]">
+                  <td className="px-[19px] md:px-[24px] text-[#6C4DEF]  flex items-center gap-2 min-w-[160px]">
                     <img
                       src={customer.image || avatar}
                       alt="avatar"
@@ -238,26 +248,38 @@ const CustomerData = ({ mapData }) => {
                     {customer.firstName} {customer.lastName}
                   </td>
                 </Link>
-                <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
+                <td className="px-[19px] md:px-[24px]  text-sm font-normal text-[#000000]">
                   {customer.useremail}
                 </td>
-                <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
+                <td className="px-[19px] md:px-[24px]  text-sm font-normal text-[#000000]">
                   {customer.mobile_number}
                 </td>
-                <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000] w-[120px] truncate">
-                  {customer?.address?.map((item) => `${item.city}/${item.state}`)}
+                <td className="px-[19px] md:px-[24px]  text-sm font-normal text-[#000000] w-[120px] truncate">
+                  {customer?.address?.map(
+                    (item) => `${item.city}/${item.state}`
+                  )}
                 </td>
-                <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000] w-[50px] truncate">
+                <td
+                  className={`px-[19px] md:px-[24px] text-sm font-normal w-[50px] truncate ${
+                    customer.userType === true
+                      ? "bg-[#0000FF12] text-[#0000FF] rounded-[90px]"
+                      : "text-[#FFA500] bg-[#FFA50024] rounded-[90px]"
+                  }`}
+                >
                   {customer.userType === true ? "Consumer" : "Provider"}
                 </td>
-                <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
+                <td className="px-[19px] md:px-[24px]  text-sm font-normal text-[#000000]">
                   {formatDate(customer.created_at)}
                 </td>
-                <td className="px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000]">
+                <td className="px-[19px] md:px-[24px]  text-sm font-normal text-[#000000]">
                   {formatDate(customer.updated_at)}
                 </td>
                 <td
-                  className={`px-[19px] md:px-[24px] py-[8px] text-sm font-normal text-[#000000] ${customer.TextColor}`}
+                  className={`px-[10px] py-[4px] text-sm font-normal text-center ${
+                    customer.accountStatus === "Active"
+                      ? "bg-[#00800012] text-[#008000] rounded-[90px]"
+                      : "text-[#800000] rounded-[90px] bg-[#FF000012]"
+                  }`}
                 >
                   {customer.accountStatus}
                 </td>
