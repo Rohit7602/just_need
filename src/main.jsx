@@ -17,19 +17,13 @@ createRoot(document.getElementById("root")).render(
     <ServiceContext>
       <SubscriptionProvider>
         <AuthProvider>
-
           <PolicyProvider>
-            <BrowserRouter>
-              <App />
-            </BrowserRouter>
+            <BannerProvider>
+              <BrowserRouter>
+                <App />
+              </BrowserRouter>
+            </BannerProvider>
           </PolicyProvider>
-
-          <BannerProvider>
-            <BrowserRouter>
-              <App />
-            </BrowserRouter>
-          </BannerProvider>
-
         </AuthProvider>
       </SubscriptionProvider>
     </ServiceContext>
