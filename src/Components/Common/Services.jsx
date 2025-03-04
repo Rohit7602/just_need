@@ -471,6 +471,7 @@ function Services() {
         <div className="flex items-center justify-center min-h-[200px]">
           <div className="text-center">
             <Loader />
+            {/* change */}
           </div>
         </div>
       )}
