@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
 import {
   BlackCloseIcon,
   ChatIcon,
@@ -9,15 +8,14 @@ import {
 } from "../../assets/icon/Icon";
 import AdminImage from "../../assets/png/AdminImage.png";
 import { Link, useLocation } from "react-router-dom";
-import { ArrowIcon, CloseIcon } from "../../assets/icon/Icons";
+import { ArrowIcon } from "../../assets/icon/Icons";
 import NotificationPopUp from "../Popups/NotificationPopUp";
 
 function TopBar() {
   const navigate = useNavigate();
-
+  const location = useLocation();
   const [isInputVisible, setIsInputVisible] = useState(false);
   const [notificationPopUp, setNotificationPopUp] = useState(false);
-  const location = useLocation();
   const searchRef = useRef(null);
 
   const toggleSearchInput = () => {
@@ -36,14 +34,35 @@ function TopBar() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  // Improved back navigation logic
   const goBack = () => {
-    navigate(-1);
+    // Check if we're in a settings sub-page
+    if (location.pathname.startsWith("/dashboard/setting/")) {
+      // Always navigate to the main settings page
+      navigate("/dashboard/setting");
+    }
+    // Check if we're in a user details page
+    else if (location.pathname.includes("/dashboard/usersList/userDetails/")) {
+      navigate("/dashboard/usersList");
+    }
+    // Check if we're in a complaints details page
+    else if (
+      location.pathname.includes("/dashboard/complaints/complaintsDetails/")
+    ) {
+      navigate("/dashboard/complaints");
+    }
+    // Default fallback
+    else {
+      navigate(-1); // Use browser history if available
+    }
   };
 
   const handleNotificationPopUp = () => {
     setNotificationPopUp(!notificationPopUp);
   };
 
+  // Determine when to show the back arrow button
   const showArrowButton =
     /\/dashboard\/complaints\/complaintsDetails\/\d+$/.test(
       location.pathname
@@ -56,8 +75,6 @@ function TopBar() {
     location.pathname === "/dashboard/setting/keys" ||
     location.pathname === "/dashboard/setting/keys&Credentials";
 
-  location.pathname === "/dashboard/setting";
-
   return (
     <div>
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 xl:gap-5">
@@ -65,7 +82,6 @@ function TopBar() {
           {showArrowButton && (
             <div className="flex items-center justify-center me-[15px]">
               <button onClick={goBack}>
-                {" "}
                 <ArrowIcon />
               </button>
             </div>
