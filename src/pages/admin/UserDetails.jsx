@@ -93,9 +93,12 @@ function UserDetails() {
   const [currentListingId, setCurrentListingId] = useState(null);
 
   const handlePopup = (id, type) => {
-    setShowPopup(true);
-    setPopupType(type);
-    setCurrentListingId(id);
+    const listing = listings.find((item) => item.id === id);
+    if (listing) {
+      setShowPopup(true);
+      setPopupType(listing.isEnabled ? "disable" : "enable"); // Set popup type based on current status
+      setCurrentListingId(id);
+    }
   };
 
   const handleConfirm = () => {

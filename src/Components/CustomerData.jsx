@@ -11,6 +11,8 @@ import {
   SpikStartCirclChat,
   ArrowIconRigth,
   ArrowIconLeft,
+  DeleteIcon,
+  DownArrow,
 } from ".././assets/icon/Icons";
 import { supabase } from "../store/supabaseCreateClient";
 
@@ -76,37 +78,31 @@ const CustomerData = ({ mapData }) => {
     setMainCheckbox(newCheckedState);
 
     if (newCheckedState) {
-      // Check all sub-checkboxes in current page
       const currentPageIds = paginatedData.map((item) => item.id);
       setSelectItem(currentPageIds);
     } else {
-      // Uncheck all sub-checkboxes
       setSelectItem([]);
     }
   };
 
   // Individual checkbox handler
   const checkHandler = (e) => {
-    const value = e.target.value;
-    const isChecked = e.target.checked; // Correctly get the checked state
+    const value = parseInt(e.target.value);
+    const isChecked = e.target.checked;
 
     if (isChecked) {
-      // Add the item to selected items
       const newSelectedItems = [...selectItem, value];
       setSelectItem(newSelectedItems);
-      // Check if all items in current page are selected
       const currentPageIds = paginatedData.map((item) => item.id);
       setMainCheckbox(
         currentPageIds.every((id) => newSelectedItems.includes(id))
       );
     } else {
-      // Remove the item from selected items
       const newSelectedItems = selectItem.filter((id) => id !== value);
       setSelectItem(newSelectedItems);
-      setMainCheckbox(false); // Uncheck main checkbox if any sub-checkbox is unchecked
+      setMainCheckbox(false);
     }
   };
-
 
   // Pagination handlers
   const handlePageChange = (direction) => {
@@ -123,10 +119,10 @@ const CustomerData = ({ mapData }) => {
 
   const handleItemsSelect = (value) => {
     setItemsPerPage(value);
-    setCurrentPage(1);
+    setCurrentPage(1); // Reset to first page
     setMainCheckbox(false);
     setSelectItem([]);
-    setShowItemsDropdown(false);
+    setShowItemsDropdown(false); // Explicitly close dropdown
   };
 
   function handleFilter() {
@@ -171,9 +167,24 @@ const CustomerData = ({ mapData }) => {
   return (
     <div className="bg-[#FFFFFF] p-5 rounded-[10px]">
       <div className="flex justify-between items-center mt-[15px]">
-        <h2 className="text-base xl:text-[20px] font-medium text-[#000000] opacity-70">
-          Users List
-        </h2>
+        <div className="flex items-center gap-6">
+          <h2 className="text-base xl:text-[20px] font-medium text-[#000000] opacity-70">
+            Users List
+          </h2>
+          <button className="border border-[#F1F1F1] text-[#00000099] py-[7px] px-[20px] rounded-[10px] flex items-center gap-2">
+            <span>
+              <DeleteIcon />
+            </span>
+            Delete
+          </button>
+          <button className="border border-[#F1F1F1] text-[#00000099] py-[7px] px-[20px] rounded-[10px] flex items-center gap-2">
+            My Action
+            <span>
+              <DownArrow />
+            </span>
+          </button>
+        </div>
+
         <div className="flex">
           <div className="flex rounded-[10px] items-center p-2 h-[42px] bg-[#F1F1F1] me-2 xl:me-[20px]">
             <CiSearch className="ms-2" />
@@ -200,16 +211,14 @@ const CustomerData = ({ mapData }) => {
         <table className="w-full text-left border-separate border-spacing-4 whitespace-nowrap rounded-[10px]">
           <thead>
             <tr className="py-[8px]">
-              {/* {location.pathname === "/dashboard" ? null : ( */}
-                <th className="px-[19px] py-[8px] md:px-[24px]">
-                  <input
-                    className="w-[16px] h-[16px]"
-                    type="checkbox"
-                    checked={mainCheckbox}
-                    onChange={handleMainCheckboxChange}
-                  />
-                </th>
-              {/* )} */}
+              <th className="px-[19px] py-[8px] md:px-[24px]">
+                <input
+                  className="w-[16px] h-[16px]"
+                  type="checkbox"
+                  checked={mainCheckbox}
+                  onChange={handleMainCheckboxChange}
+                />
+              </th>
               <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">
                 Full Name
               </th>
@@ -262,17 +271,15 @@ const CustomerData = ({ mapData }) => {
             ) : (
               paginatedData.map((customer) => (
                 <tr key={customer.id}>
-                  {/* {location.pathname === "/dashboard" ? null : ( */}
-                    <td className="px-[19px] md:px-[24px]">
-                      <input
-                        className="w-[16px] h-[16px]"
-                        type="checkbox"
-                        onChange={checkHandler}
-                        checked={selectItem.includes(customer.id)}
-                        value={customer.id}
-                      />
-                    </td>
-                  {/* )} */}
+                  <td className="px-[19px] md:px-[24px]">
+                    <input
+                      className="w-[16px] h-[16px]"
+                      type="checkbox"
+                      onChange={checkHandler}
+                      checked={selectItem.includes(customer.id)}
+                      value={customer.id}
+                    />
+                  </td>
                   <Link to={`/dashboard/usersList/userDetails/${customer.id}`}>
                     <td className="px-[19px] md:px-[24px] text-[#6C4DEF] flex items-center gap-2 min-w-[160px]">
                       <img
@@ -355,7 +362,10 @@ const CustomerData = ({ mapData }) => {
                     {[5, 10, 15, 20].map((item) => (
                       <button
                         key={item}
-                        onClick={() => handleItemsSelect(item)}
+                        onClick={(e) => {
+                          e.stopPropagation(); // Prevent click from bubbling to parent div
+                          handleItemsSelect(item);
+                        }}
                         className="w-full px-4 py-2 text-left hover:bg-gray-100"
                       >
                         {item}
