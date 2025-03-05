@@ -87,7 +87,7 @@ const CustomerData = ({ mapData }) => {
 
   // Individual checkbox handler
   const checkHandler = (e) => {
-    const value = parseInt(e.target.value);
+    const value = e.target.value;
     const isChecked = e.target.checked;
 
     if (isChecked) {
