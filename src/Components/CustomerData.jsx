@@ -107,22 +107,6 @@ const CustomerData = ({ mapData }) => {
     }
   };
 
-  // const checkHandler = (e) => {
-  //   const value = e.target.value;
-  //   const isChecked = e.target.checked;
-
-  //   console.log("Before Update:", selectItem); // Debugging ke liye
-
-  //   if (isChecked) {
-  //     const newSelectedItems = [...selectItem, value];
-  //     setSelectItem(newSelectedItems);
-  //   } else {
-  //     const newSelectedItems = selectItem.filter((id) => id !== value);
-  //     setSelectItem(newSelectedItems);
-  //   }
-
-  //   console.log("After Update:", selectItem); // Debugging ke liye
-  // };
 
   // Pagination handlers
   const handlePageChange = (direction) => {
@@ -216,7 +200,7 @@ const CustomerData = ({ mapData }) => {
         <table className="w-full text-left border-separate border-spacing-4 whitespace-nowrap rounded-[10px]">
           <thead>
             <tr className="py-[8px]">
-              {location.pathname === "/dashboard" ? null : (
+              {/* {location.pathname === "/dashboard" ? null : ( */}
                 <th className="px-[19px] py-[8px] md:px-[24px]">
                   <input
                     className="w-[16px] h-[16px]"
@@ -225,7 +209,7 @@ const CustomerData = ({ mapData }) => {
                     onChange={handleMainCheckboxChange}
                   />
                 </th>
-              )}
+              {/* )} */}
               <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">
                 Full Name
               </th>
@@ -278,7 +262,7 @@ const CustomerData = ({ mapData }) => {
             ) : (
               paginatedData.map((customer) => (
                 <tr key={customer.id}>
-                  {location.pathname === "/dashboard" ? null : (
+                  {/* {location.pathname === "/dashboard" ? null : ( */}
                     <td className="px-[19px] md:px-[24px]">
                       <input
                         className="w-[16px] h-[16px]"
@@ -288,7 +272,7 @@ const CustomerData = ({ mapData }) => {
                         value={customer.id}
                       />
                     </td>
-                  )}
+                  {/* )} */}
                   <Link to={`/dashboard/usersList/userDetails/${customer.id}`}>
                     <td className="px-[19px] md:px-[24px] text-[#6C4DEF] flex items-center gap-2 min-w-[160px]">
                       <img
