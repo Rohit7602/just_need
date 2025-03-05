@@ -209,7 +209,7 @@ function SettinGeneral() {
           <p className="min-w-[160px] text-base font-normal text-black">
             Platform Logo:
           </p>
-          <div className="border-[1px] border-[#00000033] rounded-[10px] w-[222px] h-[64px]">
+          <div className="border-[1px] border-[#00000033] rounded-[10px] w-[90px] h-[90px]">
             <img
               className="w-full h-full object-cover rounded-[10px]"
               src={image}

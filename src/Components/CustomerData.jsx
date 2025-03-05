@@ -80,8 +80,7 @@ const CustomerData = ({ mapData }) => {
   }
 
   function checkhandler(e) {
-    const isSelected = e.target.checked;
-    const value = parseInt(e.target.value);
+    const { value, isSelected } = e.target;
 
     if (isSelected) {
       setSelectitem([...selectitem, value]);
@@ -142,7 +141,6 @@ const CustomerData = ({ mapData }) => {
       customer.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       customer.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       customer.phone?.toLowerCase().includes(searchTerm.toLowerCase())
-      // customer.address?.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
 
@@ -285,7 +283,7 @@ const CustomerData = ({ mapData }) => {
                 </td>
                 {location.pathname === "/dashboard/usersList" ? null : (
                   <td
-                    className="px-[19px] md:px-[24px] py-[8px] text-center sticky right-0 bg-white"
+                    className="px-[19px] md:px-[24px]  text-center sticky right-0 bg-white"
                     onClick={handlePopup}
                   >
                     <button className="text-2xl font-medium">⋮</button>
