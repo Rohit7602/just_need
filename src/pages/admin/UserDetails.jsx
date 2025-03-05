@@ -13,16 +13,16 @@ import DisableProviderPopUp from "../../Components/Popups/DisableProviderPopUp";
 import DisablePopUp from "../../Components/Popups/DisablePopUp";
 import EnablePopUp from "../../Components/Popups/EnablePopUp";
 import ImagePreviewPopUp from "../../Components/Popups/ImagePreviewPopUp";
-import GalleryImg1 from "../../assets/png/galleryImg1.png";
+import GalleryImg1 from "../../assets/png/houseCleaner.png";
 import { supabase } from "../../store/supabaseCreateClient";
 
 function UserDetails() {
   const { id } = useParams();
-
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showPopupDisable, setShowPopupDisable] = useState(false);
   const [showImagePreviewPopUp, setShowImagePreviewPopUp] = useState(false);
+  const [hoveredItemId, setHoveredItemId] = useState(null); // Track hovered item
 
   const fetchUser = async () => {
     const { data, error } = await supabase
@@ -93,9 +93,12 @@ function UserDetails() {
   const [currentListingId, setCurrentListingId] = useState(null);
 
   const handlePopup = (id, type) => {
-    setShowPopup(true);
-    setPopupType(type);
-    setCurrentListingId(id);
+    const listing = listings.find((item) => item.id === id);
+    if (listing) {
+      setShowPopup(true);
+      setPopupType(listing.isEnabled ? "disable" : "enable"); // Set popup type based on current status
+      setCurrentListingId(id);
+    }
   };
 
   const handleConfirm = () => {
@@ -121,8 +124,6 @@ function UserDetails() {
   if (!user) return <div>User not found</div>;
 
   const isActive = user.accountStatus === "active";
-
-  console.log(user);
 
   return (
     <div className="px-4">
@@ -227,10 +228,6 @@ function UserDetails() {
                 </div>
                 <div className="w-10/12">
                   <h2 className="text-[#000000B2] text-sm xl:text-base font-normal">
-                    {/* 1.Oil Change{" "}
-                    <span className="ps-[10px]">2.Parts Repair</span>{" "}
-                    <span className="ps-[10px]">3.AC Service</span>{" "}
-                    <span className="ps-[10px]">+ 4 More</span> */}
                     {user?.business?.businessType}
                   </h2>
                 </div>
@@ -250,30 +247,39 @@ function UserDetails() {
             className="w-6/12 mt-3 xl:mt-[15px] xl:w-3/12 px-3"
             style={{ opacity: item.isEnabled ? 1 : 0.5 }}
           >
-            <div className="border-[1px] border-[#ebeaea] rounded-[10px] relative group">
+            <div
+              className="border-[1px] border-[#ebeaea] rounded-[10px] relative group  transition-all cursor-pointer"
+              onMouseEnter={() => setHoveredItemId(item.id)} // Track hover state
+              onMouseLeave={() => setHoveredItemId(null)} // Reset hover state
+            >
               <img
-                className="rounded-[10px] w-full group-hover:opacity-70"
+                className="rounded-[10px] w-full group-hover:opacity-70 hover:bg-gray-100"
                 src={GalleryImg1}
                 alt="Listing"
               />
-              <div className="absolute top-0 right-0 p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <button
-                  onClick={() =>
-                    handlePopup(item.id, item.isEnabled ? "disable" : "enable")
-                  }
-                >
-                  {item.isEnabled ? (
-                    <DisableRedicon />
-                  ) : (
-                    <span className="text-xs font-normal text-[#0DA800] hover:opacity-100 opacity-100">
-                      <EnableRedIcon />
-                    </span>
-                  )}
-                </button>
-              </div>
               <div className="p-2.5">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between h-[40px] ">
                   <p className="font-medium text-sm text-black">{item.name}</p>
+                  <div className="p-2">
+                    <button
+                      onClick={() =>
+                        handlePopup(
+                          item.id,
+                          item.isEnabled ? "disable" : "enable"
+                        )
+                      }
+                      className="flex items-center"
+                    >
+                      {/* Show Enable text on hover, otherwise show Disable icon */}
+                      {hoveredItemId === item.id ? (
+                        <span className="text-xs font-normal text-[#0DA800]">
+                          Enable
+                        </span>
+                      ) : (
+                        <DisableRedicon />
+                      )}
+                    </button>
+                  </div>
                 </div>
                 <p className="font-normal text-[14px] text-[#00000099] mt-1">
                   {item.description}
@@ -290,30 +296,6 @@ function UserDetails() {
         ))}
       </div>
 
-      <div className="bg-white rounded-[10px] mt-3">
-        <p className="font-medium text-lg leading-[22px] text-black pb-2.5 border-b-[0.5px] border-dashed border-[#00000066]">
-          Images
-        </p>
-        <div>
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-[10px] pt-5">
-            {[1, 2, 3, 4, 5, 6, 7].map((item, index) => (
-              <div key={index} className="relative group">
-                <div
-                  onClick={handleImagePreviewPopUp}
-                  className="cursor-pointer"
-                >
-                  <img
-                    className="w-[200px] h-[200px] 2xl:w-full rounded-[10px] group-hover:bg-black transition-all"
-                    src={GalleryImg1}
-                    alt="image of provider"
-                  />
-                  <div className="absolute inset-0 bg-gray-200 opacity-0 group-hover:opacity-50 transition-opacity"></div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
       {showPopupDisable && (
         <DisableProviderPopUp
           handlePopupDisable={handlePopupDisable}
@@ -329,20 +311,6 @@ function UserDetails() {
             <EnablePopUp onConfirm={handleConfirm} onCancel={handleCancel} />
           )}
         </div>
-      )}
-
-      {showImagePreviewPopUp && (
-        <ImagePreviewPopUp
-          images={[
-            GalleryImg1,
-            GalleryImg1,
-            GalleryImg1,
-            GalleryImg1,
-            GalleryImg1,
-            GalleryImg1,
-          ]}
-          onCancel={handleImagePreviewPopUp}
-        />
       )}
     </div>
   );

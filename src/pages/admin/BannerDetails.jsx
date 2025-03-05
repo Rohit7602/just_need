@@ -8,6 +8,7 @@ import {
   PlusIcon,
   PluswhiteIcon,
 } from "../../assets/icon/Icon";
+import { useServiceContext } from "../../store/ServiceContext";
 
 function BannerDetails() {
   const [image, setImage] = useState(null);
@@ -24,41 +25,66 @@ function BannerDetails() {
   const [deletePopup, setDeletePopup] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const [savePopup, setSavePopup] = useState(false);
-  const [loadedImages, setLoadedImages] = useState({}); // Track loaded state for each image
-  const imageRefs = useRef({}); // Ref to track image elements
+  const [loadedImages, setLoadedImages] = useState({});
+  const [dropdown, setDropdown] = useState(false);
+  const [fetchError, setFetchError] = useState(null); // Track fetch errors
+  const imageRefs = useRef({});
+
+  const { categories, getCategoriesWithSubcategories, loading } =
+    useServiceContext();
 
   useEffect(() => {
     fetchOffer();
-  }, []);
+    fetchCategoriesWithRetry();
+  }, [getCategoriesWithSubcategories]);
 
   const fetchOffer = async () => {
     try {
       const { data, error } = await supabase.from("offers").select("*");
       if (error) throw error;
-      setOffer(data);
-      // Initialize all images as not loaded
-      const initialLoadedState = data.reduce((acc, item) => {
+      setOffer(data || []);
+      const initialLoadedState = (data || []).reduce((acc, item) => {
         acc[item.id] = false;
         return acc;
       }, {});
       setLoadedImages(initialLoadedState);
 
-      // Check if images are already loaded (e.g., from cache)
-      data.forEach((item) => {
+      (data || []).forEach((item) => {
         if (imageRefs.current[item.id]?.complete) {
           setLoadedImages((prev) => ({ ...prev, [item.id]: true }));
         }
       });
+      setFetchError(null); // Clear any previous error
     } catch (error) {
-      toast.error("Error fetching Offers");
-      console.error(error);
+      console.error("Error fetching offers:", error);
+      toast.error("Failed to fetch offers. Retrying...");
+      setFetchError("Failed to fetch offers. Please check your connection.");
+    }
+  };
+
+  // Retry mechanism for fetching categories
+  const fetchCategoriesWithRetry = async (retries = 3, delay = 2000) => {
+    for (let i = 0; i < retries; i++) {
+      try {
+        await getCategoriesWithSubcategories();
+        setFetchError(null); // Clear error on success
+        return; // Exit on success
+      } catch (error) {
+        console.error(`Attempt ${i + 1} failed:`, error);
+        if (i === retries - 1) {
+          toast.error("Failed to load categories after retries.");
+          setFetchError("Failed to load categories. Please try again later.");
+        } else {
+          await new Promise((resolve) => setTimeout(resolve, delay));
+        }
+      }
     }
   };
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const maxSizeInBytes = 1 * 1024 * 1024; // 1 MB
+      const maxSizeInBytes = 1 * 1024 * 1024;
       if (file.size > maxSizeInBytes) {
         toast.error("Image size exceeds 1 MB. Please upload a smaller file.");
         return;
@@ -157,8 +183,8 @@ function BannerDetails() {
       resetForm();
       setSavePopup(false);
     } catch (error) {
-      console.error("Error:", error);
-      toast.error(error.message || "Something went wrong");
+      console.error("Error saving banner:", error);
+      toast.error(error.message || "Failed to save banner. Please try again.");
       setSavePopup(false);
     }
   };
@@ -175,7 +201,7 @@ function BannerDetails() {
       setDeletePopup(false);
       setDeleteId(null);
     } catch (error) {
-      toast.error("Error deleting banner");
+      toast.error("Error deleting banner: " + error.message);
       console.error(error);
       setDeletePopup(false);
       setDeleteId(null);
@@ -216,6 +242,7 @@ function BannerDetails() {
     setImageUrl("");
     setImageName("");
     setEditingOffer(null);
+    setDropdown(false); // Reset dropdown
   };
 
   function handleAddNew() {
@@ -223,10 +250,11 @@ function BannerDetails() {
     setIsModalOpen(true);
   }
 
-  // Handle image load completion
   const handleImageLoad = (id) => {
     setLoadedImages((prev) => ({ ...prev, [id]: true }));
   };
+
+  const activeCategories = categories.filter((category) => category.isActive);
 
   return (
     <div className="bg-white min-h-screen">
@@ -240,6 +268,21 @@ function BannerDetails() {
         </button>
       </div>
 
+      {fetchError && (
+        <div className="mx-5 my-5 p-4 bg-red-100 text-red-700 rounded-lg">
+          {fetchError}
+          <button
+            onClick={() => {
+              fetchOffer();
+              fetchCategoriesWithRetry();
+            }}
+            className="ml-2 underline"
+          >
+            Retry
+          </button>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mx-5 my-5">
         {offer.map((item) => (
           <div className="relative" key={item.id}>
@@ -249,7 +292,7 @@ function BannerDetails() {
               </div>
             )}
             <img
-              ref={(el) => (imageRefs.current[item.id] = el)} // Store image ref
+              ref={(el) => (imageRefs.current[item.id] = el)}
               src={item.image}
               alt="Banner"
               className={`aspect-video object-cover rounded-lg ${
@@ -372,20 +415,46 @@ function BannerDetails() {
                 />
               </div>
             </div>
-            <div>
+
+            <div className="relative">
               <label className="text-gray-600 block text-base mb-2">
                 Select Service
               </label>
-              <select
-                className="w-full px-4 py-2 border rounded-lg bg-[#F2F2F2] text-gray-600 outline-none"
-                value={service}
-                onChange={(e) => setService(e.target.value)}
-              >
-                <option value="">select value</option>
-                <option value="Painting">Painting</option>
-                <option value="Dress">Dress</option>
-              </select>
+              <input
+                type="text"
+                className="w-full px-4 py-2 border rounded-lg bg-[#F2F2F2] text-gray-600 outline-none h-[50px] cursor-pointer"
+                readOnly
+                value={service || "Select a category"}
+                onClick={() => setDropdown(!dropdown)}
+              />
+              {dropdown && (
+                <div className="w-full max-h-[100px] overflow-y-auto bg-white border rounded-lg mt-1 absolute z-10 shadow-lg">
+                  {loading ? (
+                    <div className="px-4 py-2 text-gray-600">
+                      Loading categories...
+                    </div>
+                  ) : activeCategories.length === 0 ? (
+                    <div className="px-4 py-2 text-gray-600">
+                      No active categories available
+                    </div>
+                  ) : (
+                    activeCategories.map((category) => (
+                      <div
+                        key={category.id}
+                        onClick={() => {
+                          setService(category.categoryName);
+                          setDropdown(false);
+                        }}
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-600"
+                      >
+                        {category.categoryName}
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
             </div>
+
             <button
               onClick={handleSubmit}
               className="w-full mt-4 bg-[#0832DE] text-white py-2 rounded-lg"
@@ -417,7 +486,7 @@ function BannerDetails() {
                 Delete
               </button>
             </div>
-          </div>
+          </div>  
         </div>
       )}
 
