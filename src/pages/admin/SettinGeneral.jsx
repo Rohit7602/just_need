@@ -211,7 +211,7 @@ function SettinGeneral() {
           </p>
           <div className="border-[1px] border-[#00000033] rounded-[10px] w-[222px] h-[64px]">
             <img
-              className="w-full h-full object-cover rounded-[]"
+              className="w-full h-full object-cover rounded-[10px]"
               src={image}
               alt="Platform Logo"
             />
