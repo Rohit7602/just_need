@@ -5,21 +5,19 @@ import ConfirmDeltePopUp from "./Popups/ConfirmDeltePopUp";
 import { useSubscriptionContext } from "../store/SubscriptionContext";
 
 const Subscription = () => {
-  
   const [deletePopUp, setDeletePouUp] = useState(false);
-  const [deleteItemId,setDeleteItmeId] = useState("")
-  const [updateItemId, setUpdateItemId] = useState("")
+  const [deleteItemId, setDeleteItmeId] = useState("");
+  const [updateItemId, setUpdateItemId] = useState("");
 
-  const { plans ,showPopup, setShowPopup} = useSubscriptionContext();
-
+  const { plans, showPopup, setShowPopup } = useSubscriptionContext();
 
   function handlePopup(plan) {
-    setUpdateItemId(plan.planId)
+    setUpdateItemId(plan.planId);
     setShowPopup(!showPopup);
   }
 
   const handleDeletePopUp = (deleteId) => {
-    setDeleteItmeId(deleteId)
+    setDeleteItmeId(deleteId);
     setDeletePouUp(!deletePopUp);
   };
   return (
@@ -35,10 +33,12 @@ const Subscription = () => {
         </div>
       </div>
       <div className="flex -mx-3 flex-wrap">
-
         {plans.map((item) => {
           return (
-            <div key={item.planId} className=" w-6/12 xl:w-4/12 2xl:w-3/12 px-3 mt-3">
+            <div
+              key={item.planId}
+              className=" w-6/12 xl:w-4/12 2xl:w-3/12 px-3 mt-3"
+            >
               <div
                 style={{
                   background: `linear-gradient(135deg, ${item.color}, black)`,
@@ -50,10 +50,10 @@ const Subscription = () => {
                     {item.planName}
                   </h1>
                   <div className="flex items-center gap-[15px] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <button onClick={()=>handlePopup(item)}>
+                    <button onClick={() => handlePopup(item)}>
                       <EditiconSubscription />
                     </button>
-                    <button onClick={()=>handleDeletePopUp(item.planId)}>
+                    <button onClick={() => handleDeletePopUp(item.planId)}>
                       <RedDeleteIcon />
                     </button>
                   </div>
@@ -115,8 +115,18 @@ const Subscription = () => {
           );
         })}
       </div>
-      {showPopup && <SuscriptionPopUp updateItemId={updateItemId} handlePopup={handlePopup} />}
-      {deletePopUp && <ConfirmDeltePopUp deleteId={deleteItemId} onCancel={handleDeletePopUp} />}
+      {showPopup && (
+        <SuscriptionPopUp
+          updateItemId={updateItemId}
+          handlePopup={handlePopup}
+        />
+      )}
+      {deletePopUp && (
+        <ConfirmDeltePopUp
+          deleteId={deleteItemId}
+          onCancel={handleDeletePopUp}
+        />
+      )}
     </div>
   );
 };

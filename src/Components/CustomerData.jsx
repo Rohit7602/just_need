@@ -15,6 +15,8 @@ import {
   DownArrow,
 } from ".././assets/icon/Icons";
 import { supabase } from "../store/supabaseCreateClient";
+import { toast } from "react-toastify";
+import { useCustomerContext } from "../store/CustomerContext";
 
 const CustomerData = ({ mapData }) => {
   const [showPopup, setShowPopup] = useState(false);
@@ -22,10 +24,11 @@ const CustomerData = ({ mapData }) => {
   const [selectItem, setSelectItem] = useState([]);
   const [showFilterPopup, setShowFilterPopup] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // const [users, setUsers] = useState([]);
+  // const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [showDeletePopup, setShowDeletePopup] = useState(false); // New state for delete confirmation popup
 
   const formatDate = (milliseconds) => {
     const date = new Date(milliseconds);
@@ -40,23 +43,11 @@ const CustomerData = ({ mapData }) => {
     return `${day} ${month} ${year} | ${formattedHours}:${formattedMinutes} ${ampm}`;
   };
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        setLoading(true);
-        const { data, error } = await supabase.from("users").select("*");
-        if (error) throw error;
-        setUsers(data || []);
-      } catch (err) {
-        console.error("Error fetching users:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchUsers();
-  }, []);
+  // context data here ===============
 
-  const filteredData = users.filter((customer) => {
+  const { users=[], setUsers, loading } = useCustomerContext();
+
+  const filteredData = users?.filter((customer) => {
     return (
       (customer.firstName + " " + customer.lastName)
         ?.toLowerCase()
@@ -119,10 +110,10 @@ const CustomerData = ({ mapData }) => {
 
   const handleItemsSelect = (value) => {
     setItemsPerPage(value);
-    setCurrentPage(1); // Reset to first page
+    setCurrentPage(1);
     setMainCheckbox(false);
     setSelectItem([]);
-    setShowItemsDropdown(false); // Explicitly close dropdown
+    setShowItemsDropdown(false);
   };
 
   function handleFilter() {
@@ -136,6 +127,46 @@ const CustomerData = ({ mapData }) => {
   function handlePopup() {
     setShowPopup(!showPopup);
   }
+
+  // Delete functionality
+  const handleDeleteClick = () => {
+    if (selectItem.length > 0) {
+      setShowDeletePopup(true); // Show confirmation popup if users are selected
+    } else {
+      toast.info("Please select at least one user to delete.");
+    }
+  };
+
+  const handleConfirmDisable = async () => {
+    try {
+      const { error } = await supabase
+        .from("users")
+        .update({ accountStatus: "Inactive" })
+        .in("id", selectItem);
+
+      if (error) throw error;
+
+      // Update local state to reflect changes
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          selectItem.includes(user.id)
+            ? { ...user, accountStatus: "Inactive" }
+            : user
+        )
+      );
+      setSelectItem([]); // Clear selected items
+      setMainCheckbox(false); // Uncheck main checkbox
+      setShowDeletePopup(false); // Close popup
+      toast.success("Selected users have been disabled successfully.");
+    } catch (err) {
+      console.error("Error disabling users:", err);
+      alert("Failed to disable users. Please try again.");
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeletePopup(false); // Close popup without action
+  };
 
   const location = useLocation();
   const dropdownRef = useRef(null);
@@ -171,18 +202,21 @@ const CustomerData = ({ mapData }) => {
           <h2 className="text-base xl:text-[20px] font-medium text-[#000000] opacity-70">
             Users List
           </h2>
-          <button className="border border-[#F1F1F1] text-[#00000099] py-[7px] px-[20px] rounded-[10px] flex items-center gap-2">
+          <button
+            className="border border-[#F1F1F1] text-[#00000099] py-[7px] px-[20px] rounded-[10px] flex items-center gap-2"
+            onClick={handleDeleteClick}
+          >
             <span>
               <DeleteIcon />
             </span>
             Delete
           </button>
-          <button className="border border-[#F1F1F1] text-[#00000099] py-[7px] px-[20px] rounded-[10px] flex items-center gap-2">
+          {/* <button className="border border-[#F1F1F1] text-[#00000099] py-[7px] px-[20px] rounded-[10px] flex items-center gap-2">
             My Action
             <span>
               <DownArrow />
             </span>
-          </button>
+          </button> */}
         </div>
 
         <div className="flex">
@@ -318,7 +352,7 @@ const CustomerData = ({ mapData }) => {
                   </td>
                   <td
                     className={`px-[10px] py-[4px] text-sm font-normal text-center ${
-                      customer.accountStatus === "Active"
+                      customer.accountStatus === "active"
                         ? "bg-[#00800012] text-[#008000] rounded-[90px]"
                         : "text-[#800000] rounded-[90px] bg-[#FF000012]"
                     }`}
@@ -363,7 +397,7 @@ const CustomerData = ({ mapData }) => {
                       <button
                         key={item}
                         onClick={(e) => {
-                          e.stopPropagation(); // Prevent click from bubbling to parent div
+                          e.stopPropagation();
                           handleItemsSelect(item);
                         }}
                         className="w-full px-4 py-2 text-left hover:bg-gray-100"
@@ -414,6 +448,34 @@ const CustomerData = ({ mapData }) => {
           </div>
         </div>
       </div>
+
+      {/* Delete Confirmation Popup */}
+      {showDeletePopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-[10px] shadow-lg w-[400px]">
+            <h2 className="text-lg font-medium mb-4">Confirm Disable Users</h2>
+            <p className="mb-6">
+              Are you sure you want to disable the selected {selectItem.length}{" "}
+              user(s)? This will set their status to "Inactive".
+            </p>
+            <div className="flex justify-end gap-4">
+              <button
+                className="border border-[#F1F1F1] text-[#00000099] py-2 px-4 rounded-[10px]"
+                onClick={handleCancelDelete}
+              >
+                Cancel
+              </button>
+              <button
+                className="bg-[#0832DE] text-white py-2 px-4 rounded-[10px]"
+                onClick={handleConfirmDisable}
+              >
+                Yes, Disable
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {showPopup && <ActionUserPupUp handlePopup={handlePopup} />}
       {showFilterPopup && (
         <UsersFilterPopUp

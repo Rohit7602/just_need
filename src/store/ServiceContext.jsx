@@ -9,6 +9,10 @@ function ServiceContext({ children }) {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    getCategoriesWithSubcategories();
+  }, []);
+
   async function getCategoriesWithSubcategories() {
     setLoading(true);
     try {
