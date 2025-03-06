@@ -24,6 +24,8 @@ import createPassword from "../../Components/Popups/CreatePassword";
 import passwordchanged from "../../Components/Popups/PasswordChanged";
 import ProtectedRoute from "../../Components/ProtectedRoute";
 import BannerDetails from "../../pages/admin/BannerDetails";
+import Listing from "../../pages/admin/Listing";
+import ListingDetails from "../../pages/admin/ListingDetails";
 
 function AdminRoutes() {
   return (
@@ -56,6 +58,11 @@ function AdminRoutes() {
         </Route>
         <Route path="serviceRequest" element={<ServiceRequest />} />
         <Route path="services" element={<Services />} />
+
+        
+        <Route path="listings" element={<Listing />}/>
+        <Route path="listings/:id" element={<ListingDetails />} />
+
         <Route path="bannerDetail" element={<BannerDetails />} />
         <Route path="complaints" element={<Complaints />}>
           <Route path="complaintsDetails/:id" element={<Provider_Detail />} />
