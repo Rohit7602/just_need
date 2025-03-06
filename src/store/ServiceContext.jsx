@@ -17,7 +17,8 @@ function ServiceContext({ children }) {
     setLoading(true);
     try {
       const { data, error } = await supabase.from("catview").select("*");
-      if (error) throw error;
+      if (error)
+        throw new Error(`Failed to fetch categories: ${error.message}`);
 
       const formattedData = data.map((category) => ({
         ...category,
@@ -26,52 +27,50 @@ function ServiceContext({ children }) {
 
       setCategories(formattedData);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching data:", error.message);
     } finally {
       setLoading(false);
     }
   }
 
-  async function addSubcategory(categoryId, subcategoryName) {
+  const addCategoriesSubCategories = async (
+    categoryName,
+    subCategories,
+    categoryImage
+  ) => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from("subcategories")
-        .insert([
-          {
-            catId: categoryId,
-            categoryName: subcategoryName,
-            isActive: true, // Default to active
-            createdAt: Date.now(),
-          },
-        ])
-        .select()
-        .single();
+      let imageUrl = null;
 
-      if (error) throw error;
+      if (categoryImage) {
+        console.log("Uploading image:", categoryImage.name);
+        const fileExt = categoryImage.name.split(".").pop();
+        const fileName = `${Date.now()}.${fileExt}`;
+        const filePath = `categoriesImage/${fileName}`;
 
-      // Update local state with the new subcategory
-      setCategories((prevCategories) =>
-        prevCategories.map((cat) =>
-          cat.id === categoryId
-            ? {
-                ...cat,
-                subcategory: [...(cat.subcategory || []), data],
-              }
-            : cat
-        )
-      );
-    } catch (error) {
-      console.error("Error adding subcategory:", error);
-      throw error; // Propagate error to caller
-    } finally {
-      setLoading(false);
-    }
-  }
+        const { error: uploadError } = await supabase.storage
+          .from("just_need")
+          .upload(filePath, categoryImage, {
+            cacheControl: "3600",
+            upsert: false,
+          });
 
-  const addCategoriesSubCategories = async (categoryName, subCategories) => {
-    setLoading(true);
-    try {
+        if (uploadError) {
+          console.error("Image upload failed:", uploadError.message);
+          throw uploadError;
+        }
+
+        const { data: urlData } = supabase.storage
+          .from("just_need")
+          .getPublicUrl(filePath);
+        if (!urlData?.publicUrl) throw new Error("Public URL not retrieved");
+
+        imageUrl = urlData.publicUrl;
+        console.log("Image URL:", imageUrl);
+      } else {
+        console.log("No image provided for upload");
+      }
+
       const { data: category, error: categoryError } = await supabase
         .from("categories")
         .insert([
@@ -79,6 +78,7 @@ function ServiceContext({ children }) {
             categoryName,
             isActive: true,
             featured: false,
+            image: imageUrl,
             metadatas: {
               totalListings: 0,
               averageRating: 0,
@@ -90,11 +90,20 @@ function ServiceContext({ children }) {
         .select()
         .single();
 
-      if (categoryError) throw categoryError;
-      if (!category) throw new Error("Category insertion failed.");
+      if (categoryError) {
+        console.error("Category insertion failed:", categoryError.message);
+        throw categoryError;
+      }
+      if (!category) throw new Error("Category insertion returned no data");
+
+      console.log("Category inserted:", category);
 
       if (!subCategories?.length) {
-        setLoading(false); // ✅ Ensure loader stops
+        setCategories((prevCategories) => [
+          ...prevCategories,
+          { ...category, subcategory: [] },
+        ]);
+        setLoading(false);
         return;
       }
 
@@ -109,66 +118,194 @@ function ServiceContext({ children }) {
       const { data: insertedSubcategories, error: subCategoryError } =
         await supabase.from("subcategories").insert(subcategoryData).select();
 
-      if (subCategoryError) throw subCategoryError;
+      if (subCategoryError) {
+        console.error(
+          "Subcategory insertion failed:",
+          subCategoryError.message
+        );
+        throw subCategoryError;
+      }
 
       setCategories((prevCategories) => [
         ...prevCategories,
         { ...category, subcategory: insertedSubcategories },
       ]);
     } catch (error) {
-      console.error("Error inserting category and subcategories:", error);
-    } finally {
-      setLoading(false); // ✅ Always stops loading
-    }
-  };
-
-  const updateSubcategoryName = async (subcategoryId, updatedName) => {
-    setLoading(true);
-    try {
-      const { data, error } = await supabase
-        .from("subcategories")
-        .update({ categoryName: updatedName })
-        .eq("id", subcategoryId)
-        .select();
-
-      if (error) throw error;
-
-      setCategories((prevCategories) =>
-        prevCategories.map((cat) => ({
-          ...cat,
-          subcategory: cat.subcategory.map((sub) =>
-            sub.id === subcategoryId
-              ? { ...sub, categoryName: updatedName }
-              : sub
-          ),
-        }))
-      );
-      return true;
-    } catch (error) {
-      console.error("Error updating subcategory:", error);
-      return false;
+      console.error("Error in addCategoriesSubCategories:", error.message);
+      throw error;
     } finally {
       setLoading(false);
     }
   };
 
-  const updateCategoryName = async (categoryId, newName) => {
+  async function addSubcategory(categoryId, subcategoryName, imageFile) {
     setLoading(true);
     try {
+      let imageUrl = null;
+
+      if (imageFile) {
+        const fileName = `subcategoryImages/${Date.now()}-${imageFile.name}`;
+        const { data: imageData, error: imageError } = await supabase.storage
+          .from("just_need")
+          .upload(fileName, imageFile);
+
+        if (imageError) {
+          console.error("Error uploading image:", imageError.message);
+          throw imageError;
+        }
+
+        const { data: publicUrlData } = supabase.storage
+          .from("just_need")
+          .getPublicUrl(imageData.path);
+        imageUrl = publicUrlData.publicUrl;
+      }
+
+      const { data, error } = await supabase
+        .from("subcategories")
+        .insert([
+          {
+            catId: categoryId,
+            categoryName: subcategoryName,
+            isActive: true,
+            createdAt: Date.now(),
+            image: imageUrl,
+          },
+        ])
+        .select()
+        .single();
+
+      if (error) {
+        console.error("Error inserting subcategory:", error.message);
+        throw error;
+      }
+
+      setCategories((prevCategories) =>
+        prevCategories.map((cat) =>
+          cat.id === categoryId
+            ? { ...cat, subcategory: [...(cat.subcategory || []), data] }
+            : cat
+        )
+      );
+
+      return data;
+    } catch (error) {
+      console.error("Error adding subcategory:", error.message);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function updateSubcategoryName(subcategoryId, updatedData, imageFile) {
+    setLoading(true);
+    try {
+      let imageUrl = updatedData.image;
+
+      if (imageFile) {
+        const fileName = `subcategory-images/${Date.now()}-${imageFile.name}`;
+        const { data: imageData, error: imageError } = await supabase.storage
+          .from("just_need")
+          .upload(fileName, imageFile, { upsert: true });
+
+        if (imageError) {
+          console.error("Error uploading image:", imageError.message);
+          throw imageError;
+        }
+
+        const { data: publicUrlData } = supabase.storage
+          .from("just_need")
+          .getPublicUrl(imageData.path);
+        imageUrl = publicUrlData.publicUrl;
+      }
+
+      const { data, error } = await supabase
+        .from("subcategories")
+        .update({
+          ...updatedData,
+          image: imageUrl,
+          updatedAt: Date.now(),
+        })
+        .eq("id", subcategoryId)
+        .select()
+        .single();
+
+      if (error) {
+        console.error("Error updating subcategory:", error.message);
+        throw error;
+      }
+
+      setCategories((prevCategories) =>
+        prevCategories.map((cat) => ({
+          ...cat,
+          subcategory: cat.subcategory.map((sub) =>
+            sub.id === subcategoryId ? { ...sub, ...data } : sub
+          ),
+        }))
+      );
+
+      return data;
+    } catch (error) {
+      console.error("Error updating subcategory:", error.message);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const updateCategoryName = async (categoryId, newName, imageFile) => {
+    setLoading(true);
+    try {
+      let imageUrl = null;
+
+      // If a new image is provided, upload it
+      if (imageFile) {
+        const fileExt = imageFile.name.split(".").pop();
+        const fileName = `${Date.now()}.${fileExt}`;
+        const filePath = `categoriesImage/${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from("just_need")
+          .upload(filePath, imageFile, { cacheControl: "3600", upsert: false });
+
+        if (uploadError) {
+          console.error("Image upload failed:", uploadError.message);
+          throw new Error(`Image upload failed: ${uploadError.message}`);
+        }
+
+        const { data: urlData } = supabase.storage
+          .from("just_need")
+          .getPublicUrl(filePath);
+        if (!urlData?.publicUrl) {
+          console.error("Failed to retrieve public URL for image:", filePath);
+          throw new Error("Public URL not retrieved");
+        }
+
+        imageUrl = urlData.publicUrl;
+        console.log("Updated Image URL:", imageUrl);
+      }
+
+      // Prepare the update object
+      const updateData = { categoryName: newName };
+      if (imageUrl) updateData.image = imageUrl; // Only update image if a new one is provided
+
       const { data, error } = await supabase
         .from("categories")
-        .update({ categoryName: newName })
+        .update(updateData)
         .eq("id", categoryId)
-        .select();
-      if (error) throw error;
+        .select()
+        .single();
+
+      if (error) {
+        console.error("Error updating category:", error.message);
+        throw new Error(`Category update failed: ${error.message}`);
+      }
+
       setCategories((prev) =>
-        prev.map((cat) =>
-          cat.id === categoryId ? { ...cat, categoryName: newName } : cat
-        )
+        prev.map((cat) => (cat.id === categoryId ? { ...cat, ...data } : cat))
       );
       return true;
     } catch (error) {
-      console.error("Error updating category:", error);
+      console.error("Error in updateCategoryName:", error.message);
       return false;
     } finally {
       setLoading(false);
@@ -183,7 +320,8 @@ function ServiceContext({ children }) {
         .update({ isActive: newStatus })
         .eq("id", categoryId);
 
-      if (error) throw error;
+      if (error)
+        throw new Error(`Toggle category status failed: ${error.message}`);
 
       setCategories((prevCategories) =>
         prevCategories.map((cat) =>
@@ -207,7 +345,8 @@ function ServiceContext({ children }) {
         .update({ isActive: newStatus })
         .eq("id", subcategoryId);
 
-      if (error) throw error;
+      if (error)
+        throw new Error(`Toggle subcategory status failed: ${error.message}`);
 
       setCategories((prevCategories) =>
         prevCategories.map((category) => ({
@@ -222,7 +361,7 @@ function ServiceContext({ children }) {
       console.error("Error toggling subcategory status:", error.message);
       return false;
     } finally {
-      setLoading(false); // ✅ Ensure loading stops
+      setLoading(false);
     }
   };
 
@@ -233,8 +372,8 @@ function ServiceContext({ children }) {
         .from("subcategories")
         .delete()
         .eq("id", subCategoryId);
-
-      if (error) throw error;
+      if (error)
+        throw new Error(`Subcategory deletion failed: ${error.message}`);
 
       setCategories((prevCategories) =>
         prevCategories.map((category) => ({
@@ -245,7 +384,7 @@ function ServiceContext({ children }) {
         }))
       );
     } catch (error) {
-      console.error("Error deleting subcategory:", error);
+      console.error("Error deleting subcategory:", error.message);
     } finally {
       setLoading(false);
     }
@@ -263,7 +402,7 @@ function ServiceContext({ children }) {
         .update({ categoryName: updatedName })
         .eq("id", subCategoryId);
 
-      if (error) throw error;
+      if (error) throw new Error(`Subcategory edit failed: ${error.message}`);
 
       setCategories((prevCategories) =>
         prevCategories.map((category) => ({
@@ -276,7 +415,7 @@ function ServiceContext({ children }) {
         }))
       );
     } catch (error) {
-      console.error("Error updating subcategory:", error);
+      console.error("Error updating subcategory:", error.message);
     } finally {
       setLoading(false);
     }

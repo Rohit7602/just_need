@@ -519,6 +519,11 @@ function Services() {
                     } ${!items.isActive ? "opacity-50" : ""}`}
                     onClick={() => handleCategoryClick(index)}
                   >
+                    <img
+                      className="h-[30px] w-[30px] object-cover rounded-full"
+                      src={items.image}
+                      alt=""
+                    />
                     <p className="font-normal text-base transition mx-[5px]">
                       {highlightText(
                         items?.categoryName || "Unnamed Category",
@@ -585,7 +590,12 @@ function Services() {
                       autoFocus
                     />
                   ) : (
-                    <p className="font-normal text-sm text-[#00000099] mx-[5px] transition group-hover:text-[#6C4DEF]">
+                    <p className="font-normal text-sm text-[#00000099] mx-[5px] transition group-hover:text-[#6C4DEF] flex items-center gap-4">
+                      <img
+                        className="w-[25px] h-[25px] object-cover rounded-full"
+                        src={sub.image}
+                        alt=""
+                      />
                       {highlightText(
                         sub?.categoryName || "Unnamed Subcategory",
                         searchQuery
