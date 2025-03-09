@@ -33,21 +33,18 @@ function ServiceContext({ children }) {
     }
   }
 
-  const addCategoriesSubCategories = async (
-    categoryName,
-    subCategories,
-    categoryImage
-  ) => {
+  const addCategoriesSubCategories = async (categoryName, categoryImage) => {
     setLoading(true);
     try {
       let imageUrl = null;
 
       if (categoryImage) {
-        console.log("Uploading image:", categoryImage.name);
+        console.log("Uploading image:", categoryImage.name, categoryImage.size);
         const fileExt = categoryImage.name.split(".").pop();
         const fileName = `${Date.now()}.${fileExt}`;
         const filePath = `categoriesImage/${fileName}`;
 
+        // Upload image to Supabase Storage
         const { error: uploadError } = await supabase.storage
           .from("just_need")
           .upload(filePath, categoryImage, {
@@ -57,20 +54,26 @@ function ServiceContext({ children }) {
 
         if (uploadError) {
           console.error("Image upload failed:", uploadError.message);
-          throw uploadError;
+          throw new Error(`Image upload failed: ${uploadError.message}`);
         }
 
+        // Get public URL
         const { data: urlData } = supabase.storage
           .from("just_need")
           .getPublicUrl(filePath);
-        if (!urlData?.publicUrl) throw new Error("Public URL not retrieved");
+        console.log("URL Data:", urlData); // Debug the URL response
+        if (!urlData?.publicUrl) {
+          console.error("Public URL not retrieved for filePath:", filePath);
+          throw new Error("Failed to retrieve public URL");
+        }
 
         imageUrl = urlData.publicUrl;
-        console.log("Image URL:", imageUrl);
+        console.log("Image URL set to:", imageUrl);
       } else {
         console.log("No image provided for upload");
       }
 
+      // Insert category into Supabase
       const { data: category, error: categoryError } = await supabase
         .from("categories")
         .insert([
@@ -78,7 +81,7 @@ function ServiceContext({ children }) {
             categoryName,
             isActive: true,
             featured: false,
-            image: imageUrl,
+            image: imageUrl, // Ensure this is being set
             metadatas: {
               totalListings: 0,
               averageRating: 0,
@@ -92,47 +95,23 @@ function ServiceContext({ children }) {
 
       if (categoryError) {
         console.error("Category insertion failed:", categoryError.message);
-        throw categoryError;
+        throw new Error(`Category insertion failed: ${categoryError.message}`);
       }
-      if (!category) throw new Error("Category insertion returned no data");
-
-      console.log("Category inserted:", category);
-
-      if (!subCategories?.length) {
-        setCategories((prevCategories) => [
-          ...prevCategories,
-          { ...category, subcategory: [] },
-        ]);
-        setLoading(false);
-        return;
+      if (!category) {
+        console.error("Category insertion returned no data");
+        throw new Error("Category insertion returned no data");
       }
 
-      const subcategoryData = subCategories.map((name) => ({
-        catId: category.id,
-        categoryName: name?.categoryName ?? name,
-        description: name?.description ?? "",
-        isActive: name?.isActive ?? false,
-        createdAt: name?.createdAt ?? Date.now(),
-      }));
+      console.log("Category inserted successfully:", category);
 
-      const { data: insertedSubcategories, error: subCategoryError } =
-        await supabase.from("subcategories").insert(subcategoryData).select();
-
-      if (subCategoryError) {
-        console.error(
-          "Subcategory insertion failed:",
-          subCategoryError.message
-        );
-        throw subCategoryError;
-      }
-
+      // Update state
       setCategories((prevCategories) => [
         ...prevCategories,
-        { ...category, subcategory: insertedSubcategories },
+        { ...category, subcategory: [] },
       ]);
     } catch (error) {
       console.error("Error in addCategoriesSubCategories:", error.message);
-      throw error;
+      throw error; // Re-throw to be caught in the popup
     } finally {
       setLoading(false);
     }
