@@ -237,6 +237,7 @@ function Services() {
           toast.error("Failed to update subcategory name.");
           return;
         }
+        // 
 
         // Update local state only with the new name
         setSelectedSubcategories((prev) =>
