@@ -10,6 +10,10 @@
   box-sizing: border-box !important;
   font-family: "Outfit", sans-serif !important;
 }
+.ratings_tab{
+
+}
+
 
 .group_hover:hover svg path,
 .group_hover:hover span {

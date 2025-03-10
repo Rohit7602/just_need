@@ -45,7 +45,9 @@ const CustomerData = ({ mapData }) => {
 
   // context data here ===============
 
-  const { users=[], setUsers, loading } = useCustomerContext();
+  const { users, setUsers, loading } = useCustomerContext();
+
+  console.log(users, "users");
 
   const filteredData = users?.filter((customer) => {
     return (
