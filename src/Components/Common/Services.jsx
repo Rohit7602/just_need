@@ -191,8 +191,10 @@ function Services() {
       toast.error("Name cannot be empty.");
       return;
     }
+
     try {
       if (editingCategoryId) {
+        // Editing a Category
         const success = await updateCategoryName(
           editingCategoryId,
           categoryName
@@ -202,58 +204,63 @@ function Services() {
             (cat) => cat.id === editingCategoryId
           );
           if (updatedIndex !== -1) {
-            const updatedCategories = categories.map((cat, idx) =>
-              idx === updatedIndex ? { ...cat, categoryName } : cat
-            );
             setActiveTab(updatedIndex);
             setSelectedSubcategories(
-              updatedCategories[updatedIndex]?.subcategory || []
+              categories[updatedIndex]?.subcategory || []
             );
-            setSelectedCategoryId(updatedCategories[updatedIndex]?.id || null);
+            setSelectedCategoryId(categories[updatedIndex]?.id || null);
           }
-          toggle();
-          await getCategoriesWithSubcategories();
+          toggle(); // Close the form
+          await getCategoriesWithSubcategories(); // Refresh data
           toast.success("Category updated successfully!");
         } else {
           toast.error("Failed to update category.");
         }
       } else if (editingSubcategoryId) {
+        // Editing a Subcategory
         const currentSubcategory = selectedSubcategories.find(
           (sub) => sub.id === editingSubcategoryId
         );
-        const newStatus = !currentSubcategory?.isActive;
+        if (!currentSubcategory) {
+          toast.error("Subcategory not found.");
+          return;
+        }
 
+        // Update only the name (do not toggle the status)
         const nameSuccess = await updateSubcategoryName(
           editingSubcategoryId,
-          categoryName
-        );
-        const statusSuccess = await toggleSubcategoryStatus(
-          editingSubcategoryId,
-          newStatus
+          // categoryName // Pass the new name here
+          updateSubcategoryName
         );
 
-        if (nameSuccess && statusSuccess) {
-          setSelectedSubcategories((prev) =>
-            prev.map((sub) =>
-              sub.id === editingSubcategoryId
-                ? { ...sub, categoryName, isActive: newStatus }
-                : sub
-            )
-          );
-          toggle();
-          await getCategoriesWithSubcategories();
-          toast.success(
-            `Subcategory updated and ${
-              newStatus ? "enabled" : "disabled"
-            } successfully!`
-          );
-        } else {
-          toast.error("Failed to update subcategory or toggle status.");
+        if (!nameSuccess) {
+          toast.error("Failed to update subcategory name.");
+          return;
         }
+
+        // Update local state only with the new name
+        setSelectedSubcategories((prev) =>
+          prev.map((sub) =>
+            sub.id === editingSubcategoryId
+              ? { ...sub, categoryName } // Only update the name
+              : sub
+          )
+        );
+
+        toggle(); // Close the form
+        await getCategoriesWithSubcategories(); // Refresh data
+        toast.success("Subcategory name updated successfully!");
+      } else {
+        toast.error("No valid category or subcategory selected for editing.");
       }
     } catch (error) {
-      console.error("Error in handleSaveEditPopup:", error);
-      toast.error("An error occurred while saving.");
+      console.error(
+        `Error in handleSaveEditPopup (${
+          editingCategoryId ? "category" : "subcategory"
+        }):`,
+        error
+      );
+      toast.error(`An error occurred: ${error.message}`);
     }
   }, [
     categoryName,
@@ -262,7 +269,6 @@ function Services() {
     categories,
     updateCategoryName,
     updateSubcategoryName,
-    toggleSubcategoryStatus,
     selectedSubcategories,
     getCategoriesWithSubcategories,
     toggle,
@@ -571,12 +577,12 @@ function Services() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 justify-between gap-[18px] mt-6 flex-wrap whitespace-nowrap cursor-pointer">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-between gap-[18px] mt-6 flex-wrap whitespace-nowrap cursor-pointer">
             {selectedSubcategories.length > 0 &&
               selectedSubcategories.map((sub, index) => (
                 <div
                   key={index}
-                  className="group hover:bg-[#6C4DEF1A] hover:border-[#6C4DEF1A] border border-[#0000001A] p-5 rounded-[10px] h-full transition"
+                  className="group hover:bg-[#6C4DEF1A] hover:border-[#6C4DEF1A] border border-[#0000001A] lg:p-5 p-3  rounded-[10px] h-full transition w-full"
                 >
                   <div className="flex items-center justify-between">
                     {editIndex === index ? (
@@ -589,7 +595,7 @@ function Services() {
                         autoFocus
                       />
                     ) : selectedSubcategories.length > 0 ? (
-                      <p className="font-normal text-sm text-[#00000099] mx-[5px] transition group-hover:text-[#6C4DEF] flex items-center gap-4">
+                      <p className="font-normal text-sm text-[#00000099] lg:mx-[5px] transition group-hover:text-[#6C4DEF] flex items-center lg:gap-4 gap-2">
                         <img
                           className="w-[25px] h-[25px] object-cover rounded-full"
                           src={sub.image}
@@ -603,7 +609,7 @@ function Services() {
                     ) : (
                       "No category found"
                     )}
-                    <div className="flex gap-4">
+                    <div className="flex lg:gap-4 gap-2">
                       <div
                         onClick={(e) =>
                           handleSubcategoryEdit(sub.id, sub.categoryName, e)
