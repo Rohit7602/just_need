@@ -12,23 +12,24 @@ import PolicyProvider from "./store/PrivacyPolicy.jsx";
 
 import BannerProvider from "./store/BannerContext.jsx";
 import ListingProvider from "./store/ListingContext.jsx";
+import { CustomerContext } from "./store/CustomerContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <ServiceContext>
-
-        <AuthProvider>
-          <PolicyProvider>
-            <BannerProvider>
-              <ListingProvider>
+      <AuthProvider>
+        <PolicyProvider>
+          <BannerProvider>
+            <ListingProvider>
+              <CustomerContext>
                 <BrowserRouter>
                   <App />
                 </BrowserRouter>
-              </ListingProvider>
-            </BannerProvider>
-          </PolicyProvider>
-        </AuthProvider>
-
+              </CustomerContext>
+            </ListingProvider>
+          </BannerProvider>
+        </PolicyProvider>
+      </AuthProvider>
     </ServiceContext>
     <ToastContainer />
   </StrictMode>

@@ -486,7 +486,7 @@ function BannerDetails() {
                 Delete
               </button>
             </div>
-          </div>  
+          </div>
         </div>
       )}
 

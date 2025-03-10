@@ -5,12 +5,12 @@ import ConfirmDeltePopUp from "./Popups/ConfirmDeltePopUp";
 
 
 const Subscription = () => {
-  
   const [deletePopUp, setDeletePouUp] = useState(false);
   const [deleteItemId,setDeleteItmeId] = useState("")
   const [updateItemId, setUpdateItemId] = useState("")
 
 
+  const { plans, showPopup, setShowPopup } = useSubscriptionContext();
 
 
   // function handlePopup(plan) {

@@ -12,35 +12,31 @@ import MechanicImage from "../../assets/Images/Png/dummyimage.jpg";
 import DisableProviderPopUp from "../../Components/Popups/DisableProviderPopUp";
 import DisablePopUp from "../../Components/Popups/DisablePopUp";
 import EnablePopUp from "../../Components/Popups/EnablePopUp";
-import ImagePreviewPopUp from "../../Components/Popups/ImagePreviewPopUp";
 import GalleryImg1 from "../../assets/png/houseCleaner.png";
-import { supabase } from "../../store/supabaseCreateClient";
+import { useCustomerContext } from "../../store/CustomerContext";
 
 function UserDetails() {
   const { id } = useParams();
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [showPopupDisable, setShowPopupDisable] = useState(false);
   const [showImagePreviewPopUp, setShowImagePreviewPopUp] = useState(false);
   const [hoveredItemId, setHoveredItemId] = useState(null); // Track hovered item
 
-  const fetchUser = async () => {
-    const { data, error } = await supabase
-      .from("users")
-      .select("*")
-      .eq("id", id)
-      .single();
-    if (error) {
-      console.error("Error fetching user:", error);
-    } else {
-      setUser(data);
-    }
-    setLoading(false);
-  };
+  const { users, loading, setLoading } = useCustomerContext(); // Get users from context
 
+  // Fetch user data from the users array based on the ID
   useEffect(() => {
-    fetchUser();
-  }, [id]);
+    if (users && users.length > 0) {
+      const foundUser = users.find((user) => user.id === id);
+      console.log(foundUser, "found users");
+      if (foundUser) {
+        setUser(foundUser);
+      } else {
+        console.error("User not found");
+      }
+      setLoading(false);
+    }
+  }, [id, users]);
 
   function handlePopupDisable() {
     setShowPopupDisable(!showPopupDisable);
