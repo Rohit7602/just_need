@@ -6,11 +6,11 @@ import ConfirmDeltePopUp from "./Popups/ConfirmDeltePopUp";
 
 const Subscription = () => {
   const [deletePopUp, setDeletePouUp] = useState(false);
-  const [deleteItemId,setDeleteItmeId] = useState("")
+  const [deleteItemId, setDeleteItmeId] = useState("")
   const [updateItemId, setUpdateItemId] = useState("")
 
 
-  const { plans, showPopup, setShowPopup } = useSubscriptionContext();
+  // const { plans, showPopup, setShowPopup } = useSubscriptionContext();
 
 
   // function handlePopup(plan) {
@@ -120,7 +120,7 @@ const Subscription = () => {
     // </div>
 
     <>
-    this is subs page
+      this is subs page
     </>
   );
 };

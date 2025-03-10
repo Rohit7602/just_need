@@ -14,6 +14,7 @@ import DisablePopUp from "../../Components/Popups/DisablePopUp";
 import EnablePopUp from "../../Components/Popups/EnablePopUp";
 import GalleryImg1 from "../../assets/png/houseCleaner.png";
 import { useCustomerContext } from "../../store/CustomerContext";
+import { useListingContext } from "../../store/ListingContext";
 
 function UserDetails() {
   const { id } = useParams();
@@ -21,14 +22,25 @@ function UserDetails() {
   const [showPopupDisable, setShowPopupDisable] = useState(false);
   const [showImagePreviewPopUp, setShowImagePreviewPopUp] = useState(false);
   const [hoveredItemId, setHoveredItemId] = useState(null); // Track hovered item
+  const [listings, setListings] = useState([]);
 
   const { users, loading, setLoading } = useCustomerContext(); // Get users from context
+  const { fetchlisting } = useListingContext();
+
+  async function getlisting() {
+    const listingVal = await fetchlisting();
+
+    setListings(listingVal);
+  }
+
+  useEffect(() => {
+    getlisting();
+  }, []);
 
   // Fetch user data from the users array based on the ID
   useEffect(() => {
     if (users && users.length > 0) {
       const foundUser = users.find((user) => user.id === id);
-      console.log(foundUser, "found users");
       if (foundUser) {
         setUser(foundUser);
       } else {
@@ -36,7 +48,7 @@ function UserDetails() {
       }
       setLoading(false);
     }
-  }, [id, users]);
+  }, []);
 
   function handlePopupDisable() {
     setShowPopupDisable(!showPopupDisable);
@@ -48,41 +60,6 @@ function UserDetails() {
   const handleImagePreviewPopUp = () => {
     setShowImagePreviewPopUp(!showImagePreviewPopUp);
   };
-
-  const [listings, setListings] = useState([
-    {
-      id: 1,
-      name: "House Cleaner",
-      description: "Lorem ipsum...",
-      rating: 4.2,
-      reviews: 1452,
-      isEnabled: true,
-    },
-    {
-      id: 2,
-      name: "Plumber",
-      description: "Lorem ipsum...",
-      rating: 4.5,
-      reviews: 980,
-      isEnabled: true,
-    },
-    {
-      id: 3,
-      name: "Electrician",
-      description: "Lorem ipsum...",
-      rating: 4.0,
-      reviews: 870,
-      isEnabled: true,
-    },
-    {
-      id: 4,
-      name: "Gardener",
-      description: "Lorem ipsum...",
-      rating: 4.3,
-      reviews: 450,
-      isEnabled: true,
-    },
-  ]);
 
   const [showPopup, setShowPopup] = useState(false);
   const [popupType, setPopupType] = useState("");
@@ -233,64 +210,72 @@ function UserDetails() {
         )}
       </div>
 
-      <p className="font-medium text-lg leading-[22px] text-black pb-2.5 border-b-[0.5px] border-dashed border-[#00000066] mt-[30px]">
-        Posted Listing
-      </p>
-      <div className="flex flex-row flex-wrap -mx-3">
-        {listings.map((item) => (
-          <div
-            key={item.id}
-            className="w-6/12 mt-3 xl:mt-[15px] xl:w-3/12 px-3"
-            style={{ opacity: item.isEnabled ? 1 : 0.5 }}
-          >
-            <div
-              className="border-[1px] border-[#ebeaea] rounded-[10px] relative group  transition-all cursor-pointer"
-              onMouseEnter={() => setHoveredItemId(item.id)} // Track hover state
-              onMouseLeave={() => setHoveredItemId(null)} // Reset hover state
-            >
-              <img
-                className="rounded-[10px] w-full group-hover:opacity-70 hover:bg-gray-100"
-                src={GalleryImg1}
-                alt="Listing"
-              />
-              <div className="p-2.5">
-                <div className="flex items-center justify-between h-[40px] ">
-                  <p className="font-medium text-sm text-black">{item.name}</p>
-                  <div className="p-2">
-                    <button
-                      onClick={() =>
-                        handlePopup(
-                          item.id,
-                          item.isEnabled ? "disable" : "enable"
-                        )
-                      }
-                      className="flex items-center"
-                    >
-                      {/* Show Enable text on hover, otherwise show Disable icon */}
-                      {hoveredItemId === item.id ? (
-                        <span className="text-xs font-normal text-[#0DA800]">
-                          Enable
-                        </span>
-                      ) : (
-                        <DisableRedicon />
-                      )}
-                    </button>
+      {!user.userType ? (
+        <>
+          <p className="font-medium text-lg leading-[22px] text-black pb-2.5 border-b-[0.5px] border-dashed border-[#00000066] mt-[30px]">
+            Posted Listing
+          </p>
+          <div className="flex flex-row flex-wrap -mx-3">
+            {listings?.map((item) => (
+              // console.log(item),
+              <div
+                key={item.id}
+                className="w-6/12 mt-3 xl:mt-[15px] xl:w-3/12 px-3"
+              >
+                <div
+                  className="border-[1px] border-[#ebeaea] rounded-[10px] relative group  transition-all cursor-pointer"
+                  onMouseEnter={() => setHoveredItemId(item.id)} // Track hover state
+                  onMouseLeave={() => setHoveredItemId(null)} // Reset hover state
+                >
+                  <img
+                    className="rounded-[10px] w-full group-hover:opacity-70 hover:bg-gray-100"
+                    src={item.images?.[0]}
+                    alt="Listing"
+                  />
+                  <div className="p-2.5">
+                    <div className="flex items-center justify-between h-[40px] ">
+                      <p className="font-medium text-sm text-black">
+                        {item.title}
+                      </p>
+                      <div className="p-2">
+                        <button
+                          onClick={() =>
+                            handlePopup(
+                              item.id,
+                              item.isEnabled ? "disable" : "enable"
+                            )
+                          }
+                          className="flex items-center"
+                        >
+                          {/* Show Enable text on hover, otherwise show Disable icon */}
+                          {hoveredItemId === item.id ? (
+                            <span className="text-xs font-normal text-[#0DA800]">
+                              Enable
+                            </span>
+                          ) : (
+                            <DisableRedicon />
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                    <p className="font-normal text-[14px] text-[#00000099] mt-1">
+                      {item.description}
+                    </p>
+                    <div className="flex items-center gap-1 mt-2">
+                      <RatingStarIcon />
+                      <h3 className="text-[#000F02] text-[10px] font-normal">
+                        {item.rating} | {item.reviewCount} reviews
+                      </h3>
+                    </div>
                   </div>
                 </div>
-                <p className="font-normal text-[14px] text-[#00000099] mt-1">
-                  {item.description}
-                </p>
-                <div className="flex items-center gap-1 mt-2">
-                  <RatingStarIcon />
-                  <h3 className="text-[#000F02] text-[10px] font-normal">
-                    {item.rating} | {item.reviews} reviews
-                  </h3>
-                </div>
               </div>
-            </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      ) : (
+        <p className="mt-5 text-center">No user Found</p>
+      )}
 
       {showPopupDisable && (
         <DisableProviderPopUp

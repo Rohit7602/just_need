@@ -17,7 +17,6 @@ export function CustomerContext({ children }) {
         setLoading(true);
         const { data, error } = await supabase.from("users").select("*");
 
-        console.log(data, "data");
         if (error) throw error;
         setUsers(data || []);
       } catch (err) {

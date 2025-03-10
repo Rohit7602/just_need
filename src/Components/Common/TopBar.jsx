@@ -10,12 +10,14 @@ import AdminImage from "../../assets/png/AdminImage.png";
 import { Link, useLocation } from "react-router-dom";
 import { ArrowIcon } from "../../assets/icon/Icons";
 import NotificationPopUp from "../Popups/NotificationPopUp";
+import ScrollNotify from "../Popups/ScrollNotify";
 
 function TopBar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [isInputVisible, setIsInputVisible] = useState(false);
   const [notificationPopUp, setNotificationPopUp] = useState(false);
+  const [chatPopup, setchatPopup] = useState(false)
   const searchRef = useRef(null);
 
   const toggleSearchInput = () => {
@@ -62,6 +64,10 @@ function TopBar() {
     setNotificationPopUp(!notificationPopUp);
   };
 
+  function handleChatPopup() {
+    setchatPopup(!chatPopup)
+  }
+
   // Determine when to show the back arrow button
   const showArrowButton =
     /\/dashboard\/complaints\/complaintsDetails\/\d+$/.test(
@@ -98,8 +104,8 @@ function TopBar() {
                   </span>
                 </p>
               ) : location.pathname.includes(
-                  "/dashboard/usersList/userDetails/"
-                ) ? (
+                "/dashboard/usersList/userDetails/"
+              ) ? (
                 "User's Details"
               ) : (
                 location.pathname
@@ -120,11 +126,10 @@ function TopBar() {
         <div className="flex items-center gap-2 xl:gap-4">
           <div
             ref={searchRef}
-            className={`flex items-center h-[40px] rounded-[50px] bg-[#F1F1F1] ${
-              isInputVisible
-                ? "w-[185px] lg:max-w-[330px] xl:w-[330px]"
-                : "max-w-[40px]"
-            } transition-all duration-300`}
+            className={`flex items-center h-[40px] rounded-[50px] bg-[#F1F1F1] ${isInputVisible
+              ? "w-[185px] lg:max-w-[330px] xl:w-[330px]"
+              : "max-w-[40px]"
+              } transition-all duration-300`}
           >
             <div
               onClick={toggleSearchInput}
@@ -145,12 +150,14 @@ function TopBar() {
               </div>
             )}
           </div>
-          <Link
-            to={"/dashboard/chat"}
+          <button onClick={handleChatPopup}
+
             state={"Plan, prioritize, and accomplish your tasks with ease."}
           >
             <ChatIcon />
-          </Link>
+          </button>
+
+
           <button onClick={handleNotificationPopUp}>
             <NotificationIcon />
           </button>
@@ -172,6 +179,15 @@ function TopBar() {
           <NotificationPopUp onCancel={handleNotificationPopUp} />
         </div>
       )}
+
+      {chatPopup && (
+        <ScrollNotify onCancel={handleChatPopup} />
+      )}
+
+
+
+
+
     </div>
   );
 }

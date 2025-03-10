@@ -23,44 +23,44 @@ const ListingDetails = () => {
 
   const { id } = useParams();
 
+  // console.log(id,"id");
+
   const { fetchlistingWithId } = useListingContext();
 
   async function getData() {
     const value = await fetchlistingWithId(id);
 
-  
     setListData(value);
   }
 
-
-
-
-  async function handleBlock(e,val) {
-
-    e.preventDefault()
+  async function handleBlock(e, val) {
+    e.preventDefault();
     const confirmDelete = window.confirm("Are you sure?");
     if (confirmDelete) {
-       const { data, error } = await supabase
-         .from("service_listings") // Replace with your table name
-         .update({
-           blockStatus: {
-             isBlocked: !val.isBlocked,
-             reason: val.reason,
-             blockedBy: val.blockedBy,
-           },
-         }) // Pass the updated data object
-         .eq("id", id); // Filter by id
+      const { data, error } = await supabase
+        .from("service_listings") // Replace with your table name
+        .update({
+          blockStatus: {
+            isBlocked: !val.isBlocked,
+            reason: val.reason,
+            blockedBy: val.blockedBy,
+          },
+        }) // Pass the updated data object
+        .eq("id", id); // Filter by id
 
-       if (!error) {
-         setListData((prev)=>({...prev,blockStatus:{...listData.blockStatus,isBlocked:!prev.blockStatus.isBlocked}}))
-       
-       }else{
-        alert('something went wrong. Please try again')
-       }
-      } 
-    
-}
-
+      if (!error) {
+        setListData((prev) => ({
+          ...prev,
+          blockStatus: {
+            ...listData.blockStatus,
+            isBlocked: !prev.blockStatus.isBlocked,
+          },
+        }));
+      } else {
+        alert("something went wrong. Please try again");
+      }
+    }
+  }
 
   useEffect(() => {
     getData();
@@ -98,13 +98,18 @@ const ListingDetails = () => {
               {listData.description}
             </p>
             <div className="flex gap-2 flex-wrap">
-              {listData.images.length !=0 && listData?.images?.map((item, index) => {
-                return (
-                  <div className=" rounded-md w-[250px]">
-                    <img className="rounded-md w-full" src={item} alt="listDetail" />
-                  </div>
-                );
-              })}
+              {listData.images != 0 &&
+                listData?.images?.map((item, index) => {
+                  return (
+                    <div key={index} className=" rounded-md w-[250px]">
+                      <img
+                        className="rounded-md w-full"
+                        src={item}
+                        alt="listDetail"
+                      />
+                    </div>
+                  );
+                })}
             </div>
           </div>
 

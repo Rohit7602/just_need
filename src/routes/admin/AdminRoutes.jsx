@@ -59,8 +59,8 @@ function AdminRoutes() {
         <Route path="serviceRequest" element={<ServiceRequest />} />
         <Route path="services" element={<Services />} />
 
-        
-        <Route path="listings" element={<Listing />}/>
+
+        <Route path="listings" element={<Listing />} />
         <Route path="listings/:id" element={<ListingDetails />} />
 
         <Route path="bannerDetail" element={<BannerDetails />} />
