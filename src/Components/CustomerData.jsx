@@ -250,7 +250,7 @@ const CustomerData = ({ mapData }) => {
   }, []);
 
   // Condition to show Delete and My Action buttons
-  const showActionButtons = selectItem.length >= 2 || mainCheckbox;
+  const showActionButtons = selectItem.length >= 2;
 
   return (
     <div className="bg-[#FFFFFF] p-5 rounded-[10px]">
@@ -405,11 +405,10 @@ const CustomerData = ({ mapData }) => {
                     )}
                   </td>
                   <td
-                    className={`px-[19px] md:px-[24px] text-sm font-normal w-[50px] truncate ${
-                      customer.userType === true
-                        ? "bg-[#0000FF12] text-[#0000FF] rounded-[90px]"
-                        : "text-[#FFA500] bg-[#FFA50024] rounded-[90px]"
-                    }`}
+                    className={`px-[19px] md:px-[24px] text-sm font-normal w-[50px] truncate ${customer.userType === true
+                      ? "bg-[#0000FF12] text-[#0000FF] rounded-[90px]"
+                      : "text-[#FFA500] bg-[#FFA50024] rounded-[90px]"
+                      }`}
                   >
                     {customer.userType === true ? "Consumer" : "Provider"}
                   </td>
@@ -420,11 +419,10 @@ const CustomerData = ({ mapData }) => {
                     {formatDate(customer.updated_at)}
                   </td>
                   <td
-                    className={`px-[10px] py-[4px] text-sm font-normal text-center ${
-                      customer.accountStatus === "active"
-                        ? "bg-[#00800012] text-[#008000] rounded-[90px]"
-                        : "text-[#800000] rounded-[90px] bg-[#FF000012]"
-                    }`}
+                    className={`px-[10px] py-[4px] text-sm font-normal text-center ${customer.accountStatus === "active"
+                      ? "bg-[#00800012] text-[#008000] rounded-[90px]"
+                      : "text-[#800000] rounded-[90px] bg-[#FF000012]"
+                      }`}
                   >
                     {customer.accountStatus}
                   </td>
@@ -456,11 +454,10 @@ const CustomerData = ({ mapData }) => {
                 <span>▼</span>
                 {showItemsDropdown && (
                   <div
-                    className={`absolute ${
-                      dropdownPosition === "top"
-                        ? "bottom-full mb-1"
-                        : "top-full mt-1"
-                    } bg-white border rounded shadow-lg w-full z-10`}
+                    className={`absolute ${dropdownPosition === "top"
+                      ? "bottom-full mb-1"
+                      : "top-full mt-1"
+                      } bg-white border rounded shadow-lg w-full z-10`}
                   >
                     {[5, 10, 15, 20].map((item) => (
                       <button
