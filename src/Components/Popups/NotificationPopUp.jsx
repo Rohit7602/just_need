@@ -27,7 +27,7 @@ function NotificationPopUp({ onCancel }) {
               <div>
                 <p className="text-black text-sm font-normal max-w-[300px]">
                   It is a long established fact that a reader will be when
-                  looking at its layout. 
+                  looking at its layout.
                 </p>
                 <p className="text-[#ADA4A5] font-normal text-sm mt-[5px]">
                   7 Mar 2024 (12:12 AM)
@@ -42,7 +42,7 @@ function NotificationPopUp({ onCancel }) {
               <div>
                 <p className="text-black text-sm font-normal max-w-[300px]">
                   It is a long established fact that a reader will be when
-                  looking at its layout. 
+                  looking at its layout.
                 </p>
                 <p className="text-[#ADA4A5] font-normal text-sm mt-[5px]">
                   7 Mar 2024 (12:12 AM)
@@ -57,7 +57,7 @@ function NotificationPopUp({ onCancel }) {
               <div>
                 <p className="text-black text-sm font-normal max-w-[300px]">
                   It is a long established fact that a reader will be when
-                  looking at its layout. 
+                  looking at its layout.
                 </p>
                 <p className="text-[#ADA4A5] font-normal text-sm mt-[5px]">
                   7 Mar 2024 (12:12 AM)
@@ -72,7 +72,7 @@ function NotificationPopUp({ onCancel }) {
               <div>
                 <p className="text-black text-sm font-normal max-w-[300px]">
                   It is a long established fact that a reader will be when
-                  looking at its layout. 
+                  looking at its layout.
                 </p>
                 <p className="text-[#ADA4A5] font-normal text-sm mt-[5px]">
                   7 Mar 2024 (12:12 AM)

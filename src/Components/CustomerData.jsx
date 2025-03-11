@@ -13,6 +13,7 @@ import {
   ArrowIconLeft,
   DeleteIcon,
   DownArrow,
+  FilterSvg,
 } from ".././assets/icon/Icons";
 import { supabase } from "../store/supabaseCreateClient";
 import { toast } from "react-toastify";
@@ -24,11 +25,12 @@ const CustomerData = ({ mapData }) => {
   const [selectItem, setSelectItem] = useState([]);
   const [showFilterPopup, setShowFilterPopup] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  // const [users, setUsers] = useState([]);
-  // const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [showDeletePopup, setShowDeletePopup] = useState(false); // New state for delete confirmation popup
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [filterPopupsvg, setFilterPopupSvg] = useState(false);
+  const [selectedFilters, setSelectedFilters] = useState([]);
+  const [searchPlaceholder, setSearchPlaceholder] = useState("Search"); // New state for dynamic placeholder
 
   const formatDate = (milliseconds) => {
     const date = new Date(milliseconds);
@@ -43,20 +45,51 @@ const CustomerData = ({ mapData }) => {
     return `${day} ${month} ${year} | ${formattedHours}:${formattedMinutes} ${ampm}`;
   };
 
-  // context data here ===============
-
   const { users, setUsers, loading } = useCustomerContext();
 
-  console.log(users, "users");
-
+  // Filter logic based on selected fields
   const filteredData = users?.filter((customer) => {
-    return (
-      (customer.firstName + " " + customer.lastName)
-        ?.toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      customer.useremail?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      customer.mobile_number?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    if (selectedFilters.length === 0) {
+      return (
+        (customer.firstName + " " + customer.lastName)
+          ?.toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        customer.useremail?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        customer.mobile_number
+          ?.toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        customer?.address?.some((addr) =>
+          `${addr.city}/${addr.state}`
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase())
+        )
+      );
+    }
+
+    return selectedFilters.some((filter) => {
+      switch (filter) {
+        case "name":
+          return (customer.firstName + " " + customer.lastName)
+            ?.toLowerCase()
+            .includes(searchTerm.toLowerCase());
+        case "email":
+          return customer.useremail
+            ?.toLowerCase()
+            .includes(searchTerm.toLowerCase());
+        case "address":
+          return customer?.address?.some((addr) =>
+            `${addr.city}/${addr.state}`
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase())
+          );
+        case "mobile":
+          return customer.mobile_number
+            ?.toLowerCase()
+            .includes(searchTerm.toLowerCase());
+        default:
+          return false;
+      }
+    });
   });
 
   // Pagination logic
@@ -133,7 +166,7 @@ const CustomerData = ({ mapData }) => {
   // Delete functionality
   const handleDeleteClick = () => {
     if (selectItem.length > 0) {
-      setShowDeletePopup(true); // Show confirmation popup if users are selected
+      setShowDeletePopup(true);
     } else {
       toast.info("Please select at least one user to delete.");
     }
@@ -148,7 +181,6 @@ const CustomerData = ({ mapData }) => {
 
       if (error) throw error;
 
-      // Update local state to reflect changes
       setUsers((prevUsers) =>
         prevUsers.map((user) =>
           selectItem.includes(user.id)
@@ -156,18 +188,18 @@ const CustomerData = ({ mapData }) => {
             : user
         )
       );
-      setSelectItem([]); // Clear selected items
-      setMainCheckbox(false); // Uncheck main checkbox
-      setShowDeletePopup(false); // Close popup
+      setSelectItem([]);
+      setMainCheckbox(false);
+      setShowDeletePopup(false);
       toast.success("Selected users have been disabled successfully.");
     } catch (err) {
       console.error("Error disabling users:", err);
-      alert("Failed to disable users. Please try again.");
+      toast.error("Failed to disable users. Please try again.");
     }
   };
 
   const handleCancelDelete = () => {
-    setShowDeletePopup(false); // Close popup without action
+    setShowDeletePopup(false);
   };
 
   const location = useLocation();
@@ -187,6 +219,26 @@ const CustomerData = ({ mapData }) => {
     setShowItemsDropdown((prev) => !prev);
   };
 
+  // Handle filter checkbox clicks and update placeholder
+  const handleFilterCheckboxChange = (field) => {
+    const updatedFilters = selectedFilters.includes(field)
+      ? selectedFilters.filter((f) => f !== field)
+      : [...selectedFilters, field];
+    setSelectedFilters(updatedFilters);
+    setFilterPopupSvg(false); // Close popup on click
+
+    // Update placeholder based on selected filters
+    if (updatedFilters.length === 0) {
+      setSearchPlaceholder("Search");
+    } else {
+      setSearchPlaceholder(
+        `Search ${updatedFilters
+          .map((f) => f.charAt(0).toUpperCase() + f.slice(1))
+          .join(", ")}`
+      );
+    }
+  };
+
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -197,6 +249,9 @@ const CustomerData = ({ mapData }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Condition to show Delete and My Action buttons
+  const showActionButtons = selectItem.length >= 2;
+
   return (
     <div className="bg-[#FFFFFF] p-5 rounded-[10px]">
       <div className="flex justify-between items-center mt-[15px]">
@@ -204,34 +259,46 @@ const CustomerData = ({ mapData }) => {
           <h2 className="text-base xl:text-[20px] font-medium text-[#000000] opacity-70">
             Users List
           </h2>
-          <button
-            className="border border-[#F1F1F1] text-[#00000099] py-[7px] px-[20px] rounded-[10px] flex items-center gap-2"
-            onClick={handleDeleteClick}
-          >
-            <span>
-              <DeleteIcon />
-            </span>
-            Delete
-          </button>
-          {/* <button className="border border-[#F1F1F1] text-[#00000099] py-[7px] px-[20px] rounded-[10px] flex items-center gap-2">
-            My Action
-            <span>
-              <DownArrow />
-            </span>
-          </button> */}
+          {showActionButtons && (
+            <>
+              <button
+                className="border border-[#F1F1F1] text-[#00000099] py-[7px] px-[20px] rounded-[10px] flex items-center gap-2"
+                onClick={handleDeleteClick}
+              >
+                <span>
+                  <DeleteIcon />
+                </span>
+                Delete
+              </button>
+              <button className="border border-[#F1F1F1] text-[#00000099] py-[7px] px-[20px] rounded-[10px] flex items-center gap-2">
+                My Action
+                <span>
+                  <DownArrow />
+                </span>
+              </button>
+            </>
+          )}
         </div>
 
         <div className="flex">
-          <div className="flex rounded-[10px] items-center p-2 h-[42px] bg-[#F1F1F1] me-2 xl:me-[20px]">
+          <div className="flex rounded-[10px] items-center p-2 h-[42px] bg-[#F1F1F1] xl:me-[20px]">
             <CiSearch className="ms-2" />
             <input
               type="text"
-              placeholder="Search by name, email, mobile, address"
+              placeholder={searchPlaceholder}
               className="ms-2.5 focus:outline-none focus:ring-gray-400 bg-[#F1F1F1]"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
+          {/* Filter SVG button */}
+          <button
+            onClick={() => setFilterPopupSvg(!filterPopupsvg)}
+            className="mx-5 w-[40px] h-[40px] bg-[#F1F1F1] flex items-center justify-center rounded-[10px]"
+          >
+            <FilterSvg />
+          </button>
+
           <button
             className="bg-[#0832DE] text-white px-[15px] py-2 rounded-[10px] flex items-center"
             onClick={handleFilter}
@@ -338,11 +405,10 @@ const CustomerData = ({ mapData }) => {
                     )}
                   </td>
                   <td
-                    className={`px-[19px] md:px-[24px] text-sm font-normal w-[50px] truncate ${
-                      customer.userType === true
-                        ? "bg-[#0000FF12] text-[#0000FF] rounded-[90px]"
-                        : "text-[#FFA500] bg-[#FFA50024] rounded-[90px]"
-                    }`}
+                    className={`px-[19px] md:px-[24px] text-sm font-normal w-[50px] truncate ${customer.userType === true
+                      ? "bg-[#0000FF12] text-[#0000FF] rounded-[90px]"
+                      : "text-[#FFA500] bg-[#FFA50024] rounded-[90px]"
+                      }`}
                   >
                     {customer.userType === true ? "Consumer" : "Provider"}
                   </td>
@@ -353,11 +419,10 @@ const CustomerData = ({ mapData }) => {
                     {formatDate(customer.updated_at)}
                   </td>
                   <td
-                    className={`px-[10px] py-[4px] text-sm font-normal text-center ${
-                      customer.accountStatus === "active"
-                        ? "bg-[#00800012] text-[#008000] rounded-[90px]"
-                        : "text-[#800000] rounded-[90px] bg-[#FF000012]"
-                    }`}
+                    className={`px-[10px] py-[4px] text-sm font-normal text-center ${customer.accountStatus === "active"
+                      ? "bg-[#00800012] text-[#008000] rounded-[90px]"
+                      : "text-[#800000] rounded-[90px] bg-[#FF000012]"
+                      }`}
                   >
                     {customer.accountStatus}
                   </td>
@@ -389,11 +454,10 @@ const CustomerData = ({ mapData }) => {
                 <span>▼</span>
                 {showItemsDropdown && (
                   <div
-                    className={`absolute ${
-                      dropdownPosition === "top"
-                        ? "bottom-full mb-1"
-                        : "top-full mt-1"
-                    } bg-white border rounded shadow-lg w-full z-10`}
+                    className={`absolute ${dropdownPosition === "top"
+                      ? "bottom-full mb-1"
+                      : "top-full mt-1"
+                      } bg-white border rounded shadow-lg w-full z-10`}
                   >
                     {[5, 10, 15, 20].map((item) => (
                       <button
@@ -451,7 +515,6 @@ const CustomerData = ({ mapData }) => {
         </div>
       </div>
 
-      {/* Delete Confirmation Popup */}
       {showDeletePopup && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-[10px] shadow-lg w-[400px]">
@@ -484,6 +547,80 @@ const CustomerData = ({ mapData }) => {
           handleFilter={handleFilter}
           handleFilterPopupClose={handleFilterPopupClose}
         />
+      )}
+
+      {filterPopupsvg && (
+        <div
+          onClick={() => setFilterPopupSvg(false)}
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the popup
+            className="bg-white p-6 rounded-[10px] shadow-lg w-[300px]"
+          >
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="name"
+                  onChange={() => handleFilterCheckboxChange("name")}
+                  checked={selectedFilters.includes("name")}
+                />
+                <label
+                  htmlFor="name"
+                  className="text-base font-normal leading-[140%]"
+                >
+                  Name
+                </label>
+              </div>
+              <div className="border border-[#E8E8E8] w-full"></div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="email"
+                  onChange={() => handleFilterCheckboxChange("email")}
+                  checked={selectedFilters.includes("email")}
+                />
+                <label
+                  htmlFor="email"
+                  className="text-base font-normal leading-[140%]"
+                >
+                  Email
+                </label>
+              </div>
+              <div className="border border-[#E8E8E8] w-full"></div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="address"
+                  onChange={() => handleFilterCheckboxChange("address")}
+                  checked={selectedFilters.includes("address")}
+                />
+                <label
+                  htmlFor="address"
+                  className="text-base font-normal leading-[140%]"
+                >
+                  Address
+                </label>
+              </div>
+              <div className="border border-[#E8E8E8] w-full"></div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="mobile"
+                  onChange={() => handleFilterCheckboxChange("mobile")}
+                  checked={selectedFilters.includes("mobile")}
+                />
+                <label
+                  htmlFor="mobile"
+                  className="text-base font-normal leading-[140%]"
+                >
+                  Mobile
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

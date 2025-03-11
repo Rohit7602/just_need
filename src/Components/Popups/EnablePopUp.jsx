@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useServiceContext } from "../../store/ServiceContext";
 
 function AddSubCategoryPopUp({
-  handleClose,
+  onCancel,
   selectedCategoryId,
   initialData,
   isEditMode,
@@ -24,7 +24,7 @@ function AddSubCategoryPopUp({
         // Assuming addSubcategory is a function in your context to add a new subcategory
         addSubcategory(selectedCategoryId, name);
       }
-      handleClose(); // Close the popup
+      onCancel(); // Close the popup
     }
   };
 
@@ -43,7 +43,7 @@ function AddSubCategoryPopUp({
         />
         <div className="flex justify-end mt-4">
           <button
-            onClick={handleClose}
+            onClick={() => onCancel()}
             className="mr-2 text-gray-500 px-4 py-2 rounded-[10px]"
           >
             Cancel

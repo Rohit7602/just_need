@@ -87,11 +87,10 @@ function Aside() {
                             <button
                               key={month}
                               onClick={() => handleMonthClick(i)}
-                              className={` p-1 rounded-md text-xs font-normal ${
-                                i === selectedMonth.getMonth()
+                              className={` p-1 rounded-md text-xs font-normal ${i === selectedMonth.getMonth()
                                   ? "text-[#6C4DEF]"
                                   : "text-black"
-                              }`}
+                                }`}
                             >
                               {month}
                             </button>
