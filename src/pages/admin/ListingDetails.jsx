@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import machanicImg from "../../assets/png/mechanicImage.png";
-import listDetail from "../../assets/png/listDetail.png";
+
 import user from "../../assets/png/user for listing.png";
 import star from "../../assets/png/star.png";
 import { useParams } from "react-router-dom";
@@ -12,9 +11,7 @@ import {
   EmailIcon,
   LocationIcon,
   PhoneIcon,
-  RatingStarIcon,
-  DisableRedicon,
-  EnableRedIcon,
+
 } from "../../assets/icon/Icons";
 import { useListingContext } from "../../store/ListingContext";
 
@@ -32,6 +29,8 @@ const ListingDetails = () => {
 
     setListData(value);
   }
+
+  console.log(listData, "data")
 
   async function handleBlock(e, val) {
     e.preventDefault();
@@ -122,21 +121,21 @@ const ListingDetails = () => {
                     <div className="pe-5 border-e-[1px] border-[#FFFFFF66]">
                       <img
                         className="w-[78px] h-[78px] rounded-full object-cover"
-                        src={machanicImg}
+                        src={listData?.user_detail?.image}
                         alt="image of user"
                       />
                       <h1 className="font-medium lg:text-base xl:text-lg text-white mt-2.5 text-center">
-                        {"Dummy"}
+                        {listData?.user_detail?.firstName}
                       </h1>
                       <h2 className="text-sm font-normal text-white mt-1 text-center">
-                        {"Plumber"}
+                        {listData?.user_detail?.lastName}
                       </h2>
                     </div>
                     <div className="ps-5">
                       <div className="flex gap-2.5 items-center">
                         <PhoneIcon />
                         <h3 className="text-sm font-normal text-white">
-                          {"1234567890"}
+                          {listData?.user_detail?.mobile_number}
                         </h3>
                       </div>
                       <div className="flex gap-2.5 items-center mt-2.5">
@@ -167,7 +166,7 @@ const ListingDetails = () => {
 
             <div className="flex gap-[83px] items-center flex-wrap">
               <div className="flex items-center gap-5">
-                <span className="text-[48px]">4.2</span>
+                <span className="text-[48px]">{listData?.rating}</span>
                 <div>
                   <div className="flex gap-2">
                     <div>
@@ -186,7 +185,7 @@ const ListingDetails = () => {
                       <img src={star} alt="star" />
                     </div>
                   </div>
-                  <p className="mt-2">1462 reviews</p>
+                  <p className="mt-2">{listData?.reviewCount} reviews</p>
                 </div>
               </div>
 
