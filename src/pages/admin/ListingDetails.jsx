@@ -30,9 +30,10 @@ const ListingDetails = () => {
     setListData(value);
   }
 
-  console.log(listData, "data")
+
 
   async function handleBlock(e, val) {
+    console.log(val, "val")
     e.preventDefault();
     const confirmDelete = window.confirm("Are you sure?");
     if (confirmDelete) {
@@ -94,10 +95,10 @@ const ListingDetails = () => {
               </div>
             </div>
             <p className="mb-[18px] text-[14px] text-[#00000099]">
-              {listData.description}
+              {listData?.description}
             </p>
             <div className="flex gap-2 flex-wrap">
-              {listData.images != 0 &&
+              {listData?.images != 0 &&
                 listData?.images?.map((item, index) => {
                   return (
                     <div key={index} className=" rounded-md w-[250px]">
