@@ -57,7 +57,7 @@ function AddSubCategoryPopUp({
     );
 
     if (subcategoryExists) {
-      toast.error("A subcategory with this name already exists in this category.");
+      toast.info("A subcategory with this name already exists in this category.");
       return;
     }
 

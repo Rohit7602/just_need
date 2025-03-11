@@ -511,7 +511,7 @@ function Services() {
           <div className="mt-8 relative">
             <div className="flex whitespace-nowrap">
               <div className="gap-4 flex items-center cursor-pointer overflow-x-auto scrollbar-hide">
-                {filteredCategoriesData.map((items, index) => (
+                {filteredCategoriesData?.map((items, index) => (
                   <div
                     key={index}
                     className={`flex items-center pb-2 border-b-2 px-5 hover:text-blue-500 hover:border-blue-500 ${activeTab === index

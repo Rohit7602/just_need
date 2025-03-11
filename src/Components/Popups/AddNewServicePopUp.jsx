@@ -25,7 +25,7 @@ function AddNewServicePopUp({ handleNewServicePopUp, onSuccess }) {
     );
 
     if (categoryExists) {
-      toast.error("A category with this name already exists.");
+      toast.info("A category with this name already exists.");
       return;
     }
 

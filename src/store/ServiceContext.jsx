@@ -419,7 +419,7 @@ function ServiceContext({ children }) {
       }}
     >
       {children}
-      {/* {loading && <Loader />} */}
+      {loading && <Loader />}
     </serviceProvider.Provider>
   );
 }
