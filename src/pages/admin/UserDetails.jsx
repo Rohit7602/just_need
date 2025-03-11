@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 import {
   EmailIcon,
   LocationIcon,
@@ -21,7 +21,6 @@ function UserDetails() {
   const { id } = useParams();
   const [user, setUser] = useState(null);
   const [showPopupDisable, setShowPopupDisable] = useState(false);
-  const [hoveredItemId, setHoveredItemId] = useState(null);
   const [listings, setListings] = useState([]);
 
   const { users, loading, setLoading } = useCustomerContext();
@@ -32,9 +31,10 @@ function UserDetails() {
     setListings(listingVal || []); // Default to empty array if null
   }
 
+
   useEffect(() => {
     getlisting();
-  }, [fetchlisting]); // Added dependency
+  }, []); // Added dependency
 
   useEffect(() => {
     if (users && users.length > 0) {
@@ -46,7 +46,7 @@ function UserDetails() {
       }
       setLoading(false);
     }
-  }, [users, id]); // Added dependencies
+  }, []); // Added dependencies
 
   function handlePopupDisable() {
     setShowPopupDisable(!showPopupDisable);
@@ -208,14 +208,13 @@ function UserDetails() {
           </p>
           <div className="flex flex-row flex-wrap -mx-3">
             {listings?.map((item) => (
-              <div
+              <Link to={`/dashboard/listings/${item.id}`}
                 key={item.id}
                 className="w-6/12 mt-3 xl:mt-[15px] xl:w-3/12 px-3"
               >
                 <div
                   className="border-[1px] border-[#ebeaea] rounded-[10px] relative group transition-all cursor-pointer"
-                  onMouseEnter={() => setHoveredItemId(item.id)}
-                  onMouseLeave={() => setHoveredItemId(null)}
+
                 >
                   <img
                     className="rounded-[10px] w-full group-hover:opacity-70 hover:bg-gray-100"
@@ -254,7 +253,7 @@ function UserDetails() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </>

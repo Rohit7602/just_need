@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useRef, useEffect } from "react";
 import avatar from "../assets/Images/Png/dummyimage.jpg";
 import { FaAngleDown } from "react-icons/fa";
@@ -19,7 +20,7 @@ import { supabase } from "../store/supabaseCreateClient";
 import { toast } from "react-toastify";
 import { useCustomerContext } from "../store/CustomerContext";
 
-const CustomerData = ({ mapData }) => {
+const CustomerData = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [mainCheckbox, setMainCheckbox] = useState(false);
   const [selectItem, setSelectItem] = useState([]);
@@ -521,7 +522,7 @@ const CustomerData = ({ mapData }) => {
             <h2 className="text-lg font-medium mb-4">Confirm Disable Users</h2>
             <p className="mb-6">
               Are you sure you want to disable the selected {selectItem.length}{" "}
-              user(s)? This will set their status to "Inactive".
+              user(s)? This will set their status to Inactive.
             </p>
             <div className="flex justify-end gap-4">
               <button
