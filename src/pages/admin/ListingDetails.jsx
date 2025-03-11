@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import machanicImg from "../../assets/png/mechanicImage.png";
 import listDetail from "../../assets/png/listDetail.png";
@@ -8,14 +10,7 @@ import disable_img from "../../assets/png/disable_img.png";
 import enable_img from "../../assets/png/enable_img.png";
 import { supabase } from "../../store/supabaseCreateClient";
 
-import {
-  EmailIcon,
-  LocationIcon,
-  PhoneIcon,
-  RatingStarIcon,
-  DisableRedicon,
-  EnableRedIcon,
-} from "../../assets/icon/Icons";
+import { EmailIcon, LocationIcon, PhoneIcon } from "../../assets/icon/Icons";
 import { useListingContext } from "../../store/ListingContext";
 
 const ListingDetails = () => {
@@ -248,7 +243,7 @@ const ListingDetails = () => {
         <div className="flex  flex-col gap-5">
           {[0, 1, 2, 3, 4].map((item, index) => {
             return (
-              <div>
+              <div key={index}>
                 <hr className="my-[32px] border-dotted border-t-0 border-2 " />
                 <div className="flex  items-center justify-between">
                   <div className="flex items-center gap-3">
