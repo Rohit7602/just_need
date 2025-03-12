@@ -310,6 +310,7 @@ function BannerDetails() {
               onClick={() => handleEdit(item)}
             >
               <EditSvg />
+              {/*  */}
             </div>
             <div className="absolute top-[10px] left-[10px] bg-gray-400 rounded-[50px] px-2.5 py-[5px] opacity-0 group-hover:opacity-100">
               painting
