@@ -1,4 +1,5 @@
-import { useEffect, useState, useRef } from "react";
+/* eslint-disable no-unused-vars */
+import React, { useEffect, useState, useRef } from "react";
 import { supabase } from "../../store/supabaseCreateClient";
 import { toast } from "react-toastify";
 import {
@@ -328,7 +329,7 @@ function BannerDetails() {
 
             {/* Tag Offers */}
             <div className="absolute flex gap-2 flex-wrap bottom-[10px] left-[10px] z-[3]">
-              {item?.tagOffer.map((tag, index) => (
+              {item?.tagOffer.slice(0, 4).map((tag, index) => (
                 <div
                   key={index}
                   className="bg-[#6C4DEF] text-white px-2.5 rounded-[50px] py-[5px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
