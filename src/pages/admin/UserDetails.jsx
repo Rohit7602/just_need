@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 import {
   EmailIcon,
   LocationIcon,
@@ -10,34 +10,32 @@ import {
 } from "../../assets/icon/Icons";
 import MechanicImage from "../../assets/Images/Png/dummyimage.jpg";
 import DisableProviderPopUp from "../../Components/Popups/DisableProviderPopUp";
-import DisablePopUp from "../../Components/Popups/DisablePopUp";
-import EnablePopUp from "../../Components/Popups/EnablePopUp";
-import GalleryImg1 from "../../assets/png/houseCleaner.png";
+import disable_img from "../../assets/png/disable_img.png";
+import enable_img from "../../assets/png/enable_img.png";
 import { useCustomerContext } from "../../store/CustomerContext";
 import { useListingContext } from "../../store/ListingContext";
+import { supabase } from "../../store/supabaseCreateClient";
+import { toast } from "react-toastify";
 
 function UserDetails() {
   const { id } = useParams();
   const [user, setUser] = useState(null);
   const [showPopupDisable, setShowPopupDisable] = useState(false);
-  const [showImagePreviewPopUp, setShowImagePreviewPopUp] = useState(false);
-  const [hoveredItemId, setHoveredItemId] = useState(null); // Track hovered item
   const [listings, setListings] = useState([]);
 
-  const { users, loading, setLoading } = useCustomerContext(); // Get users from context
+  const { users, loading, setLoading } = useCustomerContext();
   const { fetchlisting } = useListingContext();
 
   async function getlisting() {
     const listingVal = await fetchlisting();
-
-    setListings(listingVal);
+    setListings(listingVal || []); // Default to empty array if null
   }
+
 
   useEffect(() => {
     getlisting();
-  }, []);
+  }, []); // Added dependency
 
-  // Fetch user data from the users array based on the ID
   useEffect(() => {
     if (users && users.length > 0) {
       const foundUser = users.find((user) => user.id === id);
@@ -48,50 +46,43 @@ function UserDetails() {
       }
       setLoading(false);
     }
-  }, []);
+  }, []); // Added dependencies
 
   function handlePopupDisable() {
     setShowPopupDisable(!showPopupDisable);
-    if (showPopupDisable) {
-      fetchUser(); // Refresh user data when popup closes
-    }
   }
 
-  const handleImagePreviewPopUp = () => {
-    setShowImagePreviewPopUp(!showImagePreviewPopUp);
-  };
+  async function handleBlock(e, listing) {
+    e.preventDefault(); // Only needed if inside a form
+    const confirmDelete = window.confirm("Are you sure?");
+    if (confirmDelete) {
+      const updatedBlockStatus = {
+        isBlocked: !listing.blockStatus.isBlocked,
+        reason: listing.blockStatus.reason || "", // Default if undefined
+        blockedBy: listing.blockStatus.blockedBy || "admin", // Default if undefined
+      };
 
-  const [showPopup, setShowPopup] = useState(false);
-  const [popupType, setPopupType] = useState("");
-  const [currentListingId, setCurrentListingId] = useState(null);
+      const { data, error } = await supabase
+        .from("service_listings")
+        .update({ blockStatus: updatedBlockStatus })
+        .eq("id", listing.id);
 
-  const handlePopup = (id, type) => {
-    const listing = listings.find((item) => item.id === id);
-    if (listing) {
-      setShowPopup(true);
-      setPopupType(listing.isEnabled ? "disable" : "enable"); // Set popup type based on current status
-      setCurrentListingId(id);
+      if (!error) {
+        setListings((prev) =>
+          prev.map((item) =>
+            item.id === listing.id
+              ? { ...item, blockStatus: updatedBlockStatus }
+              : item
+          )
+        );
+        toast.success("Update successful")
+        console.log("Update successful:", data);
+      } else {
+        console.error("Error updating block status:", error);
+        toast.error("Something went wrong. Please try again.");
+      }
     }
-  };
-
-  const handleConfirm = () => {
-    setListings((prevListings) =>
-      prevListings.map((listing) =>
-        listing.id === currentListingId
-          ? { ...listing, isEnabled: popupType === "enable" }
-          : listing
-      )
-    );
-    setShowPopup(false);
-    setPopupType("");
-    setCurrentListingId(null);
-  };
-
-  const handleCancel = () => {
-    setShowPopup(false);
-    setPopupType("");
-    setCurrentListingId(null);
-  };
+  }
 
   if (loading) return <div>Loading...</div>;
   if (!user) return <div>User not found</div>;
@@ -210,22 +201,20 @@ function UserDetails() {
         )}
       </div>
 
-      {!user.userType ? (
+      {!user?.userType ? (
         <>
           <p className="font-medium text-lg leading-[22px] text-black pb-2.5 border-b-[0.5px] border-dashed border-[#00000066] mt-[30px]">
             Posted Listing
           </p>
           <div className="flex flex-row flex-wrap -mx-3">
             {listings?.map((item) => (
-              // console.log(item),
-              <div
+              <Link to={`/dashboard/listings/${item.id}`}
                 key={item.id}
                 className="w-6/12 mt-3 xl:mt-[15px] xl:w-3/12 px-3"
               >
                 <div
-                  className="border-[1px] border-[#ebeaea] rounded-[10px] relative group  transition-all cursor-pointer"
-                  onMouseEnter={() => setHoveredItemId(item.id)} // Track hover state
-                  onMouseLeave={() => setHoveredItemId(null)} // Reset hover state
+                  className="border-[1px] border-[#ebeaea] rounded-[10px] relative group transition-all cursor-pointer"
+
                 >
                   <img
                     className="rounded-[10px] w-full group-hover:opacity-70 hover:bg-gray-100"
@@ -233,27 +222,22 @@ function UserDetails() {
                     alt="Listing"
                   />
                   <div className="p-2.5">
-                    <div className="flex items-center justify-between h-[40px] ">
+                    <div className="flex items-center justify-between h-[40px]">
                       <p className="font-medium text-sm text-black">
                         {item.title}
                       </p>
                       <div className="p-2">
-                        <button
-                          onClick={() =>
-                            handlePopup(
-                              item.id,
-                              item.isEnabled ? "disable" : "enable"
-                            )
-                          }
-                          className="flex items-center"
-                        >
-                          {/* Show Enable text on hover, otherwise show Disable icon */}
-                          {hoveredItemId === item.id ? (
-                            <span className="text-xs font-normal text-[#0DA800]">
-                              Enable
-                            </span>
+                        <button onClick={(e) => handleBlock(e, item)}>
+                          {item?.blockStatus?.isBlocked ? (
+                            <div className="flex justify-center items-center gap-2">
+                              <img src={disable_img} alt="disable_img" />
+                              <p className="text-[20px]">Disable</p>
+                            </div>
                           ) : (
-                            <DisableRedicon />
+                            <div className="flex justify-center items-center gap-2">
+                              <img src={enable_img} alt="enable_img" />
+                              <p className="text-[20px]">Enable</p>
+                            </div>
                           )}
                         </button>
                       </div>
@@ -269,7 +253,7 @@ function UserDetails() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </>
@@ -282,16 +266,6 @@ function UserDetails() {
           handlePopupDisable={handlePopupDisable}
           userId={id}
         />
-      )}
-
-      {showPopup && (
-        <div className="popup-container">
-          {popupType === "disable" ? (
-            <DisablePopUp onConfirm={handleConfirm} onCancel={handleCancel} />
-          ) : (
-            <EnablePopUp onConfirm={handleConfirm} onCancel={handleCancel} />
-          )}
-        </div>
       )}
     </div>
   );

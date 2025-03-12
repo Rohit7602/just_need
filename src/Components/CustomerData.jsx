@@ -1,5 +1,5 @@
-/* eslint-disable react/no-unescaped-entities */
-import { useState, useRef, useEffect } from "react";
+/* eslint-disable no-unused-vars */
+import React, { useState, useRef, useEffect } from "react";
 import avatar from "../assets/Images/Png/dummyimage.jpg";
 import ActionUserPupUp from "./Popups/ActionUserPupUp";
 import { Link, useLocation } from "react-router-dom";
@@ -522,7 +522,7 @@ const CustomerData = () => {
             <h2 className="text-lg font-medium mb-4">Confirm Disable Users</h2>
             <p className="mb-6">
               Are you sure you want to disable the selected {selectItem.length}{" "}
-              user(s)? This will set their status to "Inactive";.
+              user(s)? This will set their status to Inactive;.
             </p>
             <div className="flex justify-end gap-4">
               <button

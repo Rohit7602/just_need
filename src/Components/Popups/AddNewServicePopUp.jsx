@@ -1,34 +1,46 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { PlusIcon } from "../../assets/icon/Icon";
 import { useServiceContext } from "../../store/ServiceContext";
 import { toast } from "react-toastify";
 
-function AddNewServicePopUp({ handleNewServicePopUp }) {
+function AddNewServicePopUp({ handleNewServicePopUp, onSuccess }) {
   const [categoryName, setCategoryName] = useState("");
   const [categoryImage, setCategoryImage] = useState(null);
   const [categoryImageUrl, setCategoryImageUrl] = useState("");
   const [categoryImageName, setCategoryImageName] = useState("");
 
-  const { addCategoriesSubCategories } = useServiceContext();
+  const { addCategoriesSubCategories, categories } = useServiceContext();
 
   const handleSaveDetails = async () => {
-    if (!categoryName) {
+    if (!categoryName.trim()) {
       toast.error("Please enter a category name.");
       return;
     }
 
+    // Check if the category name already exists
+    const categoryExists = categories.some(
+      (cat) => cat.categoryName.toLowerCase() === categoryName.toLowerCase()
+    );
+
+    if (categoryExists) {
+      toast.info("A category with this name already exists.");
+      return;
+    }
+
     try {
-      console.log("Saving category with:", { categoryName, categoryImage });
       await addCategoriesSubCategories(categoryName, categoryImage);
       toast.success("Category added successfully!");
-      handleNewServicePopUp();
+      if (onSuccess) onSuccess(); // Trigger success callback
+      handleNewServicePopUp(); // Close the popup
     } catch (error) {
       console.error("Error in handleSaveDetails:", error.message);
       toast.error(`Failed to add category: ${error.message}`);
     }
   };
 
-  function handleCategoryImage(e) {
+  const handleCategoryImage = (e) => {
     const file = e.target.files[0];
     if (file) {
       const sizeInkb = 200 * 1024; // 200 KB in bytes
@@ -36,12 +48,11 @@ function AddNewServicePopUp({ handleNewServicePopUp }) {
         toast.info("Image size exceeds 200 KB. Please upload a smaller file.");
         return;
       }
-      console.log("Selected image:", file.name, file.size);
       setCategoryImage(file);
       setCategoryImageUrl(URL.createObjectURL(file));
       setCategoryImageName(file.name);
     }
-  }
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">

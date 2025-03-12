@@ -43,12 +43,12 @@ const Listing = () => {
           prevState.map((item) =>
             item.id == id
               ? {
-                  ...item,
-                  blockStatus: {
-                    ...item.blockStatus,
-                    isBlocked: !item.blockStatus.isBlocked,
-                  },
-                }
+                ...item,
+                blockStatus: {
+                  ...item.blockStatus,
+                  isBlocked: !item.blockStatus.isBlocked,
+                },
+              }
               : item
           )
         );
@@ -67,7 +67,7 @@ const Listing = () => {
       <div>
         <div className="bg-white rounded-md p-3">
           <div className="flex flex-row flex-wrap -mx-3">
-            {listData.map((item) => (
+            {listData?.map((item) => (
               <Link
                 to={`${item.id}`}
                 className="w-6/12 mt-3 xl:mt-[15px] xl:w-3/12 px-3"

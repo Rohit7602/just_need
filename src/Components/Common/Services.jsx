@@ -1,4 +1,5 @@
-import React, {
+/* eslint-disable no-unused-vars */
+import {
   useEffect,
   useRef,
   useState,
@@ -58,7 +59,7 @@ function Services() {
       console.error("Failed to fetch categories:", error);
       toast.error("Failed to load categories. Please refresh the page.");
     });
-  }, [getCategoriesWithSubcategories]);
+  }, []);
 
   useEffect(() => {
     if (
@@ -73,7 +74,7 @@ function Services() {
       setSelectedSubcategories(firstActiveCategory?.subcategory || []);
       setSelectedCategoryId(firstActiveCategory?.id || null);
     }
-  }, [categories, loading, selectedSubcategories]);
+  }, []);
 
   const filteredCategoriesData = useMemo(() => {
     if (!searchQuery.trim()) return categories;
@@ -160,8 +161,7 @@ function Services() {
             );
             await getCategoriesWithSubcategories();
             toast.success(
-              `Subcategory updated and ${
-                newStatus ? "enabled" : "disabled"
+              `Subcategory updated and ${newStatus ? "enabled" : "disabled"
               } successfully!`
             );
           } else {
@@ -186,94 +186,89 @@ function Services() {
     setCategoryName(e.target.value);
   }, []);
 
-  const handleSaveEditPopup = useCallback(async () => {
-    if (categoryName.trim() === "") {
-      toast.error("Name cannot be empty.");
-      return;
-    }
+  const handleSaveEditPopup = useCallback(
+    async () => {
+      if (categoryName.trim() === "") {
+        toast.error("Name cannot be empty.");
+        return;
+      }
 
-    try {
+      // Check for duplicates
       if (editingCategoryId) {
-        // Editing a Category
-        const success = await updateCategoryName(
-          editingCategoryId,
-          categoryName
+        const categoryExists = categories.some(
+          (cat) =>
+            cat.categoryName.toLowerCase() === categoryName.toLowerCase() &&
+            cat.id !== editingCategoryId
         );
-        if (success) {
-          const updatedIndex = categories.findIndex(
-            (cat) => cat.id === editingCategoryId
-          );
-          if (updatedIndex !== -1) {
-            setActiveTab(updatedIndex);
-            setSelectedSubcategories(
-              categories[updatedIndex]?.subcategory || []
-            );
-            setSelectedCategoryId(categories[updatedIndex]?.id || null);
-          }
-          toggle(); // Close the form
-          await getCategoriesWithSubcategories(); // Refresh data
-          toast.success("Category updated successfully!");
-        } else {
-          toast.error("Failed to update category.");
+        if (categoryExists) {
+          toast.error("A category with this name already exists.");
+          return;
         }
       } else if (editingSubcategoryId) {
-        // Editing a Subcategory
-        const currentSubcategory = selectedSubcategories.find(
-          (sub) => sub.id === editingSubcategoryId
+        const subcategoryExists = selectedSubcategories.some(
+          (sub) =>
+            sub.categoryName.toLowerCase() === categoryName.toLowerCase() &&
+            sub.id !== editingSubcategoryId
         );
-        if (!currentSubcategory) {
-          toast.error("Subcategory not found.");
+        if (subcategoryExists) {
+          toast.error("A subcategory with this name already exists in this category.");
           return;
         }
-
-        // Update only the name (do not toggle the status)
-        const nameSuccess = await updateSubcategoryName(
-          editingSubcategoryId,
-          // categoryName // Pass the new name here
-          updateSubcategoryName
-        );
-
-        if (!nameSuccess) {
-          toast.error("Failed to update subcategory name.");
-          return;
-        }
-
-        // Update local state only with the new name
-        setSelectedSubcategories((prev) =>
-          prev.map((sub) =>
-            sub.id === editingSubcategoryId
-              ? { ...sub, categoryName } // Only update the name
-              : sub
-          )
-        );
-
-        toggle(); // Close the form
-        await getCategoriesWithSubcategories(); // Refresh data
-        toast.success("Subcategory name updated successfully!");
-      } else {
-        toast.error("No valid category or subcategory selected for editing.");
       }
-    } catch (error) {
-      console.error(
-        `Error in handleSaveEditPopup (${
-          editingCategoryId ? "category" : "subcategory"
-        }):`,
-        error
-      );
-      toast.error(`An error occurred: ${error.message}`);
-    }
-  }, [
-    categoryName,
-    editingCategoryId,
-    editingSubcategoryId,
-    categories,
-    updateCategoryName,
-    updateSubcategoryName,
-    selectedSubcategories,
-    getCategoriesWithSubcategories,
-    toggle,
-  ]);
 
+      try {
+        if (editingCategoryId) {
+          const success = await updateCategoryName(editingCategoryId, categoryName);
+          if (success) {
+            const updatedIndex = categories.findIndex(
+              (cat) => cat.id === editingCategoryId
+            );
+            if (updatedIndex !== -1) {
+              setActiveTab(updatedIndex);
+              setSelectedSubcategories(categories[updatedIndex]?.subcategory || []);
+              setSelectedCategoryId(categories[updatedIndex]?.id || null);
+            }
+            toggle();
+            await getCategoriesWithSubcategories();
+            toast.success("Category updated successfully!");
+          } else {
+            toast.error("Failed to update category.");
+          }
+        } else if (editingSubcategoryId) {
+          const nameSuccess = await updateSubcategoryName(
+            editingSubcategoryId,
+            categoryName
+          );
+          if (nameSuccess) {
+            setSelectedSubcategories((prev) =>
+              prev.map((sub) =>
+                sub.id === editingSubcategoryId ? { ...sub, categoryName } : sub
+              )
+            );
+            toggle();
+            await getCategoriesWithSubcategories();
+            toast.success("Subcategory name updated successfully!");
+          } else {
+            toast.error("Failed to update subcategory name.");
+          }
+        }
+      } catch (error) {
+        console.error("Error in handleSaveEditPopup:", error);
+        toast.error(`An error occurred: ${error.message}`);
+      }
+    },
+    [
+      categoryName,
+      editingCategoryId,
+      editingSubcategoryId,
+      categories,
+      updateCategoryName,
+      updateSubcategoryName,
+      selectedSubcategories,
+      getCategoriesWithSubcategories,
+      toggle,
+    ]
+  );
   const handleOverlayClick = useCallback(() => {
     setShowPopup(false);
     setSelectedItem(null);
@@ -335,12 +330,10 @@ function Services() {
           await getCategoriesWithSubcategories();
           toast.success(
             newStatus
-              ? `${
-                  isCategory ? "Category" : "Subcategory"
-                } enabled successfully!`
-              : `${
-                  isCategory ? "Category" : "Subcategory"
-                } disabled successfully!`
+              ? `${isCategory ? "Category" : "Subcategory"
+              } enabled successfully!`
+              : `${isCategory ? "Category" : "Subcategory"
+              } disabled successfully!`
           );
         } catch (error) {
           console.error(
@@ -348,8 +341,7 @@ function Services() {
             error
           );
           toast.error(
-            `Failed to toggle ${
-              isCategory ? "category" : "subcategory"
+            `Failed to toggle ${isCategory ? "category" : "subcategory"
             } status: ${error.message}`
           );
         }
@@ -519,14 +511,13 @@ function Services() {
           <div className="mt-8 relative">
             <div className="flex whitespace-nowrap">
               <div className="gap-4 flex items-center cursor-pointer overflow-x-auto scrollbar-hide">
-                {filteredCategoriesData.map((items, index) => (
+                {filteredCategoriesData?.map((items, index) => (
                   <div
                     key={index}
-                    className={`flex items-center pb-2 border-b-2 px-5 hover:text-blue-500 hover:border-blue-500 ${
-                      activeTab === index
-                        ? "border-blue-500 text-blue-500"
-                        : "border-transparent text-gray-700"
-                    } ${!items.isActive ? "opacity-50" : ""}`}
+                    className={`flex items-center pb-2 border-b-2 px-5 hover:text-blue-500 hover:border-blue-500 ${activeTab === index
+                      ? "border-blue-500 text-blue-500"
+                      : "border-transparent text-gray-700"
+                      } ${!items.isActive ? "opacity-50" : ""}`}
                     onClick={() => handleCategoryClick(index)}
                   >
                     <img
@@ -578,52 +569,55 @@ function Services() {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-between gap-[18px] mt-6 flex-wrap whitespace-nowrap cursor-pointer">
-            {selectedSubcategories.length > 0 &&
-              selectedSubcategories.map((sub, index) => (
-                <div
-                  key={index}
-                  className="group hover:bg-[#6C4DEF1A] hover:border-[#6C4DEF1A] border border-[#0000001A] lg:p-5 p-3  rounded-[10px] h-full transition w-full"
-                >
-                  <div className="flex items-center justify-between">
-                    {editIndex === index ? (
-                      <input
-                        type="text"
-                        value={editData}
-                        onChange={handleInputChange}
-                        onBlur={() => handleSaveEdit(sub.id)}
-                        className="w-full bg-transparent border border-black me-2 focus:outline-none p-1 rounded-[10px]"
-                        autoFocus
-                      />
-                    ) : selectedSubcategories.length > 0 ? (
-                      <p className="font-normal text-sm text-[#00000099] lg:mx-[5px] transition group-hover:text-[#6C4DEF] flex items-center lg:gap-4 gap-2">
-                        <img
-                          className="w-[25px] h-[25px] object-cover rounded-full"
-                          src={sub.image}
-                          alt=""
+            {
+              selectedSubcategories?.length > 0 ? (
+                selectedSubcategories?.map((sub, index) => (
+                  <div
+                    key={index}
+                    className="group hover:bg-[#6C4DEF1A] hover:border-[#6CDEF1A] border border-[#0000001A] lg:p-5 p-3 rounded-[10px] h-full transition w-full"
+                  >
+                    <div className="flex items-center justify-between">
+                      {editIndex === index ? (
+                        <input
+                          type="text"
+                          value={editData}
+                          onChange={handleInputChange}
+                          onBlur={() => handleSaveEdit(sub.id)}
+                          className="w-full bg-transparent border border-black me-2 focus:outline-none p-1 rounded-[10px]"
+                          autoFocus
                         />
-                        {highlightText(
-                          sub?.categoryName || "un-named category",
-                          searchQuery
-                        )}
-                      </p>
-                    ) : (
-                      "No category found"
-                    )}
-                    <div className="flex lg:gap-4 gap-2">
-                      <div
-                        onClick={(e) =>
-                          handleSubcategoryEdit(sub.id, sub.categoryName, e)
-                        }
-                      >
-                        <Editicon />
-                      </div>
-                      <div onClick={() => handleDisableClick(sub.id)}>
-                        {sub.isActive ? <EnableRedIcon /> : <DisableRedicon />}
+                      ) : (
+                        <p className="font-normal text-sm text-[#00000099] lg:mx-[5px] transition group-hover:text-[#6C4DEF] flex items-center lg:gap-4 gap-2">
+                          <img
+                            className="w-[25px] h-[25px] object-cover rounded-full"
+                            src={sub.image}
+                            alt=""
+                          />
+                          {highlightText(sub?.categoryName, searchQuery)}
+                        </p>
+                      )}
+
+                      <div className="flex lg:gap-4 gap-2">
+                        <div
+                          onClick={(e) => handleSubcategoryEdit(sub.id, sub.categoryName, e)}
+                        >
+                          <Editicon />
+                        </div>
+                        <div onClick={() => handleDisableClick(sub.id)}>
+                          {sub.isActive ? <EnableRedIcon /> : <DisableRedicon />}
+                        </div>
                       </div>
                     </div>
                   </div>
+                ))
+              ) : (
+                <div className="col-span-full text-center py-4">
+                  <p className="font-normal text-sm text-[#00000099]">
+                    No subcategories found
+                  </p>
                 </div>
-              ))}
+              )
+            }
           </div>
 
           <div className="inline-block mt-8">
@@ -676,10 +670,10 @@ function Services() {
                   currentCardIndex,
                   isCategoryToggle
                     ? categories.find((cat) => cat.id === currentCardIndex)
-                        ?.isActive
+                      ?.isActive
                     : selectedSubcategories.find(
-                        (sub) => sub.id === currentCardIndex
-                      )?.isActive,
+                      (sub) => sub.id === currentCardIndex
+                    )?.isActive,
                   "confirm",
                   isCategoryToggle
                 )
@@ -688,14 +682,14 @@ function Services() {
               isActive={
                 isCategoryToggle
                   ? categories.find((cat) => cat.id === currentCardIndex)
-                      ?.isActive
+                    ?.isActive
                   : selectedSubcategories.find(
-                      (sub) => sub.id === currentCardIndex
-                    )?.isActive
+                    (sub) => sub.id === currentCardIndex
+                  )?.isActive
               }
               confirmText={
                 isCategoryToggle &&
-                !categories.find((cat) => cat.id === currentCardIndex)?.isActive
+                  !categories.find((cat) => cat.id === currentCardIndex)?.isActive
                   ? "Yes Enable"
                   : "Yes Disable"
               }
@@ -737,9 +731,8 @@ function Services() {
                           className="flex justify-between items-center py-2"
                         >
                           <div
-                            className={`flex items-center ${
-                              index === 1 ? "mt-3" : ""
-                            }`}
+                            className={`flex items-center ${index === 1 ? "mt-3" : ""
+                              }`}
                           >
                             <label className="custom-radio">
                               <input type="radio" name="blockedService" />
@@ -812,3 +805,6 @@ function Services() {
 }
 
 export default Services;
+
+
+

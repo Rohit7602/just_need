@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useServiceContext } from "../../store/ServiceContext";
@@ -8,25 +10,23 @@ function AddSubCategoryPopUp({
   selectedCategoryId,
   isEditMode = false,
   initialData = {},
-  onSuccess, // Optional callback for success
+  onSuccess,
 }) {
   const [subCategoryName, setSubCategoryName] = useState("");
   const [subcategoryImage, setSubcategoryImage] = useState(null);
   const [subcategoryImageUrl, setSubcategoryImageUrl] = useState("");
   const [subcategoryImageName, setSubcategoryImageName] = useState("");
 
-  const { updateSubcategoryName, addSubcategory } = useServiceContext();
+  const { updateSubcategoryName, addSubcategory, categories } = useServiceContext();
 
-  // Initialize state for edit mode
   useEffect(() => {
     if (isEditMode && initialData) {
       setSubCategoryName(initialData.categoryName || "");
-      setSubcategoryImageUrl(initialData.image || ""); // Show existing image if any
-      setSubcategoryImageName(initialData.image ? "Existing Image" : ""); // Indicate existing image
+      setSubcategoryImageUrl(initialData.image || "");
+      setSubcategoryImageName(initialData.image ? "Existing Image" : "");
     }
   }, [isEditMode, initialData]);
 
-  // Handle image selection
   const handleSubcategoryImage = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -35,23 +35,34 @@ function AddSubCategoryPopUp({
         toast.info("Image size exceeds 200 KB. Please upload a smaller file.");
         return;
       }
-      console.log("Selected image:", file.name, file.size);
       setSubcategoryImage(file);
-      setSubcategoryImageUrl(URL.createObjectURL(file)); // Preview the new image
-      setSubcategoryImageName(file.name); // Update the file name display
+      setSubcategoryImageUrl(URL.createObjectURL(file));
+      setSubcategoryImageName(file.name);
     }
   };
 
-  // Save or update subcategory
   const handleSaveDetails = async () => {
     if (!subCategoryName.trim()) {
       toast.error("Please enter a subcategory name.");
       return;
     }
 
+    // Check if the subcategory name already exists in the selected category
+    const selectedCategory = categories.find((cat) => cat.id === selectedCategoryId);
+
+    const subcategoryExists = selectedCategory?.subcategory?.some(
+      (sub) =>
+        sub.categoryName.toLowerCase() === subCategoryName.toLowerCase() &&
+        sub.id !== initialData?.id // Allow the same name if it's the same subcategory being edited
+    );
+
+    if (subcategoryExists) {
+      toast.info("A subcategory with this name already exists in this category.");
+      return;
+    }
+
     try {
       if (isEditMode && initialData?.id) {
-        // Update subcategory with new name and optional image
         const updatedData = { categoryName: subCategoryName };
         const success = await updateSubcategoryName(
           initialData.id,
@@ -69,14 +80,9 @@ function AddSubCategoryPopUp({
           toast.error("Category ID is required to add a subcategory.");
           return;
         }
-        // Add new subcategory with name and optional image
-        await addSubcategory(
-          selectedCategoryId,
-          subCategoryName,
-          subcategoryImage
-        );
+        await addSubcategory(selectedCategoryId, subCategoryName, subcategoryImage);
         toast.success("Subcategory added successfully!");
-        // if (onSuccess) onSuccess();
+        if (onSuccess) onSuccess();
         handleClose();
       }
     } catch (error) {
@@ -85,9 +91,7 @@ function AddSubCategoryPopUp({
         error.message
       );
       toast.error(
-        `Failed to ${isEditMode ? "update" : "add"} subcategory: ${
-          error.message
-        }`
+        `Failed to ${isEditMode ? "update" : "add"} subcategory: ${error.message}`
       );
     }
   };
@@ -111,7 +115,6 @@ function AddSubCategoryPopUp({
             {isEditMode ? "Edit Subcategory" : "Add Subcategory"}
           </p>
 
-          {/* Subcategory Name */}
           <div className="mt-[15px]">
             <label className="block text-base font-normal text-gray-700 mb-2.5">
               Subcategory Name
@@ -125,17 +128,16 @@ function AddSubCategoryPopUp({
             />
           </div>
 
-          {/* Subcategory Image */}
           <label
             className="block text-base font-normal text-[#000000] mb-2.5 mt-[15px]"
-            htmlFor="fileUpload" // Fixed typo and matched ID
+            htmlFor="fileUpload"
           >
             Subcategory Image
           </label>
           <div className="flex items-center gap-2 bg-[#F2F2F2] rounded-lg p-2">
             <input
               type="text"
-              value={subcategoryImageName || ""} // Display selected or existing file name
+              value={subcategoryImageName || ""}
               placeholder="No Image Chosen"
               className="flex-1 px-3 py-2 bg-transparent border-none text-gray-500"
               disabled
@@ -156,17 +158,14 @@ function AddSubCategoryPopUp({
             </label>
           </div>
 
-          {/* Image Preview */}
           {subcategoryImageUrl && (
             <img
               className="h-[58px] w-[58px] rounded-[10px] mt-2.5 object-cover"
               src={subcategoryImageUrl}
               alt={subcategoryImageName || "Subcategory Preview"}
-              onError={(e) => console.error("Image load failed:", e)} // Basic error logging
             />
           )}
 
-          {/* Save Button */}
           <button
             onClick={handleSaveDetails}
             className="w-full bg-[#0832DE] text-base text-white font-medium h-[42px] py-2.5 rounded-[10px] mt-[15px]"

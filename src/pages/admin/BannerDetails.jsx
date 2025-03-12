@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { supabase } from "../../store/supabaseCreateClient";
 import { toast } from "react-toastify";
 import {
@@ -36,7 +36,7 @@ function BannerDetails() {
   useEffect(() => {
     fetchOffer();
     fetchCategoriesWithRetry();
-  }, [getCategoriesWithSubcategories]);
+  }, []);
 
   const fetchOffer = async () => {
     try {
@@ -219,8 +219,8 @@ function BannerDetails() {
       Array.isArray(item.tagOffer)
         ? item.tagOffer
         : item.tagOffer
-        ? [item.tagOffer]
-        : []
+          ? [item.tagOffer]
+          : []
     );
     setDiscount(item.discount || "");
     setService(item.service || "");
@@ -285,7 +285,7 @@ function BannerDetails() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mx-5 my-5">
         {offer.map((item) => (
-          <div className="relative" key={item.id}>
+          <div className="relative group" key={item.id}>
             {!loadedImages[item.id] && (
               <div className="aspect-video rounded-lg flex items-center justify-center bg-gray-200">
                 <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#0832DE]"></div>
@@ -295,9 +295,8 @@ function BannerDetails() {
               ref={(el) => (imageRefs.current[item.id] = el)}
               src={item.image}
               alt="Banner"
-              className={`aspect-video object-cover rounded-lg ${
-                loadedImages[item.id] ? "block" : "hidden"
-              }`}
+              className={`aspect-video object-cover rounded-lg ${loadedImages[item.id] ? "block" : "hidden"
+                }`}
               onLoad={() => handleImageLoad(item.id)}
             />
             <div
@@ -311,6 +310,13 @@ function BannerDetails() {
               onClick={() => handleEdit(item)}
             >
               <EditSvg />
+              {/*  */}
+            </div>
+            <div className="absolute top-[10px] left-[10px] bg-gray-400 rounded-[50px] px-2.5 py-[5px] opacity-0 group-hover:opacity-100">
+              painting
+            </div>
+            <div className="absolute bottom-[10px] left-[10px] bg-[#6C4DEF]  text-white px-2.5 rounded-[50px] py-[5px] opacity-0 group-hover:opacity-100">
+              best offers
             </div>
           </div>
         ))}
