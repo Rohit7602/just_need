@@ -286,11 +286,16 @@ function BannerDetails() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mx-5 my-5">
         {offer.map((item) => (
           <div className="relative group" key={item.id}>
+            {/* Gradient overlay on hover */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-60 transition-opacity duration-300 rounded-lg z-[1]"></div>
+
             {!loadedImages[item.id] && (
               <div className="aspect-video rounded-lg flex items-center justify-center bg-gray-200">
                 <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#0832DE]"></div>
               </div>
             )}
+
+            {/* Image */}
             <img
               ref={(el) => (imageRefs.current[item.id] = el)}
               src={item.image}
@@ -299,27 +304,42 @@ function BannerDetails() {
                 }`}
               onLoad={() => handleImageLoad(item.id)}
             />
+
+            {/* Delete Button */}
             <div
-              className="absolute top-2 right-2 cursor-pointer"
+              className="absolute top-2 right-2 cursor-pointer z-[3]"
               onClick={() => handleDelete(item.id)}
             >
               <DeleteSvg />
             </div>
+
+            {/* Edit Button */}
             <div
-              className="absolute top-2 right-10 cursor-pointer"
+              className="absolute top-2 right-10 cursor-pointer z-[3]"
               onClick={() => handleEdit(item)}
             >
               <EditSvg />
-              {/*  */}
             </div>
-            <div className="absolute top-[10px] left-[10px] bg-gray-400 rounded-[50px] px-2.5 py-[5px] opacity-0 group-hover:opacity-100">
-              painting
+
+            {/* Service Tag */}
+            <div className="absolute top-[10px] left-[10px] bg-white rounded-[50px] px-2.5 py-[5px] opacity-0 group-hover:opacity-100 z-[2]">
+              {item.service}
             </div>
-            <div className="absolute bottom-[10px] left-[10px] bg-[#6C4DEF]  text-white px-2.5 rounded-[50px] py-[5px] opacity-0 group-hover:opacity-100">
-              best offers
+
+            {/* Tag Offers */}
+            <div className="absolute flex gap-2 flex-wrap bottom-[10px] left-[10px] z-[3]">
+              {item?.tagOffer.map((tag, index) => (
+                <div
+                  key={index}
+                  className="bg-[#6C4DEF] text-white px-2.5 rounded-[50px] py-[5px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                >
+                  {tag}
+                </div>
+              ))}
             </div>
           </div>
         ))}
+
       </div>
 
       {isModalOpen && (
