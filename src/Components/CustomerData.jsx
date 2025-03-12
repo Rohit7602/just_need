@@ -1,13 +1,11 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useRef, useEffect } from "react";
 import avatar from "../assets/Images/Png/dummyimage.jpg";
-import { FaAngleDown } from "react-icons/fa";
 import ActionUserPupUp from "./Popups/ActionUserPupUp";
 import { Link, useLocation } from "react-router-dom";
 import UsersFilterPopUp from "../Components/Popups/UsersFilterPopUp";
 import { CiSearch, CiFilter } from "react-icons/ci";
 import {
-  DropdownIconChat,
   SpikendCirclChat,
   SpikStartCirclChat,
   ArrowIconRigth,
@@ -30,8 +28,8 @@ const CustomerData = () => {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [filterPopupsvg, setFilterPopupSvg] = useState(false);
-  const [selectedFilters, setSelectedFilters] = useState([]);
-  const [searchPlaceholder, setSearchPlaceholder] = useState("Search"); // New state for dynamic placeholder
+  const [selectedFilters, setSelectedFilters] = useState(["name"]);
+  const [searchPlaceholder, setSearchPlaceholder] = useState("Search Name"); 
 
   const formatDate = (milliseconds) => {
     const date = new Date(milliseconds);
@@ -226,7 +224,6 @@ const CustomerData = () => {
       ? selectedFilters.filter((f) => f !== field)
       : [...selectedFilters, field];
     setSelectedFilters(updatedFilters);
-    setFilterPopupSvg(false); // Close popup on click
 
     // Update placeholder based on selected filters
     if (updatedFilters.length === 0) {
@@ -406,10 +403,11 @@ const CustomerData = () => {
                     )}
                   </td>
                   <td
-                    className={`px-[19px] md:px-[24px] text-sm font-normal w-[50px] truncate ${customer.userType === true
-                      ? "bg-[#0000FF12] text-[#0000FF] rounded-[90px]"
-                      : "text-[#FFA500] bg-[#FFA50024] rounded-[90px]"
-                      }`}
+                    className={`px-[19px] md:px-[24px] text-sm font-normal w-[50px] truncate ${
+                      customer.userType === true
+                        ? "bg-[#0000FF12] text-[#0000FF] rounded-[90px]"
+                        : "text-[#FFA500] bg-[#FFA50024] rounded-[90px]"
+                    }`}
                   >
                     {customer.userType === true ? "Consumer" : "Provider"}
                   </td>
@@ -420,10 +418,11 @@ const CustomerData = () => {
                     {formatDate(customer.updated_at)}
                   </td>
                   <td
-                    className={`px-[10px] py-[4px] text-sm font-normal text-center ${customer.accountStatus === "active"
-                      ? "bg-[#00800012] text-[#008000] rounded-[90px]"
-                      : "text-[#800000] rounded-[90px] bg-[#FF000012]"
-                      }`}
+                    className={`px-[10px] py-[4px] text-sm font-normal text-center ${
+                      customer.accountStatus === "active"
+                        ? "bg-[#00800012] text-[#008000] rounded-[90px]"
+                        : "text-[#800000] rounded-[90px] bg-[#FF000012]"
+                    }`}
                   >
                     {customer.accountStatus}
                   </td>
@@ -455,10 +454,11 @@ const CustomerData = () => {
                 <span>▼</span>
                 {showItemsDropdown && (
                   <div
-                    className={`absolute ${dropdownPosition === "top"
-                      ? "bottom-full mb-1"
-                      : "top-full mt-1"
-                      } bg-white border rounded shadow-lg w-full z-10`}
+                    className={`absolute ${
+                      dropdownPosition === "top"
+                        ? "bottom-full mb-1"
+                        : "top-full mt-1"
+                    } bg-white border rounded shadow-lg w-full z-10`}
                   >
                     {[5, 10, 15, 20].map((item) => (
                       <button
@@ -522,7 +522,7 @@ const CustomerData = () => {
             <h2 className="text-lg font-medium mb-4">Confirm Disable Users</h2>
             <p className="mb-6">
               Are you sure you want to disable the selected {selectItem.length}{" "}
-              user(s)? This will set their status to Inactive.
+              user(s)? This will set their status to Inactive;.
             </p>
             <div className="flex justify-end gap-4">
               <button
@@ -574,7 +574,7 @@ const CustomerData = () => {
                   Name
                 </label>
               </div>
-              <div className="border border-[#E8E8E8] w-full"></div>
+
               <div className="flex items-center gap-2">
                 <input
                   type="checkbox"
@@ -589,7 +589,7 @@ const CustomerData = () => {
                   Email
                 </label>
               </div>
-              <div className="border border-[#E8E8E8] w-full"></div>
+
               <div className="flex items-center gap-2">
                 <input
                   type="checkbox"
@@ -604,7 +604,7 @@ const CustomerData = () => {
                   Address
                 </label>
               </div>
-              <div className="border border-[#E8E8E8] w-full"></div>
+
               <div className="flex items-center gap-2">
                 <input
                   type="checkbox"
@@ -618,6 +618,14 @@ const CustomerData = () => {
                 >
                   Mobile
                 </label>
+              </div>
+              <div
+                onClick={() => setFilterPopupSvg(false)}
+                className="flex justify-end"
+              >
+                <button className="bg-[#0832DE] text-white px-[15px] py-2 rounded-[10px] flex items-center capitalize">
+                  done
+                </button>
               </div>
             </div>
           </div>

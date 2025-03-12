@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 
 import user from "../../assets/png/user for listing.png";
@@ -248,7 +250,7 @@ const ListingDetails = () => {
         <div className="flex  flex-col gap-5">
           {[0, 1, 2, 3, 4].map((item, index) => {
             return (
-              <div>
+              <div key={index}>
                 <hr className="my-[32px] border-dotted border-t-0 border-2 " />
                 <div className="flex  items-center justify-between">
                   <div className="flex items-center gap-3">

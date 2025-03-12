@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
+/* eslint-disable react/no-unknown-property */
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   BlackCloseIcon,
@@ -7,7 +8,7 @@ import {
   SearchIcon,
 } from "../../assets/icon/Icon";
 import AdminImage from "../../assets/png/AdminImage.png";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { ArrowIcon } from "../../assets/icon/Icons";
 import NotificationPopUp from "../Popups/NotificationPopUp";
 import ScrollNotify from "../Popups/ScrollNotify";
@@ -17,7 +18,7 @@ function TopBar() {
   const location = useLocation();
   const [isInputVisible, setIsInputVisible] = useState(false);
   const [notificationPopUp, setNotificationPopUp] = useState(false);
-  const [chatPopup, setchatPopup] = useState(false)
+  const [chatPopup, setchatPopup] = useState(false);
   const searchRef = useRef(null);
 
   const toggleSearchInput = () => {
@@ -65,7 +66,7 @@ function TopBar() {
   };
 
   function handleChatPopup() {
-    setchatPopup(!chatPopup)
+    setchatPopup(!chatPopup);
   }
 
   // Determine when to show the back arrow button
@@ -104,17 +105,27 @@ function TopBar() {
                   </span>
                 </p>
               ) : location.pathname.includes(
-                "/dashboard/usersList/userDetails/"
-              ) ? (
+                  "/dashboard/usersList/userDetails/"
+                ) ? (
                 "User's Details"
+              ) : location.pathname.includes("/dashboard/listings/") ? (
+                location.pathname.match(
+                  /\/dashboard\/listings\/[0-9a-fA-F-]+$/
+                ) ? (
+                  "Listings Details" 
+                ) : (
+                  "Listings"
+                ) 
               ) : (
                 location.pathname
                   .replace("/", "")
+                  .replace(/\/[0-9a-fA-F-]+$/, "")
                   .replace("dashboard/", "")
                   .replace(
                     /complaints\/complaintsDetails\/\d+/,
                     "Complaints Details"
                   )
+
                   .replace("&", " & ")
                   .replace("/", " / ")
                   .replace("usersList", "Users List")
@@ -126,10 +137,11 @@ function TopBar() {
         <div className="flex items-center gap-2 xl:gap-4">
           <div
             ref={searchRef}
-            className={`flex items-center h-[40px] rounded-[50px] bg-[#F1F1F1] ${isInputVisible
-              ? "w-[185px] lg:max-w-[330px] xl:w-[330px]"
-              : "max-w-[40px]"
-              } transition-all duration-300`}
+            className={`flex items-center h-[40px] rounded-[50px] bg-[#F1F1F1] ${
+              isInputVisible
+                ? "w-[185px] lg:max-w-[330px] xl:w-[330px]"
+                : "max-w-[40px]"
+            } transition-all duration-300`}
           >
             <div
               onClick={toggleSearchInput}
@@ -150,13 +162,12 @@ function TopBar() {
               </div>
             )}
           </div>
-          <button onClick={handleChatPopup}
-
+          <button
+            onClick={handleChatPopup}
             state={"Plan, prioritize, and accomplish your tasks with ease."}
           >
             <ChatIcon />
           </button>
-
 
           <button onClick={handleNotificationPopUp}>
             <NotificationIcon />
@@ -180,14 +191,7 @@ function TopBar() {
         </div>
       )}
 
-      {chatPopup && (
-        <ScrollNotify onCancel={handleChatPopup} />
-      )}
-
-
-
-
-
+      {chatPopup && <ScrollNotify onCancel={handleChatPopup} />}
     </div>
   );
 }
