@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import avatar from "../assets/Images/Png/dummyimage.jpg";
 import ActionUserPupUp from "./Popups/ActionUserPupUp";
 import { Link, useLocation } from "react-router-dom";
@@ -28,8 +27,9 @@ const CustomerData = () => {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [filterPopupsvg, setFilterPopupSvg] = useState(false);
-  const [selectedFilters, setSelectedFilters] = useState(["name"]);
-  const [searchPlaceholder, setSearchPlaceholder] = useState("Search Name"); 
+  const [selectedFilters, setSelectedFilters] = useState(["name"]); // "name" is selected by default
+  const [searchPlaceholder, setSearchPlaceholder] = useState("Search Name"); // Default is "Search Name"
+  const [selectAll, setSelectAll] = useState(false);
 
   const formatDate = (milliseconds) => {
     const date = new Date(milliseconds);
@@ -49,20 +49,9 @@ const CustomerData = () => {
   // Filter logic based on selected fields
   const filteredData = users?.filter((customer) => {
     if (selectedFilters.length === 0) {
-      return (
-        (customer.firstName + " " + customer.lastName)
-          ?.toLowerCase()
-          .includes(searchTerm.toLowerCase()) ||
-        customer.useremail?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        customer.mobile_number
-          ?.toLowerCase()
-          .includes(searchTerm.toLowerCase()) ||
-        customer?.address?.some((addr) =>
-          `${addr.city}/${addr.state}`
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase())
-        )
-      );
+      return (customer.firstName + " " + customer.lastName)
+        ?.toLowerCase()
+        .includes(searchTerm.toLowerCase()); // Default to name search when no filters
     }
 
     return selectedFilters.some((filter) => {
@@ -218,16 +207,33 @@ const CustomerData = () => {
     setShowItemsDropdown((prev) => !prev);
   };
 
-  // Handle filter checkbox clicks and update placeholder
+  // Handle "Select All" checkbox change
+  const handleSelectAll = (e) => {
+    const isChecked = e.target.checked;
+    setSelectAll(isChecked);
+    if (isChecked) {
+      setSelectedFilters(["name", "email", "address", "mobile"]);
+      setSearchPlaceholder("Search Name, Email, Address, Mobile");
+    } else {
+      setSelectedFilters([]); // Clear filters
+      setSearchPlaceholder("Search Name"); // Revert to "Search Name"
+    }
+  };
+
+  // Handle individual filter checkbox change
   const handleFilterCheckboxChange = (field) => {
     const updatedFilters = selectedFilters.includes(field)
       ? selectedFilters.filter((f) => f !== field)
       : [...selectedFilters, field];
     setSelectedFilters(updatedFilters);
 
+    // Update "Select All" state
+    const allFilters = ["name", "email", "address", "mobile"];
+    setSelectAll(allFilters.every((f) => updatedFilters.includes(f)));
+
     // Update placeholder based on selected filters
     if (updatedFilters.length === 0) {
-      setSearchPlaceholder("Search");
+      setSearchPlaceholder("Search Name"); // Always "Search Name" when no filters
     } else {
       setSearchPlaceholder(
         `Search ${updatedFilters
@@ -247,7 +253,6 @@ const CustomerData = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Condition to show Delete and My Action buttons
   const showActionButtons = selectItem.length >= 2;
 
   return (
@@ -289,7 +294,6 @@ const CustomerData = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          {/* Filter SVG button */}
           <button
             onClick={() => setFilterPopupSvg(!filterPopupsvg)}
             className="mx-5 w-[40px] h-[40px] bg-[#F1F1F1] flex items-center justify-center rounded-[10px]"
@@ -381,16 +385,16 @@ const CustomerData = () => {
                       value={customer.id}
                     />
                   </td>
-                  <Link to={`/dashboard/usersList/userDetails/${customer.id}`}>
-                    <td className="px-[19px] md:px-[24px] text-[#6C4DEF] flex items-center gap-2 min-w-[160px]">
+                  <td className="px-[19px] md:px-[24px] text-[#6C4DEF] flex items-center gap-2 min-w-[160px]">
+                    <Link className="flex" to={`/dashboard/usersList/userDetails/${customer.id}`}>
                       <img
                         src={customer.image || avatar}
                         alt="avatar"
                         className="w-8 h-8 rounded-full me-2 object-cover"
                       />
                       {customer.firstName} {customer.lastName}
-                    </td>
-                  </Link>
+                    </Link>
+                  </td>
                   <td className="px-[19px] md:px-[24px] text-sm font-normal text-[#000000]">
                     {customer.useremail}
                   </td>
@@ -398,16 +402,13 @@ const CustomerData = () => {
                     {customer.mobile_number}
                   </td>
                   <td className="px-[19px] md:px-[24px] text-sm font-normal text-[#000000] w-[120px] truncate">
-                    {customer?.address?.map(
-                      (item) => `${item.city}/${item.state}`
-                    )}
+                    {customer?.address?.map((item) => `${item.city}/${item.state}`)}
                   </td>
                   <td
-                    className={`px-[19px] md:px-[24px] text-sm font-normal w-[50px] truncate ${
-                      customer.userType === true
+                    className={`px-[19px] md:px-[24px] text-sm font-normal w-[50px] truncate ${customer.userType === true
                         ? "bg-[#0000FF12] text-[#0000FF] rounded-[90px]"
                         : "text-[#FFA500] bg-[#FFA50024] rounded-[90px]"
-                    }`}
+                      }`}
                   >
                     {customer.userType === true ? "Consumer" : "Provider"}
                   </td>
@@ -418,11 +419,10 @@ const CustomerData = () => {
                     {formatDate(customer.updated_at)}
                   </td>
                   <td
-                    className={`px-[10px] py-[4px] text-sm font-normal text-center ${
-                      customer.accountStatus === "active"
+                    className={`px-[10px] py-[4px] text-sm font-normal text-center ${customer.accountStatus === "active"
                         ? "bg-[#00800012] text-[#008000] rounded-[90px]"
                         : "text-[#800000] rounded-[90px] bg-[#FF000012]"
-                    }`}
+                      }`}
                   >
                     {customer.accountStatus}
                   </td>
@@ -454,11 +454,8 @@ const CustomerData = () => {
                 <span>▼</span>
                 {showItemsDropdown && (
                   <div
-                    className={`absolute ${
-                      dropdownPosition === "top"
-                        ? "bottom-full mb-1"
-                        : "top-full mt-1"
-                    } bg-white border rounded shadow-lg w-full z-10`}
+                    className={`absolute ${dropdownPosition === "top" ? "bottom-full mb-1" : "top-full mt-1"
+                      } bg-white border rounded shadow-lg w-full z-10`}
                   >
                     {[5, 10, 15, 20].map((item) => (
                       <button
@@ -522,7 +519,7 @@ const CustomerData = () => {
             <h2 className="text-lg font-medium mb-4">Confirm Disable Users</h2>
             <p className="mb-6">
               Are you sure you want to disable the selected {selectItem.length}{" "}
-              user(s)? This will set their status to Inactive;.
+              user(s)? This will set their status to Inactive.
             </p>
             <div className="flex justify-end gap-4">
               <button
@@ -556,10 +553,21 @@ const CustomerData = () => {
           className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
         >
           <div
-            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the popup
+            onClick={(e) => e.stopPropagation()}
             className="bg-white p-6 rounded-[10px] shadow-lg w-[300px]"
           >
             <div className="flex flex-col gap-4">
+              <div className="flex gap-2">
+                <input
+                  type="checkbox"
+                  id="selectAll"
+                  checked={selectAll}
+                  onChange={handleSelectAll}
+                />
+                <label htmlFor="selectAll" className="text-base font-normal leading-[140%]">
+                  Select All
+                </label>
+              </div>
               <div className="flex items-center gap-2">
                 <input
                   type="checkbox"
@@ -574,7 +582,6 @@ const CustomerData = () => {
                   Name
                 </label>
               </div>
-
               <div className="flex items-center gap-2">
                 <input
                   type="checkbox"
@@ -589,7 +596,6 @@ const CustomerData = () => {
                   Email
                 </label>
               </div>
-
               <div className="flex items-center gap-2">
                 <input
                   type="checkbox"
@@ -604,7 +610,6 @@ const CustomerData = () => {
                   Address
                 </label>
               </div>
-
               <div className="flex items-center gap-2">
                 <input
                   type="checkbox"
@@ -624,7 +629,7 @@ const CustomerData = () => {
                 className="flex justify-end"
               >
                 <button className="bg-[#0832DE] text-white px-[15px] py-2 rounded-[10px] flex items-center capitalize">
-                  done
+                  Done
                 </button>
               </div>
             </div>

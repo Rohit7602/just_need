@@ -16,6 +16,7 @@ import { useCustomerContext } from "../../store/CustomerContext";
 import { useListingContext } from "../../store/ListingContext";
 import { supabase } from "../../store/supabaseCreateClient";
 import { toast } from "react-toastify";
+import { truncateText } from "../../utility/wordTruncate";
 
 function UserDetails() {
   const { id } = useParams();
@@ -243,7 +244,8 @@ function UserDetails() {
                       </div>
                     </div>
                     <p className="font-normal text-[14px] text-[#00000099] mt-1">
-                      {item.description}
+                      {/* {item.description} */}
+                      {truncateText(item.description, 50)}
                     </p>
                     <div className="flex items-center gap-1 mt-2">
                       <RatingStarIcon />

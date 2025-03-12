@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
-import GalleryImg1 from "../../assets/png/listingImg.png";
+/* eslint-disable no-unused-vars */
+import { useEffect, useState } from "react";
+
 import disable_img from "../../assets/png/disable_img.png";
 import enable_img from "../../assets/png/enable_img.png";
 import {
-  DisableRedicon,
-  EnableRedIcon,
+
   RatingStarIcon,
 } from "../../assets/icon/Icons";
 import { Link } from "react-router-dom";
 import { useListingContext } from "../../store/ListingContext";
 import { supabase } from "../../store/supabaseCreateClient";
 import { truncateText } from "../../utility/wordTruncate";
-import { list } from "postcss";
+
 
 const Listing = () => {
   const { fetchlisting } = useListingContext();
