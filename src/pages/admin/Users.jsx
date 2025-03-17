@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import CustomerData from '../../Components/CustomerData';
 import { customersDataList } from '../../Components/Common/Helper';

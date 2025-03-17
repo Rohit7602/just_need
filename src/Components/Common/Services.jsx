@@ -22,6 +22,7 @@ import AddSubCategoryPopUp from "../Popups/SubcategoryPopup";
 import { AiOutlineClose } from "react-icons/ai";
 import { toast } from "react-toastify";
 import Loader from "./Loader";
+import { SearchingIcon } from "../../assets/icon/Icon";
 
 function Services() {
   const [editIndex, setEditIndex] = useState(null);
@@ -570,9 +571,9 @@ function Services() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-between gap-[18px] mt-6 flex-wrap whitespace-nowrap cursor-pointer">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-between gap-[18px] mt-6 flex-wrap whitespace-nowrap">
             {
-              selectedSubcategories?.length > 0 ? (
+              selectedSubcategories?.length > 0 && (
                 selectedSubcategories?.map((sub, index) => (
                   <div
                     key={index}
@@ -612,15 +613,24 @@ function Services() {
                     </div>
                   </div>
                 ))
-              ) : (
-                <div className="col-span-full text-center py-4">
-                  <p className="font-normal text-sm text-[#00000099]">
-                    No subcategories found
-                  </p>
-                </div>
               )
             }
           </div>
+
+          {
+            !selectedSubcategories?.length > 0 && (
+              <div className="flex flex-col">
+                <div className="flex justify-center">
+                  <SearchingIcon />
+                </div>
+                <div className="flex justify-center">
+                  <p className="font-normal text-[28px] text-black">
+                    No Category Found
+                  </p>
+                </div>
+              </div>
+            )
+          }
 
           <div className="inline-block mt-8">
             <div

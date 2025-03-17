@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
@@ -12,11 +14,12 @@ import MechanicImage from "../../assets/Images/Png/dummyimage.jpg";
 import DisableProviderPopUp from "../../Components/Popups/DisableProviderPopUp";
 import disable_img from "../../assets/png/disable_img.png";
 import enable_img from "../../assets/png/enable_img.png";
-import { useCustomerContext } from "../../store/CustomerContext";
 import { useListingContext } from "../../store/ListingContext";
 import { supabase } from "../../store/supabaseCreateClient";
 import { toast } from "react-toastify";
 import { truncateText } from "../../utility/wordTruncate";
+import { useCustomerContext } from "../../store/CustomerContext";
+import { useUserContext } from "../../store/UserContext";
 
 function UserDetails() {
   const { id } = useParams();
@@ -27,44 +30,49 @@ function UserDetails() {
   const { users, loading, setLoading } = useCustomerContext();
   const { fetchlisting } = useListingContext();
 
-  async function getlisting() {
-    const listingVal = await fetchlisting();
+  const { setUserName } = useUserContext()
 
 
-    setListings(listingVal || []); // Default to empty array if null
-  }
-
-
+  // Fetch user details and listings
   useEffect(() => {
-    getlisting();
-  }, []); // Added dependency
+    const fetchData = async () => {
+      if (users && users.length > 0) {
+        const foundUser = users.find((user) => user.id === id);
+        if (foundUser) {
+          setUser(foundUser);
+          if (setUser) {
+            setUserName(foundUser?.firstName)
+          }
 
-
-
-  useEffect(() => {
-    if (users && users.length > 0) {
-      const foundUser = users.find((user) => user.id === id);
-      if (foundUser) {
-        setUser(foundUser);
-      } else {
-        console.error("User not found");
+          const listingVal = await fetchlisting();
+          const filteredListings = listingVal?.filter(
+            (item) => item?.user_detail?.id === id
+          );
+          setListings(filteredListings || []);
+        } else {
+          console.error("User not found");
+        }
+        setLoading(false);
       }
-      setLoading(false);
-    }
-  }, []); // Added dependencies
+    };
 
-  function handlePopupDisable() {
+    fetchData();
+  }, [users, id, setLoading, fetchlisting]);
+
+  // Handle disable/enable provider popup
+  const handlePopupDisable = () => {
     setShowPopupDisable(!showPopupDisable);
-  }
+  };
 
-  async function handleBlock(e, listing) {
-    e.preventDefault(); // Only needed if inside a form
+  // Handle block/unblock listing
+  const handleBlock = async (e, listing) => {
+    e.preventDefault();
     const confirmDelete = window.confirm("Are you sure?");
     if (confirmDelete) {
       const updatedBlockStatus = {
         isBlocked: !listing.blockStatus.isBlocked,
-        reason: listing.blockStatus.reason || "", // Default if undefined
-        blockedBy: listing.blockStatus.blockedBy || "admin", // Default if undefined
+        reason: listing.blockStatus.reason || "",
+        blockedBy: listing.blockStatus.blockedBy || "admin",
       };
 
       const { data, error } = await supabase
@@ -80,22 +88,18 @@ function UserDetails() {
               : item
           )
         );
-        toast.success("Update successful")
-        console.log("Update successful:", data);
+        toast.success("Update successful");
       } else {
         console.error("Error updating block status:", error);
         toast.error("Something went wrong. Please try again.");
       }
     }
-  }
+  };
 
   if (loading) return <div>Loading...</div>;
   if (!user) return <div>User not found</div>;
 
   const isActive = user.accountStatus === "active";
-
-
-
 
   return (
     <div className="px-4">
@@ -121,6 +125,7 @@ function UserDetails() {
           )}
         </button>
       </div>
+
       <div className="xl:flex mt-[30px]">
         <div className="w-full lg:w-7/12 xl:w-[399px] xl:pe-2.5 lg:flex">
           <div className="bg-[#6C4DEF] px-[30px] py-5 rounded-[10px] flex-grow flex">
@@ -129,7 +134,7 @@ function UserDetails() {
                 <img
                   className="w-[78px] h-[78px] rounded-full object-cover"
                   src={user?.image || MechanicImage}
-                  alt="image of user"
+                  alt="user"
                 />
                 <h1 className="font-medium lg:text-base xl:text-lg text-white mt-2.5 text-center">
                   {user?.firstName}
@@ -209,65 +214,64 @@ function UserDetails() {
         )}
       </div>
 
-      {!user?.userType ? (
+      {!user?.userType && (
         <>
           <p className="font-medium text-lg leading-[22px] text-black pb-2.5 border-b-[0.5px] border-dashed border-[#00000066] mt-[30px]">
             Posted Listing
           </p>
-          <div className="flex flex-row flex-wrap -mx-3">
-            {listings?.map((item) => (
-              <Link to={`/dashboard/listings/${item.id}`}
-                key={item.id}
-                className="w-6/12 mt-3 xl:mt-[15px] xl:w-3/12 px-3"
-              >
-                <div
-                  className="border-[1px] border-[#ebeaea] rounded-[10px] relative group transition-all cursor-pointer"
-
+          {listings.length > 0 ? (
+            <div className="flex flex-row flex-wrap -mx-3">
+              {listings.map((item) => (
+                <Link
+                  to={`/dashboard/listings/${item.id}`}
+                  key={item.id}
+                  className="w-6/12 mt-3 xl:mt-[15px] xl:w-3/12 px-3"
                 >
-                  <img
-                    className="rounded-[10px] w-full group-hover:opacity-70 hover:bg-gray-100"
-                    src={item.images?.[0]}
-                    alt="Listing"
-                  />
-                  <div className="p-2.5">
-                    <div className="flex items-center justify-between h-[40px]">
-                      <p className="font-medium text-sm text-black">
-                        {item.title}
+                  <div className="border-[1px] border-[#ebeaea] rounded-[10px] relative group transition-all cursor-pointer">
+                    <img
+                      className="rounded-[10px] w-full group-hover:opacity-70 hover:bg-gray-100"
+                      src={item.images?.[0]}
+                      alt="Listing"
+                    />
+                    <div className="p-2.5">
+                      <div className="flex items-center justify-between h-[40px]">
+                        <p className="font-medium text-sm text-black">
+                          {item.title}
+                        </p>
+                        <div className="p-2">
+                          <button onClick={(e) => handleBlock(e, item)}>
+                            {item?.blockStatus?.isBlocked ? (
+                              <div className="flex justify-center items-center gap-2">
+                                <img src={disable_img} alt="disable_img" />
+                                <p className="text-[20px]">Disable</p>
+                              </div>
+                            ) : (
+                              <div className="flex justify-center items-center gap-2">
+                                <img src={enable_img} alt="enable_img" />
+                                <p className="text-[20px]">Enable</p>
+                              </div>
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                      <p className="font-normal text-[14px] text-[#00000099] mt-1">
+                        {truncateText(item.description, 50)}
                       </p>
-                      <div className="p-2">
-                        <button onClick={(e) => handleBlock(e, item)}>
-                          {item?.blockStatus?.isBlocked ? (
-                            <div className="flex justify-center items-center gap-2">
-                              <img src={disable_img} alt="disable_img" />
-                              <p className="text-[20px]">Disable</p>
-                            </div>
-                          ) : (
-                            <div className="flex justify-center items-center gap-2">
-                              <img src={enable_img} alt="enable_img" />
-                              <p className="text-[20px]">Enable</p>
-                            </div>
-                          )}
-                        </button>
+                      <div className="flex items-center gap-1 mt-2">
+                        <RatingStarIcon />
+                        <h3 className="text-[#000F02] text-[10px] font-normal">
+                          {item.rating} | {item.reviewCount} reviews
+                        </h3>
                       </div>
                     </div>
-                    <p className="font-normal text-[14px] text-[#00000099] mt-1">
-                      {/* {item.description} */}
-                      {truncateText(item.description, 50)}
-                    </p>
-                    <div className="flex items-center gap-1 mt-2">
-                      <RatingStarIcon />
-                      <h3 className="text-[#000F02] text-[10px] font-normal">
-                        {item.rating} | {item.reviewCount} reviews
-                      </h3>
-                    </div>
                   </div>
-                </div>
-              </Link>
-            ))}
-          </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <p className="mt-5 text-center">No listings found</p>
+          )}
         </>
-      ) : (
-        <p className="mt-5 text-center">No user Found</p>
       )}
 
       {showPopupDisable && (

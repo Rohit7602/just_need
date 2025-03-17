@@ -1,6 +1,5 @@
-/* eslint-disable react/no-unknown-property */
 import { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   BlackCloseIcon,
   ChatIcon,
@@ -8,10 +7,10 @@ import {
   SearchIcon,
 } from "../../assets/icon/Icon";
 import AdminImage from "../../assets/png/AdminImage.png";
-import { useLocation } from "react-router-dom";
 import { ArrowIcon } from "../../assets/icon/Icons";
 import NotificationPopUp from "../Popups/NotificationPopUp";
 import ScrollNotify from "../Popups/ScrollNotify";
+import { useUserContext } from "../../store/UserContext";
 
 function TopBar() {
   const navigate = useNavigate();
@@ -21,9 +20,10 @@ function TopBar() {
   const [chatPopup, setchatPopup] = useState(false);
   const searchRef = useRef(null);
 
-  const toggleSearchInput = () => {
-    setIsInputVisible((prev) => !prev);
-  };
+  const toggleSearchInput = () => setIsInputVisible((prev) => !prev);
+
+  const { userName } = useUserContext();
+
 
   const handleClickOutside = (event) => {
     if (searchRef.current && !searchRef.current.contains(event.target)) {
@@ -38,50 +38,25 @@ function TopBar() {
     };
   }, []);
 
-  // Improved back navigation logic
   const goBack = () => {
-    // Check if we're in a settings sub-page
     if (location.pathname.startsWith("/dashboard/setting/")) {
-      // Always navigate to the main settings page
       navigate("/dashboard/setting");
-    }
-    // Check if we're in a user details page
-    else if (location.pathname.includes("/dashboard/usersList/userDetails/")) {
+    } else if (location.pathname.includes("/dashboard/usersList/userDetails/")) {
       navigate("/dashboard/usersList");
-    }
-    // Check if we're in a complaints details page
-    else if (
-      location.pathname.includes("/dashboard/complaints/complaintsDetails/")
-    ) {
+    } else if (location.pathname.includes("/dashboard/complaints/complaintsDetails/")) {
       navigate("/dashboard/complaints");
-    }
-    // Default fallback
-    else {
-      navigate(-1); // Use browser history if available
+    } else if (location.pathname.includes("/dashboard/listings/")) {
+      navigate("/dashboard/listings");
+    } else {
+      navigate(-1);
     }
   };
 
-  const handleNotificationPopUp = () => {
-    setNotificationPopUp(!notificationPopUp);
-  };
-
-  function handleChatPopup() {
-    setchatPopup(!chatPopup);
-  }
-
-  // Determine when to show the back arrow button
   const showArrowButton =
-    /\/dashboard\/complaints\/complaintsDetails\/\d+$/.test(
-      location.pathname
-    ) ||
-    /\/dashboard\/usersList\/userDetails\/userDetails\/\d+$/.test(
-      location.pathname
-    ) ||
-    location.pathname === "/dashboard/setting/general" ||
-    location.pathname === "/dashboard/setting/legal" ||
-    location.pathname === "/dashboard/setting/keys" ||
-    location.pathname === "/dashboard/usersList/userDetails" ||
-    location.pathname === "/dashboard/setting/keys&Credentials";
+    location.pathname.includes("/dashboard/usersList/userDetails/") ||
+    location.pathname.includes("/dashboard/listings/") ||
+    location.pathname.startsWith("/dashboard/setting/") ||
+    location.pathname.includes("/dashboard/complaints/complaintsDetails/");
 
   return (
     <div>
@@ -97,38 +72,21 @@ function TopBar() {
           <div>
             <p className="font-medium text-lg xl:text-[22px] capitalize">
               {location.pathname.startsWith("/dashboard/setting/") ? (
-                <p className="text-[#00000099] font-medium text-lg xl:text-[22px] capitalize">
-                  setting /
+                <span className="text-[#00000099]">
+                  Setting /
                   <span className="text-black ms-1">
-                    {location.pathname
-                      .replace("/dashboard/setting/", "")
-                      .replace("&", " & ")}
+                    {location.pathname.replace("/dashboard/setting/", "").replace("&", " & ")}
                   </span>
-                </p>
-              ) : location.pathname.includes(
-                  "/dashboard/usersList/userDetails/"
-                ) ? (
-                "User's Details"
+                </span>
+              ) : location.pathname.includes("/dashboard/usersList/userDetails/") ? (
+                `User's Details / ${userName}`
               ) : location.pathname.includes("/dashboard/listings/") ? (
-                location.pathname.match(
-                  /\/dashboard\/listings\/[0-9a-fA-F-]+$/
-                ) ? (
-                  "Listings Details" 
-                ) : (
-                  "Listings"
-                ) 
+                "Listings Details"
               ) : (
                 location.pathname
-                  .replace("/", "")
-                  .replace(/\/[0-9a-fA-F-]+$/, "")
-                  .replace("dashboard/", "")
-                  .replace(
-                    /complaints\/complaintsDetails\/\d+/,
-                    "Complaints Details"
-                  )
-
-                  .replace("&", " & ")
+                  .replace("/dashboard/", "")
                   .replace("/", " / ")
+                  .replace("&", " & ")
                   .replace("usersList", "Users List")
               )}
             </p>
@@ -138,11 +96,8 @@ function TopBar() {
         <div className="flex items-center gap-2 xl:gap-4">
           <div
             ref={searchRef}
-            className={`flex items-center h-[40px] rounded-[50px] bg-[#F1F1F1] ${
-              isInputVisible
-                ? "w-[185px] lg:max-w-[330px] xl:w-[330px]"
-                : "max-w-[40px]"
-            } transition-all duration-300`}
+            className={`flex items-center h-[40px] rounded-[50px] bg-[#F1F1F1] ${isInputVisible ? "w-[185px] lg:max-w-[330px] xl:w-[330px]" : "max-w-[40px]"
+              } transition-all duration-300`}
           >
             <div
               onClick={toggleSearchInput}
@@ -163,18 +118,14 @@ function TopBar() {
               </div>
             )}
           </div>
-          <button
-            onClick={handleChatPopup}
-            state={"Plan, prioritize, and accomplish your tasks with ease."}
-          >
+          <button onClick={setchatPopup}>
             <ChatIcon />
           </button>
-
-          <button onClick={handleNotificationPopUp}>
+          <button onClick={setNotificationPopUp}>
             <NotificationIcon />
           </button>
           <div className="flex items-center">
-            <img className="w-[40px]" src={AdminImage} alt="image of admin" />
+            <img className="w-[40px]" src={AdminImage} alt="Admin" />
             <div className="ms-2.5">
               <p className="font-normal text-sm xl:text-base text-[#171717] leading-[20px]">
                 Super Admin
@@ -186,13 +137,9 @@ function TopBar() {
           </div>
         </div>
       </div>
-      {notificationPopUp && (
-        <div>
-          <NotificationPopUp onCancel={handleNotificationPopUp} />
-        </div>
-      )}
 
-      {chatPopup && <ScrollNotify onCancel={handleChatPopup} />}
+      {notificationPopUp && <NotificationPopUp onCancel={setNotificationPopUp} />}
+      {chatPopup && <ScrollNotify onCancel={setchatPopup} />}
     </div>
   );
 }
