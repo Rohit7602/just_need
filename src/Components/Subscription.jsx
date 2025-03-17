@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import SuscriptionPopUp from "./Popups/SuscriptionPopUp";
 import { EditiconSubscription, RedDeleteIcon } from "../assets/icon/Icons";

@@ -1,4 +1,6 @@
-import { createContext, useContext, useEffect, useState } from "react";
+/* eslint-disable react/prop-types */
+/* eslint-disable react-refresh/only-export-components */
+import { createContext, useContext } from "react";
 import { supabase } from "./supabaseCreateClient";
 
 const SubsciptionProvider = createContext()
@@ -6,7 +8,7 @@ const SubsciptionProvider = createContext()
 export const useSubscriptionContext = () => useContext(SubsciptionProvider)
 
 export const SubscriptionContext = ({ children }) => {
-    
+
 
 
     // useEffect(() => {

@@ -406,8 +406,8 @@ const CustomerData = () => {
                   </td>
                   <td
                     className={`px-[19px] md:px-[24px] text-sm font-normal w-[50px] truncate ${customer.userType === true
-                        ? "bg-[#0000FF12] text-[#0000FF] rounded-[90px]"
-                        : "text-[#FFA500] bg-[#FFA50024] rounded-[90px]"
+                      ? "bg-[#0000FF12] text-[#0000FF] rounded-[90px]"
+                      : "text-[#FFA500] bg-[#FFA50024] rounded-[90px]"
                       }`}
                   >
                     {customer.userType === true ? "Consumer" : "Provider"}
@@ -420,8 +420,8 @@ const CustomerData = () => {
                   </td>
                   <td
                     className={`px-[10px] py-[4px] text-sm font-normal text-center ${customer.accountStatus === "active"
-                        ? "bg-[#00800012] text-[#008000] rounded-[90px]"
-                        : "text-[#800000] rounded-[90px] bg-[#FF000012]"
+                      ? "bg-[#00800012] text-[#008000] rounded-[90px]"
+                      : "text-[#800000] rounded-[90px] bg-[#FF000012]"
                       }`}
                   >
                     {customer.accountStatus}
@@ -540,6 +540,7 @@ const CustomerData = () => {
       )}
 
       {showPopup && <ActionUserPupUp handlePopup={handlePopup} />}
+
       {showFilterPopup && (
         <UsersFilterPopUp
           handleFilter={handleFilter}

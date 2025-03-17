@@ -50,11 +50,13 @@ function AddSubCategoryPopUp({
     // Check if the subcategory name already exists in the selected category
     const selectedCategory = categories.find((cat) => cat.id === selectedCategoryId);
 
-    const subcategoryExists = selectedCategory?.subcategory?.some(
-      (sub) =>
-        sub.categoryName.toLowerCase() === subCategoryName.toLowerCase() &&
-        sub.id !== initialData?.id // Allow the same name if it's the same subcategory being edited
-    );
+    const subcategoryExists = Array.isArray(selectedCategory?.subcategory) &&
+      selectedCategory.subcategory.some(
+        (sub) =>
+          sub?.categoryName?.toLowerCase() === subCategoryName.toLowerCase() &&
+          sub.id !== initialData?.id
+      );
+
 
     if (subcategoryExists) {
       toast.info("A subcategory with this name already exists in this category.");
@@ -82,7 +84,7 @@ function AddSubCategoryPopUp({
         }
         await addSubcategory(selectedCategoryId, subCategoryName, subcategoryImage);
         toast.success("Subcategory added successfully!");
-        if (onSuccess) onSuccess();
+        // if (onSuccess) onSuccess();
         handleClose();
       }
     } catch (error) {
