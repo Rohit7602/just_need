@@ -29,6 +29,8 @@ function UserDetails() {
 
   async function getlisting() {
     const listingVal = await fetchlisting();
+
+
     setListings(listingVal || []); // Default to empty array if null
   }
 
@@ -36,6 +38,8 @@ function UserDetails() {
   useEffect(() => {
     getlisting();
   }, []); // Added dependency
+
+
 
   useEffect(() => {
     if (users && users.length > 0) {
@@ -90,6 +94,9 @@ function UserDetails() {
 
   const isActive = user.accountStatus === "active";
 
+
+
+
   return (
     <div className="px-4">
       <div className="flex items-center justify-end">
@@ -121,27 +128,27 @@ function UserDetails() {
               <div className="pe-5 border-e-[1px] border-[#FFFFFF66]">
                 <img
                   className="w-[78px] h-[78px] rounded-full object-cover"
-                  src={user.image || MechanicImage}
+                  src={user?.image || MechanicImage}
                   alt="image of user"
                 />
                 <h1 className="font-medium lg:text-base xl:text-lg text-white mt-2.5 text-center">
-                  {user.firstName}
+                  {user?.firstName}
                 </h1>
                 <h2 className="text-sm font-normal text-white mt-1 text-center">
-                  {user.category}
+                  {user?.category}
                 </h2>
               </div>
               <div className="ps-5">
                 <div className="flex gap-2.5 items-center">
                   <PhoneIcon />
                   <h3 className="text-sm font-normal text-white">
-                    {user.mobile_number}
+                    {user?.mobile_number}
                   </h3>
                 </div>
                 <div className="flex gap-2.5 items-center mt-2.5">
                   <EmailIcon />
                   <h3 className="text-sm font-normal text-white">
-                    {user.useremail}
+                    {user?.useremail}
                   </h3>
                 </div>
                 <div className="flex gap-2.5 items-center mt-2.5">
@@ -155,7 +162,7 @@ function UserDetails() {
           </div>
         </div>
 
-        {!user.userType && (
+        {!user?.userType && (
           <div className="w-full lg:w-7/12 xl:w-[646px] xl:ps-2.5 mt-3 xl:mt-0 flex">
             <div className="bg-[#F1F1F1] rounded-[10px] p-[15px] pb-7 flex-grow flex flex-col">
               <p className="font-medium text-lg leading-[22px] text-black pb-2.5 border-b-[0.5px] border-dashed border-[#00000066]">

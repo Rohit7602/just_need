@@ -80,6 +80,7 @@ function TopBar() {
     location.pathname === "/dashboard/setting/general" ||
     location.pathname === "/dashboard/setting/legal" ||
     location.pathname === "/dashboard/setting/keys" ||
+    location.pathname === "/dashboard/usersList/userDetails" ||
     location.pathname === "/dashboard/setting/keys&Credentials";
 
   return (

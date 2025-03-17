@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import {
   useEffect,
@@ -531,6 +532,7 @@ function Services() {
                     <span className="font-normal text-xs flex justify-center items-center w-[25px] h-[17px] bg-[#0000000F] rounded-[60px] py-1 px-1.5 me-1">
                       {items?.subcategory?.length || 0}
                     </span>
+
                     <div className="flex gap-2">
                       <div
                         onClick={(e) =>

@@ -32,7 +32,7 @@ function AddNewServicePopUp({ handleNewServicePopUp, onSuccess }) {
     try {
       await addCategoriesSubCategories(categoryName, categoryImage);
       toast.success("Category added successfully!");
-      if (onSuccess) onSuccess(); // Trigger success callback
+      // if (onSuccess) onSuccess(); // Trigger success callback
       handleNewServicePopUp(); // Close the popup
     } catch (error) {
       console.error("Error in handleSaveDetails:", error.message);
