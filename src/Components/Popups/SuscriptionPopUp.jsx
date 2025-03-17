@@ -1,4 +1,7 @@
-import React, { useState, useRef, useEffect } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-undef */
+/* eslint-disable react/prop-types */
+import { useState, useRef, useEffect } from "react";
 import { ChromePicker } from "react-color";
 
 

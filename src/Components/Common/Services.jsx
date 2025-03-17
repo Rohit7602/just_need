@@ -22,7 +22,7 @@ import AddSubCategoryPopUp from "../Popups/SubcategoryPopup";
 import { AiOutlineClose } from "react-icons/ai";
 import { toast } from "react-toastify";
 import Loader from "./Loader";
-import { SearchingIcon } from "../../assets/icon/Icon";
+import { SearchingIcon, UnderIcon } from "../../assets/icon/Icon";
 
 function Services() {
   const [editIndex, setEditIndex] = useState(null);
@@ -65,11 +65,10 @@ function Services() {
 
   useEffect(() => {
     if (categories.length > 0 && !loading) {
-      // Find the first active category or fallback to the first category
+
       const firstActiveCategory =
         categories.find((cat) => cat.isActive) || categories[0];
 
-      // Filter subcategories to exclude null/undefined values in required fields
       const validSubcategories = (firstActiveCategory?.subcategory || []).filter(
         (sub) => sub?.id && sub?.categoryName && sub?.catID // Add other required fields if needed
       );
@@ -80,7 +79,7 @@ function Services() {
       setSelectedSubcategories(validSubcategories); // Set filtered subcategories
       setSelectedCategoryId(firstActiveCategory?.id || null);
     }
-  }, [categories, loading]); // Add categories and loading as dependencies
+  }, [categories, loading]);
 
   const filteredCategoriesData = useMemo(() => {
     if (!searchQuery.trim()) return categories;
@@ -475,6 +474,8 @@ function Services() {
       )
     );
   };
+
+
   return (
     <div className="p-[14px] rounded-[10px] shadow-md bg-white">
       {!categories && (
@@ -485,10 +486,11 @@ function Services() {
         </div>
       )}
       {!loading && categories.length === 0 && <p>No categories available.</p>}
-      {!loading && categories.length > 0 && (
+      {!loading && categories.length >= 0 && (
         <>
           <div className="xl:flex-row flex-col flex xl:items-center justify-between">
-            <h1 className="font-medium text-[22px]">Education</h1>
+            <h1 className="font-medium text-[22px]">{categories[activeTab]?.categoryName}
+            </h1>
             <div className="flex items-center mt-[20px] xl:mt-[0px]">
               <div className="bg-[#F1F1F1] w-[337px] px-[16px] py-2.5 h-[42px] rounded-[10px]">
                 <div className="flex items-center">
@@ -562,6 +564,10 @@ function Services() {
                     </div>
                   </div>
                 ))}
+              </div>
+
+              <div className="cursor-pointer border-b border-[rgb(128,128,128)] ps-5 flex flex-col justify-center">
+                <UnderIcon />
               </div>
 
               <div className="bg-white border-b border-[rgb(128,128,128)] ps-5">
