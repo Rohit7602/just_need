@@ -15,6 +15,7 @@ import BannerProvider from "./store/BannerContext.jsx";
 import ListingProvider from "./store/ListingContext.jsx";
 import { CustomerContext } from "./store/CustomerContext.jsx";
 import { SubscriptionContext } from "./store/SubscriptionContext.jsx";
+import { UserProvider } from "./store/UserContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -26,7 +27,9 @@ createRoot(document.getElementById("root")).render(
               <CustomerContext>
                 <SubscriptionContext>
                   <BrowserRouter>
-                    <App />
+                    <UserProvider>
+                      <App />
+                    </UserProvider>
                   </BrowserRouter>
                 </SubscriptionContext>
               </CustomerContext>

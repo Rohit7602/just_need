@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 
 import user from "../../assets/png/user for listing.png";
 import star from "../../assets/png/star.png";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import disable_img from "../../assets/png/disable_img.png";
 import enable_img from "../../assets/png/enable_img.png";
 import { supabase } from "../../store/supabaseCreateClient";
@@ -148,8 +148,9 @@ const ListingDetails = () => {
           <div className="">
             <h3 className="text-[20px] font-medium mb-[24px]">Posted By</h3>
             <div className="xl:flex mt-[30px]">
-              <div className="w-full lg:w-7/12 xl:w-[399px]  lg:flex">
-                <div className="bg-[#6C4DEF] px-[30px] py-5 rounded-[10px] flex-grow flex">
+              <div className="w-full lg:w-7/12 xl:w-[399px] lg:flex">
+                <div className="bg-[#6C4DEF] px-[30px] py-5 rounded-[10px] flex-grow flex relative group overflow-hidden">
+                  {/* User Info */}
                   <div className="flex items-center">
                     <div className="pe-5 border-e-[1px] border-[#FFFFFF66]">
                       <img
@@ -185,10 +186,19 @@ const ListingDetails = () => {
                       </div>
                     </div>
                   </div>
+
+                  {/* View Profile Button */}
+                  <Link to={`/dashboard/usersList/userDetails/${listData?.user_detail?.id}`}
+                    className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white text-sm font-medium rounded-[10px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"
+
+                  >
+                    View Profile
+                  </Link>
                 </div>
               </div>
             </div>
           </div>
+
         </div>
 
         <hr className="my-[32px] border-dotted border-t-0 border-2 " />
@@ -333,7 +343,7 @@ const ListingDetails = () => {
           })}
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 
