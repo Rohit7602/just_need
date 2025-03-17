@@ -64,19 +64,23 @@ function Services() {
   }, []);
 
   useEffect(() => {
-    if (
-      categories.length > 0 &&
-      selectedSubcategories.length === 0 &&
-      !loading
-    ) {
+    if (categories.length > 0 && !loading) {
+      // Find the first active category or fallback to the first category
       const firstActiveCategory =
         categories.find((cat) => cat.isActive) || categories[0];
+
+      // Filter subcategories to exclude null/undefined values in required fields
+      const validSubcategories = (firstActiveCategory?.subcategory || []).filter(
+        (sub) => sub?.id && sub?.categoryName && sub?.catID // Add other required fields if needed
+      );
+
+      // Set the active tab, subcategories, and category ID
       const index = categories.indexOf(firstActiveCategory);
       setActiveTab(index);
-      setSelectedSubcategories(firstActiveCategory?.subcategory || []);
+      setSelectedSubcategories(validSubcategories); // Set filtered subcategories
       setSelectedCategoryId(firstActiveCategory?.id || null);
     }
-  }, []);
+  }, [categories, loading]); // Add categories and loading as dependencies
 
   const filteredCategoriesData = useMemo(() => {
     if (!searchQuery.trim()) return categories;
@@ -120,13 +124,9 @@ function Services() {
     setShowNewServicePopUp((prev) => !prev);
   }, []);
 
-  // const handleSubcategory = useCallback(() => {
-  //   setSubCategoryPopup((prev) => !prev);
-  // }, []);
-
-  const handleSubcategory =()=>{
-    
-  };
+  const handleSubcategory = useCallback(() => {
+    setSubCategoryPopup((prev) => !prev);
+  }, []);
 
   const handleEditClick = useCallback((index, categoryName) => {
     setEditIndex(index);
@@ -275,6 +275,7 @@ function Services() {
       toggle,
     ]
   );
+
   const handleOverlayClick = useCallback(() => {
     setShowPopup(false);
     setSelectedItem(null);
@@ -474,7 +475,6 @@ function Services() {
       )
     );
   };
-
   return (
     <div className="p-[14px] rounded-[10px] shadow-md bg-white">
       {!categories && (
@@ -485,7 +485,7 @@ function Services() {
         </div>
       )}
       {!loading && categories.length === 0 && <p>No categories available.</p>}
-      {!loading && categories.length >= 0 && (
+      {!loading && categories.length > 0 && (
         <>
           <div className="xl:flex-row flex-col flex xl:items-center justify-between">
             <h1 className="font-medium text-[22px]">Education</h1>
@@ -622,12 +622,12 @@ function Services() {
           </div>
 
           {
-            !selectedSubcategories?.length > 0 && (
+            selectedSubcategories?.length === 0 && (
               <div className="flex flex-col">
                 <div className="flex justify-center">
                   <SearchingIcon />
                 </div>
-                <div className="flex justify-center mt-5">
+                <div className="flex justify-center">
                   <p className="font-normal text-[28px] text-black">
                     No Category Found
                   </p>
@@ -643,7 +643,7 @@ function Services() {
             >
               <Plusicon />
               <p className="font-normal text-[16px] text-white ms-[12px]">
-                Add New Sub
+                Add New Service
               </p>
             </div>
           </div>

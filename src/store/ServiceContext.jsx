@@ -16,30 +16,6 @@ function ServiceContext({ children }) {
     getCategoriesWithSubcategories();
   }, []);
 
-  // async function getCategoriesWithSubcategories() {
-  //   setLoading(true);
-  //   try {
-  //     const { data, error } = await supabase.from("catview").select("*");
-  //     if (error)
-  //       throw new Error(`Failed to fetch categories: ${error.message}`);
-
-  //     const formattedData = data.map((category) => {
-  //       console.log(category, "category")
-  //       return ({
-
-  //         ...category,
-  //         subcategory: category.subcategory ?? [],
-  //       })
-  //     });
-
-  //     setCategories(formattedData);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error.message);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
-
   async function getCategoriesWithSubcategories() {
     setLoading(true);
     try {
@@ -48,12 +24,13 @@ function ServiceContext({ children }) {
         throw new Error(`Failed to fetch categories: ${error.message}`);
 
       const formattedData = data.map((category) => {
-        console.log(category, "category");
+        console.log(category);
         return {
           ...category,
-          // subcategory: category.subcategory ?? [], // Agar subcategory null ya undefined hai toh empty array set karo
+          subcategory: category.subcategory ?? [],
         };
       });
+
 
       setCategories(formattedData);
     } catch (error) {
