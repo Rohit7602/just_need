@@ -120,9 +120,13 @@ function Services() {
     setShowNewServicePopUp((prev) => !prev);
   }, []);
 
-  const handleSubcategory = useCallback(() => {
-    setSubCategoryPopup((prev) => !prev);
-  }, []);
+  // const handleSubcategory = useCallback(() => {
+  //   setSubCategoryPopup((prev) => !prev);
+  // }, []);
+
+  const handleSubcategory =()=>{
+    
+  };
 
   const handleEditClick = useCallback((index, categoryName) => {
     setEditIndex(index);
@@ -481,7 +485,7 @@ function Services() {
         </div>
       )}
       {!loading && categories.length === 0 && <p>No categories available.</p>}
-      {!loading && categories.length > 0 && (
+      {!loading && categories.length >= 0 && (
         <>
           <div className="xl:flex-row flex-col flex xl:items-center justify-between">
             <h1 className="font-medium text-[22px]">Education</h1>
@@ -623,7 +627,7 @@ function Services() {
                 <div className="flex justify-center">
                   <SearchingIcon />
                 </div>
-                <div className="flex justify-center">
+                <div className="flex justify-center mt-5">
                   <p className="font-normal text-[28px] text-black">
                     No Category Found
                   </p>
@@ -639,7 +643,7 @@ function Services() {
             >
               <Plusicon />
               <p className="font-normal text-[16px] text-white ms-[12px]">
-                Add New Service
+                Add New Sub
               </p>
             </div>
           </div>
