@@ -786,8 +786,8 @@ export const SearchingIcon = () => {
 export const UnderIcon = () => {
   return (
     <svg width="20" height="10" viewBox="0 0 20 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <g clip-path="url(#clip0_12_17)">
-        <path fill-rule="evenodd" clip-rule="evenodd" d="M9.40755 8.46428L4.69338 3.75011L5.87171 2.57178L9.99672 6.69678L14.1217 2.57178L15.3 3.75011L10.5859 8.46428C10.4296 8.6205 10.2177 8.70827 9.99672 8.70827C9.77574 8.70827 9.56382 8.6205 9.40755 8.46428Z" fill="black" />
+      <g clipPath="url(#clip0_12_17)">
+        <path fillRule="evenodd" clipRule="evenodd" d="M9.40755 8.46428L4.69338 3.75011L5.87171 2.57178L9.99672 6.69678L14.1217 2.57178L15.3 3.75011L10.5859 8.46428C10.4296 8.6205 10.2177 8.70827 9.99672 8.70827C9.77574 8.70827 9.56382 8.6205 9.40755 8.46428Z" fill="black" />
       </g>
       <defs>
         <clipPath id="clip0_12_17">

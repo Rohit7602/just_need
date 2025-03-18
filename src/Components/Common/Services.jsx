@@ -45,6 +45,14 @@ function Services() {
   const [editingSubcategoryId, setEditingSubcategoryId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
 
+
+  const [isVertical, setIsVertical] = useState(false);
+
+
+  const toggleLayout = () => {
+    setIsVertical((prev) => !prev);
+  };
+
   const {
     categories = [],
     updateSubcategoryName,
@@ -367,19 +375,50 @@ function Services() {
     ]
   );
 
+  // const handleCategoryClick = useCallback(
+
+
+  //   (index) => {
+  //     const sourceArray = searchQuery.trim()
+  //       ? filteredCategoriesData
+  //       : categories;
+  //     if (sourceArray[index]?.isActive) {
+  //       setActiveTab(index);
+  //       setSelectedSubcategories(sourceArray[index]?.subcategory || []);
+  //       setSelectedCategoryId(sourceArray[index]?.id || null);
+  //     }
+
+  //   },
+  //   [categories, filteredCategoriesData, searchQuery]
+  // );
+
   const handleCategoryClick = useCallback(
     (index) => {
+
+      console.log(index, "index")
       const sourceArray = searchQuery.trim()
         ? filteredCategoriesData
         : categories;
+
       if (sourceArray[index]?.isActive) {
-        setActiveTab(index);
+        // Move clicked category to the top of the list
+        const updatedArray = [
+          sourceArray[index],
+          ...sourceArray.filter((_, i) => i !== index),
+        ];
+
+        // Set active tab and selected subcategories
+        setActiveTab(index); // New index becomes 0 after moving to the top
         setSelectedSubcategories(sourceArray[index]?.subcategory || []);
         setSelectedCategoryId(sourceArray[index]?.id || null);
+
+        // Collapse the list
+        setIsVertical(false);
       }
     },
     [categories, filteredCategoriesData, searchQuery]
   );
+
 
   const handleCategoryEdit = useCallback((categoryId, currentName, e) => {
     e.stopPropagation();
@@ -517,14 +556,19 @@ function Services() {
           </div>
 
           <div className="mt-8 relative">
-            <div className="flex whitespace-nowrap">
-              <div className="gap-4 flex items-center cursor-pointer overflow-x-auto scrollbar-hide">
+            <div className={`flex whitespace-nowrap ${isVertical ? "border-b border-[rgb(128,128,128)]" : ""}`}>
+              {/* Categories Section */}
+              <div
+                className={`gap-4 flex items-center cursor-pointer ${isVertical ? "flex-wrap" : "overflow-x-auto scrollbar-hide"
+                  }`}
+              >
                 {filteredCategoriesData?.map((items, index) => (
                   <div
                     key={index}
-                    className={`flex items-center pb-2 border-b-2 px-5 hover:text-blue-500 hover:border-blue-500 ${activeTab === index
-                      ? "border-blue-500 text-blue-500"
-                      : "border-transparent text-gray-700"
+                    className={`flex items-center pb-2 ${!isVertical ? "border-b-2" : ""
+                      } px-5 hover:text-blue-500 hover:border-blue-500 ${activeTab === index
+                        ? "border-blue-500 text-blue-500"
+                        : "border-transparent text-gray-700"
                       } ${!items.isActive ? "opacity-50" : ""}`}
                     onClick={() => handleCategoryClick(index)}
                   >
@@ -555,28 +599,35 @@ function Services() {
                         }}
                         className="ms-2"
                       >
-                        {items.isActive ? (
-                          <EnableRedIcon />
-                        ) : (
-                          <DisableRedicon />
-                        )}
+                        {items.isActive ? <EnableRedIcon /> : <DisableRedicon />}
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div className="cursor-pointer border-b border-[rgb(128,128,128)] ps-5 flex flex-col justify-center">
-                <UnderIcon />
-              </div>
-
-              <div className="bg-white border-b border-[rgb(128,128,128)] ps-5">
-                <button
-                  className="text-[#6C4DEF] font-normal text-base"
-                  onClick={toggleOptionsVisibility}
+              {/* UnderIcon Button */}
+              <div className="flex">
+                <div
+                  className={`cursor-pointer ps-5 flex flex-col justify-start mt-3 ${!isVertical ? "border-b border-[rgb(128,128,128)]" : ""
+                    }`}
+                  onClick={toggleLayout}
                 >
-                  View Blocked List
-                </button>
+                  <UnderIcon />
+                </div>
+
+                {/* View Blocked List Button */}
+                <div
+                  className={`bg-white ps-5 ${!isVertical ? "border-b border-[rgb(128,128,128)]" : ""
+                    }`}
+                >
+                  <button
+                    className="text-[#6C4DEF] font-normal text-base"
+                    onClick={toggleOptionsVisibility}
+                  >
+                    View Blocked List
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -635,7 +686,7 @@ function Services() {
                 </div>
                 <div className="flex justify-center">
                   <p className="font-normal text-[28px] text-black">
-                    No Category Found
+                    No Sub-Category Found
                   </p>
                 </div>
               </div>
@@ -649,7 +700,7 @@ function Services() {
             >
               <Plusicon />
               <p className="font-normal text-[16px] text-white ms-[12px]">
-                Add New Service
+                Add New Sub-Category
               </p>
             </div>
           </div>

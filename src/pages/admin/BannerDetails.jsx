@@ -433,13 +433,26 @@ function BannerDetails() {
                 <label className="text-gray-600 block text-base mb-2">
                   Discount %
                 </label>
-                <input
+                {/* <input
                   type="text"
                   value={discount}
                   placeholder="Discount"
                   onChange={(e) => setDiscount(e.target.value)}
                   className="w-full px-4 py-2 border rounded-lg bg-[#F2F2F2] text-gray-600 outline-none"
-                />
+                /> */}
+
+                <select
+                  value={discount}
+                  onChange={(e) => setDiscount(e.target.value)}
+                  className="w-full px-4 py-2 border rounded-lg bg-[#F2F2F2] text-gray-600 outline-none"
+                >
+                  <option value="" disabled>
+                    Select Discount
+                  </option>
+                  <option value="5">percentage</option>
+                  <option value="10">percentage</option>
+
+                </select>
               </div>
             </div>
 
