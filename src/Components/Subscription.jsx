@@ -130,7 +130,7 @@ const Subscription = () => {
           );
         })}
       </div>
-      {/* {showPopup && <SuscriptionPopUp updateItemId={updateItemId} handlePopup={handlePopup} />} */}
+      {showPopup && <SuscriptionPopUp updateItemId={updateItemId} handlePopup={handlePopup} />}
       {deletePopUp && <ConfirmDeltePopUp deleteId={deleteItemId} onCancel={handleDeletePopUp} />}
     </div>
 
