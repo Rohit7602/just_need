@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -81,7 +83,7 @@ function ScrollNotify({ onCancel }) {
                     ))}
                 </div>
             </div>
-        </div >
+        </div>
     );
 }
 

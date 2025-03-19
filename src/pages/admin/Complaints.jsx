@@ -196,7 +196,7 @@ export const Complaints = () => {
                   <th className="text-black text-sm font-medium py-3 px-4 border-b">Description</th>
                   <th className="text-black text-sm font-medium py-3 px-4 border-b">Date</th>
                   <th className="text-black text-sm font-medium py-3 px-4 border-b">Email</th>
-                  <th className="text-black text-sm font-medium py-3 px-4 border-b bg-white">Status</th>
+                  <th className="text-black text-sm font-medium py-3 px-4 border-b  bg-white">Status</th>
                   <th className="text-black text-sm font-medium py-3 px-4 border-b bg-white">Action</th>
                 </tr>
               </thead>
@@ -230,7 +230,7 @@ export const Complaints = () => {
                         : 'text-[#008000] rounded-[90px] bg-[#0080001A] text-center'
                         }`}>   {item.status}</span>
                     </td>
-                    <td className="text-black text-sm font-normal px-4 text_center align-top">{item.action}</td>
+                    <td className="text-black text-sm font-normal px-4 text-center align-top">{item.action}</td>
                   </tr>
                 ))}
               </tbody>

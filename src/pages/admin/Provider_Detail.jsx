@@ -31,6 +31,8 @@ const Provider_Detail = () => {
   const [showImagePreviewPopUp, setShowImagePreviewPupUp] = useState(false);
   const popupRef = useRef(null);
 
+  const [isOpen, setIsOpen] = useState(false);
+
   const handleImagePreviewPopUp = () => {
     setShowImagePreviewPupUp(!showImagePreviewPopUp);
   };
@@ -60,18 +62,8 @@ const Provider_Detail = () => {
 
   return (
     <div className="">
-      <div className="flex justify-end relative items-center flex-wrap gap-y-4 mt-5 md:mt-0">
-        <button
-          onClick={togglePopup}
-          className="bg-[#0832DE] flex items-center text-white font-normal text-sm md:text-base px-3 md:px-4 py-2.5 h-[42px] rounded-[10px] mt-5 md:mt-0"
-        >
-          <Resolve_Issue />
-          <h5 className="ms-2 md:ms-3">Resolve Issue</h5>
-        </button>
-        {popup && <div ref={popupRef}><ResolveIssuePopus onClose={togglePopup} /></div>}
-      </div>
-      <div className=" flex lg:flex justify-between gap-5 mt-5">
-        <div className="bg-white w-7/12">
+      <div className=" flex lg:flex justify-between gap-5 ">
+        <div className="bg-whi w-7/12">
           <div className="flex justify-between">
             <div className="flex">
               <div>
@@ -83,11 +75,11 @@ const Provider_Detail = () => {
                   <p className="font-semibold text-lg ">Robert Fox</p>
                   <p className="text-[#6C4DEF] font-normal text-sm bg-[#6C4DEF1A] px-2.5 py-1 rounded-[90px]">Processing</p>
                 </div>
-                <p className="">House Cleaning</p>
+                <p className="font-normal text-sm text-[#ADA4A5]">House Cleaning</p>
               </div>
             </div>
             <div>
-              <button className="px-[12px] py-[15px] text-[#6C4DEF] border-[#6C4DEF] border font-normal text-base rounded-[10px]">
+              <button className="px-[28px] py-[12px] text-[#6C4DEF] border-[#6C4DEF] border font-normal text-base rounded-[10px]">
                 Contact Now
               </button>
             </div>
@@ -101,28 +93,28 @@ const Provider_Detail = () => {
                 <span className="ml-2 text-[#1D1617] font-normal text-sm opacity-[50%]">#12345567</span>
               </div>
               <div className="flex mt-[16px]">
-                <span className="font-medium">Date :</span>
+                <span className="font-normal text-sm">Date :</span>
                 <span className="ml-2 text-[#1D1617] font-normal text-sm opacity-[50%]">11 Dec, 2024</span>
               </div>
 
               {/* Complaint Type and Email */}
               <div className="flex mt-[16px]">
-                <span className="font-medium">Complaint Type :</span>
+                <span className="font-normal text-sm">Complaint Type :</span>
                 <span className="ml-2 text-[#1D1617] font-normal text-sm opacity-[50%]">Cushion Damaged</span>
               </div>
               <div className="flex mt-[16px]">
-                <span className="font-medium">Email :</span>
+                <span className="font-normal text-sm">Email :</span>
                 <span className="ml-2 text-[#1D1617] font-normal text-sm opacity-[50%]">john@gmail.com</span>
               </div>
 
               {/* Service Type and Status */}
               <div className="flex mt-[16px]">
-                <span className="font-medium">Service Type :</span>
+                <span className="font-normal text-sm">Service Type :</span>
                 <span className="ml-2 text-[#1D1617] font-normal text-sm opacity-[50%]">Plumbing</span>
               </div>
               <div className="flex items-center mt-[16px]">
-                <span className="font-medium">Status :</span>
-                <select className="ml-2 bg-[#6C4DEF1A] rounded-[90px] text-purple-700 px-2 py-0.5  border-none outline-none">
+                <span className="font-normal text-sm">Status :</span>
+                <select className="ml-2 bg-[#6C4DEF1A] font-normal text-sm rounded-[90px] text-purple-700 px-2 py-0.5  border-none outline-none">
                   <option>Processing</option>
                   <option>Completed</option>
                   <option>Pending</option>
@@ -135,11 +127,11 @@ const Provider_Detail = () => {
 
           {/* Complaint Description */}
           <div className="p-[14px] rounded-[10px] bg-[#DDDADA4D]">
-            <h2 className="font-medium text-lg text-black">
+            <h2 className="font-semibold text-base text-black">
               Complaint
             </h2>
-            <div className="w-full border-[0.5px] border-dashed border-black border-opacity-40 opacity-40 my-3"></div>
-            <p className="text-base text-black opacity-70">
+            <div className="w-full  opacity-40 my-3"></div>
+            <p className="text-sm font-normal text-black opacity-70">
               It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.
             </p>
             <div className="flex gap-[14px] mt-2.5">
@@ -148,22 +140,65 @@ const Provider_Detail = () => {
             </div>
           </div>
 
-          <div className="flex justify-end mt-5">
-            <button className="px-[15px] py-[12px] font-normal text-base rounded-[10px] bg-[#0832DE] text-white">Update complaint state</button>
+          <div className="relative">
+            {/* Button to open the popup */}
+            <div className="flex justify-end mt-5">
+              <button
+                className="px-[15px] py-[12px] font-normal text-base rounded-[10px] bg-[#0832DE] text-white"
+                onClick={() => setIsOpen(true)}
+              >
+                Update complaint state
+              </button>
+            </div>
+
+            {/* Popup */}
+            {isOpen && (
+              <div onClick={() => setIsOpen(false)} className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                <div className="bg-white p-[18px] rounded-[14px] shadow-[#00000040] w-[350px]">
+                  <div className="flex justify-between items-center">
+                    <h2 className="text-xl font-medium">Update complaint state</h2>
+                    <button
+                      className="text-4xl font-normal"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      &times;
+                    </button>
+                  </div>
+                  <div className="mt-3">
+                    <p className="font-normal text-base">1. Assign to</p>
+                    <hr className="my-2.5" />
+                    <p className="font-normal text-base">2. Instructions</p>
+                    <hr className="my-2.5" />
+                    <p className="font-normal text-base">3. Status</p>
+                  </div>
+                  <div className="flex  gap-3 mt-[30px]">
+                    <button className="font-normal text-base px-[34px] py-2 bg-[#0832DE] text-white rounded-[10px]">
+                      Apply
+                    </button>
+                    <button
+                      className="font-normal text-base px-[34px] py-2 bg-[#F1F1F1] rounded-[10px]"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
 
         <div className="border"></div>
 
-        <div className="rounded-md p-4 max-w-md shadow-sm w-4/12">
-          <h2 className="font-semibold text-lg mb-4">History Log</h2>
+        <div className="rounded-md p-4 max-w-md  w-4/12">
+          <h2 className="font-semibold text-base mb-4">History Log</h2>
           <div className="">
             {/* Received */}
             <div className="flex items-start">
               <div className="flex flex-col items-center">
                 <div className="w-4 h-4 border-2 border-[#6C4DEF] rounded-full"></div>
-                <div className="w-[2px] h-10 bg-[#6C4DEF]"></div>
+                <div className="w-[2px] h-20 border border-dashed border-[#6C4DEF] "></div>
               </div>
               <div className="ml-4">
                 <h3 className="font-semibold font-base">Received</h3>
@@ -172,10 +207,10 @@ const Provider_Detail = () => {
             </div>
 
             {/* In Review */}
-            <div className="flex items-start mt-10">
+            <div className="flex items-start">
               <div className="flex flex-col items-center">
                 <div className="w-4 h-4 border-2 border-[#6C4DEF] rounded-full"></div>
-                <div className="w-[2px] h-10 bg-[#6C4DEF]"></div>
+                <div className="w-[2px] h-20 border border-dashed border-[#000] opacity-10"></div>
               </div>
               <div className="ml-4 flex items-center">
                 <div>
@@ -188,10 +223,10 @@ const Provider_Detail = () => {
             </div>
 
             {/* Action Taken */}
-            <div className="flex items-start mt-10">
+            <div className="flex items-start">
               <div className="flex flex-col items-center">
                 <div className="w-4 h-4 border-2 border-[#6C4DEF] rounded-full"></div>
-                <div className="w-[2px] h-10 bg-[#6C4DEF]"></div>
+                <div className="w-[2px] h-20 border border-dashed border-[#000] opacity-10"></div>
               </div>
               <div className="ml-4">
                 <h3 className="font-semibold font-base">Action Taken</h3>
@@ -200,10 +235,10 @@ const Provider_Detail = () => {
             </div>
 
             {/* Resolved */}
-            <div className="flex items-start mt-10">
+            <div className="flex items-start">
               <div className="flex flex-col items-center">
                 <div className="w-4 h-4 border-2 border-[#6C4DEF] rounded-full"></div>
-                <div className="w-[2px] h-10 bg-[#6C4DEF]"></div>
+                <div className="w-[2px] h-20 border border-dashed border-[#000] opacity-10"></div>
               </div>
               <div className="ml-4">
                 <h3 className="font-semibold font-base">Resolved</h3>
@@ -212,7 +247,7 @@ const Provider_Detail = () => {
             </div>
 
             {/* Closed */}
-            <div className="flex items-start mt-10">
+            <div className="flex items-start">
               <div className="flex flex-col items-center">
                 <div className="w-4 h-4 border-2 border-[#6C4DEF] rounded-full"></div>
               </div>

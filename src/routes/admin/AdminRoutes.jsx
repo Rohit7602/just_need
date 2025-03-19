@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Route, Routes, Navigate } from "react-router-dom";
 import AdminLayout from "../../Components/AdminLayout";
 import Aside from "../../pages/admin/Aside";
