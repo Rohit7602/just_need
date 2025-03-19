@@ -1,4 +1,6 @@
-import React, { useState ,useEffect,useRef} from "react";
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect, useRef } from "react";
 import ResolveIssuePopus from "../../Components/Popups/ResolveIssuePopus";
 import {
   ArrowIcon,
@@ -21,6 +23,8 @@ import img5 from "../../assets/png/img5.png";
 import img6 from "../../assets/png/img6.png";
 import img7 from "../../assets/png/img7.png";
 import ImagePreviewPopUp from "../../Components/Popups/ImagePreviewPopUp";
+import robert from "../../assets/Images/Png/robert.png"
+import cleaning from "../../assets/Images/Png/cleaning.png"
 
 const Provider_Detail = () => {
   const [popup, setPopup] = useState(false);
@@ -66,130 +70,160 @@ const Provider_Detail = () => {
         </button>
         {popup && <div ref={popupRef}><ResolveIssuePopus onClose={togglePopup} /></div>}
       </div>
-      <div className="lg:flex justify-between gap-5">
-        <div className="bg-[#6C4DEF] p-5 rounded-[10px] mt-5 w-full md:w-[489px] lg:w-[379px]">
-          <h2 className="font-medium text-sm lg:text-lg text-white">
-            Customer Detail
-          </h2>
-          <div className="w-full border-[0.5px] border-dashed border-white border-opacity-60 opacity-60 my-3"></div>
-          <div className="flex items-center gap-5">
-            <div className="w-1/4">
-              <img src={imgCustemer} alt="Customer" />
-              <h2 className="font-medium text-white pt-2 text-sm md:text-base">
-                Jhon Deo
-              </h2>
-            </div>
-            <div className="border border-dashed border-white border-opacity-60 opacity-60 h-24"></div>
-            <div className="flex-1">
-              <div className="flex items-center gap-3">
-                <PhnIcon />
-                <h2 className="text-white text-sm">+91 89979 87908</h2>
+      <div className=" flex lg:flex justify-between gap-5 mt-5">
+        <div className="bg-white w-7/12">
+          <div className="flex justify-between">
+            <div className="flex">
+              <div>
+                <img src={robert} alt="" />
               </div>
-              <div className="flex items-center gap-3 pt-3">
-                <EmailIcon />
-                <h2 className="text-white text-sm">johndeo12@gmail.com</h2>
-              </div>
-              <div className="flex items-center gap-3 pt-3">
-                <LocsionIcon />
-                <h2 className="text-white text-sm">
-                  Hisar Haryana B street 352
-                </h2>
+
+              <div className="ms-3">
+                <div className="flex items-center gap-[10px]">
+                  <p className="font-semibold text-lg ">Robert Fox</p>
+                  <p className="text-[#6C4DEF] font-normal text-sm bg-[#6C4DEF1A] px-2.5 py-1 rounded-[90px]">Processing</p>
+                </div>
+                <p className="">House Cleaning</p>
               </div>
             </div>
+            <div>
+              <button className="px-[12px] py-[15px] text-[#6C4DEF] border-[#6C4DEF] border font-normal text-base rounded-[10px]">
+                Contact Now
+              </button>
+            </div>
+          </div>
+
+          <div className="mt-5">
+            <div className="grid grid-cols-2 gap-y-2 text-sm text-gray-700">
+              {/* Complaint ID and Date */}
+              <div className="flex mt-[16px]">
+                <span className="font-normal text-sm  text-[#1D1617]">Complaint Id :</span>
+                <span className="ml-2 text-[#1D1617] font-normal text-sm opacity-[50%]">#12345567</span>
+              </div>
+              <div className="flex mt-[16px]">
+                <span className="font-medium">Date :</span>
+                <span className="ml-2 text-[#1D1617] font-normal text-sm opacity-[50%]">11 Dec, 2024</span>
+              </div>
+
+              {/* Complaint Type and Email */}
+              <div className="flex mt-[16px]">
+                <span className="font-medium">Complaint Type :</span>
+                <span className="ml-2 text-[#1D1617] font-normal text-sm opacity-[50%]">Cushion Damaged</span>
+              </div>
+              <div className="flex mt-[16px]">
+                <span className="font-medium">Email :</span>
+                <span className="ml-2 text-[#1D1617] font-normal text-sm opacity-[50%]">john@gmail.com</span>
+              </div>
+
+              {/* Service Type and Status */}
+              <div className="flex mt-[16px]">
+                <span className="font-medium">Service Type :</span>
+                <span className="ml-2 text-[#1D1617] font-normal text-sm opacity-[50%]">Plumbing</span>
+              </div>
+              <div className="flex items-center mt-[16px]">
+                <span className="font-medium">Status :</span>
+                <select className="ml-2 bg-[#6C4DEF1A] rounded-[90px] text-purple-700 px-2 py-0.5  border-none outline-none">
+                  <option>Processing</option>
+                  <option>Completed</option>
+                  <option>Pending</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div className="border my-[24px]"></div>
+
+          {/* Complaint Description */}
+          <div className="p-[14px] rounded-[10px] bg-[#DDDADA4D]">
+            <h2 className="font-medium text-lg text-black">
+              Complaint
+            </h2>
+            <div className="w-full border-[0.5px] border-dashed border-black border-opacity-40 opacity-40 my-3"></div>
+            <p className="text-base text-black opacity-70">
+              It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.
+            </p>
+            <div className="flex gap-[14px] mt-2.5">
+              <img src={cleaning} alt="" />
+              <img src={cleaning} alt="" />
+            </div>
+          </div>
+
+          <div className="flex justify-end mt-5">
+            <button className="px-[15px] py-[12px] font-normal text-base rounded-[10px] bg-[#0832DE] text-white">Update complaint state</button>
           </div>
         </div>
 
-        <div className="bg-[#F1F1F1] p-5 rounded-[10px] mt-5 w-full md:w-[489px] lg:w-[379px]">
-          <h2 className="font-medium text-sm lg:text-lg text-black">
-            Provider Detail
-          </h2>
-          <div className="w-full border-[0.5px] border-dashed border-black border-opacity-60 opacity-60 my-3"></div>
-          <div className="flex items-center gap-5">
-            <div className="w-1/4">
-              <img src={imgCustemer} alt="Provider" />
-              <h2 className="font-medium text-black pt-2 text-sm md:text-base">
-                Mike Tyson
-              </h2>
+
+        <div className="border"></div>
+
+        <div className="rounded-md p-4 max-w-md shadow-sm w-5/12">
+          <h2 className="font-semibold text-lg mb-4">History Log</h2>
+          <div className="">
+            {/* Received */}
+            <div className="flex items-start">
+              <div className="flex flex-col items-center">
+                <div className="w-4 h-4 border-2 border-[#6C4DEF] rounded-full"></div>
+                <div className="w-[2px] h-10 bg-[#6C4DEF]"></div>
+              </div>
+              <div className="ml-4">
+                <h3 className="font-sembold font-base">Received</h3>
+                <p className="text-sm font-normal text-black opacity-[80%] mt-2.5">Complaint logged and acknowledged.</p>
+              </div>
             </div>
-            <div className="border border-dashed border-black border-opacity-60 opacity-60 h-24 "></div>
-            <div className="flex-1">
-              <div className="flex items-center gap-3">
-                <PhnIcon2 />
-                <h2 className="text-black text-sm">+91 89979 87908</h2>
+
+            {/* In Review */}
+            <div className="flex items-start mt-10">
+              <div className="flex flex-col items-center">
+                <div className="w-4 h-4 border-2 border-[#6C4DEF] rounded-full"></div>
+                <div className="w-[2px] h-10 bg-[#6C4DEF]"></div>
               </div>
-              <div className="flex items-center gap-3 pt-3">
-                <EmailIcon2 />
-                <h2 className="text-black text-sm">johndeo12@gmail.com</h2>
+              <div className="ml-4 flex items-center">
+                <div>
+                  <h3 className="font-sembold font-base">In Review</h3>
+                  <p className="text-sm font-normal text-black opacity-[80%] mt-2.5">Assigned to the concerned department for investigation.</p>
+                </div>
+                {/* Profile Icon */}
+
               </div>
-              <div className="flex items-center gap-3 pt-3">
-                <LocsionIcon2 />
-                <h2 className="text-black text-sm">
-                  Hisar Haryana B street 352
-                </h2>
+            </div>
+
+            {/* Action Taken */}
+            <div className="flex items-start mt-10">
+              <div className="flex flex-col items-center">
+                <div className="w-4 h-4 border-2 border-[#6C4DEF] rounded-full"></div>
+                <div className="w-[2px] h-10 bg-[#6C4DEF]"></div>
+              </div>
+              <div className="ml-4">
+                <h3 className="font-sembold font-base">Action Taken</h3>
+                <p className="text-sm font-normal text-black opacity-[80%] mt-2.5">Resolution steps initiated.</p>
+              </div>
+            </div>
+
+            {/* Resolved */}
+            <div className="flex items-start mt-10">
+              <div className="flex flex-col items-center">
+                <div className="w-4 h-4 border-2 border-[#6C4DEF] rounded-full"></div>
+                <div className="w-[2px] h-10 bg-[#6C4DEF]"></div>
+              </div>
+              <div className="ml-4">
+                <h3 className="font-sembold font-base">Resolved</h3>
+                <p className="text-sm font-normal text-black opacity-[80%] mt-2.5">Complaint successfully addressed.</p>
+              </div>
+            </div>
+
+            {/* Closed */}
+            <div className="flex items-start mt-10">
+              <div className="flex flex-col items-center">
+                <div className="w-4 h-4 border-2 border-[#6C4DEF] rounded-full"></div>
+              </div>
+              <div className="ml-4">
+                <h3 className="font-sembold font-base">Closed</h3>
+                <p className="text-sm font-normal text-black opacity-[80%] mt-2.5">Confirmed resolution and feedback received.</p>
               </div>
             </div>
           </div>
         </div>
       </div>
-      {/* Complaint Description */}
-      <div className="lg:flex justify-between gap-5 pt-8">
-        <div className="lg:w-6/12">
-          <h2 className="font-medium text-lg text-black">
-            Complaint Description
-          </h2>
-          <div className="w-full border-[0.5px] border-dashed border-black border-opacity-40 opacity-40 my-3"></div>
-          <p className="text-base text-black opacity-70">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. Lorem Ipsum is simply
-            dummy text of the printing and typesetting industry. Lorem Ipsum has
-            been the industry's standard dummy text ever since the 1500s, when
-            an unknown printer took a galley of type and scrambled it to make a
-            type specimen book.
-          </p>
-        </div>
-        <div className="w-full lg:w-[382px] md:w-[489px] border-[1px] border-[#ebeaea] rounded-[10px]  mt-4">
-          <img
-            className="w-full rounded-[10px]"
-            src={HouseCleaner}
-            alt="House Cleaner"
-          />
-          <div className="p-3 flex items-center justify-between">
-            <h3 className="font-medium text-base text-black">House Cleaner</h3>
-            <div className="flex items-center gap-3">
-              <StarIcon />
-              <h2 className="text-sm">
-                4.2 <span className="px-2">|</span> 1452 reviews
-              </h2>
-            </div>
-          </div>
-          <p className="text-sm opacity-60 px-3 pb-4">
-            Lorem ipsum dolor sit amet consectetur. urna mattis mi at sed
-            dapibus. Blandit non lacus nisi donec a sagittis.
-          </p>
-        </div>
-      </div>
-      {/* Images Section */}
-      <h2 className="font-medium text-lg pt-8">Images</h2>
-      <div className="w-full border-[0.5px] border-dashed border-black border-opacity-40 opacity-40 my-3"></div>
-      <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-[10px]  pt-5">
-        {[img1, img2, img3, img4, img5, img6, img7].map((img, index) => (
-          <img
-            onClick={handleImagePreviewPopUp}
-            key={index}
-            className="w-[200px] h-[200px] 2xl:w-full rounded-[10px] "
-            src={img}
-            alt={`img-${index + 1}`}
-          />
-        ))}
-      </div>
-      {showImagePreviewPopUp && (
-        <ImagePreviewPopUp
-          images={[img1, img2, img3, img4, img5, img6, img7]}
-          onCancel={handleImagePreviewPopUp}
-        />
-      )}
     </div>
   );
 };
