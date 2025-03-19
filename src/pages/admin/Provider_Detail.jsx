@@ -156,7 +156,7 @@ const Provider_Detail = () => {
 
         <div className="border"></div>
 
-        <div className="rounded-md p-4 max-w-md shadow-sm w-5/12">
+        <div className="rounded-md p-4 max-w-md shadow-sm w-4/12">
           <h2 className="font-semibold text-lg mb-4">History Log</h2>
           <div className="">
             {/* Received */}
@@ -166,7 +166,7 @@ const Provider_Detail = () => {
                 <div className="w-[2px] h-10 bg-[#6C4DEF]"></div>
               </div>
               <div className="ml-4">
-                <h3 className="font-sembold font-base">Received</h3>
+                <h3 className="font-semibold font-base">Received</h3>
                 <p className="text-sm font-normal text-black opacity-[80%] mt-2.5">Complaint logged and acknowledged.</p>
               </div>
             </div>
@@ -179,7 +179,7 @@ const Provider_Detail = () => {
               </div>
               <div className="ml-4 flex items-center">
                 <div>
-                  <h3 className="font-sembold font-base">In Review</h3>
+                  <h3 className="font-semibold font-base">In Review</h3>
                   <p className="text-sm font-normal text-black opacity-[80%] mt-2.5">Assigned to the concerned department for investigation.</p>
                 </div>
                 {/* Profile Icon */}
@@ -194,7 +194,7 @@ const Provider_Detail = () => {
                 <div className="w-[2px] h-10 bg-[#6C4DEF]"></div>
               </div>
               <div className="ml-4">
-                <h3 className="font-sembold font-base">Action Taken</h3>
+                <h3 className="font-semibold font-base">Action Taken</h3>
                 <p className="text-sm font-normal text-black opacity-[80%] mt-2.5">Resolution steps initiated.</p>
               </div>
             </div>
@@ -206,7 +206,7 @@ const Provider_Detail = () => {
                 <div className="w-[2px] h-10 bg-[#6C4DEF]"></div>
               </div>
               <div className="ml-4">
-                <h3 className="font-sembold font-base">Resolved</h3>
+                <h3 className="font-semibold font-base">Resolved</h3>
                 <p className="text-sm font-normal text-black opacity-[80%] mt-2.5">Complaint successfully addressed.</p>
               </div>
             </div>
@@ -217,7 +217,7 @@ const Provider_Detail = () => {
                 <div className="w-4 h-4 border-2 border-[#6C4DEF] rounded-full"></div>
               </div>
               <div className="ml-4">
-                <h3 className="font-sembold font-base">Closed</h3>
+                <h3 className="font-semibold font-base">Closed</h3>
                 <p className="text-sm font-normal text-black opacity-[80%] mt-2.5">Confirmed resolution and feedback received.</p>
               </div>
             </div>
