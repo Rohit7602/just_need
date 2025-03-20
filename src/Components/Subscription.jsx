@@ -1,7 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import SuscriptionPopUp from "./Popups/SuscriptionPopUp";
-import { EditiconSubscription, RedDeleteIcon } from "../assets/icon/Icons";
+import { EditiconSubscription, Plusicon, RedDeleteIcon } from "../assets/icon/Icons";
 import ConfirmDeltePopUp from "./Popups/ConfirmDeltePopUp";
 import { useSubscriptionContext } from "../store/SubscriptionContext";
 
@@ -27,6 +28,7 @@ const Subscription = () => {
   }, []);
 
 
+
   function handlePopup(plan) {
     setUpdateItemId(plan.planId)
     setShowPopup(!showPopup);
@@ -45,7 +47,9 @@ const Subscription = () => {
             onClick={handlePopup}
             className="bg-[#0832DE] font-normal text-base text-white py-2 xl:py-2.5 h-[42px] px-3 xl:px-[15px] rounded-[10px] mt-3 float-right"
           >
-            <span className="me-3">+</span> Add Plan
+            <div className="flex items-center">
+              <span className="me-3"><Plusicon /></span> Add Plan
+            </div>
           </button>
         </div>
       </div>
@@ -53,7 +57,7 @@ const Subscription = () => {
 
         {plans?.map((item) => {
           return (
-            <div key={item.planId} className=" w-6/12 xl:w-4/12 2xl:w-3/12 px-3 mt-3">
+            <div key={item.id} className=" w-6/12 xl:w-4/12 2xl:w-3/12 px-3 mt-3">
               <div
                 style={{
                   background: `linear-gradient(135deg, ${item.color}, black)`,
@@ -82,7 +86,7 @@ const Subscription = () => {
                     {item.currency}
                   </sup>
                   <span className="text-[48px] xl:text-[64px] font-semibold">
-                    {item.price}
+                    {item.Price}
                   </span>
                   {/* <div className="inline-block h-[40px] w-[3px] bg-white rotate-[-140deg] mx-2 "></div> */}
                   <sub className="text-xl font-normal">
@@ -130,7 +134,7 @@ const Subscription = () => {
           );
         })}
       </div>
-      {showPopup && <SuscriptionPopUp updateItemId={updateItemId} handlePopup={handlePopup} />}
+      {/* {showPopup && <SuscriptionPopUp updateItemId={updateItemId} handlePopup={handlePopup} />} */}
       {deletePopUp && <ConfirmDeltePopUp deleteId={deleteItemId} onCancel={handleDeletePopUp} />}
     </div>
 
