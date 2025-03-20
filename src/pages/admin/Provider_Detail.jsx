@@ -62,8 +62,8 @@ const Provider_Detail = () => {
 
   return (
     <div className="">
-      <div className=" flex lg:flex justify-between gap-5 ">
-        <div className="bg-whi w-7/12">
+      <div className="flex flex-col xl:flex-row justify-between gap-5 ">
+        <div className="xl:w-7/12 w-full">
           <div className="flex justify-between">
             <div className="flex">
               <div>
@@ -191,9 +191,9 @@ const Provider_Detail = () => {
 
         <div className="border"></div>
 
-        <div className="rounded-md p-4 max-w-md  w-4/12">
+        <div className="rounded-md p-4  xl:w-4/12 w-full">
           <h2 className="font-semibold text-base mb-4">History Log</h2>
-          <div className="">
+          <div>
             {/* Received */}
             <div className="flex items-start">
               <div className="flex flex-col items-center">
