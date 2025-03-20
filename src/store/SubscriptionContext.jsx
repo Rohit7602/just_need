@@ -88,6 +88,8 @@ export const SubscriptionContext = ({ children }) => {
     //         return data
     //     }
     // }
+
+    
     return (
         <SubsciptionProvider.Provider value={{ fetchSubscription }}>
             {children}
