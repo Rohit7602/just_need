@@ -225,12 +225,12 @@ export const Complaints = () => {
                     <td className="text-black text-sm font-normal px-4">{item.date}</td>
                     <td className="text-black text-sm font-normal px-4">{item.email}</td>
                     <td className='text-center'>
-                      <span className={`text-sm font-normal py-[4px] px-2.5 bg-white ${item.status === 'Pending'
+                      <span className={`text-sm font-normal py-[4px] px-2.5 ${item.status === 'Pending'
                         ? 'bg-[#FFA50029] text-[#FFA500] rounded-[90px]'
                         : 'text-[#008000] rounded-[90px] bg-[#0080001A] text-center'
                         }`}>   {item.status}</span>
                     </td>
-                    <td className="text-black text-sm font-normal px-4 text-center align-top">{item.action}</td>
+                    <td className="text-black text-sm font-normal px-4 text_center align-top">{item.action}</td>
                   </tr>
                 ))}
               </tbody>
