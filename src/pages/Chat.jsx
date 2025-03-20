@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import { UserIcon } from "../assets/icon/Icons";
 import ChatImg1 from "../assets/png/chatImg 1.png";
