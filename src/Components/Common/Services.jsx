@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import {
@@ -22,7 +23,8 @@ import AddSubCategoryPopUp from "../Popups/SubcategoryPopup";
 import { AiOutlineClose } from "react-icons/ai";
 import { toast } from "react-toastify";
 import Loader from "./Loader";
-import { SearchingIcon, UnderIcon } from "../../assets/icon/Icon";
+import { PlusIcon, SearchingIcon, UnderIcon } from "../../assets/icon/Icon";
+import { supabase } from "../../store/supabaseCreateClient";
 
 function Services() {
   const [editIndex, setEditIndex] = useState(null);
@@ -44,10 +46,10 @@ function Services() {
   const [editingCategoryId, setEditingCategoryId] = useState(null);
   const [editingSubcategoryId, setEditingSubcategoryId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-
+  const [categoryImage, setCategoryImage] = useState(null); // State for category image
+  const [categoryImageUrl, setCategoryImageUrl] = useState(""); // State for image URL
 
   const [isVertical, setIsVertical] = useState(false);
-
 
   const toggleLayout = () => {
     setIsVertical((prev) => !prev);
@@ -71,23 +73,34 @@ function Services() {
     });
   }, []);
 
+  const handleCategoryImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const maxSizeInBytes = 1 * 1024 * 1024; // 1 MB
+      if (file.size > maxSizeInBytes) {
+        toast.error("Image size exceeds 1 MB. Please upload a smaller file.");
+        return;
+      }
+      setCategoryImage(file);
+      setCategoryImageUrl(URL.createObjectURL(file));
+    }
+  };
+
   useEffect(() => {
     if (categories.length > 0 && !loading) {
-
       const firstActiveCategory =
         categories.find((cat) => cat.isActive) || categories[0];
 
       const validSubcategories = (firstActiveCategory?.subcategory || []).filter(
-        (sub) => sub?.id && sub?.categoryName && sub?.catID // Add other required fields if needed
+        (sub) => sub?.id && sub?.categoryName && sub?.catID
       );
 
-      // Set the active tab, subcategories, and category ID
       const index = categories.indexOf(firstActiveCategory);
       setActiveTab(index);
-      setSelectedSubcategories(validSubcategories); // Set filtered subcategories
+      setSelectedSubcategories(validSubcategories);
       setSelectedCategoryId(firstActiveCategory?.id || null);
     }
-  }, []);
+  }, [categories, loading]);
 
   const filteredCategoriesData = useMemo(() => {
     if (!searchQuery.trim()) return categories;
@@ -122,6 +135,8 @@ function Services() {
         setCategoryName("");
         setEditingCategoryId(null);
         setEditingSubcategoryId(null);
+        setCategoryImage(null); // Reset image when closing form
+        setCategoryImageUrl(""); // Reset image URL when closing form
       }
       return !prev;
     });
@@ -174,8 +189,7 @@ function Services() {
             );
             await getCategoriesWithSubcategories();
             toast.success(
-              `Subcategory updated and ${newStatus ? "enabled" : "disabled"
-              } successfully!`
+              `Subcategory updated and ${newStatus ? "enabled" : "disabled"} successfully!`
             );
           } else {
             toast.error("Failed to update subcategory or toggle status.");
@@ -199,89 +213,71 @@ function Services() {
     setCategoryName(e.target.value);
   }, []);
 
-  const handleSaveEditPopup = useCallback(
-    async () => {
-      if (categoryName.trim() === "") {
-        toast.error("Name cannot be empty.");
-        return;
-      }
+  const handleSaveEditPopup = useCallback(async () => {
+    if (categoryName.trim() === "") {
+      toast.error("Name cannot be empty.");
+      return;
+    }
 
-      // Check for duplicates
+    try {
       if (editingCategoryId) {
-        const categoryExists = categories.some(
-          (cat) =>
-            cat.categoryName.toLowerCase() === categoryName.toLowerCase() &&
-            cat.id !== editingCategoryId
-        );
-        if (categoryExists) {
-          toast.error("A category with this name already exists.");
-          return;
-        }
-      } else if (editingSubcategoryId) {
-        const subcategoryExists = selectedSubcategories.some(
-          (sub) =>
-            sub.categoryName.toLowerCase() === categoryName.toLowerCase() &&
-            sub.id !== editingSubcategoryId
-        );
-        if (subcategoryExists) {
-          toast.error("A subcategory with this name already exists in this category.");
-          return;
-        }
-      }
+        // Update category name
+        const nameSuccess = await updateCategoryName(editingCategoryId, categoryName);
 
-      try {
-        if (editingCategoryId) {
-          const success = await updateCategoryName(editingCategoryId, categoryName);
-          if (success) {
-            const updatedIndex = categories.findIndex(
-              (cat) => cat.id === editingCategoryId
-            );
-            if (updatedIndex !== -1) {
-              setActiveTab(updatedIndex);
-              setSelectedSubcategories(categories[updatedIndex]?.subcategory || []);
-              setSelectedCategoryId(categories[updatedIndex]?.id || null);
-            }
-            toggle();
-            await getCategoriesWithSubcategories();
-            toast.success("Category updated successfully!");
-          } else {
-            toast.error("Failed to update category.");
-          }
-        } else if (editingSubcategoryId) {
-          const nameSuccess = await updateSubcategoryName(
-            editingSubcategoryId,
-            categoryName
-          );
-          if (nameSuccess) {
-            setSelectedSubcategories((prev) =>
-              prev.map((sub) =>
-                sub.id === editingSubcategoryId ? { ...sub, categoryName } : sub
-              )
-            );
-            toggle();
-            await getCategoriesWithSubcategories();
-            toast.success("Subcategory name updated successfully!");
-          } else {
-            toast.error("Failed to update subcategory name.");
-          }
+        // Update category image if a new image is uploaded
+        let imageSuccess = true;
+        if (categoryImage) {
+          const fileExt = categoryImage.name.split(".").pop();
+          const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
+          const filePath = `category-images/${fileName}`;
+
+          // Upload image to Supabase storage
+          const { data: imageData, error: imageError } = await supabase.storage
+            .from("just_need") // Replace with your actual bucket name
+            .upload(filePath, categoryImage, {
+              cacheControl: "3600",
+              upsert: false,
+            });
+
+          if (imageError) throw new Error("Image upload failed: " + imageError.message);
+
+          const { data: publicUrlData } = supabase.storage
+            .from("just_need")
+            .getPublicUrl(filePath);
+
+          if (!publicUrlData?.publicUrl) throw new Error("Failed to get public URL");
+
+          // Update the category with the new image URL in the database
+          const { error: updateError } = await supabase
+            .from("categories") // Replace with your actual table name
+            .update({ image: publicUrlData.publicUrl })
+            .eq("id", editingCategoryId);
+
+          if (updateError) throw new Error("Failed to update category image: " + updateError.message);
+
+          imageSuccess = true;
         }
-      } catch (error) {
-        console.error("Error in handleSaveEditPopup:", error);
-        toast.error(`An error occurred: ${error.message}`);
+
+        if (nameSuccess && imageSuccess) {
+          toast.success("Category updated successfully!");
+          await getCategoriesWithSubcategories();
+          toggle();
+        } else {
+          toast.error("Failed to update category.");
+        }
       }
-    },
-    [
-      categoryName,
-      editingCategoryId,
-      editingSubcategoryId,
-      categories,
-      updateCategoryName,
-      updateSubcategoryName,
-      selectedSubcategories,
-      getCategoriesWithSubcategories,
-      toggle,
-    ]
-  );
+    } catch (error) {
+      console.error("Error updating category:", error);
+      toast.error(`An error occurred: ${error.message}`);
+    }
+  }, [
+    categoryName,
+    categoryImage,
+    editingCategoryId,
+    updateCategoryName,
+    getCategoriesWithSubcategories,
+    toggle,
+  ]);
 
   const handleOverlayClick = useCallback(() => {
     setShowPopup(false);
@@ -344,10 +340,8 @@ function Services() {
           await getCategoriesWithSubcategories();
           toast.success(
             newStatus
-              ? `${isCategory ? "Category" : "Subcategory"
-              } enabled successfully!`
-              : `${isCategory ? "Category" : "Subcategory"
-              } disabled successfully!`
+              ? `${isCategory ? "Category" : "Subcategory"} enabled successfully!`
+              : `${isCategory ? "Category" : "Subcategory"} disabled successfully!`
           );
         } catch (error) {
           console.error(
@@ -355,8 +349,7 @@ function Services() {
             error
           );
           toast.error(
-            `Failed to toggle ${isCategory ? "category" : "subcategory"
-            } status: ${error.message}`
+            `Failed to toggle ${isCategory ? "category" : "subcategory"} status: ${error.message}`
           );
         }
       } else {
@@ -375,50 +368,27 @@ function Services() {
     ]
   );
 
-  // const handleCategoryClick = useCallback(
-
-
-  //   (index) => {
-  //     const sourceArray = searchQuery.trim()
-  //       ? filteredCategoriesData
-  //       : categories;
-  //     if (sourceArray[index]?.isActive) {
-  //       setActiveTab(index);
-  //       setSelectedSubcategories(sourceArray[index]?.subcategory || []);
-  //       setSelectedCategoryId(sourceArray[index]?.id || null);
-  //     }
-
-  //   },
-  //   [categories, filteredCategoriesData, searchQuery]
-  // );
-
   const handleCategoryClick = useCallback(
     (index) => {
-
-      console.log(index, "index")
       const sourceArray = searchQuery.trim()
         ? filteredCategoriesData
         : categories;
 
       if (sourceArray[index]?.isActive) {
-        // Move clicked category to the top of the list
         const updatedArray = [
           sourceArray[index],
           ...sourceArray.filter((_, i) => i !== index),
         ];
 
-        // Set active tab and selected subcategories
-        setActiveTab(index); // New index becomes 0 after moving to the top
+        setActiveTab(index);
         setSelectedSubcategories(sourceArray[index]?.subcategory || []);
         setSelectedCategoryId(sourceArray[index]?.id || null);
 
-        // Collapse the list
         setIsVertical(false);
       }
     },
     [categories, filteredCategoriesData, searchQuery]
   );
-
 
   const handleCategoryEdit = useCallback((categoryId, currentName, e) => {
     e.stopPropagation();
@@ -426,8 +396,12 @@ function Services() {
     setEditingCategoryId(categoryId);
     setEditingSubcategoryId(null);
     setCategoryName(currentName || "");
+    // Set the current category image URL when editing starts
+    const currentCategory = categories.find((cat) => cat.id === categoryId);
+    setCategoryImageUrl(currentCategory?.image || ""); // Pre-populate with existing image URL
+    setCategoryImage(null); // Reset uploaded image to null
     setShowForm(true);
-  }, []);
+  }, [categories]);
 
   const handleSubcategoryEdit = useCallback((subcategoryId, currentName, e) => {
     e.stopPropagation();
@@ -487,10 +461,9 @@ function Services() {
     toast.success("New service added successfully!");
     await getCategoriesWithSubcategories();
     handleNewServicePopUp();
-    // Set the newly added category as active with 0 subcategories
-    const newCategoryIndex = categories.length - 1; // Changed to length - 1 to get the last added category
+    const newCategoryIndex = categories.length - 1;
     setActiveTab(newCategoryIndex);
-    setSelectedSubcategories([]); // Ensure no subcategories are set initially
+    setSelectedSubcategories([]);
     setSelectedCategoryId(categories[newCategoryIndex]?.id || null);
   };
 
@@ -514,7 +487,6 @@ function Services() {
     );
   };
 
-
   return (
     <div className="p-[14px] rounded-[10px] shadow-md bg-white">
       {!categories && (
@@ -528,8 +500,7 @@ function Services() {
       {!loading && categories.length >= 0 && (
         <>
           <div className="xl:flex-row flex-col flex xl:items-center justify-between">
-            <h1 className="font-medium text-[22px]">{categories[activeTab]?.categoryName}
-            </h1>
+            <h1 className="font-medium text-[22px]">{categories[activeTab]?.categoryName}</h1>
             <div className="flex items-center mt-[20px] xl:mt-[0px]">
               <div className="bg-[#F1F1F1] w-[337px] px-[16px] py-2.5 h-[42px] rounded-[10px]">
                 <div className="flex items-center">
@@ -557,18 +528,15 @@ function Services() {
 
           <div className="mt-8 relative">
             <div className={`flex whitespace-nowrap ${isVertical ? "border-b border-[rgb(128,128,128)]" : ""}`}>
-              {/* Categories Section */}
               <div
-                className={`gap-4 flex items-center cursor-pointer ${isVertical ? "flex-wrap" : "overflow-x-auto scrollbar-hide"
-                  }`}
+                className={`gap-4 flex items-center cursor-pointer ${isVertical ? "flex-wrap" : "overflow-x-auto scrollbar-hide"}`}
               >
                 {filteredCategoriesData?.map((items, index) => (
                   <div
                     key={index}
-                    className={`flex items-center pb-2 ${!isVertical ? "border-b-2" : ""
-                      } px-5 hover:text-blue-500 hover:border-blue-500 ${activeTab === index
-                        ? "border-blue-500 text-blue-500"
-                        : "border-transparent text-gray-700"
+                    className={`flex items-center pb-2 ${!isVertical ? "border-b-2" : ""} px-5 hover:text-blue-500 hover:border-blue-500 ${activeTab === index
+                      ? "border-blue-500 text-blue-500"
+                      : "border-transparent text-gray-700"
                       } ${!items.isActive ? "opacity-50" : ""}`}
                     onClick={() => handleCategoryClick(index)}
                   >
@@ -606,20 +574,16 @@ function Services() {
                 ))}
               </div>
 
-              {/* UnderIcon Button */}
               <div className="flex">
                 <div
-                  className={`cursor-pointer ps-5 flex flex-col justify-start mt-3 ${!isVertical ? "border-b border-[rgb(128,128,128)]" : ""
-                    }`}
+                  className={`cursor-pointer ps-5 flex flex-col justify-start mt-3 ${!isVertical ? "border-b border-[rgb(128,128,128)]" : ""}`}
                   onClick={toggleLayout}
                 >
                   <UnderIcon />
                 </div>
 
-                {/* View Blocked List Button */}
                 <div
-                  className={`bg-white ps-5 ${!isVertical ? "border-b border-[rgb(128,128,128)]" : ""
-                    }`}
+                  className={`bg-white ps-5 ${!isVertical ? "border-b border-[rgb(128,128,128)]" : ""}`}
                 >
                   <button
                     className="text-[#6C4DEF] font-normal text-base"
@@ -633,65 +597,60 @@ function Services() {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-between gap-[18px] mt-6 flex-wrap whitespace-nowrap">
-            {
-              selectedSubcategories?.length > 0 && (
-                selectedSubcategories?.map((sub, index) => (
-                  <div
-                    key={index}
-                    className="group hover:bg-[#6C4DEF1A] hover:border-[#6CDEF1A] border border-[#0000001A] lg:p-5 p-3 rounded-[10px] h-full transition w-full"
-                  >
-                    <div className="flex items-center justify-between">
-                      {editIndex === index ? (
-                        <input
-                          type="text"
-                          value={editData}
-                          onChange={handleInputChange}
-                          onBlur={() => handleSaveEdit(sub.id)}
-                          className="w-full bg-transparent border border-black me-2 focus:outline-none p-1 rounded-[10px]"
-                          autoFocus
+            {selectedSubcategories?.length > 0 &&
+              selectedSubcategories?.map((sub, index) => (
+                <div
+                  key={index}
+                  className="group hover:bg-[#6C4DEF1A] hover:border-[#6CDEF1A] border border-[#0000001A] lg:p-5 p-3 rounded-[10px] h-full transition w-full"
+                >
+                  <div className="flex items-center justify-between">
+                    {editIndex === index ? (
+                      <input
+                        type="text"
+                        value={editData}
+                        onChange={handleInputChange}
+                        onBlur={() => handleSaveEdit(sub.id)}
+                        className="w-full bg-transparent border border-black me-2 focus:outline-none p-1 rounded-[10px]"
+                        autoFocus
+                      />
+                    ) : (
+                      <p className="font-normal text-sm text-[#00000099] lg:mx-[5px] transition group-hover:text-[#6C4DEF] flex items-center lg:gap-4 gap-2">
+                        <img
+                          className="w-[25px] h-[25px] object-cover rounded-full"
+                          src={sub.image}
+                          alt=""
                         />
-                      ) : (
-                        <p className="font-normal text-sm text-[#00000099] lg:mx-[5px] transition group-hover:text-[#6C4DEF] flex items-center lg:gap-4 gap-2">
-                          <img
-                            className="w-[25px] h-[25px] object-cover rounded-full"
-                            src={sub.image}
-                            alt=""
-                          />
-                          {highlightText(sub?.categoryName, searchQuery)}
-                        </p>
-                      )}
+                        {highlightText(sub?.categoryName, searchQuery)}
+                      </p>
+                    )}
 
-                      <div className="flex lg:gap-4 gap-2">
-                        <div
-                          onClick={(e) => handleSubcategoryEdit(sub.id, sub.categoryName, e)}
-                        >
-                          <Editicon />
-                        </div>
-                        <div onClick={() => handleDisableClick(sub.id)}>
-                          {sub.isActive ? <EnableRedIcon /> : <DisableRedicon />}
-                        </div>
+                    <div className="flex lg:gap-4 gap-2">
+                      <div
+                        onClick={(e) => handleSubcategoryEdit(sub.id, sub.categoryName, e)}
+                      >
+                        <Editicon />
+                      </div>
+                      <div onClick={() => handleDisableClick(sub.id)}>
+                        {sub.isActive ? <EnableRedIcon /> : <DisableRedicon />}
                       </div>
                     </div>
                   </div>
-                ))
-              )
-            }
+                </div>
+              ))}
           </div>
 
-          {
-            selectedSubcategories?.length === 0 && (
-              <div className="flex flex-col">
-                <div className="flex justify-center">
-                  <SearchingIcon />
-                </div>
-                <div className="flex justify-center">
-                  <p className="font-normal text-[28px] text-black">
-                    No Sub-Category Found
-                  </p>
-                </div>
+          {selectedSubcategories?.length === 0 && (
+            <div className="flex flex-col">
+              <div className="flex justify-center">
+                <SearchingIcon />
               </div>
-            )
-          }
+              <div className="flex justify-center">
+                <p className="font-normal text-[28px] text-black">
+                  No Sub-Category Found
+                </p>
+              </div>
+            </div>
+          )}
 
           <div className="inline-block mt-8">
             <div
@@ -742,11 +701,8 @@ function Services() {
                 toggleDisableCard(
                   currentCardIndex,
                   isCategoryToggle
-                    ? categories.find((cat) => cat.id === currentCardIndex)
-                      ?.isActive
-                    : selectedSubcategories.find(
-                      (sub) => sub.id === currentCardIndex
-                    )?.isActive,
+                    ? categories.find((cat) => cat.id === currentCardIndex)?.isActive
+                    : selectedSubcategories.find((sub) => sub.id === currentCardIndex)?.isActive,
                   "confirm",
                   isCategoryToggle
                 )
@@ -754,11 +710,8 @@ function Services() {
               onCancel={() => setShowDisablePopup(false)}
               isActive={
                 isCategoryToggle
-                  ? categories.find((cat) => cat.id === currentCardIndex)
-                    ?.isActive
-                  : selectedSubcategories.find(
-                    (sub) => sub.id === currentCardIndex
-                  )?.isActive
+                  ? categories.find((cat) => cat.id === currentCardIndex)?.isActive
+                  : selectedSubcategories.find((sub) => sub.id === currentCardIndex)?.isActive
               }
               confirmText={
                 isCategoryToggle &&
@@ -804,8 +757,7 @@ function Services() {
                           className="flex justify-between items-center py-2"
                         >
                           <div
-                            className={`flex items-center ${index === 1 ? "mt-3" : ""
-                              }`}
+                            className={`flex items-center ${index === 1 ? "mt-3" : ""}`}
                           >
                             <label className="custom-radio">
                               <input type="radio" name="blockedService" />
@@ -861,6 +813,49 @@ function Services() {
                       }
                     />
                   </div>
+
+                  {editingCategoryId && (
+                    <>
+                      <label
+                        className="block text-base font-normal text-[#000000] mb-2.5 mt-[15px]"
+                        htmlFor="imageText"
+                      >
+                        Category Image
+                      </label>
+                      <div className="flex items-center gap-2 bg-[#F2F2F2] rounded-lg p-2">
+                        <input
+                          type="text"
+                          placeholder={categoryImageUrl ? "Image Uploaded" : "No Image Chosen"}
+                          value={categoryImageUrl ? "Image Uploaded" : "No Image Chosen"} // Reflect the current state
+                          className="flex-1 px-3 py-2 bg-transparent border-none text-gray-500"
+                          disabled
+                        />
+                        <input
+                          type="file"
+                          className="hidden"
+                          id="fileUpload"
+                          accept="image/*"
+                          onChange={handleCategoryImageChange}
+                        />
+                        <label
+                          htmlFor="fileUpload"
+                          className="px-2.5 py-1 border border-[#E03F3F] text-[#E03F3F] rounded-lg cursor-pointer flex items-center"
+                        >
+                          <PlusIcon className="mr-1" />
+                          Upload
+                        </label>
+                      </div>
+
+                      {categoryImageUrl && (
+                        <img
+                          src={categoryImageUrl}
+                          alt="Category Preview"
+                          className="mt-2 w-[100px] h-[100px] object-cover rounded-lg"
+                        />
+                      )}
+                    </>
+                  )}
+
                   <button
                     onClick={handleSaveEditPopup}
                     className="w-full bg-[#0832DE] font-normal text-base text-white mt-6 py-2 rounded-[10px]"
@@ -878,6 +873,3 @@ function Services() {
 }
 
 export default Services;
-
-
-
