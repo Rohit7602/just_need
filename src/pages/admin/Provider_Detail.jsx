@@ -25,6 +25,7 @@ import img7 from "../../assets/png/img7.png";
 import ImagePreviewPopUp from "../../Components/Popups/ImagePreviewPopUp";
 import robert from "../../assets/Images/Png/robert.png"
 import cleaning from "../../assets/Images/Png/cleaning.png"
+import { DropdownIcon } from "../../assets/icon/Icon";
 
 const Provider_Detail = () => {
   const [popup, setPopup] = useState(false);
@@ -32,6 +33,16 @@ const Provider_Detail = () => {
   const popupRef = useRef(null);
 
   const [isOpen, setIsOpen] = useState(false);
+  const [dropdown, setDropdown] = useState(false)
+  const [AssignDropdown, setAssignDropDown] = useState(false)
+
+  function toggleDropdown() {
+    setDropdown(!dropdown)
+  }
+
+  function assignDropdown() {
+    setAssignDropDown(!AssignDropdown)
+  }
 
   const handleImagePreviewPopUp = () => {
     setShowImagePreviewPupUp(!showImagePreviewPopUp);
@@ -80,7 +91,7 @@ const Provider_Detail = () => {
             </div>
             <div>
               <button className="px-[28px] py-[12px] text-[#6C4DEF] border-[#6C4DEF] border font-normal text-base rounded-[10px]">
-                Contact Now
+                Show Contact Detail
               </button>
             </div>
           </div>
@@ -114,11 +125,9 @@ const Provider_Detail = () => {
               </div>
               <div className="flex items-center mt-[16px]">
                 <span className="font-normal text-sm">Status :</span>
-                <select className="ml-2 bg-[#6C4DEF1A] font-normal text-sm rounded-[90px] text-purple-700 px-2 py-0.5  border-none outline-none">
-                  <option>Processing</option>
-                  <option>Completed</option>
-                  <option>Pending</option>
-                </select>
+                <span className="ml-2 bg-[#6C4DEF1A] font-normal text-sm rounded-[90px] text-purple-700 px-2 py-0.5  border-none outline-none">Processing</span>
+
+
               </div>
             </div>
           </div>
@@ -153,7 +162,7 @@ const Provider_Detail = () => {
 
             {/* Popup */}
             {isOpen && (
-              <div onClick={() => setIsOpen(false)} className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+              <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                 <div className="bg-white p-[18px] rounded-[14px] shadow-[#00000040] w-[350px]">
                   <div className="flex justify-between items-center">
                     <h2 className="text-xl font-medium">Update complaint state</h2>
@@ -165,11 +174,71 @@ const Provider_Detail = () => {
                     </button>
                   </div>
                   <div className="mt-3">
-                    <p className="font-normal text-base">1. Assign to</p>
+                    <div onClick={assignDropdown} className={`flex ${!assignDropdown && "flex"}`} >
+                      <p className="font-normal text-base whitespace-nowrap">1. Assign to</p>
+                      <span className="flex justify-end w-full">
+                        <DropdownIcon />
+                      </span>
+                    </div>
+
+                    {AssignDropdown && (
+                      <div className="mt-2 rounded-md">
+                        <div
+                          className="p-2 cursor-pointer rounded-[90px]"
+                        >
+                          provider list
+                        </div>
+                        <div
+                          className="p-2 cursor-pointer rounded-[90px] "
+                        >
+                          provider list
+                        </div>
+                        <div
+                          className="p-2  cursor-pointer rounded-[90px] "
+                        >
+                          provider list
+                        </div>
+                      </div>
+                    )}
+
+
                     <hr className="my-2.5" />
-                    <p className="font-normal text-base">2. Instructions</p>
+
+                    <input className="font-normal text-base outline-none border-none placeholder-black" type="text" placeholder="2. Instructions" />
                     <hr className="my-2.5" />
-                    <p className="font-normal text-base">3. Status</p>
+
+                    <div onClick={toggleDropdown} className={`flex ${!dropdown && "flex"}`}>
+                      <p className="whitespace-nowrap">3. Status</p>
+                      <span className="flex justify-end w-full">
+                        <DropdownIcon />
+                      </span>
+
+                    </div>
+                    {dropdown && (
+                      <div className="mt-2 rounded-md">
+                        <div
+                          className="p-2 mt-2 cursor-pointer rounded-[90px] hover:bg-[#6C4DEF1A] text-[#6C4DEF]"
+                        >
+                          Process
+                        </div>
+                        <div
+                          className="p-2 mt-2 cursor-pointer rounded-[90px] hover:bg-[#FFA50029] text-[#FFA500]"
+                        >
+                          Pending
+                        </div>
+                        <div
+                          className="p-2 mt-2 cursor-pointer rounded-[90px] hover:bg-[#0080001A] text-[#008000]"
+                        >
+                          Done
+                        </div>
+                      </div>
+                    )}
+                    {/* <select className="bg-white border-none outline-none text-base">
+                      <option className="font-normal text-base" value="process">3. Status</option>
+                      <option className="font-normal text-base" value="process">Process</option>
+                      <option className="font-normal text-base" value="pending">Pending</option>
+                      <option className="font-normal text-base" value="done">Done</option>
+                    </select> */}
                   </div>
                   <div className="flex  gap-3 mt-[30px]">
                     <button className="font-normal text-base px-[34px] py-2 bg-[#0832DE] text-white rounded-[10px]">

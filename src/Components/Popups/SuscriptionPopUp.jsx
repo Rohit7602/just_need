@@ -207,9 +207,6 @@ function SuscriptionPopUp({ handlePopup, updateItemId }) {
         </div>
       </div>
     </>
-    // <>
-    // some data
-    // </>
   );
 }
 

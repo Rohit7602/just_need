@@ -24,7 +24,6 @@ function ServiceContext({ children }) {
         throw new Error(`Failed to fetch categories: ${error.message}`);
 
       const formattedData = data.map((category) => {
-        console.log(category);
         return {
           ...category,
           subcategory: category.subcategory ?? [],
