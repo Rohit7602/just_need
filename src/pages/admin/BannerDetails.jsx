@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState, useRef } from "react";
 import { supabase } from "../../store/supabaseCreateClient";
@@ -301,7 +303,7 @@ function BannerDetails() {
               ref={(el) => (imageRefs.current[item.id] = el)}
               src={item.image}
               alt="Banner"
-              className={`aspect-video object-cover rounded-lg ${loadedImages[item.id] ? "block" : "hidden"
+              className={`aspect-video object-cover rounded-lg w-full ${loadedImages[item.id] ? "block" : "hidden"
                 }`}
               onLoad={() => handleImageLoad(item.id)}
             />
@@ -343,167 +345,177 @@ function BannerDetails() {
 
       </div>
 
-      {isModalOpen && (
-        <div
-          onClick={() => setIsModalOpen(false)}
-          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-        >
+      {
+        isModalOpen && (
           <div
-            onClick={(e) => e.stopPropagation()}
-            className="bg-white w-[694px] p-6 rounded-lg shadow-lg relative"
+            onClick={() => setIsModalOpen(false)}
+            className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
           >
-            <div className="flex justify-center items-center mb-4">
-              <h2 className="text-lg font-medium">
-                {editingOffer ? "Edit Banner" : "Add Banner"}
-              </h2>
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="text-3xl font-light absolute top-1.5 right-5"
-              >
-                ×
-              </button>
-            </div>
-            <div className="border-b border-gray-300 mb-4"></div>
-            <label className="text-black block mb-2">
-              {!editingOffer ? "No Image Chosen" : "Upload Image"}
-            </label>
-            <div className="flex items-center gap-2 bg-[#F2F2F2] rounded-lg p-2">
-              <input
-                type="text"
-                value={image ? image.name : imageName || "No Image Chosen"}
-                className="flex-1 px-4 py-2 bg-transparent border-none text-gray-500"
-                disabled
-              />
-              <input
-                type="file"
-                className="hidden"
-                id="fileUpload"
-                accept="image/*"
-                onChange={handleImageChange}
-              />
-              <label
-                htmlFor="fileUpload"
-                className="px-2.5 py-1 border border-[#E03F3F] text-[#E03F3F] rounded-lg cursor-pointer flex items-center"
-              >
-                <PlusIcon className="mr-1" />
-                Upload
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white w-[694px] p-6 rounded-lg shadow-lg relative"
+            >
+              <div className="flex justify-center items-center mb-4">
+                <h2 className="text-lg font-medium">
+                  {editingOffer ? "Edit Banner" : "Add Banner"}
+                </h2>
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="text-3xl font-light absolute top-1.5 right-5"
+                >
+                  ×
+                </button>
+              </div>
+              <div className="border-b border-gray-300 mb-4"></div>
+              <label className="text-black block mb-2">
+                {!editingOffer ? "No Image Chosen" : "Upload Image"}
               </label>
-            </div>
-
-            {imageUrl && (
-              <img
-                className="w-[58px] h-[58px] object-cover mt-2.5 rounded-[10px]"
-                src={imageUrl}
-                alt=""
-              />
-            )}
-
-            <div className="grid grid-cols-2 gap-4 mt-4">
-              <div className="mt-4">
-                <label className="text-gray-600 block text-base mb-2">
-                  Tags (Press Enter to add)
-                </label>
+              <div className="flex items-center gap-2 bg-[#F2F2F2] rounded-lg p-2">
                 <input
                   type="text"
-                  placeholder="Enter Tag Name"
-                  value={tagInput}
-                  onChange={(e) => setTagInput(e.target.value)}
-                  onKeyDown={handleAddTag}
-                  className="w-full px-4 py-2 border rounded-lg bg-[#F2F2F2] text-gray-600 outline-none"
+                  value={image ? image.name : imageName || "No Image Chosen"}
+                  className="flex-1 px-4 py-2 bg-transparent border-none text-gray-500"
+                  disabled
                 />
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {tags?.map((tag, index) => (
-                    <div
-                      key={index}
-                      className="bg-[#6C4DEF1A] text-[#6C4DEF] px-2.5 py-1 rounded-full flex items-center"
-                    >
-                      <p className="font-normal text-sm">{tag}</p>
-                      <button
-                        onClick={() => handleRemoveTag(tag)}
-                        className="ml-2.5 text-[#6C4DEF]"
+                <input
+                  type="file"
+                  className="hidden"
+                  id="fileUpload"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                />
+                <label
+                  htmlFor="fileUpload"
+                  className="px-2.5 py-1 border border-[#E03F3F] text-[#E03F3F] rounded-lg cursor-pointer flex items-center"
+                >
+                  <PlusIcon className="mr-1" />
+                  Upload
+                </label>
+              </div>
+
+              {imageUrl && (
+                <img
+                  className="w-[58px] h-[58px] object-cover mt-2.5 rounded-[10px]"
+                  src={imageUrl}
+                  alt=""
+                />
+              )}
+
+              <div className="grid grid-cols-2 gap-4 mt-4">
+                <div className="mt-4">
+                  <label className="text-black block text-base mb-2">
+                    Tags (Press Enter to add)
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Enter Tag Name"
+                    value={tagInput}
+                    onChange={(e) => setTagInput(e.target.value)}
+                    onKeyDown={handleAddTag}
+                    className="w-full px-4 py-2 border rounded-lg bg-[#F2F2F2] text-gray-600 outline-none"
+                  />
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {tags?.map((tag, index) => (
+                      <div
+                        key={index}
+                        className="bg-[#6C4DEF1A] text-[#6C4DEF] px-2.5 py-1 rounded-full flex items-center"
                       >
-                        <CrossIcon />
-                      </button>
-                    </div>
-                  ))}
+                        <p className="font-normal text-sm">{tag}</p>
+                        <button
+                          onClick={() => handleRemoveTag(tag)}
+                          className="ml-2.5 text-[#6C4DEF]"
+                        >
+                          <CrossIcon />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="mt-4">
+                  <label className="text-black block text-base mb-2">
+                    Discount %
+                  </label>
+
+                  <select
+                    value={discount}
+                    onChange={(e) => setDiscount(e.target.value)}
+                    className="w-full px-4 py-2 border rounded-lg bg-[#F2F2F2] text-gray-600 outline-none"
+                  >
+                    <option value="" disabled>
+                      Discount Type
+                    </option>
+                    <option value="5">Amount</option>
+                    <option value="10">Percentage</option>
+
+                  </select>
                 </div>
               </div>
 
-              <div className="mt-4">
-                <label className="text-gray-600 block text-base mb-2">
-                  Discount %
-                </label>
-                {/* <input
-                  type="text"
-                  value={discount}
-                  placeholder="Discount"
-                  onChange={(e) => setDiscount(e.target.value)}
-                  className="w-full px-4 py-2 border rounded-lg bg-[#F2F2F2] text-gray-600 outline-none"
-                /> */}
-
-                <select
-                  value={discount}
-                  onChange={(e) => setDiscount(e.target.value)}
-                  className="w-full px-4 py-2 border rounded-lg bg-[#F2F2F2] text-gray-600 outline-none"
-                >
-                  <option value="" disabled>
-                    Select Discount
-                  </option>
-                  <option value="5">percentage</option>
-                  <option value="10">percentage</option>
-
-                </select>
-              </div>
-            </div>
-
-            <div className="relative">
-              <label className="text-gray-600 block text-base mb-2">
-                Select Service
-              </label>
-              <input
-                type="text"
-                className="w-full px-4 py-2 border rounded-lg bg-[#F2F2F2] text-gray-600 outline-none h-[50px] cursor-pointer"
-                readOnly
-                value={service || "Select a category"}
-                onClick={() => setDropdown(!dropdown)}
-              />
-              {dropdown && (
-                <div className="w-full max-h-[100px] overflow-y-auto bg-white border rounded-lg mt-1 absolute z-10 shadow-lg">
-                  {loading ? (
-                    <div className="px-4 py-2 text-gray-600">
-                      Loading categories...
+              <div className="flex gap-4">
+                <div className="relative w-1/2">
+                  <label className="text-black block text-base mb-2">
+                    Select Service
+                  </label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2 border rounded-lg bg-[#F2F2F2] text-gray-600 outline-none h-[50px] cursor-pointer"
+                    readOnly
+                    value={service || "Select a category"}
+                    onClick={() => setDropdown(!dropdown)}
+                  />
+                  {dropdown && (
+                    <div className="w-full max-h-[100px] overflow-y-auto bg-white border rounded-lg mt-1 absolute z-10 shadow-lg">
+                      {loading ? (
+                        <div className="px-4 py-2 text-gray-600">
+                          Loading categories...
+                        </div>
+                      ) : activeCategories.length === 0 ? (
+                        <div className="px-4 py-2 text-gray-600">
+                          No active categories available
+                        </div>
+                      ) : (
+                        activeCategories.map((category) => (
+                          <div
+                            key={category.id}
+                            onClick={() => {
+                              setService(category.categoryName);
+                              setDropdown(false);
+                            }}
+                            className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-600"
+                          >
+                            {category.categoryName}
+                          </div>
+                        ))
+                      )}
                     </div>
-                  ) : activeCategories.length === 0 ? (
-                    <div className="px-4 py-2 text-gray-600">
-                      No active categories available
-                    </div>
-                  ) : (
-                    activeCategories.map((category) => (
-                      <div
-                        key={category.id}
-                        onClick={() => {
-                          setService(category.categoryName);
-                          setDropdown(false);
-                        }}
-                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-600"
-                      >
-                        {category.categoryName}
-                      </div>
-                    ))
                   )}
                 </div>
-              )}
-            </div>
 
-            <button
-              onClick={handleSubmit}
-              className="w-full mt-4 bg-[#0832DE] text-white py-2 rounded-lg"
-            >
-              {editingOffer ? "Update Details" : "Save Details"}
-            </button>
+
+                <div className="w-1/2">
+                  <label className="text-black block text-base mb-2">
+                    Discount%
+                  </label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2 border rounded-lg bg-[#F2F2F2] text-gray-600 outline-none h-[50px] cursor-pointer"
+                    readOnly
+                    placeholder="20%"
+                  />
+                </div>
+              </div>
+
+              <button
+                onClick={handleSubmit}
+                className="w-full mt-4 bg-[#0832DE] text-white py-2 rounded-lg"
+              >
+                {editingOffer ? "Update Details" : "Save Details"}
+              </button>
+            </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
       {deletePopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -562,3 +574,487 @@ function BannerDetails() {
 }
 
 export default BannerDetails;
+
+
+
+
+
+// import React, { useEffect, useState, useRef } from "react";
+// import { supabase } from "../../store/supabaseCreateClient";
+// import { toast } from "react-toastify";
+// import {
+//   CrossIcon,
+//   DeleteSvg,
+//   EditSvg,
+//   PlusIcon,
+//   PluswhiteIcon,
+// } from "../../assets/icon/Icon";
+// import { useServiceContext } from "../../store/ServiceContext";
+// import ReactCrop from "react-image-crop";
+// import "react-image-crop/dist/ReactCrop.css";
+
+// function BannerDetails() {
+//   const [image, setImage] = useState(null);
+//   const [imageUrl, setImageUrl] = useState("");
+//   const [imageName, setImageName] = useState("");
+//   const [isModalOpen, setIsModalOpen] = useState(false);
+//   const [offer, setOffer] = useState([]);
+//   const [tags, setTags] = useState([]);
+//   const [tagInput, setTagInput] = useState("");
+//   const [discount, setDiscount] = useState("");
+//   const [service, setService] = useState("");
+//   const [description, setDescription] = useState("");
+//   const [editingOffer, setEditingOffer] = useState(null);
+//   const [deletePopup, setDeletePopup] = useState(false);
+//   const [deleteId, setDeleteId] = useState(null);
+//   const [savePopup, setSavePopup] = useState(false);
+//   const [loadedImages, setLoadedImages] = useState({});
+//   const [dropdown, setDropdown] = useState(false);
+//   const [fetchError, setFetchError] = useState(null);
+//   const [crop, setCrop] = useState({ aspect: 16 / 9 }); // Default aspect ratio 16:9
+//   const [croppedImageUrl, setCroppedImageUrl] = useState(null);
+//   const imageRefs = useRef({});
+//   const imgRef = useRef(null);
+
+//   const { categories, getCategoriesWithSubcategories, loading } =
+//     useServiceContext();
+
+//   useEffect(() => {
+//     fetchOffer();
+//     fetchCategoriesWithRetry();
+//   }, []);
+
+//   const fetchOffer = async () => {
+//     try {
+//       const { data, error } = await supabase.from("offers").select("*");
+//       if (error) throw error;
+//       setOffer(data || []);
+//       const initialLoadedState = (data || []).reduce((acc, item) => {
+//         acc[item.id] = false;
+//         return acc;
+//       }, {});
+//       setLoadedImages(initialLoadedState);
+
+//       (data || []).forEach((item) => {
+//         if (imageRefs.current[item.id]?.complete) {
+//           setLoadedImages((prev) => ({ ...prev, [item.id]: true }));
+//         }
+//       });
+//       setFetchError(null);
+//     } catch (error) {
+//       console.error("Error fetching offers:", error);
+//       toast.error("Failed to fetch offers. Retrying...");
+//       setFetchError("Failed to fetch offers. Please check your connection.");
+//     }
+//   };
+
+//   const fetchCategoriesWithRetry = async (retries = 3, delay = 2000) => {
+//     for (let i = 0; i < retries; i++) {
+//       try {
+//         await getCategoriesWithSubcategories();
+//         setFetchError(null);
+//         return;
+//       } catch (error) {
+//         console.error(`Attempt ${i + 1} failed:`, error);
+//         if (i === retries - 1) {
+//           toast.error("Failed to load categories after retries.");
+//           setFetchError("Failed to load categories. Please try again later.");
+//         } else {
+//           await new Promise((resolve) => setTimeout(resolve, delay));
+//         }
+//       }
+//     }
+//   };
+
+//   const handleImageChange = (event) => {
+//     const file = event.target.files[0];
+//     if (file) {
+//       const maxSizeInBytes = 1 * 1024 * 1024; // 1 MB
+//       if (file.size > maxSizeInBytes) {
+//         toast.error("Image size exceeds 1 MB. Please upload a smaller file.");
+//         return;
+//       }
+//       const reader = new FileReader();
+//       reader.onload = () => {
+//         setImageUrl(reader.result);
+//         setImage(file);
+//         setImageName(file.name);
+//       };
+//       reader.readAsDataURL(file);
+//     }
+//   };
+
+//   const handleDeleteImage = () => {
+//     setImage(null);
+//     setImageUrl("");
+//     setCroppedImageUrl(null);
+//   };
+
+//   const onImageLoad = (img) => {
+//     imgRef.current = img;
+//     // Set default crop area to cover the entire image with 16:9 aspect ratio
+//     const aspectRatio = 16 / 9;
+//     const width = img.width;
+//     const height = img.height;
+//     const cropWidth = Math.min(width, height * aspectRatio);
+//     const cropHeight = cropWidth / aspectRatio;
+
+//     setCrop({
+//       unit: "px", // Use pixels for fixed dimensions
+//       width: cropWidth,
+//       height: cropHeight,
+//       x: (width - cropWidth) / 2, // Center the crop area
+//       y: (height - cropHeight) / 2,
+//       aspect: aspectRatio, // Lock aspect ratio
+//     });
+//   };
+
+//   const handleCropComplete = (crop) => {
+//     if (imgRef.current && crop.width && crop.height) {
+//       const croppedImage = getCroppedImg(imgRef.current, crop);
+//       setCroppedImageUrl(croppedImage);
+//     }
+//   };
+
+//   const getCroppedImg = (image, crop) => {
+//     const canvas = document.createElement("canvas");
+//     const scaleX = image.naturalWidth / image.width;
+//     const scaleY = image.naturalHeight / image.height;
+//     canvas.width = crop.width;
+//     canvas.height = crop.height;
+//     const ctx = canvas.getContext("2d");
+
+//     ctx.drawImage(
+//       image,
+//       crop.x * scaleX,
+//       crop.y * scaleY,
+//       crop.width * scaleX,
+//       crop.height * scaleY,
+//       0,
+//       0,
+//       crop.width,
+//       crop.height
+//     );
+
+//     return canvas.toDataURL("image/jpeg");
+//   };
+
+//   const handleAddTag = (e) => {
+//     if (e.key === "Enter" && tagInput.trim()) {
+//       e.preventDefault();
+//       setTags([...tags, tagInput.trim()]);
+//       setTagInput("");
+//     }
+//   };
+
+//   const handleRemoveTag = (tagToRemove) => {
+//     setTags(tags.filter((tag) => tag !== tagToRemove));
+//   };
+
+//   const handleSubmit = () => {
+//     if (!tags.length || !discount || !service) {
+//       toast.error("Please fill all fields (at least one tag required)");
+//       return;
+//     }
+//     if (!editingOffer && !croppedImageUrl) {
+//       toast.error("Please upload and crop an image for new banners");
+//       return;
+//     }
+//     setSavePopup(true);
+//   };
+
+//   const handleSaveConfirm = async () => {
+//     try {
+//       let uploadedImageUrl = editingOffer ? editingOffer.image : "";
+//       if (croppedImageUrl) {
+//         const blob = await fetch(croppedImageUrl).then((res) => res.blob());
+//         const fileExt = "jpeg";
+//         const fileName = `${Date.now()}_${Math.random()
+//           .toString(36)
+//           .substring(2)}.${fileExt}`;
+//         const filePath = `banners/${fileName}`;
+
+//         const { data: imageData, error: imageError } = await supabase.storage
+//           .from("just_need")
+//           .upload(filePath, blob, {
+//             cacheControl: "3600",
+//             upsert: false,
+//           });
+
+//         if (imageError)
+//           throw new Error("Image upload failed: " + imageError.message);
+
+//         const { data: publicUrlData } = supabase.storage
+//           .from("just_need")
+//           .getPublicUrl(imageData.path);
+
+//         if (!publicUrlData?.publicUrl)
+//           throw new Error("Failed to get public URL");
+
+//         uploadedImageUrl = publicUrlData.publicUrl;
+//       }
+
+//       if (editingOffer) {
+//         const { error } = await supabase
+//           .from("offers")
+//           .update({
+//             tagOffer: tags,
+//             discount,
+//             service,
+//             description,
+//             image: uploadedImageUrl,
+//           })
+//           .eq("id", editingOffer.id);
+
+//         if (error) throw error;
+//         toast.success("Banner updated successfully!");
+//       } else {
+//         const { error } = await supabase.from("offers").insert([
+//           {
+//             tagOffer: tags,
+//             discount,
+//             service,
+//             description,
+//             image: uploadedImageUrl,
+//           },
+//         ]);
+
+//         if (error) throw error;
+//         toast.success("Banner added successfully!");
+//       }
+
+//       fetchOffer();
+//       setIsModalOpen(false);
+//       resetForm();
+//       setSavePopup(false);
+//     } catch (error) {
+//       console.error("Error saving banner:", error);
+//       toast.error(error.message || "Failed to save banner. Please try again.");
+//       setSavePopup(false);
+//     }
+//   };
+
+//   const resetForm = () => {
+//     setTags([]);
+//     setTagInput("");
+//     setDiscount("");
+//     setService("");
+//     setDescription("");
+//     setImage(null);
+//     setImageUrl("");
+//     setImageName("");
+//     setCroppedImageUrl(null);
+//     setEditingOffer(null);
+//     setDropdown(false);
+//   };
+
+//   return (
+//     <div className="bg-white min-h-screen">
+//       <div className="mt-5 flex justify-end mx-10">
+//         <button
+//           onClick={() => {
+//             resetForm();
+//             setIsModalOpen(true);
+//           }}
+//           className="bg-[#0832DE] text-white rounded-[10px] py-2 px-4 flex items-center gap-2"
+//         >
+//           <PluswhiteIcon />
+//           Add New Banner
+//         </button>
+//       </div>
+
+//       {isModalOpen && (
+//         <div
+//           onClick={() => setIsModalOpen(false)}
+//           className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+//         >
+//           <div
+//             onClick={(e) => e.stopPropagation()}
+//             className="bg-white w-[694px] p-6 rounded-lg shadow-lg relative"
+//           >
+//             <div className="flex justify-center items-center mb-4">
+//               <h2 className="text-lg font-medium">
+//                 {editingOffer ? "Edit Banner" : "Add Banner"}
+//               </h2>
+//               <button
+//                 onClick={() => setIsModalOpen(false)}
+//                 className="text-3xl font-light absolute top-1.5 right-5"
+//               >
+//                 ×
+//               </button>
+//             </div>
+//             <div className="border-b border-gray-300 mb-4"></div>
+//             <label className="text-black block mb-2">
+//               {!editingOffer ? "No Image Chosen" : "Upload Image"}
+//             </label>
+//             <div className="flex items-center gap-2 bg-[#F2F2F2] rounded-lg p-2">
+//               <input
+//                 type="text"
+//                 value={image ? image.name : imageName || "No Image Chosen"}
+//                 className="flex-1 px-4 py-2 bg-transparent border-none text-gray-500"
+//                 disabled
+//               />
+//               <input
+//                 type="file"
+//                 className="hidden"
+//                 id="fileUpload"
+//                 accept="image/*"
+//                 onChange={handleImageChange}
+//               />
+//               <label
+//                 htmlFor="fileUpload"
+//                 className="px-2.5 py-1 border border-[#E03F3F] text-[#E03F3F] rounded-lg cursor-pointer flex items-center"
+//               >
+//                 <PlusIcon className="mr-1" />
+//                 Upload
+//               </label>
+//             </div>
+
+//             {imageUrl && (
+//               <div className="relative mt-4">
+//                 {/* Cross Icon to Delete Image */}
+//                 <button
+//                   onClick={handleDeleteImage}
+//                   className="absolute top-2 right-2 bg-white rounded-full p-1 z-10"
+//                 >
+//                   <CrossIcon className="text-red-500" />
+//                 </button>
+
+//                 {/* Image Cropping */}
+//                 <ReactCrop
+//                   crop={crop}
+//                   onChange={(newCrop) => setCrop(newCrop)}
+//                   onComplete={handleCropComplete}
+//                   aspect={16 / 9} // Lock aspect ratio to 16:9
+//                   locked // Prevent user from changing aspect ratio
+//                 >
+//                   <img
+//                     ref={onImageLoad}
+//                     src={imageUrl}
+//                     alt="Uploaded"
+//                     style={{ width: "100%", height: "300px", objectFit: "cover" }}
+//                   />
+//                 </ReactCrop>
+//               </div>
+//             )}
+
+//             {/* Rest of the modal content (tags, discount, service, etc.) */}
+//             <div className="grid grid-cols-2 gap-4 mt-4">
+//               <div className="mt-4">
+//                 <label className="text-black block text-base mb-2">
+//                   Tags (Press Enter to add)
+//                 </label>
+//                 <input
+//                   type="text"
+//                   placeholder="Enter Tag Name"
+//                   value={tagInput}
+//                   onChange={(e) => setTagInput(e.target.value)}
+//                   onKeyDown={handleAddTag}
+//                   className="w-full px-4 py-2 border rounded-lg bg-[#F2F2F2] text-gray-600 outline-none"
+//                 />
+//                 <div className="flex flex-wrap gap-2 mt-2">
+//                   {tags?.map((tag, index) => (
+//                     <div
+//                       key={index}
+//                       className="bg-[#6C4DEF1A] text-[#6C4DEF] px-2.5 py-1 rounded-full flex items-center"
+//                     >
+//                       <p className="font-normal text-sm">{tag}</p>
+//                       <button
+//                         onClick={() => handleRemoveTag(tag)}
+//                         className="ml-2.5 text-[#6C4DEF]"
+//                       >
+//                         <CrossIcon />
+//                       </button>
+//                     </div>
+//                   ))}
+//                 </div>
+//               </div>
+
+//               <div className="mt-4">
+//                 <label className="text-black block text-base mb-2">
+//                   Discount %
+//                 </label>
+
+//                 <select
+//                   value={discount}
+//                   onChange={(e) => setDiscount(e.target.value)}
+//                   className="w-full px-4 py-2 border rounded-lg bg-[#F2F2F2] text-gray-600 outline-none"
+//                 >
+//                   <option value="" disabled>
+//                     Discount Type
+//                   </option>
+//                   <option value="5">Amount</option>
+//                   <option value="10">Percentage</option>
+
+//                 </select>
+//               </div>
+//             </div>
+
+//             <div className="flex gap-4">
+//               <div className="relative w-1/2">
+//                 <label className="text-black block text-base mb-2">
+//                   Select Service
+//                 </label>
+//                 <input
+//                   type="text"
+//                   className="w-full px-4 py-2 border rounded-lg bg-[#F2F2F2] text-gray-600 outline-none h-[50px] cursor-pointer"
+//                   readOnly
+//                   value={service || "Select a category"}
+//                   onClick={() => setDropdown(!dropdown)}
+//                 />
+//                 {dropdown && (
+//                   <div className="w-full max-h-[100px] overflow-y-auto bg-white border rounded-lg mt-1 absolute z-10 shadow-lg">
+//                     {loading ? (
+//                       <div className="px-4 py-2 text-gray-600">
+//                         Loading categories...
+//                       </div>
+//                     ) : activeCategories.length === 0 ? (
+//                       <div className="px-4 py-2 text-gray-600">
+//                         No active categories available
+//                       </div>
+//                     ) : (
+//                       activeCategories.map((category) => (
+//                         <div
+//                           key={category.id}
+//                           onClick={() => {
+//                             setService(category.categoryName);
+//                             setDropdown(false);
+//                           }}
+//                           className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-600"
+//                         >
+//                           {category.categoryName}
+//                         </div>
+//                       ))
+//                     )}
+//                   </div>
+//                 )}
+//               </div>
+
+
+//               <div className="w-1/2">
+//                 <label className="text-black block text-base mb-2">
+//                   Discount%
+//                 </label>
+//                 <input
+//                   type="text"
+//                   className="w-full px-4 py-2 border rounded-lg bg-[#F2F2F2] text-gray-600 outline-none h-[50px] cursor-pointer"
+//                   readOnly
+//                   placeholder="20%"
+//                 />
+//               </div>
+//             </div>
+
+//             <button
+//               onClick={handleSubmit}
+//               className="w-full mt-4 bg-[#0832DE] text-white py-2 rounded-lg"
+//             >
+//               {editingOffer ? "Update Details" : "Save Details"}
+//             </button>
+//           </div>
+//         </div>
+//       )}
+//     </div>
+//   );
+// }
+
+// export default BannerDetails;

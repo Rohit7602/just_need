@@ -24,7 +24,6 @@ function TopBar() {
 
   const { userName } = useUserContext();
 
-
   const handleClickOutside = (event) => {
     if (searchRef.current && !searchRef.current.contains(event.target)) {
       setIsInputVisible(false);
@@ -46,11 +45,12 @@ function TopBar() {
     } else if (location.pathname.includes("/dashboard/complaints/complaintsDetails/")) {
       navigate("/dashboard/complaints");
     } else if (location.pathname.includes("/dashboard/listings/")) {
-      navigate("/dashboard/listings");
+      navigate(-1);
     } else {
       navigate(-1);
     }
   };
+
 
   const showArrowButton =
     location.pathname.includes("/dashboard/usersList/userDetails/") ||
@@ -85,7 +85,7 @@ function TopBar() {
               ) : (
                 location.pathname
                   .replace("/dashboard/", "")
-                  .replace("/", " / ")
+                  .replace("/", " ")
                   .replace("&", " & ")
                   .replace("usersList", "Users List")
               )}
