@@ -87,7 +87,7 @@ function Services() {
       setSelectedSubcategories(validSubcategories); // Set filtered subcategories
       setSelectedCategoryId(firstActiveCategory?.id || null);
     }
-  }, [categories, loading]);
+  }, []);
 
   const filteredCategoriesData = useMemo(() => {
     if (!searchQuery.trim()) return categories;
