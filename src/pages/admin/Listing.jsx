@@ -65,7 +65,7 @@ const Listing = () => {
   if (listData.length !== 0) {
     return (
       <div>
-        <div className="bg-white rounded-md p-3">
+        <div className="bg-white rounded-md p-5">
           <div className="flex flex-row flex-wrap -mx-3">
             {listData?.map((item) => (
               <Link
@@ -73,8 +73,8 @@ const Listing = () => {
                 className="w-6/12 mt-3 xl:mt-[15px] xl:w-3/12 px-3"
                 key={item.id}
               >
-                <div>
-                  <div className="border-[1px] border-[#ebeaea] rounded-[15px] relative group">
+                <div className="h-full">
+                  <div className="border-[1px] h-full border-[#ebeaea] rounded-[15px] relative group">
                     <img
                       className=" w-full rounded-t-md group-hover:opacity-70"
                       src={item.images[0]}

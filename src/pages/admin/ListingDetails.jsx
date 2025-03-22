@@ -72,7 +72,7 @@ const ListingDetails = () => {
   return (
     <div className="bg-white rounded-md flex flex-col lg:flex-row ">
       {/* Left Side - Scrollable */}
-      <div className="lg:w-7/12 w-full p-3">
+      <div className="lg:w-7/12 w-full p-3 h-[calc(100vh-115px)] overflow-auto scrollRemove">
         <div>
           <div className="flex justify-between">
             <h3 className="text-[20px] font-medium">Posted By</h3>
@@ -194,6 +194,7 @@ const ListingDetails = () => {
                     onClick={() => handleViewImage(item)}
                     alt="listDetail"
                   />
+
                   <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                     <button
                       onClick={() => handleViewImage(item)}
@@ -217,7 +218,7 @@ const ListingDetails = () => {
       </div>
 
       {/* Right Side - Fixed Height, Scrollable */}
-      <div className="lg:w-5/12 w-full p-3 h-screen overflow-auto scrollRemove">
+      <div className="lg:w-5/12 w-full p-3 h-[calc(100vh-115px)] overflow-auto scrollRemove">
         <div className="bg-[#DDDADA4D] p-3 rounded-md">
           <h4 className="font-semibold text-[20px]">Reviews</h4>
           <div className="flex gap-[83px] items-center flex-wrap">

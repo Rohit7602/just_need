@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 import { Outlet } from "react-router-dom";
 import SideBar from "./Common/SideBar";
@@ -9,11 +10,11 @@ function AdminLayout() {
       <div className="max-w-[200px] xl:max-w-[270px]  h-screen  ">
         <SideBar />
       </div>
-      <div className="w-[calc(100vw-200px)] xl:w-[calc(100vw-270px)]   h-screen overflow-scroll scrollRemove ">
+      <div className="w-[calc(100vw-320px)] xl:w-calc(100vw-270px)] scrollRemove ">
         <div className="sticky top-0 z-30 bg-white px-4 pt-5 pb-[15px] rounded-[10px]">
           <TopBar />
         </div>
-        <div className="min-h-[calc(100vh-117px)] flex flex-col mt-4 pb-5">
+        <div className="h-[calc(100vh-115px)] flex flex-col mt-4 pb-5 overflow-auto scrollRemove">
           <Outlet />
         </div>
       </div>

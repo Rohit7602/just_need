@@ -41,7 +41,7 @@ function TopBar() {
     if (location.pathname.startsWith("/dashboard/setting/")) {
       navigate("/dashboard/setting");
     } else if (location.pathname.includes("/dashboard/usersList/userDetails/")) {
-      navigate("/dashboard/usersList");
+      navigate(-1);
     } else if (location.pathname.includes("/dashboard/complaints/complaintsDetails/")) {
       navigate("/dashboard/complaints");
     } else if (location.pathname.includes("/dashboard/listings/")) {
