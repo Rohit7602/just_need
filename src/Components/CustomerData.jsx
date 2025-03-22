@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState, useRef, useEffect } from "react";
 import avatar from "../assets/Images/Png/dummyimage.jpg";
 import ActionUserPupUp from "./Popups/ActionUserPupUp";
@@ -346,16 +347,19 @@ const CustomerData = () => {
                 Sub. Exp. Date
               </th>
               <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">
-                Status
+                Profile Status
               </th>
-              {location.pathname === "/dashboard/usersList" ? null : (
-                <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base sticky right-0 bg-white">
-                  Action
-                </th>
-              )}
+              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">
+                Business Profile
+              </th>
+              {/* {location.pathname === "/dashboard/usersList" ? null : ( */}
+              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base sticky right-0 bg-white">
+                Action
+              </th>
+              {/* )} */}
             </tr>
             <tr>
-              <td colSpan="10">
+              <td colSpan="12">
                 <div className="w-full border border-dashed border-[#00000066]"></div>
               </td>
             </tr>
@@ -412,28 +416,37 @@ const CustomerData = () => {
                   >
                     {customer.userType === true ? "Consumer" : "Provider"}
                   </td>
+
                   <td className="px-[19px] md:px-[24px] text-sm font-normal text-[#000000]">
                     {formatDate(customer.created_at)}
                   </td>
                   <td className="px-[19px] md:px-[24px] text-sm font-normal text-[#000000]">
                     {formatDate(customer.updated_at)}
                   </td>
-                  <td
-                    className={`px-[10px] py-[4px] text-sm font-normal text-center ${customer.accountStatus === "active"
-                      ? "bg-[#00800012] text-[#008000] rounded-[90px]"
-                      : "text-[#800000] rounded-[90px] bg-[#FF000012]"
-                      }`}
-                  >
-                    {customer.accountStatus}
+                  <td>
+                    <div className="flex justify-center items-center">
+                      <span className={`px-[10px] py-[4px] text-sm font-normal text-center ${customer.accountStatus === "active"
+                        ? "bg-[#00800012] text-[#008000] rounded-[90px]"
+                        : "text-[#800000] rounded-[90px] bg-[#FF000012]"
+                        }`}> {customer.accountStatus}</span>
+                    </div>
                   </td>
-                  {location.pathname === "/dashboard/usersList" ? null : (
-                    <td
-                      className="px-[19px] md:px-[24px] text-center sticky right-0 bg-white"
-                      onClick={handlePopup}
-                    >
-                      <button className="text-2xl font-medium">⋮</button>
-                    </td>
-                  )}
+                  <td>
+                    <div className="flex justify-center items-center">
+                      <span className={`px-[10px] py-[4px] text-sm font-normal text-center ${customer.accountStatus === "active"
+                        ? "bg-[#00800012] text-[#008000] rounded-[90px]"
+                        : "text-[#800000] rounded-[90px] bg-[#FF000012]"
+                        }`}> {customer.accountStatus}</span>
+                    </div>
+                  </td>
+                  {/* {location.pathname === "/dashboard/usersList" ? null : ( */}
+                  <td
+                    className="px-[19px] md:px-[24px] text-center sticky right-0 bg-white"
+                    onClick={handlePopup}
+                  >
+                    <button className="text-2xl font-medium">⋮</button>
+                  </td>
+                  {/* )} */}
                 </tr>
               ))
             )}

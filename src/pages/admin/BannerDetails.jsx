@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 import { useEffect, useState, useRef } from "react";
 import { supabase } from "../../store/supabaseCreateClient";
@@ -21,7 +22,6 @@ function BannerDetails() {
   const [offer, setOffer] = useState([]);
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState("");
-  const [discount, setDiscount] = useState("");
   const [service, setService] = useState("");
   const [description, setDescription] = useState("");
   const [editingOffer, setEditingOffer] = useState(null);
@@ -35,7 +35,11 @@ function BannerDetails() {
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [croppedImageUrl, setCroppedImageUrl] = useState(null);
-  const [isCropping, setIsCropping] = useState(true); // New state to toggle cropping mode
+  const [isCropping, setIsCropping] = useState(false); // Changed to false initially
+  const [discount, setDiscount] = useState("");
+  const [amount, setAmount] = useState("");
+  const [percentage, setPercentage] = useState("");
+
   const imageRefs = useRef({});
 
   const { categories, getCategoriesWithSubcategories, loading } =
@@ -91,7 +95,7 @@ function BannerDetails() {
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const maxSizeInBytes = 1 * 1024 * 1024;
+      const maxSizeInBytes = 10 * 1024 * 1024;
       if (file.size > maxSizeInBytes) {
         toast.error("Image size exceeds 1 MB. Please upload a smaller file.");
         return;
@@ -100,7 +104,7 @@ function BannerDetails() {
       setImageUrl(URL.createObjectURL(file));
       setImageName(file.name);
       setCroppedImageUrl(null);
-      setIsCropping(true); // Enable cropping mode for new image
+      setIsCropping(true); // Enable cropping for new image uploads
     }
   };
 
@@ -120,7 +124,7 @@ function BannerDetails() {
     setCroppedAreaPixels(croppedAreaPixels);
     if (imageUrl && croppedAreaPixels) {
       const croppedImage = await getCroppedImg(imageUrl, croppedAreaPixels);
-      setCroppedImageUrl(URL.createObjectURL(croppedImage)); // Set as data URL for preview
+      setCroppedImageUrl(URL.createObjectURL(croppedImage));
     }
   };
 
@@ -155,18 +159,26 @@ function BannerDetails() {
   };
 
   const handleCropConfirm = () => {
-    setIsCropping(false); // Exit cropping mode, show cropped image
+    setIsCropping(false);
   };
 
   const handleCropCancel = () => {
-    setCroppedImageUrl(null); // Reset cropped image
-    setCrop({ x: 0, y: 0 }); // Reset crop position
-    setZoom(1); // Reset zoom
+    setCroppedImageUrl(null);
+    setCrop({ x: 0, y: 0 });
+    setZoom(1);
+    setIsCropping(false); // Reset to non-cropping mode
   };
 
   const handleSubmit = () => {
     if (!tags.length || !discount || !service) {
       toast.error("Please fill all fields (at least one tag required)");
+      return;
+    }
+    if (
+      discount === "amount" && !amount ||
+      discount === "percentage" && !percentage
+    ) {
+      toast.error(`Please enter ${discount === "amount" ? "amount" : "percentage"}`);
       return;
     }
     if (!editingOffer && !imageUrl) {
@@ -215,9 +227,10 @@ function BannerDetails() {
           .from("offers")
           .update({
             tagOffer: tags,
-            discount,
-            service,
-            description,
+            service: service,
+            description: description,
+            amount: discount === "amount" ? amount : null,
+            percentage: discount === "percentage" ? percentage : null,
             image: uploadedImageUrl,
           })
           .eq("id", editingOffer.id);
@@ -228,9 +241,10 @@ function BannerDetails() {
         const { error } = await supabase.from("offers").insert([
           {
             tagOffer: tags,
-            discount,
-            service,
-            description,
+            service: service,
+            description: description,
+            amount: discount === "amount" ? amount : null,
+            percentage: discount === "percentage" ? percentage : null,
             image: uploadedImageUrl,
           },
         ]);
@@ -283,15 +297,16 @@ function BannerDetails() {
           ? [item.tagOffer]
           : []
     );
-    setDiscount(item.discount || "");
+    setDiscount(item.amount ? "amount" : item.percentage ? "percentage" : ""); // Infer discount type
     setService(item.service || "");
     setDescription(item.description || "");
+    setAmount(item.amount || "");
+    setPercentage(item.percentage || "");
     setImageUrl(item.image || "");
-    const imagePath = item.image ? item.image.split("/").pop() : "";
-    setImageName(imagePath || "Existing Image");
+    setImageName(item.image ? item.image.split("/").pop() : "Existing Image");
     setImage(null);
     setCroppedImageUrl(null);
-    setIsCropping(true); // Enable cropping mode for edit
+    setIsCropping(false); // Show existing image without cropping initially
     setIsModalOpen(true);
   };
 
@@ -301,6 +316,8 @@ function BannerDetails() {
     setDiscount("");
     setService("");
     setDescription("");
+    setAmount("");
+    setPercentage("");
     setImage(null);
     setImageUrl("");
     setImageName("");
@@ -309,7 +326,7 @@ function BannerDetails() {
     setDropdown(false);
     setCrop({ x: 0, y: 0 });
     setZoom(1);
-    setIsCropping(true); // Reset to cropping mode
+    setIsCropping(false); // Reset to non-cropping mode
   };
 
   const handleAddNew = () => {
@@ -324,7 +341,7 @@ function BannerDetails() {
   const activeCategories = categories.filter((category) => category.isActive);
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-white min-h-screen p-3">
       <div className="mt-5 flex justify-end mx-10">
         <button
           onClick={handleAddNew}
@@ -464,7 +481,7 @@ function BannerDetails() {
                         image={imageUrl}
                         crop={crop}
                         zoom={zoom}
-                        aspect={1}
+                        aspect={16 / 9}
                         onCropChange={setCrop}
                         onZoomChange={setZoom}
                         onCropComplete={onCropComplete}
@@ -481,23 +498,33 @@ function BannerDetails() {
                           onClick={handleCropConfirm}
                           className="bg-green-500 text-white px-4 py-2 rounded-lg"
                         >
-                          ✅
+                          Crop
                         </button>
                         <button
                           onClick={handleCropCancel}
                           className="bg-red-500 text-white px-4 py-2 rounded-lg"
                         >
-                          ❌
+                          Cancel
                         </button>
                       </div>
                     )}
                   </>
                 ) : (
-                  <img
-                    src={croppedImageUrl || imageUrl}
-                    alt="Cropped Preview"
-                    className="w-[58px] h-[58px] object-cover rounded-[10px]"
-                  />
+                  <div>
+                    <img
+                      src={croppedImageUrl || imageUrl}
+                      alt="Cropped Preview"
+                      className="w-[58px] h-[58px] object-cover rounded-[10px]"
+                    />
+                    {editingOffer && (
+                      <button
+                        onClick={() => setIsCropping(true)}
+                        className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-lg"
+                      >
+                        Edit Crop
+                      </button>
+                    )}
+                  </div>
                 )}
               </div>
             )}
@@ -535,7 +562,7 @@ function BannerDetails() {
 
               <div className="mt-4">
                 <label className="text-black block text-base mb-2">
-                  Discount %
+                  Discount Type
                 </label>
                 <select
                   value={discount}
@@ -545,13 +572,13 @@ function BannerDetails() {
                   <option value="" disabled>
                     Discount Type
                   </option>
-                  <option value="5">Amount</option>
-                  <option value="10">Percentage</option>
+                  <option value="amount">Amount</option>
+                  <option value="percentage">Percentage</option>
                 </select>
               </div>
             </div>
 
-            <div className="flex gap-4">
+            <div className="flex gap-4 mt-[15px]">
               <div className="relative w-1/2">
                 <label className="text-black block text-base mb-2">
                   Select Service
@@ -593,13 +620,20 @@ function BannerDetails() {
 
               <div className="w-1/2">
                 <label className="text-black block text-base mb-2">
-                  Discount%
+                  {discount === "amount" ? "Amount" : "Percentage"}
                 </label>
                 <input
-                  type="text"
-                  className="w-full px-4 py-2 border rounded-lg bg-[#F2F2F2] text-gray-600 outline-none h-[50px] cursor-pointer"
-                  readOnly
-                  placeholder="20%"
+                  type="number"
+                  placeholder={
+                    discount === "amount" ? "Enter amount" : "Enter percentage"
+                  }
+                  value={discount === "amount" ? amount : percentage}
+                  onChange={(e) =>
+                    discount === "amount"
+                      ? setAmount(e.target.value)
+                      : setPercentage(e.target.value)
+                  }
+                  className="w-full px-4 py-2 border rounded-lg bg-[#F2F2F2] text-gray-600 outline-none h-[50px]"
                 />
               </div>
             </div>

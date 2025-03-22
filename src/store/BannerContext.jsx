@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "./supabaseCreateClient";
 import { toast } from "react-toastify";
@@ -19,6 +20,9 @@ function BannerProvider({ children }) {
       setOffer(data);
     }
   };
+
+
+  console.log(offer,"offer")
 
   const handleDelete = async (id) => {
     // console.log("harish", id);
