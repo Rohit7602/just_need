@@ -47,6 +47,9 @@ const CustomerData = () => {
 
   const { users, setUsers, loading } = useCustomerContext();
 
+
+  console.log(users, "users")
+
   // Filter logic based on selected fields
   const filteredData = users?.filter((customer) => {
     if (selectedFilters.length === 0) {
@@ -341,10 +344,10 @@ const CustomerData = () => {
                 User Type
               </th>
               <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base w-[200px]">
-                Registered At
+                Created At
               </th>
               <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base w-[200px]">
-                Sub. Exp. Date
+                Updated At
               </th>
               <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">
                 Profile Status
@@ -390,11 +393,11 @@ const CustomerData = () => {
                     />
                   </td>
                   <td className="px-[19px] md:px-[24px] text-[#6C4DEF] flex items-center gap-2 min-w-[160px]">
-                    <Link className="flex" to={`/dashboard/usersList/userDetails/${customer.id}`}>
+                    <Link className="flex gap-2" to={`/dashboard/usersList/userDetails/${customer.id}`}>
                       <img
                         src={customer.image || avatar}
                         alt="avatar"
-                        className="w-8 h-8 rounded-full me-2 object-cover"
+                        className="!w-8 h-8  rounded-full object-cover img_user"
                       />
                       {customer.firstName} {customer.lastName}
                     </Link>
@@ -409,12 +412,16 @@ const CustomerData = () => {
                     {customer?.address?.map((item) => `${item.city}/${item.state}`)}
                   </td>
                   <td
-                    className={`px-[19px] md:px-[24px] text-sm font-normal w-[50px] truncate ${customer.userType === true
+                    className={`px-[19px] text-sm font-normal truncate ${customer.IsSeller == true
                       ? "bg-[#0000FF12] text-[#0000FF] rounded-[90px]"
                       : "text-[#FFA500] bg-[#FFA50024] rounded-[90px]"
                       }`}
                   >
-                    {customer.userType === true ? "Consumer" : "Provider"}
+                    <div className="flex justify-center">
+                      <span>
+                        {customer.IsSeller === true ? "Consumer" : "Seller"}
+                      </span>
+                    </div>
                   </td>
 
                   <td className="px-[19px] md:px-[24px] text-sm font-normal text-[#000000]">
@@ -433,11 +440,15 @@ const CustomerData = () => {
                   </td>
                   <td>
                     <div className="flex justify-center items-center">
-                      <span className={`px-[10px] py-[4px] text-sm font-normal text-center ${customer.accountStatus === "active"
-                        ? "bg-[#00800012] text-[#008000] rounded-[90px]"
-                        : "text-[#800000] rounded-[90px] bg-[#FF000012]"
-                        }`}> {customer.accountStatus}</span>
+                      <span className={`px-[10px] py-[4px] text-sm font-normal text-center ${customer?.businessDetail.status === "Active"
+                        && "bg-[#00800012] text-[#008000] rounded-[90px]"
+                        } ${customer?.businessDetail.status === "Pending"
+                        && "bg-[#6C4DEF1A] text-[#6C4DEF] rounded-[90px]"
+                        } ${customer?.businessDetail.status === "Rejected"
+                        && "bg-[#FF00001A] text-[#FF0000] rounded-[90px]"
+                        }`}> {customer?.businessDetail.status}</span>
                     </div>
+                    {/* : "text-[#800000] rounded-[90px] bg-[#FF000012]" */}
                   </td>
                   {/* {location.pathname === "/dashboard/usersList" ? null : ( */}
                   <td
@@ -452,7 +463,7 @@ const CustomerData = () => {
             )}
           </tbody>
         </table>
-      </div>
+      </div >
       <div className="p-4 bg-white rounded-[10px]">
         <div className="flex justify-end">
           <div className="flex items-center">
@@ -526,131 +537,137 @@ const CustomerData = () => {
         </div>
       </div>
 
-      {showDeletePopup && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-[10px] shadow-lg w-[400px]">
-            <h2 className="text-lg font-medium mb-4">Confirm Disable Users</h2>
-            <p className="mb-6">
-              Are you sure you want to disable the selected {selectItem.length}{" "}
-              user(s)? This will set their status to Inactive.
-            </p>
-            <div className="flex justify-end gap-4">
-              <button
-                className="border border-[#F1F1F1] text-[#00000099] py-2 px-4 rounded-[10px]"
-                onClick={handleCancelDelete}
-              >
-                Cancel
-              </button>
-              <button
-                className="bg-[#0832DE] text-white py-2 px-4 rounded-[10px]"
-                onClick={handleConfirmDisable}
-              >
-                Yes, Disable
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {showPopup && <ActionUserPupUp handlePopup={handlePopup} />}
-
-      {showFilterPopup && (
-        <UsersFilterPopUp
-          handleFilter={handleFilter}
-          handleFilterPopupClose={handleFilterPopupClose}
-        />
-      )}
-
-      {filterPopupsvg && (
-        <div
-          onClick={() => setFilterPopupSvg(false)}
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="bg-white p-6 rounded-[10px] shadow-lg w-[300px]"
-          >
-            <div className="flex flex-col gap-4">
-              <div className="flex gap-2">
-                <input
-                  type="checkbox"
-                  id="selectAll"
-                  checked={selectAll}
-                  onChange={handleSelectAll}
-                />
-                <label htmlFor="selectAll" className="text-base font-normal leading-[140%]">
-                  Select All
-                </label>
-              </div>
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="name"
-                  onChange={() => handleFilterCheckboxChange("name")}
-                  checked={selectedFilters.includes("name")}
-                />
-                <label
-                  htmlFor="name"
-                  className="text-base font-normal leading-[140%]"
+      {
+        showDeletePopup && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-[10px] shadow-lg w-[400px]">
+              <h2 className="text-lg font-medium mb-4">Confirm Disable Users</h2>
+              <p className="mb-6">
+                Are you sure you want to disable the selected {selectItem.length}{" "}
+                user(s)? This will set their status to Inactive.
+              </p>
+              <div className="flex justify-end gap-4">
+                <button
+                  className="border border-[#F1F1F1] text-[#00000099] py-2 px-4 rounded-[10px]"
+                  onClick={handleCancelDelete}
                 >
-                  Name
-                </label>
-              </div>
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="email"
-                  onChange={() => handleFilterCheckboxChange("email")}
-                  checked={selectedFilters.includes("email")}
-                />
-                <label
-                  htmlFor="email"
-                  className="text-base font-normal leading-[140%]"
+                  Cancel
+                </button>
+                <button
+                  className="bg-[#0832DE] text-white py-2 px-4 rounded-[10px]"
+                  onClick={handleConfirmDisable}
                 >
-                  Email
-                </label>
-              </div>
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="address"
-                  onChange={() => handleFilterCheckboxChange("address")}
-                  checked={selectedFilters.includes("address")}
-                />
-                <label
-                  htmlFor="address"
-                  className="text-base font-normal leading-[140%]"
-                >
-                  Address
-                </label>
-              </div>
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="mobile"
-                  onChange={() => handleFilterCheckboxChange("mobile")}
-                  checked={selectedFilters.includes("mobile")}
-                />
-                <label
-                  htmlFor="mobile"
-                  className="text-base font-normal leading-[140%]"
-                >
-                  Mobile
-                </label>
-              </div>
-              <div
-                onClick={() => setFilterPopupSvg(false)}
-                className="flex justify-end"
-              >
-                <button className="bg-[#0832DE] text-white px-[15px] py-2 rounded-[10px] flex items-center capitalize">
-                  Done
+                  Yes, Disable
                 </button>
               </div>
             </div>
           </div>
-        </div>
-      )}
-    </div>
+        )
+      }
+
+      {showPopup && <ActionUserPupUp handlePopup={handlePopup} />}
+
+      {
+        showFilterPopup && (
+          <UsersFilterPopUp
+            handleFilter={handleFilter}
+            handleFilterPopupClose={handleFilterPopupClose}
+          />
+        )
+      }
+
+      {
+        filterPopupsvg && (
+          <div
+            onClick={() => setFilterPopupSvg(false)}
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white p-6 rounded-[10px] shadow-lg w-[300px]"
+            >
+              <div className="flex flex-col gap-4">
+                <div className="flex gap-2">
+                  <input
+                    type="checkbox"
+                    id="selectAll"
+                    checked={selectAll}
+                    onChange={handleSelectAll}
+                  />
+                  <label htmlFor="selectAll" className="text-base font-normal leading-[140%]">
+                    Select All
+                  </label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="name"
+                    onChange={() => handleFilterCheckboxChange("name")}
+                    checked={selectedFilters.includes("name")}
+                  />
+                  <label
+                    htmlFor="name"
+                    className="text-base font-normal leading-[140%]"
+                  >
+                    Name
+                  </label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="email"
+                    onChange={() => handleFilterCheckboxChange("email")}
+                    checked={selectedFilters.includes("email")}
+                  />
+                  <label
+                    htmlFor="email"
+                    className="text-base font-normal leading-[140%]"
+                  >
+                    Email
+                  </label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="address"
+                    onChange={() => handleFilterCheckboxChange("address")}
+                    checked={selectedFilters.includes("address")}
+                  />
+                  <label
+                    htmlFor="address"
+                    className="text-base font-normal leading-[140%]"
+                  >
+                    Address
+                  </label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="mobile"
+                    onChange={() => handleFilterCheckboxChange("mobile")}
+                    checked={selectedFilters.includes("mobile")}
+                  />
+                  <label
+                    htmlFor="mobile"
+                    className="text-base font-normal leading-[140%]"
+                  >
+                    Mobile
+                  </label>
+                </div>
+                <div
+                  onClick={() => setFilterPopupSvg(false)}
+                  className="flex justify-end"
+                >
+                  <button className="bg-[#0832DE] text-white px-[15px] py-2 rounded-[10px] flex items-center capitalize">
+                    Done
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )
+      }
+    </div >
   );
 };
 

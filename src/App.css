@@ -10,10 +10,8 @@
   box-sizing: border-box !important;
   font-family: "Outfit", sans-serif !important;
 }
-.ratings_tab{
-
+.ratings_tab {
 }
-
 
 .group_hover:hover svg path,
 .group_hover:hover span {
@@ -97,7 +95,6 @@
   transform: translate(-50%, -50%);
 }
 
-
 .custom-checkbox {
   appearance: none;
   width: 16px;
@@ -111,7 +108,7 @@
 }
 
 .custom-checkbox:checked {
-  background-color:#999999;
+  background-color: #999999;
   border-color: #999999;
 }
 
@@ -126,6 +123,12 @@
   transform: translate(-50%, -50%);
 }
 
-.text_center{
+.text_center {
   text-align: -webkit-center;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
 }
