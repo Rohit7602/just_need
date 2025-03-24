@@ -103,7 +103,7 @@ function UserDetails() {
 
   return (
     <div className="px-4">
-      <div className="flex items-center justify-end">
+      <div className="flex items-center justify-center">
         <button
           onClick={handlePopupDisable}
           className="flex items-center gap-3 py-2.5 h-[42px] px-3 xl:px-[15px] rounded-[10px]"
