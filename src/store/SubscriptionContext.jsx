@@ -1,99 +1,129 @@
-/* eslint-disable no-undef */
-/* eslint-disable react/prop-types */
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext } from "react";
+/* eslint-disable react/prop-types */
+import { createContext, useContext, useState } from "react";
 import { supabase } from "./supabaseCreateClient";
 
-const SubsciptionProvider = createContext()
+const SubscriptionProvider = createContext();
 
-export const useSubscriptionContext = () => useContext(SubsciptionProvider)
+export const useSubscriptionContext = () => useContext(SubscriptionProvider);
 
 export const SubscriptionContext = ({ children }) => {
+    const [plans, setPlans] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [showPopup, setShowPopup] = useState(false);
 
+    const addPlan = async (planData) => {
+        setLoading(true);
+        try {
+            const { data, error } = await supabase
+                .from("Subscription")
+                .insert([planData])
+                .select();
 
+            if (error) throw error;
 
+            console.log("Plan added successfully", data);
+            setPlans((prev) => [...prev, data[0]]); // Update local state
+            setShowPopup(false);
+            return { success: true };
+        } catch (error) {
+            console.error("Error adding plan:", error);
+            return { error: error.message };
+        } finally {
+            setLoading(false);
+        }
+    };
 
+    const deletePlan = async (planId) => {
+        try {
+            const { error } = await supabase
+                .from("Subscription")
+                .delete()
+                .eq("id", planId); // Ensure this matches your Supabase column
 
-    // useEffect(() => {
-    //     async function fetchSubscriptionPlans() {
+            if (error) throw error;
 
-    //         const { data, error } = await supabase.from("Subscription").select("*");
+            console.log("Plan deleted successfully!");
+            setPlans((prev) => prev.filter((plan) => plan.id !== planId)); // Update local state
+            return { success: true };
+        } catch (error) {
+            console.error("Error deleting plan:", error);
+            return { error: error.message };
+        }
+    };
 
-    //         if (error) {
-    //             console.error("Error fetching plans:", error);
-    //         } else {
-    //             setPlans(data);
-    //         }
+    const updatePlan = async (updatedData, planId) => {
+        setLoading(true);
+        try {
+            const { data, error } = await supabase
+                .from("Subscription")
+                .update(updatedData)
+                .eq("planId", planId) // Ensure this matches your Supabase column
+                .select();
 
-    //     }
+            if (error) throw error;
 
-    //     fetchSubscriptionPlans();
-    // }, []);
-
-    // const addPlan = async (planData) => {
-    //     setLoading(true);
-    //     const { data, error } = await supabase
-    //         .from("subscriptionPlans")
-    //         .insert([planData])
-    //         .select();
-
-    //     if (error) {
-    //         console.log("Plan is not added, there is an error:", error);
-    //     } else {
-    //         console.log("Plan is added successfully", data);
-    //         setPlans([...plans, { ...planData, planId: data[0].planId, cancellationPolicy: data[0].cancellationPolicy }]);
-    //         setShowPopup(false);
-    //     }
-    //     setLoading(false);
-    // };
-
-    // const deletePlan = async (planId) => {
-    //     const { error } = await supabase.from("subscriptionPlans").delete().eq("planId", planId);
-
-    //     if (error) {
-    //         console.error("Error deleting row:", error);
-    //     } else {
-    //         console.log("Row deleted successfully!");
-    //         const { data: updatedPlans } = await supabase.from("subscriptionPlans").select("*");
-    //         setPlans(updatedPlans);
-    //     }
-    // };
-
-    // const updatePlan = async (updatedData, planId) => {
-    //     setLoading(true);
-    //     const { data, error } = await supabase.from("subscriptionPlans").update(updatedData).eq("planId", planId).select();
-
-    //     if (error) {
-    //         console.error("Data is not updated:", error);
-    //     } else {
-    //         console.log("Plan is updated successfully:", data);
-    //         setPlans((prev) => prev.map((value) => (value.planId === planId ? { ...value, ...updatedData } : value)));
-    //         setShowPopup(false);
-    //     }
-    //     setLoading(false);
-    // };
+            console.log("Plan updated successfully:", data);
+            setPlans((prev) =>
+                prev.map((plan) =>
+                    plan.planId === planId ? { ...plan, ...updatedData } : plan
+                )
+            );
+            setShowPopup(false);
+            return { success: true, data };
+        } catch (error) {
+            console.error("Error updating plan:", error);
+            return { error: error.message };
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const fetchSubscription = async () => {
-        const { data, error } = await supabase.from("Subscription").select("*")
+        try {
+            const { data, error } = await supabase.from("Subscription").select("*");
 
-        if (!error) {
-            return data
+            if (error) throw error;
+            setPlans(data); // Update local state
+            return data;
+        } catch (error) {
+            console.error("Error fetching subscriptions:", error);
+            return [];
         }
-    }
+    };
 
-    // const fetchSubscritptionId = async (id) => {
-    //     const { data, error } = await supabase.from("Subscription").select("*").eq("id", id).single()
+    const fetchSubscriptionById = async (id) => {
+        try {
+            const { data, error } = await supabase
+                .from("Subscription")
+                .select("*")
+                .eq("id", id)
+                .single();
 
-    //     if (!error) {
-    //         return data
-    //     }
-    // }
+            if (error) throw error;
+            return data;
+        } catch (error) {
+            console.error("Error fetching subscription:", error);
+            return null;
+        }
+    };
 
-    
     return (
-        <SubsciptionProvider.Provider value={{ fetchSubscription }}>
+        <SubscriptionProvider.Provider
+            value={{
+                plans,
+                loading,
+                showPopup,
+                setShowPopup,
+                addPlan,
+                deletePlan,
+                updatePlan,
+                fetchSubscription,
+                fetchSubscriptionById,
+                setPlans,
+            }}
+        >
             {children}
-        </SubsciptionProvider.Provider>
-    )
-}
-
+        </SubscriptionProvider.Provider>
+    );
+};
