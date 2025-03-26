@@ -1,8 +1,12 @@
-import React from "react";
+/* eslint-disable react/prop-types */
 import { RedDeleteIcon } from "../../assets/icon/Icon";
+import { useSubscriptionContext } from "../../store/SubscriptionContext";
 
 
 function ConfirmDeltePopUp({ onCancel, deleteId }) {
+
+
+  const { deletePlan } = useSubscriptionContext()
 
   const handleDeleteConfirm = () => {
     if (deleteId) {

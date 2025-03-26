@@ -63,7 +63,7 @@ function SuscriptionPopUp({ handlePopup, updateItemId }) {
         setPrimaryColor(existingPlan.color || "#000000");
       }
     }
-  }, [updateItemId, plans]);
+  }, [updateItemId]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {

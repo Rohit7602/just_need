@@ -39,6 +39,7 @@ const Subscription = () => {
     setDeletePouUp(!deletePopUp);
   };
 
+
   return (
     <div className="w-full p-[15px] bg-white rounded-[10px]">
       <div className="rounded-lg mb-5">
@@ -56,23 +57,24 @@ const Subscription = () => {
       <div className="flex -mx-3 flex-wrap">
 
         {plans?.map((item) => {
+          console.log(item, "item")
           return (
-            <div key={item.id} className=" w-6/12 xl:w-4/12 2xl:w-3/12 px-3 mt-3">
+            <div key={item.id} className="w-6/12 xl:w-4/12 2xl:w-3/12 px-3 mt-3 ">
               <div
                 style={{
                   background: `linear-gradient(135deg, ${item.color}, black)`,
                 }}
-                className=" p-5 rounded-[10px] group "
+                className=" p-5 rounded-[10px] group bg-gradient-to-br from-[#8970F2] to-[#321A95]"
               >
                 <div className="flex items-center justify-between">
                   <h1 className="text-xl xl:text-[26px] font-semibold text-white">
-                    {item.planName}
+                    {item.PlanName}
                   </h1>
                   <div className="flex items-center gap-[15px] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <button onClick={() => handlePopup(item)}>
                       <EditiconSubscription />
                     </button>
-                    <button onClick={() => handleDeletePopUp(item.planId)}>
+                    <button onClick={() => handleDeletePopUp(item.id)}>
                       <RedDeleteIcon />
                     </button>
                   </div>

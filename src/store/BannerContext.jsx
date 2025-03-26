@@ -22,8 +22,6 @@ function BannerProvider({ children }) {
   };
 
 
-  console.log(offer,"offer")
-
   const handleDelete = async (id) => {
     // console.log("harish", id);
     const { error } = await supabase.from("offers").delete().eq("id", id);
