@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import { Arrowicon, UserIcon } from "../../assets/icon/Icons";
 import { UpArrowGreen } from "../../assets/icon/Icon";
@@ -198,7 +199,7 @@ function Aside() {
           </div>
         </div>
       </div>
-      <div className=" mt-4 px-[14px] bg-white rounded-[10px] mb-4 ">
+      <div className=" mt-4 px-[14px] bg-white rounded-[10px]">
         <CustomerData />
       </div>
     </>

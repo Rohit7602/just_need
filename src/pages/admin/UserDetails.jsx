@@ -103,7 +103,7 @@ function UserDetails() {
 
   return (
     <div className="px-4">
-      <div className="flex items-center justify-end">
+      <div className="flex items-center justify-center">
         <button
           onClick={handlePopupDisable}
           className="flex items-center gap-3 py-2.5 h-[42px] px-3 xl:px-[15px] rounded-[10px]"
@@ -181,7 +181,7 @@ function UserDetails() {
                 </div>
                 <div className="w-10/12">
                   <h2 className="text-[#000000B2] text-sm xl:text-base font-normal">
-                    {user?.business?.businessName}
+                    {user?.businessDetail?.businessName}
                   </h2>
                 </div>
               </div>
@@ -193,7 +193,7 @@ function UserDetails() {
                 </div>
                 <div className="w-10/12">
                   <h2 className="text-[#000000B2] text-sm xl:text-base font-normal">
-                    {user?.business?.businessType}
+                    {user?.businessDetail?.description}
                   </h2>
                 </div>
               </div>
@@ -205,7 +205,12 @@ function UserDetails() {
                 </div>
                 <div className="w-10/12">
                   <h2 className="text-[#000000B2] text-sm xl:text-base font-normal">
-                    {user?.business?.businessType}
+                    {user?.businessDetail?.categories?.map((item, index) => (
+                      <span key={index}>
+                        {item.categoryName}
+                        {index < user.businessDetail.categories.length - 1 && ', '}
+                      </span>
+                    ))}
                   </h2>
                 </div>
               </div>

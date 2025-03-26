@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import CustomerServiceLogo from "../../assets/png/customerServiceLogo.png";
 import { NavLink, useLocation } from "react-router-dom";
 import {
@@ -14,6 +14,7 @@ import {
   VerticalVilotgSvg,
   BannerSvg,
   ListingSvg,
+  MessageIcon,
 } from "../../assets/icon/Icon";
 import LogOutPopUp from "../Popups/LogOutPopUp";
 
@@ -53,9 +54,8 @@ function SideBar() {
           >
             <DasboardSvg pathName={pathName} />
             <span
-              className={`font-normal text-sm xl:text-base ${
-                pathName == "/dashboard" ? "text-[#6c4def]" : "text-[#00000099]"
-              }`}
+              className={`font-normal text-sm xl:text-base ${pathName == "/dashboard" ? "text-[#6c4def]" : "text-[#00000099]"
+                }`}
             >
               Dashboard
             </span>
@@ -73,11 +73,10 @@ function SideBar() {
           >
             <CustomerSvg pathName={pathName} />
             <span
-              className={`font-normal text-sm xl:text-base ${
-                pathName.startsWith("/dashboard/usersList")
-                  ? "text-[#6c4def]"
-                  : "text-[#00000099]"
-              }`}
+              className={`font-normal text-sm xl:text-base ${pathName.startsWith("/dashboard/usersList")
+                ? "text-[#6c4def]"
+                : "text-[#00000099]"
+                }`}
             >
               Users
             </span>
@@ -95,11 +94,10 @@ function SideBar() {
           >
             <SubsciptionSvg pathName={pathName} />
             <span
-              className={`font-normal text-sm xl:text-base ${
-                pathName == "/dashboard/subscription"
-                  ? "text-[#6c4def]"
-                  : "text-[#00000099]"
-              }`}
+              className={`font-normal text-sm xl:text-base ${pathName == "/dashboard/subscription"
+                ? "text-[#6c4def]"
+                : "text-[#00000099]"
+                }`}
             >
               Subscription
             </span>
@@ -118,16 +116,41 @@ function SideBar() {
           >
             <ServiceRequestSvg pathName={pathName} />
             <span
-              className={`font-normal text-sm xl:text-base ${
-                pathName == "/dashboard/serviceRequest"
-                  ? "text-[#6c4def]"
-                  : "text-[#00000099]"
-              }`}
+              className={`font-normal text-sm xl:text-base ${pathName == "/dashboard/serviceRequest"
+                ? "text-[#6c4def]"
+                : "text-[#00000099]"
+                }`}
             >
               Service Request
             </span>
           </NavLink>
         </div>
+
+        {/*  */}
+
+
+        <div className="flex items-center mt-3 xl:mt-5 group_hover">
+          <VerticalVilotSettingSvg
+            pathName={pathName}
+            checkpath="/dashboard/chat"
+          />
+          <NavLink
+            state={"Plan, prioritize, and accomplish your tasks with ease."}
+            to="/dashboard/chat"
+            className="flex items-center py-2.5 px-2 xl:px-[15px] gap-3 xl:gap-5 ms-[5px] w-full"
+          >
+            <MessageIcon pathName={pathName} />
+            <span
+              className={`font-normal text-sm xl:text-base ${pathName == "/dashboard/chat"
+                ? "text-[#6c4def]"
+                : "text-[#00000099]"
+                }`}
+            >
+              Messages
+            </span>
+          </NavLink>
+        </div>
+        {/*  */}
 
         <div className="flex items-center mt-3 xl:mt-5 group_hover">
           <VerticalVilotSettingSvg
@@ -141,11 +164,10 @@ function SideBar() {
           >
             <ServicesSvg pathName={pathName} />
             <span
-              className={`font-normal text-sm xl:text-base ${
-                pathName == "/dashboard/services"
-                  ? "text-[#6c4def]"
-                  : "text-[#00000099]"
-              }`}
+              className={`font-normal text-sm xl:text-base ${pathName == "/dashboard/services"
+                ? "text-[#6c4def]"
+                : "text-[#00000099]"
+                }`}
             >
               Services
             </span>
@@ -164,11 +186,10 @@ function SideBar() {
           >
             <ListingSvg pathName={pathName} />
             <span
-              className={`font-normal text-sm xl:text-base ${
-                pathName == "/dashboard/listings"
-                  ? "text-[#6c4def]"
-                  : "text-[#00000099]"
-              }`}
+              className={`font-normal text-sm xl:text-base ${pathName == "/dashboard/listings"
+                ? "text-[#6c4def]"
+                : "text-[#00000099]"
+                }`}
             >
               Listings
             </span>
@@ -187,11 +208,10 @@ function SideBar() {
           >
             <BannerSvg pathName={pathName} />
             <span
-              className={`font-normal text-sm xl:text-base ${
-                pathName == "/dashboard/bannerDetail"
-                  ? "text-[#6c4def]"
-                  : "text-[#00000099]"
-              }`}
+              className={`font-normal text-sm xl:text-base ${pathName == "/dashboard/bannerDetail"
+                ? "text-[#6c4def]"
+                : "text-[#00000099]"
+                }`}
             >
               Banner Details
             </span>
@@ -210,11 +230,10 @@ function SideBar() {
           >
             <ComplaintsSvg pathName={pathName} />
             <span
-              className={`font-normal text-sm xl:text-base ${
-                pathName.startsWith("/dashboard/complaints")
-                  ? "text-[#6c4def]"
-                  : "text-[#00000099]"
-              }`}
+              className={`font-normal text-sm xl:text-base ${pathName.startsWith("/dashboard/complaints")
+                ? "text-[#6c4def]"
+                : "text-[#00000099]"
+                }`}
             >
               Complaints
             </span>
@@ -238,11 +257,10 @@ function SideBar() {
           >
             <SettingSvg pathName={pathName} />
             <span
-              className={`font-normal text-sm xl:text-base ${
-                pathName.startsWith("/dashboard/setting")
-                  ? "text-[#6c4def]"
-                  : "text-[#00000099]"
-              }`}
+              className={`font-normal text-sm xl:text-base ${pathName.startsWith("/dashboard/setting")
+                ? "text-[#6c4def]"
+                : "text-[#00000099]"
+                }`}
             >
               Setting
             </span>
@@ -262,11 +280,10 @@ function SideBar() {
           >
             <LogoutSvg pathName={pathName} />
             <span
-              className={`font-normal text-sm xl:text-base ${
-                pathName == "/dashboard/logout"
-                  ? "text-[#6c4def]"
-                  : "text-[#00000099]"
-              }`}
+              className={`font-normal text-sm xl:text-base ${pathName == "/dashboard/logout"
+                ? "text-[#6c4def]"
+                : "text-[#00000099]"
+                }`}
             >
               Logout
             </span>

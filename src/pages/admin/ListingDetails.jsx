@@ -71,6 +71,7 @@ const ListingDetails = () => {
 
   return (
     <div className="bg-white rounded-md flex flex-col lg:flex-row ">
+      
       {/* Left Side - Scrollable */}
       <div className="lg:w-7/12 w-full p-3 h-[calc(100vh-115px)] overflow-auto scrollRemove">
         <div>
@@ -174,7 +175,7 @@ const ListingDetails = () => {
             <h2 className="font-semibold text-base text-black">
               {listData?.categoryName}
             </h2>
-            <p className="font-semibold text-lg">${listData?.price}</p>
+            <p className="font-semibold text-lg">₹ {listData?.price}</p>
           </div>
           <div className="w-full opacity-40 my-[14px]"></div>
           <p className="text-sm font-normal text-black opacity-70">
