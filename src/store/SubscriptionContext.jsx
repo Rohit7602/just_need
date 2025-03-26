@@ -2,7 +2,6 @@
 /* eslint-disable react/prop-types */
 import { createContext, useContext, useState } from "react";
 import { supabase } from "./supabaseCreateClient";
-import { toast } from "react-toastify";
 
 const SubscriptionProvider = createContext();
 
@@ -24,7 +23,7 @@ export const SubscriptionContext = ({ children }) => {
             if (error) throw error;
 
             console.log("Plan added successfully", data);
-            setPlans(prev => [...prev, data[0]]);
+            setPlans((prev) => [...prev, data[0]]); // Update local state
             setShowPopup(false);
             return { success: true };
         } catch (error) {
@@ -40,15 +39,15 @@ export const SubscriptionContext = ({ children }) => {
             const { error } = await supabase
                 .from("Subscription")
                 .delete()
-                .eq("id", planId);
+                .eq("id", planId); // Ensure this matches your Supabase column
 
             if (error) throw error;
 
-            toast.success("Plan deleted successfully!");
-            setPlans(prev => prev.filter(plan => plan.planId !== planId));
+            console.log("Plan deleted successfully!");
+            setPlans((prev) => prev.filter((plan) => plan.id !== planId)); // Update local state
             return { success: true };
         } catch (error) {
-            toast.error("Error deleting plan:", error);
+            console.error("Error deleting plan:", error);
             return { error: error.message };
         }
     };
@@ -59,14 +58,14 @@ export const SubscriptionContext = ({ children }) => {
             const { data, error } = await supabase
                 .from("Subscription")
                 .update(updatedData)
-                .eq("planId", planId)
+                .eq("planId", planId) // Ensure this matches your Supabase column
                 .select();
 
             if (error) throw error;
 
             console.log("Plan updated successfully:", data);
-            setPlans(prev =>
-                prev.map(plan =>
+            setPlans((prev) =>
+                prev.map((plan) =>
                     plan.planId === planId ? { ...plan, ...updatedData } : plan
                 )
             );
@@ -82,11 +81,10 @@ export const SubscriptionContext = ({ children }) => {
 
     const fetchSubscription = async () => {
         try {
-            const { data, error } = await supabase
-                .from("Subscription")
-                .select("*");
+            const { data, error } = await supabase.from("Subscription").select("*");
 
             if (error) throw error;
+            setPlans(data); // Update local state
             return data;
         } catch (error) {
             console.error("Error fetching subscriptions:", error);
@@ -111,18 +109,20 @@ export const SubscriptionContext = ({ children }) => {
     };
 
     return (
-        <SubscriptionProvider.Provider value={{
-            plans,
-            loading,
-            showPopup,
-            setShowPopup,
-            addPlan,
-            deletePlan,
-            updatePlan,
-            fetchSubscription,
-            fetchSubscriptionById,
-            setPlans
-        }}>
+        <SubscriptionProvider.Provider
+            value={{
+                plans,
+                loading,
+                showPopup,
+                setShowPopup,
+                addPlan,
+                deletePlan,
+                updatePlan,
+                fetchSubscription,
+                fetchSubscriptionById,
+                setPlans,
+            }}
+        >
             {children}
         </SubscriptionProvider.Provider>
     );
