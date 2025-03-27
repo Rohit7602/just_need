@@ -17,13 +17,20 @@ export const SubscriptionContext = ({ children }) => {
         try {
             const { data, error } = await supabase
                 .from("Subscription")
-                .insert([planData])
+                .insert([{
+                    planName: planData.planName,
+                    price: parseFloat(planData.price),
+                    durationInDays: parseInt(planData.durationInDays),
+                    currency: planData.currency,
+                    color: planData.color,
+                    cancellationPolicy: planData.cancellationPolicy || "Standard policy"
+                }])
                 .select();
 
             if (error) throw error;
 
-            console.log("Plan added successfully", data);
-            setPlans((prev) => [...prev, data[0]]); // Update local state
+            console.log("Plan added successfully:", data);
+            setPlans(prev => [...prev, data[0]]);
             setShowPopup(false);
             return { success: true };
         } catch (error) {
@@ -39,12 +46,12 @@ export const SubscriptionContext = ({ children }) => {
             const { error } = await supabase
                 .from("Subscription")
                 .delete()
-                .eq("id", planId); // Ensure this matches your Supabase column
+                .eq("id", planId);
 
             if (error) throw error;
 
             console.log("Plan deleted successfully!");
-            setPlans((prev) => prev.filter((plan) => plan.id !== planId)); // Update local state
+            setPlans(prev => prev.filter(plan => plan.id !== planId));
             return { success: true };
         } catch (error) {
             console.error("Error deleting plan:", error);
@@ -57,20 +64,27 @@ export const SubscriptionContext = ({ children }) => {
         try {
             const { data, error } = await supabase
                 .from("Subscription")
-                .update(updatedData)
-                .eq("planId", planId) // Ensure this matches your Supabase column
+                .update({
+                    planName: updatedData.planName,
+                    price: parseFloat(updatedData.price),
+                    durationInDays: parseInt(updatedData.durationInDays),
+                    currency: updatedData.currency,
+                    color: updatedData.color,
+                    cancellationPolicy: updatedData.cancellationPolicy
+                })
+                .eq("id", planId)
                 .select();
 
             if (error) throw error;
 
             console.log("Plan updated successfully:", data);
-            setPlans((prev) =>
-                prev.map((plan) =>
-                    plan.planId === planId ? { ...plan, ...updatedData } : plan
+            setPlans(prev =>
+                prev.map(plan =>
+                    plan.id === planId ? { ...plan, ...data[0] } : plan
                 )
             );
             setShowPopup(false);
-            return { success: true, data };
+            return { success: true, data: data[0] };
         } catch (error) {
             console.error("Error updating plan:", error);
             return { error: error.message };
@@ -81,10 +95,12 @@ export const SubscriptionContext = ({ children }) => {
 
     const fetchSubscription = async () => {
         try {
-            const { data, error } = await supabase.from("Subscription").select("*");
+            const { data, error } = await supabase
+                .from("Subscription")
+                .select("*")
 
             if (error) throw error;
-            setPlans(data); // Update local state
+            setPlans(data);
             return data;
         } catch (error) {
             console.error("Error fetching subscriptions:", error);

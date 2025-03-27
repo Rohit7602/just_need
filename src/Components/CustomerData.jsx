@@ -17,6 +17,7 @@ import {
 import { supabase } from "../store/supabaseCreateClient";
 import { toast } from "react-toastify";
 import { useCustomerContext } from "../store/CustomerContext";
+import { DeleteRedIcon, EyeIcon } from "../assets/icon/Icon";
 
 const CustomerData = () => {
   const [showPopup, setShowPopup] = useState(false);
@@ -394,7 +395,7 @@ const CustomerData = () => {
                       <img
                         src={customer.image || avatar}
                         alt="avatar"
-                        className="!w-8 h-8  rounded-full object-cover img_user"
+                        className="!w-8 h-8 aspect-[1/1]  rounded-full object-cover img_user"
                       />
                       {customer.firstName} {customer.lastName}
                     </Link>
@@ -447,10 +448,11 @@ const CustomerData = () => {
                     </div>
                   </td>
                   <td
-                    className="px-[19px] md:px-[24px] text-center sticky right-0 bg-white"
-                    onClick={handlePopup}
+                    className="px-[19px] md:px-[24px] text-center bg-white"
+                  // onClick={handlePopup}
                   >
-                    <button className="text-2xl font-medium">⋮</button>
+                    <button className="text-2xl font-medium"><EyeIcon /></button>
+                    <button className="text-2xl font-medium ms-[6px]"><DeleteRedIcon /></button>
                   </td>
                 </tr>
               ))

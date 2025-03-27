@@ -1,4 +1,5 @@
-import React from "react";
+/* eslint-disable react/prop-types */
+
 import { UserIcon } from "../../assets/icon/Icon";
 
 function NotificationPopUp({ onCancel }) {

@@ -126,7 +126,7 @@ const Listing = () => {
               >
 
                 <div className="h-full">
-                  <div className="h-full  relative group">
+                  <div className="h-full  relative group flex flex-col">
                     <div className="relative">
                       <img
                         className="w-full group-hover:opacity-70 h-[128px] object-cover"
@@ -136,7 +136,7 @@ const Listing = () => {
                       <button className="absolute bg-[#6C4DEF] z-20 text-white py-[2px] px-2 rounded-tr-[20px] rounded-br-[20px] bottom-[10px] transition-opacity duration-300">{item?.categoryName}</button>
                     </div>
 
-                    <div className="p-2.5 bg-white">
+                    <div className="p-2.5 bg-white flex-grow">
                       <div className="flex  justify-between items-center">
                         <p className="font-medium text-base text-black">
                           {item.title}
