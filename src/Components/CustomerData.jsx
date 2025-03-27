@@ -153,7 +153,7 @@ const CustomerData = () => {
     setShowPopup(!showPopup);
   }
 
-  // Delete functionality
+  // Delete functionality for multiple users
   const handleDeleteClick = () => {
     if (selectItem.length > 0) {
       setShowDeletePopup(true);
@@ -162,34 +162,40 @@ const CustomerData = () => {
     }
   };
 
-  const handleConfirmDisable = async () => {
+  // Delete functionality for single user via DeleteRedIcon
+  const handleSingleDeleteClick = (userId) => {
+    setSelectItem([userId]); // Set only the clicked user as selected
+    setShowDeletePopup(true);
+  };
+
+  // Confirm delete handler (works for both single and multiple users)
+  const handleConfirmDelete = async () => {
     try {
       const { error } = await supabase
         .from("users")
-        .update({ accountStatus: "Inactive" })
+        .delete()
         .in("id", selectItem);
 
       if (error) throw error;
 
       setUsers((prevUsers) =>
-        prevUsers.map((user) =>
-          selectItem.includes(user.id)
-            ? { ...user, accountStatus: "Inactive" }
-            : user
-        )
+        prevUsers.filter((user) => !selectItem.includes(user.id))
       );
       setSelectItem([]);
       setMainCheckbox(false);
       setShowDeletePopup(false);
-      toast.success("Selected users have been disabled successfully.");
+      toast.success(
+        `Successfully deleted.`
+      );
     } catch (err) {
-      console.error("Error disabling users:", err);
-      toast.error("Failed to disable users. Please try again.");
+      console.error("Error deleting users:", err);
+      toast.error("Failed to delete users. Please try again.");
     }
   };
 
   const handleCancelDelete = () => {
     setShowDeletePopup(false);
+    setSelectItem([]); // Clear selection after canceling
   };
 
   const location = useLocation();
@@ -353,11 +359,9 @@ const CustomerData = () => {
               <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base">
                 Business Profile
               </th>
-              {/* {location.pathname === "/dashboard/usersList" ? null : ( */}
-              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base sticky right-0 bg-white">
+              <th className="px-[19px] py-[8px] md:px-[24px] font-medium text-sm md:text-base  bg-white">
                 Action
               </th>
-              {/* )} */}
             </tr>
             <tr>
               <td colSpan="12">
@@ -368,13 +372,13 @@ const CustomerData = () => {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan="10" className="text-center py-4">
+                <td colSpan="11" className="text-center py-4">
                   Loading...
                 </td>
               </tr>
             ) : paginatedData.length === 0 ? (
               <tr>
-                <td colSpan="10" className="text-center py-4">
+                <td colSpan="11" className="text-center py-4">
                   No users found
                 </td>
               </tr>
@@ -391,11 +395,14 @@ const CustomerData = () => {
                     />
                   </td>
                   <td className="px-[19px] md:px-[24px] text-[#6C4DEF] flex items-center gap-2 min-w-[160px]">
-                    <Link className="flex gap-2" to={`/dashboard/usersList/userDetails/${customer.id}`}>
+                    <Link
+                      className="flex gap-2"
+                      to={`/dashboard/usersList/userDetails/${customer.id}`}
+                    >
                       <img
                         src={customer.image || avatar}
                         alt="avatar"
-                        className="!w-8 h-8 aspect-[1/1]  rounded-full object-cover img_user"
+                        className="!w-8 h-8 aspect-[1/1] rounded-full object-cover img_user"
                       />
                       {customer.firstName} {customer.lastName}
                     </Link>
@@ -410,10 +417,11 @@ const CustomerData = () => {
                     {customer?.address?.map((item) => `${item.city}/${item.state}`)}
                   </td>
                   <td
-                    className={`px-[19px] text-sm font-normal truncate ${customer.IsSeller == true
-                      ? "bg-[#0000FF12] text-[#0000FF] rounded-[90px]"
-                      : "text-[#FFA500] bg-[#FFA50024] rounded-[90px]"
-                      }`}
+                    className={`px-[19px] text-sm font-normal truncate ${
+                      customer.IsSeller == true
+                        ? "bg-[#0000FF12] text-[#0000FF] rounded-[90px]"
+                        : "text-[#FFA500] bg-[#FFA50024] rounded-[90px]"
+                    }`}
                   >
                     <div className="flex justify-center">
                       <span>
@@ -421,7 +429,6 @@ const CustomerData = () => {
                       </span>
                     </div>
                   </td>
-
                   <td className="px-[19px] md:px-[24px] text-sm font-normal text-[#000000]">
                     {formatDate(customer.created_at)}
                   </td>
@@ -430,36 +437,52 @@ const CustomerData = () => {
                   </td>
                   <td>
                     <div className="flex justify-center items-center">
-                      <span className={`px-[10px] py-[4px] text-sm font-normal text-center ${customer.accountStatus === "active"
-                        ? "bg-[#00800012] text-[#008000] rounded-[90px]"
-                        : "text-[#800000] rounded-[90px] bg-[#FF000012]"
-                        }`}> {customer.accountStatus}</span>
+                      <span
+                        className={`px-[10px] py-[4px] text-sm font-normal text-center ${
+                          customer.accountStatus === "active"
+                            ? "bg-[#00800012] text-[#008000] rounded-[90px]"
+                            : "text-[#800000] rounded-[90px] bg-[#FF000012]"
+                        }`}
+                      >
+                        {customer.accountStatus}
+                      </span>
                     </div>
                   </td>
                   <td>
                     <div className="flex justify-center items-center">
-                      <span className={`px-[10px] py-[4px] text-sm font-normal text-center ${customer?.businessDetail.status === "Active"
-                        && "bg-[#00800012] text-[#008000] rounded-[90px]"
-                        } ${customer?.businessDetail.status === "Pending"
-                        && "bg-[#6C4DEF1A] text-[#6C4DEF] rounded-[90px]"
-                        } ${customer?.businessDetail.status === "Rejected"
-                        && "bg-[#FF00001A] text-[#FF0000] rounded-[90px]"
-                        }`}> {customer?.businessDetail.status}</span>
+                      <span
+                        className={`px-[10px] py-[4px] text-sm font-normal text-center ${
+                          customer?.businessDetail.status === "Active" &&
+                          "bg-[#00800012] text-[#008000] rounded-[90px]"
+                        } ${
+                          customer?.businessDetail.status === "Pending" &&
+                          "bg-[#6C4DEF1A] text-[#6C4DEF] rounded-[90px]"
+                        } ${
+                          customer?.businessDetail.status === "Rejected" &&
+                          "bg-[#FF00001A] text-[#FF0000] rounded-[90px]"
+                        }`}
+                      >
+                        {customer?.businessDetail.status}
+                      </span>
                     </div>
                   </td>
-                  <td
-                    className="px-[19px] md:px-[24px] text-center bg-white"
-                  // onClick={handlePopup}
-                  >
-                    <button className="text-2xl font-medium"><EyeIcon /></button>
-                    <button className="text-2xl font-medium ms-[6px]"><DeleteRedIcon /></button>
+                  <td className="px-[19px] md:px-[24px] text-center bg-white">
+                    <button className="text-2xl font-medium">
+                      <EyeIcon />
+                    </button>
+                    <button
+                      className="text-2xl font-medium ms-[6px]"
+                      onClick={() => handleSingleDeleteClick(customer.id)}
+                    >
+                      <DeleteRedIcon />
+                    </button>
                   </td>
                 </tr>
               ))
             )}
           </tbody>
         </table>
-      </div >
+      </div>
       <div className="p-4 bg-white rounded-[10px]">
         <div className="flex justify-end">
           <div className="flex items-center">
@@ -474,8 +497,9 @@ const CustomerData = () => {
                 <span>▼</span>
                 {showItemsDropdown && (
                   <div
-                    className={`absolute ${dropdownPosition === "top" ? "bottom-full mb-1" : "top-full mt-1"
-                      } bg-white border rounded shadow-lg w-full z-10`}
+                    className={`absolute ${
+                      dropdownPosition === "top" ? "bottom-full mb-1" : "top-full mt-1"
+                    } bg-white border rounded shadow-lg w-full z-10`}
                   >
                     {[5, 10, 15, 20].map((item) => (
                       <button
@@ -533,139 +557,130 @@ const CustomerData = () => {
         </div>
       </div>
 
-      {
-        showDeletePopup && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded-[10px] shadow-lg w-[400px]">
-              <h2 className="text-lg font-medium mb-4">Confirm Disable Users</h2>
-              <p className="mb-6">
-                Are you sure you want to disable the selected {selectItem.length}{" "}
-                user(s)? This will set their status to Inactive.
-              </p>
-              <div className="flex justify-end gap-4">
-                <button
-                  className="border border-[#F1F1F1] text-[#00000099] py-2 px-4 rounded-[10px]"
-                  onClick={handleCancelDelete}
-                >
-                  Cancel
-                </button>
-                <button
-                  className="bg-[#0832DE] text-white py-2 px-4 rounded-[10px]"
-                  onClick={handleConfirmDisable}
-                >
-                  Yes, Disable
-                </button>
-              </div>
+      {showDeletePopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-[10px] shadow-lg w-[400px]">
+            <h2 className="text-lg font-medium mb-4">Confirm Delete Users</h2>
+            <p className="mb-6">
+              Are you sure you want to delete the user
+            </p>
+            <div className="flex justify-end gap-4">
+              <button
+                className="border border-[#F1F1F1] text-[#00000099] py-2 px-4 rounded-[10px]"
+                onClick={handleCancelDelete}
+              >
+                Cancel
+              </button>
+              <button
+                className="bg-red-600 text-white py-2 px-4 rounded-[10px]"
+                onClick={handleConfirmDelete}
+              >
+                Yes, Delete
+              </button>
             </div>
           </div>
-        )
-      }
+        </div>
+      )}
 
       {showPopup && <ActionUserPupUp handlePopup={handlePopup} />}
 
-      {
-        showFilterPopup && (
-          <UsersFilterPopUp
-            handleFilter={handleFilter}
-            handleFilterPopupClose={handleFilterPopupClose}
-          />
-        )
-      }
+      {showFilterPopup && (
+        <UsersFilterPopUp
+          handleFilter={handleFilter}
+          handleFilterPopupClose={handleFilterPopupClose}
+        />
+      )}
 
-      {
-        filterPopupsvg && (
+      {filterPopupsvg && (
+        <div
+          onClick={() => setFilterPopupSvg(false)}
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+        >
           <div
-            onClick={() => setFilterPopupSvg(false)}
-            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white p-6 rounded-[10px] shadow-lg w-[300px]"
           >
-            <div
-              onClick={(e) => e.stopPropagation()}
-              className="bg-white p-6 rounded-[10px] shadow-lg w-[300px]"
-            >
-              <div className="flex flex-col gap-4">
-                <div className="flex gap-2">
-                  <input
-                    type="checkbox"
-                    id="selectAll"
-                    checked={selectAll}
-                    onChange={handleSelectAll}
-                  />
-                  <label htmlFor="selectAll" className="text-base font-normal leading-[140%]">
-                    Select All
-                  </label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="name"
-                    onChange={() => handleFilterCheckboxChange("name")}
-                    checked={selectedFilters.includes("name")}
-                  />
-                  <label
-                    htmlFor="name"
-                    className="text-base font-normal leading-[140%]"
-                  >
-                    Name
-                  </label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="email"
-                    onChange={() => handleFilterCheckboxChange("email")}
-                    checked={selectedFilters.includes("email")}
-                  />
-                  <label
-                    htmlFor="email"
-                    className="text-base font-normal leading-[140%]"
-                  >
-                    Email
-                  </label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="address"
-                    onChange={() => handleFilterCheckboxChange("address")}
-                    checked={selectedFilters.includes("address")}
-                  />
-                  <label
-                    htmlFor="address"
-                    className="text-base font-normal leading-[140%]"
-                  >
-                    Address
-                  </label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="mobile"
-                    onChange={() => handleFilterCheckboxChange("mobile")}
-                    checked={selectedFilters.includes("mobile")}
-                  />
-                  <label
-                    htmlFor="mobile"
-                    className="text-base font-normal leading-[140%]"
-                  >
-                    Mobile
-                  </label>
-                </div>
-                <div
-                  onClick={() => setFilterPopupSvg(false)}
-                  className="flex justify-end"
+            <div className="flex flex-col gap-4">
+              <div className="flex gap-2">
+                <input
+                  type="checkbox"
+                  id="selectAll"
+                  checked={selectAll}
+                  onChange={handleSelectAll}
+                />
+                <label htmlFor="selectAll" className="text-base font-normal leading-[140%]">
+                  Select All
+                </label>
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="name"
+                  onChange={() => handleFilterCheckboxChange("name")}
+                  checked={selectedFilters.includes("name")}
+                />
+                <label
+                  htmlFor="name"
+                  className="text-base font-normal leading-[140%]"
                 >
-                  <button className="bg-[#0832DE] text-white px-[15px] py-2 rounded-[10px] flex items-center capitalize">
-                    Done
-                  </button>
-                </div>
+                  Name
+                </label>
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="email"
+                  onChange={() => handleFilterCheckboxChange("email")}
+                  checked={selectedFilters.includes("email")}
+                />
+                <label
+                  htmlFor="email"
+                  className="text-base font-normal leading-[140%]"
+                >
+                  Email
+                </label>
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="address"
+                  onChange={() => handleFilterCheckboxChange("address")}
+                  checked={selectedFilters.includes("address")}
+                />
+                <label
+                  htmlFor="address"
+                  className="text-base font-normal leading-[140%]"
+                >
+                  Address
+                </label>
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="mobile"
+                  onChange={() => handleFilterCheckboxChange("mobile")}
+                  checked={selectedFilters.includes("mobile")}
+                />
+                <label
+                  htmlFor="mobile"
+                  className="text-base font-normal leading-[140%]"
+                >
+                  Mobile
+                </label>
+              </div>
+              <div
+                onClick={() => setFilterPopupSvg(false)}
+                className="flex justify-end"
+              >
+                <button className="bg-[#0832DE] text-white px-[15px] py-2 rounded-[10px] flex items-center capitalize">
+                  Done
+                </button>
               </div>
             </div>
           </div>
-        )
-      }
-
-
-    </div >
+        </div>
+      )}
+    </div>
   );
 };
 

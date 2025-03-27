@@ -14,13 +14,13 @@ const Subscription = () => {
 
   const { plans, fetchSubscription } = useSubscriptionContext();
 
-  // useEffect(() => {
-  //   async function getPlans() {
-  //     const data = await fetchSubscription();
-  //     console.log("Fetched plans:", data);
-  //   }
-  //   getPlans();
-  // }, []);
+  useEffect(() => {
+    async function getPlans() {
+      const data = await fetchSubscription();
+      console.log("Fetched plans:", data);
+    }
+    getPlans();
+  }, []);
 
   const handlePopup = () => {
     setUpdateItemId(""); // Clear update ID for adding new plan
