@@ -10,7 +10,7 @@ function AdminLayout() {
       <div className="max-w-[200px] xl:max-w-[270px]  h-screen pb-4 pl-1">
         <SideBar />
       </div>
-      <div className="w-[calc(100vw-320px)] xl:w-calc(100vw-270px)] scrollRemove ">
+      <div className="w-[calc(100vw-250px)] xl:w-[calc(100vw-320px)]  scrollRemove ">
         <div className="sticky top-0 z-30 bg-white px-4 pt-5 pb-[15px] rounded-[10px]">
           <TopBar />
         </div>

@@ -47,9 +47,6 @@ const CustomerData = () => {
 
   const { users, setUsers, loading } = useCustomerContext();
 
-
-  console.log(users, "users")
-
   // Filter logic based on selected fields
   const filteredData = users?.filter((customer) => {
     if (selectedFilters.length === 0) {
@@ -419,7 +416,7 @@ const CustomerData = () => {
                   >
                     <div className="flex justify-center">
                       <span>
-                        {customer.IsSeller === true ? "Consumer" : "Seller"}
+                        {customer.IsSeller === true ? "Seller" : "Consumer"}
                       </span>
                     </div>
                   </td>
@@ -448,16 +445,13 @@ const CustomerData = () => {
                         && "bg-[#FF00001A] text-[#FF0000] rounded-[90px]"
                         }`}> {customer?.businessDetail.status}</span>
                     </div>
-                    {/* : "text-[#800000] rounded-[90px] bg-[#FF000012]" */}
                   </td>
-                  {/* {location.pathname === "/dashboard/usersList" ? null : ( */}
                   <td
                     className="px-[19px] md:px-[24px] text-center sticky right-0 bg-white"
                     onClick={handlePopup}
                   >
                     <button className="text-2xl font-medium">⋮</button>
                   </td>
-                  {/* )} */}
                 </tr>
               ))
             )}

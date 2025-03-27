@@ -1,9 +1,17 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { useState } from 'react';
 import { DownIcon, UpIcon } from '../../assets/icon/Icon';
+import PriceRange from './PriceRange';
+import { useServiceContext } from '../../store/ServiceContext';
 
 const FilterComponent = ({ onClose }) => {
+
+    const { categories } = useServiceContext()
+
+
     const [openDropdown, setOpenDropdown] = useState(null);
+
     const [selectedFilters, setSelectedFilters] = useState({
         category: [],
         subCategory: [],
@@ -13,18 +21,9 @@ const FilterComponent = ({ onClose }) => {
     });
 
     const filterOptions = {
-        category: ['Cleaning', 'Plumbing', 'Vehicle', 'Washing', 'Electrician', 'Repair'],
-        subCategory: {
-            Cleaning: ['Home Cleaning', 'Office Cleaning', 'Deep Cleaning'],
-            Plumbing: ['Pipe Repair', 'Faucet Installation', 'Drain Cleaning'],
-            Vehicle: ['Car Wash', 'Oil Change', 'Tire Service'],
-            Washing: ['Laundry', 'Dry Cleaning', 'Ironing'],
-            Electrician: ['Wiring', 'Light Installation', 'Panel Repair'],
-            Repair: ['Appliance', 'Furniture', 'Electronics']
-        },
-        status: ['Active', 'Inactive', 'Pending'],
-        priceRange: ['Under ₹500', '₹500 - ₹1000', '₹1000 - ₹2000', 'Over ₹2000'],
-        ratings: ['5 Stars', '4 Stars & Up', '3 Stars & Up', 'Any Rating']
+
+        status: ['Active', 'Blocked'],
+        ratings: ['5+ Rating', '4+ Rating', '3+ Rating', '2+ Rating', '1+ Rating']
     };
 
     const toggleDropdown = (dropdownName) => {
@@ -94,8 +93,8 @@ const FilterComponent = ({ onClose }) => {
                 </button>
                 {openDropdown === 'category' && (
                     <div className="mt-2 p-3 grid grid-cols-2 rounded-lg">
-                        {filterOptions.category.map(item => (
-                            <div key={item} className="flex items-center mb-2 last:mb-0">
+                        {categories.map((item) => (
+                            <div key={item.id} className="flex items-center mb-2 last:mb-0">
                                 <input
                                     type="checkbox"
                                     id={`category-${item}`}
@@ -103,8 +102,8 @@ const FilterComponent = ({ onClose }) => {
                                     onChange={() => handleFilterSelect('category', item)}
                                     className="h-4 w-4 text-blue-600 rounded"
                                 />
-                                <label htmlFor={`category-${item}`} className="ml-2 text-[#00000099] font-normal text-base">
-                                    {item}
+                                <label htmlFor={`category-${item}`} className="ml-2 text-[#00000099] font-normal text-base whitespace-nowrap">
+                                    {item.categoryName}
                                 </label>
                             </div>
                         ))}
@@ -128,29 +127,34 @@ const FilterComponent = ({ onClose }) => {
                     </button>
                     {openDropdown === 'subCategory' && (
                         <div className="mt-2 p-3 rounded-lg">
-                            {selectedFilters.category.map(category => (
-                                <div key={category} className="mb-3">
+                            {categories.map((category) => (
+
+                                <div key={category} className="mb-3" >
                                     <h4 className="font-medium text-gray-600 mb-2">{category}</h4>
-                                    {filterOptions.subCategory[category]?.map(subItem => (
-                                        <div key={subItem} className="flex items-center mb-2 ml-2">
-                                            <input
-                                                type="checkbox"
-                                                id={`subCategory-${subItem}`}
-                                                checked={selectedFilters.subCategory.includes(subItem)}
-                                                onChange={() => handleFilterSelect('subCategory', subItem)}
-                                                className="h-4 w-4 text-blue-600 rounded"
-                                            />
-                                            <label htmlFor={`subCategory-${subItem}`} className="ml-2 text-[#00000099] font-normal text-base">
-                                                {subItem}
-                                            </label>
-                                        </div>
-                                    ))}
+                                    {
+                                        category?.subcategory?.map((subItem) => (
+                                            console.log(subItem, "data"),
+                                            <div key={subItem.id} className="flex items-center mb-2 ml-2">
+                                                <input
+                                                    type="checkbox"
+                                                    id={`subCategory-${subItem.id}`}
+                                                    checked={categories.subCategory.includes(subItem.categoryName)}
+                                                    onChange={() => handleFilterSelect('subCategory', subItem.categoryName)}
+                                                    className="h-4 w-4 text-blue-600 rounded"
+                                                />
+                                                <label htmlFor={`subCategory-${subItem}`} className="ml-2 text-[#00000099] font-normal text-base">
+                                                    {subItem.categoryName}
+                                                </label>
+                                            </div>
+                                        ))
+                                    }
                                 </div>
                             ))}
                         </div>
                     )}
                 </div>
-            )}
+            )
+            }
 
             {/* Status Filter */}
             <div className="mb-4">
@@ -200,25 +204,10 @@ const FilterComponent = ({ onClose }) => {
                     )}
                 </button>
                 {openDropdown === 'priceRange' && (
-                    <div className="mt-2 p-3 rounded-lg">
-                        {filterOptions.priceRange.map(item => (
-                            <div key={item} className="flex items-center mb-2 last:mb-0">
-                                <input
-                                    type="radio"
-                                    id={`priceRange-${item}`}
-                                    name="priceRange"
-                                    checked={selectedFilters.priceRange === item}
-                                    onChange={() => handleFilterSelect('priceRange', item)}
-                                    className="h-4 w-4 text-blue-600"
-                                />
-                                <label htmlFor={`priceRange-${item}`} className="ml-2 text-[#00000099] font-normal text-base">
-                                    {item}
-                                </label>
-                            </div>
-                        ))}
-                    </div>
+                    <PriceRange />
                 )}
             </div>
+
 
             {/* Ratings Filter */}
             <div className="mb-6">
@@ -263,7 +252,7 @@ const FilterComponent = ({ onClose }) => {
                     Cancel
                 </button>
             </div>
-        </div>
+        </div >
     );
 };
 

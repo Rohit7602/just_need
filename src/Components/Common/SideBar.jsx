@@ -104,7 +104,7 @@ function SideBar() {
           </NavLink>
         </div>
 
-        <div className="flex items-center mt-3 xl:mt-5 group_hover">
+        {/* <div className="flex items-center mt-3 xl:mt-5 group_hover">
           <VerticalVilotSettingSvg
             pathName={pathName}
             checkpath="/dashboard/serviceRequest"
@@ -124,7 +124,7 @@ function SideBar() {
               Service Request
             </span>
           </NavLink>
-        </div>
+        </div> */}
 
         {/*  */}
 
