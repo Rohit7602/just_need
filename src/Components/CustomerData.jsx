@@ -383,8 +383,8 @@ const CustomerData = () => {
                 </td>
               </tr>
             ) : (
-              paginatedData.map((customer) => (
-                <tr key={customer.id}>
+              paginatedData.map((customer, index) => (
+                <tr key={index}>
                   <td className="px-[19px] md:px-[24px]">
                     <input
                       className="w-[16px] h-[16px]"
@@ -400,75 +400,77 @@ const CustomerData = () => {
                       to={`/dashboard/usersList/userDetails/${customer.id}`}
                     >
                       <img
-                        src={customer.image || avatar}
+                        src={customer?.image || avatar}
                         alt="avatar"
                         className="!w-8 h-8 aspect-[1/1] rounded-full object-cover img_user"
                       />
-                      {customer.firstName} {customer.lastName}
+                      {customer?.firstName} {customer?.lastName}
                     </Link>
                   </td>
                   <td className="px-[19px] md:px-[24px] text-sm font-normal text-[#000000]">
-                    {customer.useremail}
+                    {customer?.useremail}
                   </td>
                   <td className="px-[19px] md:px-[24px] text-sm font-normal text-[#000000]">
-                    {customer.mobile_number}
+                    {customer?.mobile_number}
                   </td>
                   <td className="px-[19px] md:px-[24px] text-sm font-normal text-[#000000] w-[120px] truncate">
-                    {customer?.address?.map((item) => `${item.city}/${item.state}`)}
+                    {/* {customer?.address?.map((item) => `${item.city}/${item.state}`)} */}
+                    {Array.isArray(customer?.address)
+                      ? customer.address.map((item) => `${item.city}/${item.state}`).join(", ")
+                      : customer?.address?.city && customer?.address?.state
+                        ? `${customer.address.city}/${customer.address.state}`
+                        : "N/A"}
                   </td>
                   <td
-                    className={`px-[19px] text-sm font-normal truncate ${
-                      customer.IsSeller == true
-                        ? "bg-[#0000FF12] text-[#0000FF] rounded-[90px]"
-                        : "text-[#FFA500] bg-[#FFA50024] rounded-[90px]"
-                    }`}
+                    className={`px-[19px] text-sm font-normal truncate ${customer.IsSeller == true
+                      ? "bg-[#0000FF12] text-[#0000FF] rounded-[90px]"
+                      : "text-[#FFA500] bg-[#FFA50024] rounded-[90px]"
+                      }`}
                   >
                     <div className="flex justify-center">
                       <span>
-                        {customer.IsSeller === true ? "Seller" : "Consumer"}
+                        {customer?.IsSeller === true ? "Seller" : "Consumer"}
                       </span>
                     </div>
                   </td>
                   <td className="px-[19px] md:px-[24px] text-sm font-normal text-[#000000]">
-                    {formatDate(customer.created_at)}
+                    {formatDate(customer?.created_at)}
                   </td>
                   <td className="px-[19px] md:px-[24px] text-sm font-normal text-[#000000]">
-                    {formatDate(customer.updated_at)}
+                    {formatDate(customer?.updated_at)}
                   </td>
                   <td>
                     <div className="flex justify-center items-center">
                       <span
-                        className={`px-[10px] py-[4px] text-sm font-normal text-center ${
-                          customer.accountStatus === "active"
-                            ? "bg-[#00800012] text-[#008000] rounded-[90px]"
-                            : "text-[#800000] rounded-[90px] bg-[#FF000012]"
-                        }`}
+                        className={`px-[10px] py-[4px] text-sm font-normal text-center ${customer?.accountStatus === "active"
+                          ? "bg-[#00800012] text-[#008000] rounded-[90px]"
+                          : "text-[#800000] rounded-[90px] bg-[#FF000012]"
+                          }`}
                       >
-                        {customer.accountStatus}
+                        {customer?.accountStatus}
                       </span>
                     </div>
                   </td>
                   <td>
                     <div className="flex justify-center items-center">
                       <span
-                        className={`px-[10px] py-[4px] text-sm font-normal text-center ${
-                          customer?.businessDetail.status === "Active" &&
+                        className={`px-[10px] py-[4px] text-sm font-normal text-center ${customer?.businessDetail.status === "Active" &&
                           "bg-[#00800012] text-[#008000] rounded-[90px]"
-                        } ${
-                          customer?.businessDetail.status === "Pending" &&
+                          } ${customer?.businessDetail.status === "Pending" &&
                           "bg-[#6C4DEF1A] text-[#6C4DEF] rounded-[90px]"
-                        } ${
-                          customer?.businessDetail.status === "Rejected" &&
+                          } ${customer?.businessDetail.status === "Rejected" &&
                           "bg-[#FF00001A] text-[#FF0000] rounded-[90px]"
-                        }`}
+                          }`}
                       >
                         {customer?.businessDetail.status}
                       </span>
                     </div>
                   </td>
                   <td className="px-[19px] md:px-[24px] text-center bg-white">
-                    <button className="text-2xl font-medium">
-                      <EyeIcon />
+                    <button>
+                      <Link to={`/dashboard/usersList/userDetails/${customer.id}`} className="text-2xl font-medium">
+                        <EyeIcon />
+                      </Link>
                     </button>
                     <button
                       className="text-2xl font-medium ms-[6px]"
@@ -497,9 +499,8 @@ const CustomerData = () => {
                 <span>▼</span>
                 {showItemsDropdown && (
                   <div
-                    className={`absolute ${
-                      dropdownPosition === "top" ? "bottom-full mb-1" : "top-full mt-1"
-                    } bg-white border rounded shadow-lg w-full z-10`}
+                    className={`absolute ${dropdownPosition === "top" ? "bottom-full mb-1" : "top-full mt-1"
+                      } bg-white border rounded shadow-lg w-full z-10`}
                   >
                     {[5, 10, 15, 20].map((item) => (
                       <button

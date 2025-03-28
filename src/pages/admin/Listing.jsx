@@ -99,14 +99,14 @@ const Listing = () => {
                   className="ms-2.5 focus:outline-none focus:ring-gray-400 bg-[#F1F1F1]"
                 />
               </div>
-              <button
-                className="mx-5 w-[40px] h-[40px] bg-[#F1F1F1] flex items-center justify-center rounded-[10px]"
+              {/* <button
+                className=" w-[40px] h-[40px] bg-[#F1F1F1] flex items-center justify-center rounded-[10px]"
               >
                 <FilterSvg />
-              </button>
+              </button> */}
 
               <button onClick={() => setIsfilterPopup(!isFilterPopup)}
-                className="bg-[#0832DE] text-white px-[15px] py-2 rounded-[10px] flex items-center"
+                className="bg-[#0832DE] ms-5 text-white px-[15px] py-2 rounded-[10px] flex items-center"
               >
                 <span>
                   <CiFilter className="w-[24px] h-[24px] me-[12px]" />
@@ -201,8 +201,8 @@ const Listing = () => {
           </div>
         </div>
         {isFilterPopup && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white w-[425px]">
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-hidden">
+            <div className="bg-white w-[425px] overflow-y-scroll h-full scrollRemove">
               <FilterComponent onClose={() => setIsfilterPopup(false)} />
             </div>
           </div>
