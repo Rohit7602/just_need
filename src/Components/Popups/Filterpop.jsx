@@ -98,7 +98,7 @@ const FilterComponent = ({ onClose }) => {
                                 />
                                 <label
                                     htmlFor={`category-${item.id}`}
-                                    className="ml-2 text-[#00000099] font-normal text-base whitespace-nowrap"
+                                    className="ml-2 text-[#00000099] font-normal text-base whitespace-wrap"
                                 >
                                     {item.categoryName}
                                 </label>

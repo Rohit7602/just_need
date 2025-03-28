@@ -100,6 +100,7 @@ const ListingDetails = () => {
                       <p className="font-semibold text-lg">
                         {listData?.user_detail?.firstName}{" "}
                         {listData?.user_detail?.lastName}
+                        
                       </p>
                     </div>
                     <p className="font-normal text-sm text-[#ADA4A5]">
@@ -130,7 +131,7 @@ const ListingDetails = () => {
                   Email <span className="ms-5">:</span>
                 </span>
                 <span className="text-[#1D1617] font-normal text-sm opacity-[50%] ms-10">
-                  johndeo12@gmail.com
+                  {listData?.user_detail?.useremail}
                 </span>
               </div>
               <div className="flex mt-[16px]">
@@ -138,7 +139,12 @@ const ListingDetails = () => {
                   Address <span className="ms-5">:</span>
                 </span>
                 <span className="text-[#1D1617] font-normal text-sm opacity-[50%] ms-10">
-                  Hisar Haryana B street 352
+              
+                    {listData?.user_detail?.address?.city && listData?.user_detail?.address?.state
+                      ? `${listData.user_detail.address.city} ${listData.user_detail.address.state}`
+                      : "N/A"}
+                
+
                 </span>
               </div>
             </div>

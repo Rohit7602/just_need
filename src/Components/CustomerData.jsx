@@ -383,102 +383,103 @@ const CustomerData = () => {
                 </td>
               </tr>
             ) : (
-              paginatedData.map((customer) => (
-                <tr key={customer.id}>
-                  <td className="px-[19px] md:px-[24px]">
-                    <input
-                      className="w-[16px] h-[16px]"
-                      type="checkbox"
-                      onChange={checkHandler}
-                      checked={selectItem.includes(customer.id)}
-                      value={customer.id}
-                    />
-                  </td>
-                  <td className="px-[19px] md:px-[24px] text-[#6C4DEF] flex items-center gap-2 min-w-[160px]">
-                    <Link
-                      className="flex gap-2"
-                      to={`/dashboard/usersList/userDetails/${customer.id}`}
-                    >
-                      <img
-                        src={customer.image || avatar}
-                        alt="avatar"
-                        className="!w-8 h-8 aspect-[1/1] rounded-full object-cover img_user"
+              paginatedData.map((customer) => {
+                console.log(customer, "custom")
+                return (
+                  <tr key={customer.id}>
+                    <td className="px-[19px] md:px-[24px]">
+                      <input
+                        className="w-[16px] h-[16px]"
+                        type="checkbox"
+                        onChange={checkHandler}
+                        checked={selectItem.includes(customer.id)}
+                        value={customer.id}
                       />
-                      {customer.firstName} {customer.lastName}
-                    </Link>
-                  </td>
-                  <td className="px-[19px] md:px-[24px] text-sm font-normal text-[#000000]">
-                    {customer.useremail}
-                  </td>
-                  <td className="px-[19px] md:px-[24px] text-sm font-normal text-[#000000]">
-                    {customer.mobile_number}
-                  </td>
-                  <td className="px-[19px] md:px-[24px] text-sm font-normal text-[#000000] w-[120px] truncate">
-                    {customer?.address?.map((item) => `${item.city}/${item.state}`)}
-                  </td>
-                  <td
-                    className={`px-[19px] text-sm font-normal truncate ${
-                      customer.IsSeller == true
-                        ? "bg-[#0000FF12] text-[#0000FF] rounded-[90px]"
-                        : "text-[#FFA500] bg-[#FFA50024] rounded-[90px]"
-                    }`}
-                  >
-                    <div className="flex justify-center">
-                      <span>
-                        {customer.IsSeller === true ? "Seller" : "Consumer"}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-[19px] md:px-[24px] text-sm font-normal text-[#000000]">
-                    {formatDate(customer.created_at)}
-                  </td>
-                  <td className="px-[19px] md:px-[24px] text-sm font-normal text-[#000000]">
-                    {formatDate(customer.updated_at)}
-                  </td>
-                  <td>
-                    <div className="flex justify-center items-center">
-                      <span
-                        className={`px-[10px] py-[4px] text-sm font-normal text-center ${
-                          customer.accountStatus === "active"
-                            ? "bg-[#00800012] text-[#008000] rounded-[90px]"
-                            : "text-[#800000] rounded-[90px] bg-[#FF000012]"
-                        }`}
+                    </td>
+                    <td className="px-[19px] md:px-[24px] text-[#6C4DEF] flex items-center gap-2 min-w-[160px]">
+                      <Link
+                        className="flex gap-2"
+                        to={`/dashboard/usersList/userDetails/${customer.id}`}
                       >
-                        {customer.accountStatus}
-                      </span>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="flex justify-center items-center">
-                      <span
-                        className={`px-[10px] py-[4px] text-sm font-normal text-center ${
-                          customer?.businessDetail.status === "Active" &&
-                          "bg-[#00800012] text-[#008000] rounded-[90px]"
-                        } ${
-                          customer?.businessDetail.status === "Pending" &&
-                          "bg-[#6C4DEF1A] text-[#6C4DEF] rounded-[90px]"
-                        } ${
-                          customer?.businessDetail.status === "Rejected" &&
-                          "bg-[#FF00001A] text-[#FF0000] rounded-[90px]"
+                        <img
+                          src={customer.image || avatar}
+                          alt="avatar"
+                          className="!w-8 h-8 aspect-[1/1] rounded-full object-cover img_user"
+                        />
+                        {customer.firstName} {customer.lastName}
+                      </Link>
+                    </td>
+                    <td className="px-[19px] md:px-[24px] text-sm font-normal text-[#000000]">
+                      {customer.useremail}
+                    </td>
+                    <td className="px-[19px] md:px-[24px] text-sm font-normal text-[#000000]">
+                      {customer.mobile_number}
+                    </td>
+                    <td className="px-[19px] md:px-[24px] text-sm font-normal text-[#000000] w-[120px] truncate">
+                      {Array.isArray(customer?.address) && customer.address.length > 0
+                        ? customer.address.map((item) => `${item.city}/${item.state}`).join(", ")
+                        : "N/A"}
+
+                    </td>
+                    <td
+                      className={`px-[19px] text-sm font-normal truncate ${customer.IsSeller == true
+                          ? "bg-[#0000FF12] text-[#0000FF] rounded-[90px]"
+                          : "text-[#FFA500] bg-[#FFA50024] rounded-[90px]"
                         }`}
-                      >
-                        {customer?.businessDetail.status}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-[19px] md:px-[24px] text-center bg-white">
-                    <button className="text-2xl font-medium">
-                      <EyeIcon />
-                    </button>
-                    <button
-                      className="text-2xl font-medium ms-[6px]"
-                      onClick={() => handleSingleDeleteClick(customer.id)}
                     >
-                      <DeleteRedIcon />
-                    </button>
-                  </td>
-                </tr>
-              ))
+                      <div className="flex justify-center">
+                        <span>
+                          {customer.IsSeller === true ? "Seller" : "Consumer"}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-[19px] md:px-[24px] text-sm font-normal text-[#000000]">
+                      {formatDate(customer.created_at)}
+                    </td>
+                    <td className="px-[19px] md:px-[24px] text-sm font-normal text-[#000000]">
+                      {formatDate(customer.updated_at)}
+                    </td>
+                    <td>
+                      <div className="flex justify-center items-center">
+                        <span
+                          className={`px-[10px] py-[4px] text-sm font-normal text-center ${customer.accountStatus === "active"
+                              ? "bg-[#00800012] text-[#008000] rounded-[90px]"
+                              : "text-[#800000] rounded-[90px] bg-[#FF000012]"
+                            }`}
+                        >
+                          {customer.accountStatus ? "Active" : "Inactive"}
+                        </span>
+                      </div>
+                    </td>
+                    <td>
+                      <div className="flex justify-center items-center">
+                        <span
+                          className={`px-[10px] py-[4px] text-sm font-normal text-center ${customer?.businessDetail.status === "Active" &&
+                            "bg-[#00800012] text-[#008000] rounded-[90px]"
+                            } ${customer?.businessDetail.status === "Pending" &&
+                            "bg-[#6C4DEF1A] text-[#6C4DEF] rounded-[90px]"
+                            } ${customer?.businessDetail.status === "Rejected" &&
+                            "bg-[#FF00001A] text-[#FF0000] rounded-[90px]"
+                            }`}
+                        >
+                          {customer?.businessDetail.status}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-[19px] md:px-[24px] text-center bg-white">
+                      <button className="text-2xl font-medium">
+                        <EyeIcon />
+                      </button>
+                      <button
+                        className="text-2xl font-medium ms-[6px]"
+                        onClick={() => handleSingleDeleteClick(customer.id)}
+                      >
+                        <DeleteRedIcon />
+                      </button>
+                    </td>
+                  </tr>
+                )
+              })
             )}
           </tbody>
         </table>
@@ -497,9 +498,8 @@ const CustomerData = () => {
                 <span>▼</span>
                 {showItemsDropdown && (
                   <div
-                    className={`absolute ${
-                      dropdownPosition === "top" ? "bottom-full mb-1" : "top-full mt-1"
-                    } bg-white border rounded shadow-lg w-full z-10`}
+                    className={`absolute ${dropdownPosition === "top" ? "bottom-full mb-1" : "top-full mt-1"
+                      } bg-white border rounded shadow-lg w-full z-10`}
                   >
                     {[5, 10, 15, 20].map((item) => (
                       <button
