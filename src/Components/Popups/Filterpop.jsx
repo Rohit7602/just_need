@@ -1,60 +1,59 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { useState } from 'react';
 import { DownIcon, UpIcon } from '../../assets/icon/Icon';
+import PriceRange from './PriceRange';
+import { useServiceContext } from '../../store/ServiceContext';
 
 const FilterComponent = ({ onClose }) => {
+    const { categories } = useServiceContext();
+
     const [openDropdown, setOpenDropdown] = useState(null);
-    const [selectedFilters, setSelectedFilters] = useState({
-        category: [],
-        subCategory: [],
+    const [selectedCategories, setSelectedCategories] = useState([]); // To track selected categories
+    const [selectedSubCategories, setSelectedSubCategories] = useState([]); // To track selected subcategories
+    const [selectedFilters, setSelectedFilters] = useState({ // Reintroduced for status, priceRange, ratings
         status: null,
         priceRange: null,
         ratings: null
     });
 
     const filterOptions = {
-        category: ['Cleaning', 'Plumbing', 'Vehicle', 'Washing', 'Electrician', 'Repair'],
-        subCategory: {
-            Cleaning: ['Home Cleaning', 'Office Cleaning', 'Deep Cleaning'],
-            Plumbing: ['Pipe Repair', 'Faucet Installation', 'Drain Cleaning'],
-            Vehicle: ['Car Wash', 'Oil Change', 'Tire Service'],
-            Washing: ['Laundry', 'Dry Cleaning', 'Ironing'],
-            Electrician: ['Wiring', 'Light Installation', 'Panel Repair'],
-            Repair: ['Appliance', 'Furniture', 'Electronics']
-        },
-        status: ['Active', 'Inactive', 'Pending'],
-        priceRange: ['Under ₹500', '₹500 - ₹1000', '₹1000 - ₹2000', 'Over ₹2000'],
-        ratings: ['5 Stars', '4 Stars & Up', '3 Stars & Up', 'Any Rating']
+        status: ['Active', 'Blocked'],
+        ratings: ['5+ Rating', '4+ Rating', '3+ Rating', '2+ Rating', '1+ Rating']
     };
 
     const toggleDropdown = (dropdownName) => {
         setOpenDropdown(openDropdown === dropdownName ? null : dropdownName);
     };
 
+    const handleCategorySelect = (categoryName) => {
+        setSelectedCategories(prev =>
+            prev.includes(categoryName)
+                ? prev.filter(item => item !== categoryName)
+                : [...prev, categoryName]
+        );
+    };
 
+    const handleSubCategorySelect = (subCategoryName) => {
+        setSelectedSubCategories(prev =>
+            prev.includes(subCategoryName)
+                ? prev.filter(item => item !== subCategoryName)
+                : [...prev, subCategoryName]
+        );
+    };
 
     const handleFilterSelect = (filterType, value) => {
-        if (filterType === 'category' || filterType === 'subCategory') {
-            // Toggle selection for multi-select filters
-            setSelectedFilters(prev => ({
-                ...prev,
-                [filterType]: prev[filterType].includes(value)
-                    ? prev[filterType].filter(item => item !== value)
-                    : [...prev[filterType], value]
-            }));
-        } else {
-            // Single selection for other filters
-            setSelectedFilters(prev => ({
-                ...prev,
-                [filterType]: prev[filterType] === value ? null : value
-            }));
-        }
+        setSelectedFilters(prev => ({
+            ...prev,
+            [filterType]: prev[filterType] === value ? null : value
+        }));
     };
 
     const clearFilters = () => {
+        setSelectedCategories([]);
+        setSelectedSubCategories([]);
         setSelectedFilters({
-            category: [],
-            subCategory: [],
             status: null,
             priceRange: null,
             ratings: null
@@ -62,7 +61,7 @@ const FilterComponent = ({ onClose }) => {
     };
 
     return (
-        <div className="p-[18px] bg-white rounded-lg ">
+        <div className="p-[18px] bg-white rounded-lg">
             <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-semibold text-gray-800">Filters</h2>
                 <button
@@ -71,19 +70,13 @@ const FilterComponent = ({ onClose }) => {
                 >
                     Clear All
                 </button>
-                {/* <button
-                    
-                    className="text-sm text-blue-600 hover:text-blue-800"
-                >
-                    ✖
-                </button> */}
             </div>
 
             {/* Category Filter */}
             <div className="mb-4">
                 <button
                     onClick={() => toggleDropdown('category')}
-                    className="w-full flex justify-between items-center p-3  border-b rounded-none"
+                    className="w-full flex justify-between items-center p-3 border-b rounded-none"
                 >
                     <span className="font-normal text-base">Category</span>
                     {openDropdown === 'category' ? (
@@ -94,17 +87,20 @@ const FilterComponent = ({ onClose }) => {
                 </button>
                 {openDropdown === 'category' && (
                     <div className="mt-2 p-3 grid grid-cols-2 rounded-lg">
-                        {filterOptions.category.map(item => (
-                            <div key={item} className="flex items-center mb-2 last:mb-0">
+                        {categories.map((item) => (
+                            <div key={item.id} className="flex items-center mb-2 last:mb-0">
                                 <input
                                     type="checkbox"
-                                    id={`category-${item}`}
-                                    checked={selectedFilters.category.includes(item)}
-                                    onChange={() => handleFilterSelect('category', item)}
+                                    id={`category-${item.id}`}
+                                    checked={selectedCategories.includes(item.categoryName)}
+                                    onChange={() => handleCategorySelect(item.categoryName)}
                                     className="h-4 w-4 text-blue-600 rounded"
                                 />
-                                <label htmlFor={`category-${item}`} className="ml-2 text-[#00000099] font-normal text-base">
-                                    {item}
+                                <label
+                                    htmlFor={`category-${item.id}`}
+                                    className="ml-2 text-[#00000099] font-normal text-base whitespace-nowrap"
+                                >
+                                    {item.categoryName}
                                 </label>
                             </div>
                         ))}
@@ -112,12 +108,12 @@ const FilterComponent = ({ onClose }) => {
                 )}
             </div>
 
-            {/* Sub-category Filter (only shows if categories are selected) */}
-            {selectedFilters.category.length > 0 && (
+            {/* Sub-category Filter */}
+            {selectedCategories.length > 0 && (
                 <div className="mb-4">
                     <button
                         onClick={() => toggleDropdown('subCategory')}
-                        className="w-full flex justify-between items-center p-3  border-b rounded-none"
+                        className="w-full flex justify-between items-center p-3 border-b rounded-none"
                     >
                         <span className="font-normal text-base">Sub-category</span>
                         {openDropdown === 'subCategory' ? (
@@ -128,25 +124,31 @@ const FilterComponent = ({ onClose }) => {
                     </button>
                     {openDropdown === 'subCategory' && (
                         <div className="mt-2 p-3 rounded-lg">
-                            {selectedFilters.category.map(category => (
-                                <div key={category} className="mb-3">
-                                    <h4 className="font-medium text-gray-600 mb-2">{category}</h4>
-                                    {filterOptions.subCategory[category]?.map(subItem => (
-                                        <div key={subItem} className="flex items-center mb-2 ml-2">
-                                            <input
-                                                type="checkbox"
-                                                id={`subCategory-${subItem}`}
-                                                checked={selectedFilters.subCategory.includes(subItem)}
-                                                onChange={() => handleFilterSelect('subCategory', subItem)}
-                                                className="h-4 w-4 text-blue-600 rounded"
-                                            />
-                                            <label htmlFor={`subCategory-${subItem}`} className="ml-2 text-[#00000099] font-normal text-base">
-                                                {subItem}
-                                            </label>
-                                        </div>
-                                    ))}
-                                </div>
-                            ))}
+                            {selectedCategories.map((categoryName) => {
+                                const category = categories.find(cat => cat.categoryName === categoryName);
+                                return (
+                                    <div key={category.id} className="mb-3">
+                                        <h4 className="font-medium text-gray-600 mb-2">{category.categoryName}</h4>
+                                        {category?.subcategory?.map((subItem) => (
+                                            <div key={subItem.id} className="flex items-center mb-2 ml-2">
+                                                <input
+                                                    type="checkbox"
+                                                    id={`subCategory-${subItem.id}`}
+                                                    checked={selectedSubCategories.includes(subItem.categoryName)}
+                                                    onChange={() => handleSubCategorySelect(subItem.categoryName)}
+                                                    className="h-4 w-4 text-blue-600 rounded"
+                                                />
+                                                <label
+                                                    htmlFor={`subCategory-${subItem.id}`}
+                                                    className="ml-2 text-[#00000099] font-normal text-base"
+                                                >
+                                                    {subItem.categoryName}
+                                                </label>
+                                            </div>
+                                        ))}
+                                    </div>
+                                );
+                            })}
                         </div>
                     )}
                 </div>
@@ -156,7 +158,7 @@ const FilterComponent = ({ onClose }) => {
             <div className="mb-4">
                 <button
                     onClick={() => toggleDropdown('status')}
-                    className="w-full flex justify-between items-center p-3  border-b rounded-none"
+                    className="w-full flex justify-between items-center p-3 border-b rounded-none"
                 >
                     <span className="font-normal text-base">Status</span>
                     {openDropdown === 'status' ? (
@@ -167,7 +169,7 @@ const FilterComponent = ({ onClose }) => {
                 </button>
                 {openDropdown === 'status' && (
                     <div className="mt-2 p-3 rounded-lg">
-                        {filterOptions.status.map(item => (
+                        {filterOptions.status.map((item) => (
                             <div key={item} className="flex items-center mb-2 last:mb-0">
                                 <input
                                     type="radio"
@@ -190,7 +192,7 @@ const FilterComponent = ({ onClose }) => {
             <div className="mb-4">
                 <button
                     onClick={() => toggleDropdown('priceRange')}
-                    className="w-full flex justify-between items-center p-3  border-b rounded-none"
+                    className="w-full flex justify-between items-center p-3 border-b rounded-none"
                 >
                     <span className="font-normal text-base">Price Range</span>
                     {openDropdown === 'priceRange' ? (
@@ -199,25 +201,7 @@ const FilterComponent = ({ onClose }) => {
                         <p className="h-5 w-5 text-gray-500"><UpIcon /></p>
                     )}
                 </button>
-                {openDropdown === 'priceRange' && (
-                    <div className="mt-2 p-3 rounded-lg">
-                        {filterOptions.priceRange.map(item => (
-                            <div key={item} className="flex items-center mb-2 last:mb-0">
-                                <input
-                                    type="radio"
-                                    id={`priceRange-${item}`}
-                                    name="priceRange"
-                                    checked={selectedFilters.priceRange === item}
-                                    onChange={() => handleFilterSelect('priceRange', item)}
-                                    className="h-4 w-4 text-blue-600"
-                                />
-                                <label htmlFor={`priceRange-${item}`} className="ml-2 text-[#00000099] font-normal text-base">
-                                    {item}
-                                </label>
-                            </div>
-                        ))}
-                    </div>
-                )}
+                {openDropdown === 'priceRange' && <PriceRange />}
             </div>
 
             {/* Ratings Filter */}
@@ -235,7 +219,7 @@ const FilterComponent = ({ onClose }) => {
                 </button>
                 {openDropdown === 'ratings' && (
                     <div className="mt-2 p-3 rounded-lg">
-                        {filterOptions.ratings.map(item => (
+                        {filterOptions.ratings.map((item) => (
                             <div key={item} className="flex items-center mb-2 last:mb-0">
                                 <input
                                     type="radio"
@@ -254,9 +238,8 @@ const FilterComponent = ({ onClose }) => {
                 )}
             </div>
 
-            <div className='flex gap-4 mt-[30px]'>
-
-                <button className="w-full py-2 px-4 bg-[#0832DE] text-white rounded-[10px]  transition-colors">
+            <div className="flex gap-4 mt-[30px]">
+                <button className="w-full py-2 px-4 bg-[#0832DE] text-white rounded-[10px] transition-colors">
                     Apply
                 </button>
                 <button onClick={onClose} className="w-full py-2 px-4 bg-[#F1F1F1] text-black rounded-[10px]">

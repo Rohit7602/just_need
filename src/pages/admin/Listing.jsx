@@ -76,7 +76,7 @@ const Listing = () => {
   if (listData.length !== 0) {
     return (
       <div>
-        <div className="bg-white rounded-md p-5">
+        <div className="bg-[rgba(255, 255, 255, 1)] rounded-md p-5" style={{ background: "white" }}>
           <div className="flex justify-between items-center mb-[17px]">
             <div className="flex items-center gap-6">
               <div>
@@ -90,7 +90,7 @@ const Listing = () => {
               </button>
             </div>
 
-            <div className="flex items-center">
+            <div className="flex">
               <div className="flex rounded-[10px] items-center p-2 h-[42px] bg-[#F1F1F1] xl:me-[20px]">
                 <CiSearch className="ms-2" />
                 <input
@@ -120,33 +120,34 @@ const Listing = () => {
             {listData?.map((item) => (
               <Link
                 to={`${item.id}`}
-                className="w-6/12 mt-3 xl:mt-[15px] xl:w-3/12 px-3 "
+                style={{ filter: "drop-shadow(0,0,34 rgba(0,0,0,0.11))" }}
+                className="w-6/12 mt-3 xl:mt-[15px] xl:w-3/12 px-3 filter !drop-shadow-lg"
                 key={item.id}
               >
 
                 <div className="h-full">
-                  <div className="border-[1px] h-full border-[#ebeaea] rounded-[15px] relative group">
+                  <div className="h-full  relative group flex flex-col">
                     <div className="relative">
                       <img
-                        className=" w-full rounded-t-md group-hover:opacity-70 "
+                        className="w-full group-hover:opacity-70 h-[128px] object-cover"
                         src={item.images[0]}
                         alt="Listing"
                       />
-                      <button className="absolute bg-[#6C4DEF] z-20 text-white py-[2px] px-2 rounded-tr-[20px] rounded-br-[20px] bottom-[10px] opacity-0 group-hover:opacity-100 transition-opacity duration-300">{item?.categoryName}</button>
+                      <button className="absolute bg-[#6C4DEF] z-20 text-white py-[2px] px-2 rounded-tr-[20px] rounded-br-[20px] bottom-[10px] transition-opacity duration-300">{item?.categoryName}</button>
                     </div>
 
-                    <div className="p-2.5">
+                    <div className="p-2.5 bg-white flex-grow">
                       <div className="flex  justify-between items-center">
-                        <p className="font-medium text-sm text-black">
+                        <p className="font-medium text-base text-black">
                           {item.title}
                         </p>
-                        <p>Feb 12</p>
+                        <p className="font-normal text-[12px] text-[rgba(0, 0, 0, 0.6)]">Feb 12</p>
                       </div>
 
 
                       <div className="flex justify-between mt-[5px]">
                         <div>
-                          <p className="font-medium text-[18px]">₹ 2,500</p>
+                          <p className="font-medium text-[18px]">₹ {item.price}</p>
                         </div>
                         <div className="group-hover:hidden transition-opacity duration-300">
                           <button className="py-1">
@@ -179,7 +180,7 @@ const Listing = () => {
                       </div>
 
                       <p className="font-normal text-[14px] text-[#00000099] mt-1">
-                        {truncateText(item.description, 50)}
+                        {truncateText(item.description, 100)}
                       </p>
                       <div className="flex items-center justify-between gap-1 mt-2">
                         <div>
@@ -201,7 +202,7 @@ const Listing = () => {
         </div>
         {isFilterPopup && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white w-[325px]">
+            <div className="bg-white w-[425px]">
               <FilterComponent onClose={() => setIsfilterPopup(false)} />
             </div>
           </div>
