@@ -13,6 +13,7 @@ import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css";
 import { DisableIcon, EnableIcon } from "../../assets/icon/Icon";
 import { truncateText } from "../../utility/wordTruncate";
+import { list } from "postcss";
 
 const ListingDetails = () => {
   const [listData, setListData] = useState({});
@@ -69,15 +70,17 @@ const ListingDetails = () => {
     getData();
   }, []);
 
+  console.log(listData,"list data")
+
   return (
     <div className="bg-white rounded-md flex flex-col lg:flex-row ">
-      
+
       {/* Left Side - Scrollable */}
       <div className="lg:w-7/12 w-full p-3 h-[calc(100vh-115px)] overflow-auto scrollRemove">
         <div>
           <div className="flex justify-between">
             <h3 className="text-[20px] font-medium">Posted By</h3>
-            <p className="font-normal text-[12px]">Feb 12</p>
+            <p className="font-normal text-[12px]">{listData?.createdAt}</p>
           </div>
 
           {/* Updated Design */}

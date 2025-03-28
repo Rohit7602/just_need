@@ -2,6 +2,7 @@
 /* eslint-disable react/prop-types */
 import { createContext, useContext, useState } from "react";
 import { supabase } from "./supabaseCreateClient";
+import { toast } from "react-toastify";
 
 const SubscriptionProvider = createContext();
 
@@ -17,17 +18,26 @@ export const SubscriptionContext = ({ children }) => {
         try {
             const { data, error } = await supabase
                 .from("Subscription")
-                .insert([planData])
+                .insert([{
+                    planName: planData.planName,
+                    price: parseFloat(planData.price),
+                    durationInDays: parseInt(planData.durationInDays),
+                    currency: planData.currency,
+                    color: planData.color,
+                    cancellationPolicy: planData.cancellationPolicy || "Standard policy"
+                }])
                 .select();
 
             if (error) throw error;
 
-            console.log("Plan added successfully", data);
-            setPlans((prev) => [...prev, data[0]]); // Update local state
+            console.log("Plan added successfully:", data);
+            setPlans(prev => [...prev, data[0]]);
             setShowPopup(false);
+            toast.success("Plan added successfully!");
             return { success: true };
         } catch (error) {
             console.error("Error adding plan:", error);
+            toast.error("Failed to add plan: " + error.message);
             return { error: error.message };
         } finally {
             setLoading(false);
@@ -39,15 +49,17 @@ export const SubscriptionContext = ({ children }) => {
             const { error } = await supabase
                 .from("Subscription")
                 .delete()
-                .eq("id", planId); // Ensure this matches your Supabase column
+                .eq("id", planId);
 
             if (error) throw error;
 
             console.log("Plan deleted successfully!");
-            setPlans((prev) => prev.filter((plan) => plan.id !== planId)); // Update local state
+            setPlans(prev => prev.filter(plan => plan.id !== planId));
+            toast.success("Plan deleted successfully!");
             return { success: true };
         } catch (error) {
             console.error("Error deleting plan:", error);
+            toast.error("Failed to delete plan: " + error.message);
             return { error: error.message };
         }
     };
@@ -57,22 +69,31 @@ export const SubscriptionContext = ({ children }) => {
         try {
             const { data, error } = await supabase
                 .from("Subscription")
-                .update(updatedData)
-                .eq("planId", planId) // Ensure this matches your Supabase column
+                .update({
+                    planName: updatedData.planName,
+                    price: parseFloat(updatedData.price),
+                    durationInDays: parseInt(updatedData.durationInDays),
+                    currency: updatedData.currency,
+                    color: updatedData.color,
+                    cancellationPolicy: updatedData.cancellationPolicy
+                })
+                .eq("id", planId)
                 .select();
 
             if (error) throw error;
 
             console.log("Plan updated successfully:", data);
-            setPlans((prev) =>
-                prev.map((plan) =>
-                    plan.planId === planId ? { ...plan, ...updatedData } : plan
+            setPlans(prev =>
+                prev.map(plan =>
+                    plan.id === planId ? { ...plan, ...data[0] } : plan
                 )
             );
             setShowPopup(false);
-            return { success: true, data };
+            toast.success("Plan updated successfully!");
+            return { success: true, data: data[0] };
         } catch (error) {
             console.error("Error updating plan:", error);
+            toast.error("Failed to update plan: " + error.message);
             return { error: error.message };
         } finally {
             setLoading(false);
@@ -81,13 +102,18 @@ export const SubscriptionContext = ({ children }) => {
 
     const fetchSubscription = async () => {
         try {
-            const { data, error } = await supabase.from("Subscription").select("*");
+            const { data, error } = await supabase
+                .from("Subscription")
+                .select("*");
 
             if (error) throw error;
-            setPlans(data); // Update local state
+
+            setPlans(data);
+            // No success toast for fetch (silent operation)
             return data;
         } catch (error) {
             console.error("Error fetching subscriptions:", error);
+            toast.error("Failed to fetch subscriptions: " + error.message);
             return [];
         }
     };
@@ -101,9 +127,12 @@ export const SubscriptionContext = ({ children }) => {
                 .single();
 
             if (error) throw error;
+           
+            // No success toast for fetch by ID (silent operation)
             return data;
         } catch (error) {
             console.error("Error fetching subscription:", error);
+            toast.error("Failed to fetch subscription: " + error.message);
             return null;
         }
     };

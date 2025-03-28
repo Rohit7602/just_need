@@ -167,7 +167,7 @@ function UserDetails() {
           </div>
         </div>
 
-        {!user?.userType && (
+        {user?.IsSeller && (
           <div className="w-full lg:w-7/12 xl:w-[646px] xl:ps-2.5 mt-3 xl:mt-0 flex">
             <div className="bg-[#F1F1F1] rounded-[10px] p-[15px] pb-7 flex-grow flex flex-col">
               <p className="font-medium text-lg leading-[22px] text-black pb-2.5 border-b-[0.5px] border-dashed border-[#00000066]">
@@ -219,7 +219,7 @@ function UserDetails() {
         )}
       </div>
 
-      {!user?.userType && (
+      {user?.IsSeller && (
         <>
           <p className="font-medium text-lg leading-[22px] text-black pb-2.5 border-b-[0.5px] border-dashed border-[#00000066] mt-[30px]">
             Posted Listing

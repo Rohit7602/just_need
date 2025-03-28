@@ -138,7 +138,7 @@ function TopBar() {
         </div>
       </div>
 
-      {notificationPopUp && <NotificationPopUp onCancel={setNotificationPopUp} />}
+      {notificationPopUp && <NotificationPopUp onCancel={() => setNotificationPopUp(false)} />}
       {chatPopup && <ScrollNotify onCancel={() => setchatPopup(false)} />}
     </div>
   );
