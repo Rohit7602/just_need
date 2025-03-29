@@ -19,6 +19,7 @@ const Listing = () => {
   const [filteredData, setFilteredData] = useState([]); 
   const [searchTerm, setSearchTerm] = useState("");
   const [searchPlaceholder, setSearchPlaceholder] = useState("Search Name"); 
+  const [appliedFilters, setAppliedFilters] = useState(null);
   async function getData() {
     const value = await fetchlisting();
 
@@ -69,15 +70,45 @@ const Listing = () => {
 
   // 🔎 **Search Logic**
   useEffect(() => {
-    if (searchTerm.trim() === "") {
-      setFilteredData(listData);
-    } else {
-      const filtered = listData.filter((item) =>
+    let tempData = [...listData];
+
+    // Apply search filter
+    if (searchTerm.trim() !== "") {
+      tempData = tempData.filter((item) =>
         item.title.toLowerCase().includes(searchTerm.toLowerCase())
       );
-      setFilteredData(filtered);
     }
-  }, [searchTerm, listData]);
+
+    // Apply additional filters
+    if (appliedFilters) {
+      if (appliedFilters.categories.length > 0) {
+        tempData = tempData.filter((item) =>
+          appliedFilters.categories.includes(item.categoryName)
+        );
+      }
+      if (appliedFilters.subCategories.length > 0) {
+        tempData = tempData.filter((item) =>
+          appliedFilters.subCategories.includes(item.subCategoryName)
+        );
+      }
+      if (appliedFilters.status) {
+        tempData = tempData.filter((item) =>
+          item.blockStatus.isBlocked === (appliedFilters.status === "Blocked")
+        );
+      }
+      if (appliedFilters.ratings) {
+        const ratingValue = parseInt(appliedFilters.ratings[0], 10);
+        tempData = tempData.filter((item) => item.rating >= ratingValue);
+      }
+    }
+
+    setFilteredData(tempData);
+  }, [searchTerm, listData, appliedFilters]);
+
+  const applyFilters = (filters) => {
+    console.log("Applied Filters:", filters);
+    setAppliedFilters(filters);
+  };
 
   if (listData.length !== 0) {
     return (
@@ -114,7 +145,7 @@ const Listing = () => {
               </div>
               <button onClick={() => setIsfilterPopup(!isFilterPopup)} className="mx-5 w-[40px] h-[40px] bg-[#F1F1F1] flex items-center justify-center rounded-[10px]">
                 <FilterSvg />
-              </button>
+              </button> 
 
               <button
                 onClick={() => setIsfilterPopup(!isFilterPopup)}
@@ -219,9 +250,10 @@ const Listing = () => {
           </div>
         </div>
         {isFilterPopup && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white w-[425px]">
-              <FilterComponent onClose={() => setIsfilterPopup(false)} />
+          <div  className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 overflow-hidden z-50">
+            <div onClick={() => setIsfilterPopup(false)} className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"></div>
+            <div className="bg-white w-[425px] relative  z-[60]">
+              <FilterComponent onApplyFilters={applyFilters} onClose={() => setIsfilterPopup(false)} />
             </div>
           </div>
         )}

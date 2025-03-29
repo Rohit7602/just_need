@@ -9,8 +9,8 @@ const PriceRange = () => {
             <div className="mt-4 relative">
                 {/* Price Labels */}
                 <div className="flex justify-between text-sm text-gray-400">
-                    <span>${values[0]}</span>
-                    <span>${values[1]}</span>
+                    <span>₹{values[1]}</span>
+                    <span>₹{values[0]}</span>
                 </div>
 
                 {/* Slider */}
@@ -45,8 +45,8 @@ const PriceRange = () => {
 
                 {/* Min & Max Price Labels */}
                 <div className="flex justify-between text-sm text-gray-400 mt-2">
-                    <span>$0</span>
-                    <span>$1000</span>
+                    <span>₹0</span>
+                    <span>₹1000</span>
                 </div>
             </div>
         </div>

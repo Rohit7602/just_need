@@ -59,6 +59,9 @@ function UserDetails() {
     fetchData();
   }, [users, id, setLoading, fetchlisting]);
 
+
+
+
   // Handle disable/enable provider popup
   const handlePopupDisable = () => {
     setShowPopupDisable(!showPopupDisable);
