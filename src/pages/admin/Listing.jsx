@@ -16,7 +16,9 @@ const Listing = () => {
   const { fetchlisting } = useListingContext();
   const [listData, setListData] = useState([]);
   const [isFilterPopup, setIsfilterPopup] = useState(false);
-
+  const [filteredData, setFilteredData] = useState([]); 
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchPlaceholder, setSearchPlaceholder] = useState("Search Name"); 
   async function getData() {
     const value = await fetchlisting();
 
@@ -58,9 +60,24 @@ const Listing = () => {
     }
   }
 
+  
+
   useEffect(() => {
     getData();
   }, []);
+
+
+  // 🔎 **Search Logic**
+  useEffect(() => {
+    if (searchTerm.trim() === "") {
+      setFilteredData(listData);
+    } else {
+      const filtered = listData.filter((item) =>
+        item.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredData(filtered);
+    }
+  }, [searchTerm, listData]);
 
   if (listData.length !== 0) {
     return (
@@ -88,8 +105,10 @@ const Listing = () => {
               <div className="flex rounded-[10px] items-center p-2 h-[42px] bg-[#F1F1F1] xl:me-[20px]">
                 <CiSearch className="ms-2" />
                 <input
+                  placeholder={searchPlaceholder}
                   type="text"
-                  placeholder="Search task"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                   className="ms-2.5 focus:outline-none focus:ring-gray-400 bg-[#F1F1F1]"
                 />
               </div>
@@ -110,7 +129,7 @@ const Listing = () => {
           </div>
 
           <div className="flex flex-row flex-wrap -mx-3">
-            {listData?.map((item) => (
+            {filteredData?.map((item) => (
               <Link
                 to={`${item.id}`}
                 style={{ filter: "drop-shadow(0,0,34 rgba(0,0,0,0.11))" }}
