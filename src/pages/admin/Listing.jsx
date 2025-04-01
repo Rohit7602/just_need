@@ -3,12 +3,7 @@ import { useEffect, useState } from "react";
 
 import disable_img from "../../assets/png/disable_img.png";
 import enable_img from "../../assets/png/enable_img.png";
-import {
-
-  DownArrow,
-  FilterSvg,
-  RatingStarIcon,
-} from "../../assets/icon/Icons";
+import { DownArrow, FilterSvg, RatingStarIcon } from "../../assets/icon/Icons";
 import { Link } from "react-router-dom";
 import { useListingContext } from "../../store/ListingContext";
 import { supabase } from "../../store/supabaseCreateClient";
@@ -17,17 +12,14 @@ import { CiFilter, CiSearch } from "react-icons/ci";
 import FiltersPopup from "../../Components/Popups/Filterpop";
 import FilterComponent from "../../Components/Popups/Filterpop";
 
-
 const Listing = () => {
   const { fetchlisting } = useListingContext();
   const [listData, setListData] = useState([]);
-  const [isFilterPopup, setIsfilterPopup] = useState(false)
-
-
-
-
-
-
+  const [isFilterPopup, setIsfilterPopup] = useState(false);
+  const [filteredData, setFilteredData] = useState([]); 
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchPlaceholder, setSearchPlaceholder] = useState("Search Name"); 
+  const [appliedFilters, setAppliedFilters] = useState(null);
   async function getData() {
     const value = await fetchlisting();
 
@@ -54,12 +46,12 @@ const Listing = () => {
           prevState.map((item) =>
             item.id == id
               ? {
-                ...item,
-                blockStatus: {
-                  ...item.blockStatus,
-                  isBlocked: !item.blockStatus.isBlocked,
-                },
-              }
+                  ...item,
+                  blockStatus: {
+                    ...item.blockStatus,
+                    isBlocked: !item.blockStatus.isBlocked,
+                  },
+                }
               : item
           )
         );
@@ -69,18 +61,68 @@ const Listing = () => {
     }
   }
 
+  
+
   useEffect(() => {
     getData();
   }, []);
 
+
+  // 🔎 **Search Logic**
+  useEffect(() => {
+    let tempData = [...listData];
+
+    // Apply search filter
+    if (searchTerm.trim() !== "") {
+      tempData = tempData.filter((item) =>
+        item.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Apply additional filters
+    if (appliedFilters) {
+      if (appliedFilters.categories.length > 0) {
+        tempData = tempData.filter((item) =>
+          appliedFilters.categories.includes(item.categoryName)
+        );
+      }
+      if (appliedFilters.subCategories.length > 0) {
+        tempData = tempData.filter((item) =>
+          appliedFilters.subCategories.includes(item.subCategoryName)
+        );
+      }
+      if (appliedFilters.status) {
+        tempData = tempData.filter((item) =>
+          item.blockStatus.isBlocked === (appliedFilters.status === "Blocked")
+        );
+      }
+      if (appliedFilters.ratings) {
+        const ratingValue = parseInt(appliedFilters.ratings[0], 10);
+        tempData = tempData.filter((item) => item.rating >= ratingValue);
+      }
+    }
+
+    setFilteredData(tempData);
+  }, [searchTerm, listData, appliedFilters]);
+
+  const applyFilters = (filters) => {
+    console.log("Applied Filters:", filters);
+    setAppliedFilters(filters);
+  };
+
   if (listData.length !== 0) {
     return (
       <div>
-        <div className="bg-[rgba(255, 255, 255, 1)] rounded-md p-5" style={{ background: "white" }}>
+        <div
+          className="bg-[rgba(255, 255, 255, 1)] rounded-md p-5"
+          style={{ background: "white" }}
+        >
           <div className="flex justify-between items-center mb-[17px]">
             <div className="flex items-center gap-6">
               <div>
-                <h1 className="font-medium text-[20px] text-[#000000] opacity-[70%]">posted listing</h1>
+                <h1 className="font-medium text-[20px] text-[#000000] opacity-[70%]">
+                  posted listing
+                </h1>
               </div>
               <button className="border border-[#F1F1F1] text-[#00000099] py-[7px] px-[20px] rounded-[10px] flex items-center gap-2">
                 My Action
@@ -94,18 +136,19 @@ const Listing = () => {
               <div className="flex rounded-[10px] items-center p-2 h-[42px] bg-[#F1F1F1] xl:me-[20px]">
                 <CiSearch className="ms-2" />
                 <input
+                  placeholder={searchPlaceholder}
                   type="text"
-                  placeholder="Search task"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                   className="ms-2.5 focus:outline-none focus:ring-gray-400 bg-[#F1F1F1]"
                 />
               </div>
-              <button
-                className="mx-5 w-[40px] h-[40px] bg-[#F1F1F1] flex items-center justify-center rounded-[10px]"
-              >
+              <button onClick={() => setIsfilterPopup(!isFilterPopup)} className="mx-5 w-[40px] h-[40px] bg-[#F1F1F1] flex items-center justify-center rounded-[10px]">
                 <FilterSvg />
-              </button>
+              </button> 
 
-              <button onClick={() => setIsfilterPopup(!isFilterPopup)}
+              <button
+                onClick={() => setIsfilterPopup(!isFilterPopup)}
                 className="bg-[#0832DE] text-white px-[15px] py-2 rounded-[10px] flex items-center"
               >
                 <span>
@@ -117,14 +160,13 @@ const Listing = () => {
           </div>
 
           <div className="flex flex-row flex-wrap -mx-3">
-            {listData?.map((item) => (
+            {filteredData?.map((item) => (
               <Link
                 to={`${item.id}`}
                 style={{ filter: "drop-shadow(0,0,34 rgba(0,0,0,0.11))" }}
                 className="w-6/12 mt-3 xl:mt-[15px] xl:w-3/12 px-3 filter !drop-shadow-lg"
                 key={item.id}
               >
-
                 <div className="h-full">
                   <div className="h-full  relative group flex flex-col">
                     <div className="relative">
@@ -133,21 +175,26 @@ const Listing = () => {
                         src={item.images[0]}
                         alt="Listing"
                       />
-                      <button className="absolute bg-[#6C4DEF] z-20 text-white py-[2px] px-2 rounded-tr-[20px] rounded-br-[20px] bottom-[10px] transition-opacity duration-300">{item?.categoryName}</button>
+                      <button className="absolute bg-[#6C4DEF] z-20 text-white py-[2px] px-2 rounded-tr-[20px] rounded-br-[20px] bottom-[10px] transition-opacity duration-300 text-xs">
+                        {item?.categoryName}
+                      </button>
                     </div>
 
                     <div className="p-2.5 bg-white flex-grow">
                       <div className="flex  justify-between items-center">
-                        <p className="font-medium text-base text-black">
+                        <p className="font-normal text-base text-black">
                           {item.title}
                         </p>
-                        <p className="font-normal text-[12px] text-[rgba(0, 0, 0, 0.6)]">Feb 12</p>
+                        <p className="font-normal text-[12px] text-[rgba(0, 0, 0, 0.6)]">
+                          Feb 12
+                        </p>
                       </div>
-
 
                       <div className="flex justify-between mt-[5px]">
                         <div>
-                          <p className="font-medium text-[18px]">₹ {item.price}</p>
+                          <p className="font-semibold text-[18px]">
+                            ₹ {item.price}
+                          </p>
                         </div>
                         <div className="group-hover:hidden transition-opacity duration-300">
                           <button className="py-1">
@@ -184,7 +231,9 @@ const Listing = () => {
                       </p>
                       <div className="flex items-center justify-between gap-1 mt-2">
                         <div>
-                          <p className="font-normal text-[#00000099] text-[12px]">Hisar, Haryana</p>
+                          <p className="font-normal text-[#00000099] text-[12px]">
+                            Hisar, Haryana
+                          </p>
                         </div>
                         <div className="flex gap-3 items-center bg-[#FFA5001A] rounded-[50px] py-[2px] px-[5px]">
                           <RatingStarIcon />
@@ -201,9 +250,10 @@ const Listing = () => {
           </div>
         </div>
         {isFilterPopup && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white w-[425px]">
-              <FilterComponent onClose={() => setIsfilterPopup(false)} />
+          <div  className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 overflow-hidden z-50">
+            <div onClick={() => setIsfilterPopup(false)} className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"></div>
+            <div className="bg-white w-[425px] relative  z-[60]">
+              <FilterComponent onApplyFilters={applyFilters} onClose={() => setIsfilterPopup(false)} />
             </div>
           </div>
         )}

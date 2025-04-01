@@ -29,9 +29,10 @@ const CustomerData = () => {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [filterPopupsvg, setFilterPopupSvg] = useState(false);
-  const [selectedFilters, setSelectedFilters] = useState(["name"]); // "name" is selected by default
-  const [searchPlaceholder, setSearchPlaceholder] = useState("Search Name"); // Default is "Search Name"
+  const [selectedFilters, setSelectedFilters] = useState(["name"]);
+  const [searchPlaceholder, setSearchPlaceholder] = useState("Search Name");
   const [selectAll, setSelectAll] = useState(false);
+
 
   const formatDate = (milliseconds) => {
     const date = new Date(milliseconds);
@@ -47,7 +48,7 @@ const CustomerData = () => {
   };
 
   const { users, setUsers, loading } = useCustomerContext();
-
+  const [filteredUsers, setFilteredUsers] = useState(users);
   // Filter logic based on selected fields
   const filteredData = users?.filter((customer) => {
     if (selectedFilters.length === 0) {
@@ -82,12 +83,16 @@ const CustomerData = () => {
     });
   });
 
+
   // Pagination logic
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, filteredData.length);
-  const paginatedData = filteredData.slice(startIndex, endIndex);
 
+  const [paginatedData, setPaginatedData] = useState([]);
+  useEffect(() => {
+    setPaginatedData(filteredData.slice(startIndex, endIndex)); // 🔹 Update when filteredData or pagination changes
+  }, [startIndex, endIndex]);
   // Main checkbox handler
   const handleMainCheckboxChange = () => {
     const newCheckedState = !mainCheckbox;
@@ -263,6 +268,52 @@ const CustomerData = () => {
 
   const showActionButtons = selectItem.length >= 2;
 
+  const applyFilters = (filters) => {
+    let updatedUsers = users;
+    console.log(filters, "Filters Applied");
+
+    // **Filter by User Type (Seller / Consumer)**
+    if (filters.selectedUserType) {
+      updatedUsers = updatedUsers.filter(user => {
+        if (filters.selectedUserType === "Seller") {
+          return user.IsSeller === true;
+        } else if (filters.selectedUserType === "Consumer") {
+          return user.IsSeller === false;
+        }
+        return true;
+      });
+    }
+
+    // **Filter by Profile Status**
+    if (filters.profileStatus) {
+      updatedUsers = updatedUsers.filter(user => user.profileStatus === filters.profileStatus);
+    }
+
+    // **Filter by Business Status**
+    if (filters.businessStatus) {
+      updatedUsers = updatedUsers.filter(user => user.businessDetail?.status === filters.businessStatus);
+    }
+
+    // **Filter by Subscription Status**
+    if (filters.subscriptionStatus) {
+      updatedUsers = updatedUsers.filter(user => user.verificationStatus === filters.subscriptionStatus);
+    }
+
+    console.log(updatedUsers, "Updated Users After Filtering");
+
+    // **Update States**
+    setFilteredUsers(updatedUsers);
+    setCurrentPage(1); // Pagination reset
+
+    // **Paginate Data**
+    const startIndex = 0;
+    const endIndex = Math.min(itemsPerPage, updatedUsers.length);
+    setPaginatedData(updatedUsers.slice(startIndex, endIndex));
+  };
+
+ 
+
+
   return (
     <div className="bg-[#FFFFFF] p-5 rounded-[10px]">
       <div className="flex justify-between items-center mt-[15px]">
@@ -383,102 +434,103 @@ const CustomerData = () => {
                 </td>
               </tr>
             ) : (
-              paginatedData.map((customer) => (
-                <tr key={customer.id}>
-                  <td className="px-[19px] md:px-[24px]">
-                    <input
-                      className="w-[16px] h-[16px]"
-                      type="checkbox"
-                      onChange={checkHandler}
-                      checked={selectItem.includes(customer.id)}
-                      value={customer.id}
-                    />
-                  </td>
-                  <td className="px-[19px] md:px-[24px] text-[#6C4DEF] flex items-center gap-2 min-w-[160px]">
-                    <Link
-                      className="flex gap-2"
-                      to={`/dashboard/usersList/userDetails/${customer.id}`}
-                    >
-                      <img
-                        src={customer.image || avatar}
-                        alt="avatar"
-                        className="!w-8 h-8 aspect-[1/1] rounded-full object-cover img_user"
+              paginatedData.map((customer) => {
+
+                return (
+                  <tr key={customer.id}>
+                    <td className="px-[19px] md:px-[24px]">
+                      <input
+                        className="w-[16px] h-[16px]"
+                        type="checkbox"
+                        onChange={checkHandler}
+                        checked={selectItem.includes(customer.id)}
+                        value={customer.id}
                       />
-                      {customer.firstName} {customer.lastName}
-                    </Link>
-                  </td>
-                  <td className="px-[19px] md:px-[24px] text-sm font-normal text-[#000000]">
-                    {customer.useremail}
-                  </td>
-                  <td className="px-[19px] md:px-[24px] text-sm font-normal text-[#000000]">
-                    {customer.mobile_number}
-                  </td>
-                  <td className="px-[19px] md:px-[24px] text-sm font-normal text-[#000000] w-[120px] truncate">
-                    {customer?.address?.map((item) => `${item.city}/${item.state}`)}
-                  </td>
-                  <td
-                    className={`px-[19px] text-sm font-normal truncate ${
-                      customer.IsSeller == true
+                    </td>
+                    <td className="px-[19px] md:px-[24px] text-[#6C4DEF] flex items-center gap-2 min-w-[160px]">
+                      <Link
+                        className="flex gap-2"
+                        to={`/dashboard/usersList/userDetails/${customer.id}`}
+                      >
+                        <img
+                          src={customer.image || avatar}
+                          alt="avatar"
+                          className="!w-8 h-8 aspect-[1/1] rounded-full object-cover img_user"
+                        />
+                        {customer.firstName} {customer.lastName}
+                      </Link>
+                    </td>
+                    <td className="px-[19px] md:px-[24px] text-sm font-normal text-[#000000]">
+                      {customer.useremail}
+                    </td>
+                    <td className="px-[19px] md:px-[24px] text-sm font-normal text-[#000000]">
+                      {customer.mobile_number}
+                    </td>
+                    <td className="px-[19px] md:px-[24px] text-sm font-normal text-[#000000] w-[120px] truncate">
+                      {Array.isArray(customer?.address) && customer.address.length > 0
+                        ? customer.address.map((item) => `${item.city}/${item.state}`).join(", ")
+                        : "N/A"}
+
+                    </td>
+                    <td
+                      className={`px-[19px] text-sm font-normal truncate ${customer.IsSeller == true
                         ? "bg-[#0000FF12] text-[#0000FF] rounded-[90px]"
                         : "text-[#FFA500] bg-[#FFA50024] rounded-[90px]"
-                    }`}
-                  >
-                    <div className="flex justify-center">
-                      <span>
-                        {customer.IsSeller === true ? "Seller" : "Consumer"}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-[19px] md:px-[24px] text-sm font-normal text-[#000000]">
-                    {formatDate(customer.created_at)}
-                  </td>
-                  <td className="px-[19px] md:px-[24px] text-sm font-normal text-[#000000]">
-                    {formatDate(customer.updated_at)}
-                  </td>
-                  <td>
-                    <div className="flex justify-center items-center">
-                      <span
-                        className={`px-[10px] py-[4px] text-sm font-normal text-center ${
-                          customer.accountStatus === "active"
+                        }`}
+                    >
+                      <div className="flex justify-center">
+                        <span>
+                          {customer.IsSeller === true ? "Seller" : "Consumer"}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-[19px] md:px-[24px] text-sm font-normal text-[#000000]">
+                      {formatDate(customer.created_at)}
+                    </td>
+                    <td className="px-[19px] md:px-[24px] text-sm font-normal text-[#000000]">
+                      {formatDate(customer.updated_at)}
+                    </td>
+                    <td>
+                      <div className="flex justify-center items-center">
+                        <span
+                          className={`px-[10px] py-[4px] text-sm font-normal text-center ${customer.accountStatus === "active"
                             ? "bg-[#00800012] text-[#008000] rounded-[90px]"
                             : "text-[#800000] rounded-[90px] bg-[#FF000012]"
-                        }`}
+                            }`}
+                        >
+                          {customer.accountStatus ? "Active" : "Inactive"}
+                        </span>
+                      </div>
+                    </td>
+                    <td>
+                      <div className="flex justify-center items-center">
+                        <span
+                          className={`px-[10px] py-[4px] text-sm font-normal text-center ${customer?.businessDetail.status === "Active" &&
+                            "bg-[#00800012] text-[#008000] rounded-[90px]"
+                            } ${customer?.businessDetail.status === "Pending" &&
+                            "bg-[#6C4DEF1A] text-[#6C4DEF] rounded-[90px]"
+                            } ${customer?.businessDetail.status === "Rejected" &&
+                            "bg-[#FF00001A] text-[#FF0000] rounded-[90px]"
+                            }`}
+                        >
+                          {customer?.businessDetail.status}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-[19px] md:px-[24px] text-center bg-white">
+                      <button className="text-2xl font-medium">
+                        <EyeIcon />
+                      </button>
+                      <button
+                        className="text-2xl font-medium ms-[6px]"
+                        onClick={() => handleSingleDeleteClick(customer.id)}
                       >
-                        {customer.accountStatus}
-                      </span>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="flex justify-center items-center">
-                      <span
-                        className={`px-[10px] py-[4px] text-sm font-normal text-center ${
-                          customer?.businessDetail.status === "Active" &&
-                          "bg-[#00800012] text-[#008000] rounded-[90px]"
-                        } ${
-                          customer?.businessDetail.status === "Pending" &&
-                          "bg-[#6C4DEF1A] text-[#6C4DEF] rounded-[90px]"
-                        } ${
-                          customer?.businessDetail.status === "Rejected" &&
-                          "bg-[#FF00001A] text-[#FF0000] rounded-[90px]"
-                        }`}
-                      >
-                        {customer?.businessDetail.status}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-[19px] md:px-[24px] text-center bg-white">
-                    <button className="text-2xl font-medium">
-                      <EyeIcon />
-                    </button>
-                    <button
-                      className="text-2xl font-medium ms-[6px]"
-                      onClick={() => handleSingleDeleteClick(customer.id)}
-                    >
-                      <DeleteRedIcon />
-                    </button>
-                  </td>
-                </tr>
-              ))
+                        <DeleteRedIcon />
+                      </button>
+                    </td>
+                  </tr>
+                )
+              })
             )}
           </tbody>
         </table>
@@ -497,9 +549,8 @@ const CustomerData = () => {
                 <span>▼</span>
                 {showItemsDropdown && (
                   <div
-                    className={`absolute ${
-                      dropdownPosition === "top" ? "bottom-full mb-1" : "top-full mt-1"
-                    } bg-white border rounded shadow-lg w-full z-10`}
+                    className={`absolute ${dropdownPosition === "top" ? "bottom-full mb-1" : "top-full mt-1"
+                      } bg-white border rounded shadow-lg w-full z-10`}
                   >
                     {[5, 10, 15, 20].map((item) => (
                       <button
@@ -588,6 +639,7 @@ const CustomerData = () => {
         <UsersFilterPopUp
           handleFilter={handleFilter}
           handleFilterPopupClose={handleFilterPopupClose}
+          applyFilters={applyFilters}
         />
       )}
 

@@ -529,8 +529,8 @@ function BannerDetails() {
               </div>
             )}
 
-            <div className="grid grid-cols-2 gap-4 mt-4">
-              <div className="mt-4">
+            <div className="flex flex-wrap mt-4">
+              <div className="mt-5 w-1/2 px-2">
                 <label className="text-black block text-base mb-2">
                   Tags (Press Enter to add)
                 </label>
@@ -540,7 +540,7 @@ function BannerDetails() {
                   value={tagInput}
                   onChange={(e) => setTagInput(e.target.value)}
                   onKeyDown={handleAddTag}
-                  className="w-full px-4 py-2 border rounded-lg bg-[#F2F2F2] text-gray-600 outline-none"
+                  className="w-full px-4 py-3 border rounded-lg bg-[#F2F2F2] text-gray-600 outline-none"
                 />
                 <div className="flex flex-wrap gap-2 mt-2">
                   {tags?.map((tag, index) => (
@@ -559,33 +559,13 @@ function BannerDetails() {
                   ))}
                 </div>
               </div>
-
-              <div className="mt-4">
-                <label className="text-black block text-base mb-2">
-                  Discount Type
-                </label>
-                <select
-                  value={discount}
-                  onChange={(e) => setDiscount(e.target.value)}
-                  className="w-full px-4 py-2 border rounded-lg bg-[#F2F2F2] text-gray-600 outline-none"
-                >
-                  <option value="" disabled>
-                    Discount Type
-                  </option>
-                  <option value="amount">Amount</option>
-                  <option value="percentage">Percentage</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="flex gap-4 mt-[15px]">
-              <div className="relative w-1/2">
+              <div className="relative w-1/2 mt-5 px-2">
                 <label className="text-black block text-base mb-2">
                   Select Service
                 </label>
                 <input
                   type="text"
-                  className="w-full px-4 py-2 border rounded-lg bg-[#F2F2F2] text-gray-600 outline-none h-[50px] cursor-pointer"
+                  className="w-full px-4 py-2  border rounded-lg bg-[#F2F2F2] text-gray-600 outline-none h-[50px] cursor-pointer"
                   readOnly
                   value={service || "Select a category"}
                   onClick={() => setDropdown(!dropdown)}
@@ -618,7 +598,7 @@ function BannerDetails() {
                 )}
               </div>
 
-              <div className="w-1/2">
+              <div className="mt-4 w-1/2 px-2">
                 <label className="text-black block text-base mb-2">
                   {discount === "amount" ? "Amount" : "Percentage"}
                 </label>
@@ -633,9 +613,30 @@ function BannerDetails() {
                       ? setAmount(e.target.value)
                       : setPercentage(e.target.value)
                   }
+                  onWheel={(e) => e.currentTarget.blur()}
                   className="w-full px-4 py-2 border rounded-lg bg-[#F2F2F2] text-gray-600 outline-none h-[50px]"
                 />
               </div>
+              <div className="mt-4 w-1/2 px-2">
+                <label className="text-black block text-base mb-2">
+                  Discount Type
+                </label>
+                <select
+                  value={discount}
+                  onChange={(e) => setDiscount(e.target.value)}
+                  className="w-full px-4 py-3 border rounded-lg bg-[#F2F2F2] text-gray-600 outline-none"
+                >
+                  <option value="" disabled>
+                    Discount Type
+                  </option>
+                  <option value="amount">Amount</option>
+                  <option value="percentage">Percentage</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-4 mt-[15px]">
+             
             </div>
 
             <button
