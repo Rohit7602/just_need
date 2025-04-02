@@ -14,6 +14,7 @@ import "react-image-lightbox/style.css";
 import { DisableIcon, EnableIcon } from "../../assets/icon/Icon";
 import { truncateText } from "../../utility/wordTruncate";
 import { list } from "postcss";
+import userDummyImg from '../../assets/Images/Png/dummyimage.jpg'
 
 const ListingDetails = () => {
   const [listData, setListData] = useState({});
@@ -73,7 +74,7 @@ const ListingDetails = () => {
   console.log(listData,"list data")
 
   return (
-    <div className="bg-white rounded-md flex flex-col lg:flex-row ">
+    <div className="bg-white rounded-md flex flex-col lg:flex-row h-full overflow-auto scrollRemove">
 
       {/* Left Side - Scrollable */}
       <div className="lg:w-7/12 w-full p-3 h-[calc(100vh-115px)] overflow-auto scrollRemove">
@@ -91,7 +92,7 @@ const ListingDetails = () => {
                   <div>
                     <img
                       className="flex h-[52px] w-[52px] rounded-full"
-                      src={listData?.thumbnailImage}
+                      src={listData?.user_detail?.image || userDummyImg}
                       alt=""
                     />
                   </div>

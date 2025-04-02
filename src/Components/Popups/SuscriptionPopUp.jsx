@@ -14,7 +14,8 @@ function SuscriptionPopUp({ handlePopup, updateItemId }) {
         durationInDays: "",
         currency: "₹",
         color: "#0832DE",
-        cancellationPolicy: ""
+        cancellationPolicy: "",
+          features: [""]
     };
 
     const [subscriptionData, setSubscriptionData] = useState(initialData);
@@ -31,7 +32,7 @@ function SuscriptionPopUp({ handlePopup, updateItemId }) {
                     durationInDays: existingPlan.durationInDays?.toString() || "",
                     currency: existingPlan.currency || "₹",
                     color: existingPlan.color || "#0832DE",
-                    cancellationPolicy: existingPlan.cancellationPolicy || ""
+                    cancellationPolicy: existingPlan.cancellationPolicy || "", features: existingPlan.features || [""]
                 });
             }
         } else {
@@ -50,7 +51,15 @@ function SuscriptionPopUp({ handlePopup, updateItemId }) {
         const { name, value } = e.target;
         setSubscriptionData(prev => ({ ...prev, [name]: value }));
     };
+    const handleFeatureChange = (index, value) => {
+        const newFeatures = [...subscriptionData.features];
+        newFeatures[index] = value;
+        setSubscriptionData(prev => ({ ...prev, features: newFeatures }));
+    };
 
+    const addFeatureField = () => {
+        setSubscriptionData(prev => ({ ...prev, features: [...prev.features, ""] }));
+    };
     const handleSubmit = async () => {
         if (loading) return;
 
@@ -95,30 +104,47 @@ function SuscriptionPopUp({ handlePopup, updateItemId }) {
                 <div className="w-full bg-white rounded-lg shadow-lg p-6 relative">
                     <button
                         onClick={handlePopup}
-                        className="absolute top-2 right-2 text-gray-600 hover:text-black"
+                        className="absolute top-4 right-4 text-gray-600 hover:text-black text-2xl"
                         aria-label="Close"
                     >
                         ✕
                     </button>
-                    <p className="font-normal text-lg text-black text-center pb-[15px] border-b-[0.5px] border-dashed border-[#00000066]">
+                    <p className="font-normal text-lg text-black text-start pb-[15px] border-b-[0.5px] border-dashed border-[#00000066]">
                         {updateItemId ? "Edit Subscription" : "Add Subscription"}
                     </p>
 
                     <div className="mt-[15px]">
                         <label className="block text-base font-normal text-gray-700 mb-2.5">
-                            Plan Name
+                            Subscription Name
                         </label>
                         <input
                             name="planName"
                             value={subscriptionData.planName}
                             onChange={handleInputChange}
-                            placeholder="e.g. Premium Plan"
+                            placeholder="Standard"
                             className="w-full px-3 py-[12px] rounded-[7px] bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
 
                     <div className="flex justify-between mt-[15px]">
-                        <div className="w-[48%]">
+                        <div className="w-[25%]">
+                            <label className="block text-base font-normal text-gray-700 mb-2.5">
+                                Currency
+                            </label>
+                            <div className="w-full pe-3 rounded-[7px] bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <select
+                                    name="currency"
+                                    value={subscriptionData.currency}
+                                    onChange={handleInputChange}
+                                    className="w-full px-3 py-[12px] rounded-[7px] bg-gray-100 focus:outline-none"
+                                >
+                                    <option value="₹">Ind (Rs)</option>
+                                    <option value="$">US Dollar ($)</option>
+                                    <option value="€">Euro (€)</option>
+                                    <option value="£">Pound (£)</option>
+                                </select>
+                            </div>
+                        </div> <div className="w-[35%]">
                             <label className="block text-base font-normal text-gray-700 mb-2.5">
                                 Price
                             </label>
@@ -127,55 +153,37 @@ function SuscriptionPopUp({ handlePopup, updateItemId }) {
                                 type="number"
                                 value={subscriptionData.price}
                                 onChange={handleInputChange}
-                                placeholder="000.00"
+                                placeholder="₹199.00"
                                 className="w-full px-3 py-[12px] rounded-[7px] bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 onWheel={(e) => e.target.blur()}
                             />
                         </div>
-                        <div className="w-[48%]">
+                        <div className="w-[35%]">
                             <label className="block text-base font-normal text-gray-700 mb-2.5">
-                                Duration (Days)
+                                Duration (In years)
                             </label>
                             <input
                                 name="durationInDays"
                                 type="number"
                                 value={subscriptionData.durationInDays}
                                 onChange={handleInputChange}
-                                placeholder="30"
+                                placeholder="1"
                                 className="w-full px-3 py-[12px] rounded-[7px] bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 onWheel={(e) => e.target.blur()}
                             />
                         </div>
                     </div>
 
-                    <div className="mt-[15px]">
-                        <label className="block text-base font-normal text-gray-700 mb-2.5">
-                            Currency
-                        </label>
-                        <select
-                            name="currency"
-                            value={subscriptionData.currency}
-                            onChange={handleInputChange}
-                            className="w-full px-3 py-[12px] rounded-[7px] bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        >
-                            <option value="₹">Indian Rupee (₹)</option>
-                            <option value="$">US Dollar ($)</option>
-                            <option value="€">Euro (€)</option>
-                            <option value="£">Pound (£)</option>
-                        </select>
-                    </div>
+                    
 
-                    <div className="mt-[15px]">
-                        <label className="block text-base font-normal text-gray-700 mb-2.5">
-                            Cancellation Policy
-                        </label>
-                        <textarea
-                            name="cancellationPolicy"
-                            value={subscriptionData.cancellationPolicy}
-                            onChange={handleInputChange}
-                            placeholder="Describe the cancellation policy..."
-                            className="w-full px-3 py-[12px] rounded-[7px] bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[80px]"
-                        />
+                    <div className="mt-4">
+                        <div className="flex items-center justify-between">
+                            <label className="block text-base font-normal text-gray-700">Features</label>
+                            <button onClick={addFeatureField} className=" text-[#6C4DEF] px-4 py-2 rounded mt-2">+ Add Features</button>
+</div>
+                        {subscriptionData.features.map((feature, index) => (
+                            <input key={index} value={feature} onChange={(e) => handleFeatureChange(index, e.target.value)} placeholder="Feature" className="w-full px-3 py-2 rounded bg-gray-100 mb-2 focus:ring-2 focus:ring-blue-500" />
+                        ))}
                     </div>
 
                     <div className="mt-[15px] relative">
@@ -184,9 +192,15 @@ function SuscriptionPopUp({ handlePopup, updateItemId }) {
                         </label>
                         <div className="flex items-center gap-2.5">
                             <button
-                                className="h-[42px] px-4 rounded-[10px] text-white"
+                                className="h-[42px] w-[163px] px-4 rounded-[10px] text-white"
                                 style={{ backgroundColor: subscriptionData.color }}
                                 onClick={() => setShowColorPicker(!showColorPicker)}
+                            >
+                               
+                            </button>
+                            <button
+                                className="h-[42px] w-[calc(100%-163px)] text-start px-4 rounded-[10px] text-black/70 bg-[#F2F2F2]"
+                               
                             >
                                 {subscriptionData.color}
                             </button>
