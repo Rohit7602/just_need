@@ -195,7 +195,7 @@ export const Complaints = () => {
 
           {/* Complaints Table */}
           <div className="overflow-x-auto mt-6">
-              <table className="w-full text-left border-separate border-spacing-y-2 whitespace-nowrap rounded-xl">
+            <table className="w-full text-left border-separate border-spacing-y-2 whitespace-nowrap rounded-xl">
               <thead>
                 <tr>
                   <th className="text-black text-sm font-medium py-3 px-4 border-b">
@@ -230,8 +230,8 @@ export const Complaints = () => {
                     <td className="text-black text-sm font-normal px-4">{item.subject}</td>
                     <td className="text-black text-sm font-normal px-4 max-w-[279px] overflow-hidden whitespace-pre-wrap">
                       <div className="w-[279px] max-h-[60px] overflow-hidden whitespace-pre-wrap">
-                                                {item.description}
-                                         </div>
+                        {item.description}
+                      </div>
                     </td>
                     <td className="text-black text-sm font-normal px-4">
                       {new Date(item.created_at).toLocaleDateString('en-GB', {
@@ -249,13 +249,13 @@ export const Complaints = () => {
                     <td className=" text-black text-sm font-normal px-4">{item.userdetails?.useremail}</td>
                     <td className="text-center">
                       <span className={`px-2.5 py-[4px] rounded-full ${item.userdetails?.verificationStatus === 'Pending'
-                          ? 'bg-[#FFA50029] text-[#FFA500]'
-                          : 'bg-[#0080001A] text-[#008000]'
+                        ? 'bg-[#FFA50029] text-[#FFA500]'
+                        : 'bg-[#0080001A] text-[#008000]'
                         }`}>
                         {item.userdetails?.verificationStatus}
                       </span>
                     </td>
-                    <td className="text-black text-sm font-normal px-4"><ActionIcon /></td>
+                    <td className="text-black text-sm font-normal px-4 text_center"><ActionIcon /></td>
                   </tr>
                 ))}
               </tbody>
