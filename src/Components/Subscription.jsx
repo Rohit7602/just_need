@@ -85,7 +85,7 @@ const Subscription = () => {
                   {item.price}
                 </span>
                 <sub className="text-xl font-normal">
-                  /{item.durationInDays} Days
+                  /{item.durationInDays} Years
                 </sub>
               </p>
               <p className="mt-[15px] text-[#FFFFFF99] text-sm xl:text-base font-normal">
