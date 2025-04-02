@@ -16,9 +16,9 @@ const Listing = () => {
   const { fetchlisting } = useListingContext();
   const [listData, setListData] = useState([]);
   const [isFilterPopup, setIsfilterPopup] = useState(false);
-  const [filteredData, setFilteredData] = useState([]); 
+  const [filteredData, setFilteredData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchPlaceholder, setSearchPlaceholder] = useState("Search Name"); 
+  const [searchPlaceholder, setSearchPlaceholder] = useState("Search Name");
   const [appliedFilters, setAppliedFilters] = useState(null);
   async function getData() {
     const value = await fetchlisting();
@@ -46,12 +46,12 @@ const Listing = () => {
           prevState.map((item) =>
             item.id == id
               ? {
-                  ...item,
-                  blockStatus: {
-                    ...item.blockStatus,
-                    isBlocked: !item.blockStatus.isBlocked,
-                  },
-                }
+                ...item,
+                blockStatus: {
+                  ...item.blockStatus,
+                  isBlocked: !item.blockStatus.isBlocked,
+                },
+              }
               : item
           )
         );
@@ -61,7 +61,7 @@ const Listing = () => {
     }
   }
 
-  
+
 
   useEffect(() => {
     getData();
@@ -106,9 +106,36 @@ const Listing = () => {
   }, [searchTerm, listData, appliedFilters]);
 
   const applyFilters = (filters) => {
-    console.log("Applied Filters:", filters);
     setAppliedFilters(filters);
   };
+
+  const removeFilter = (filterType, value) => {
+    setAppliedFilters((prevFilters) => {
+      // Clone the appliedFilters to avoid mutating the state directly
+      const updatedFilters = { ...prevFilters };
+
+      // Check the type of filter and remove the appropriate filter
+      if (filterType === "categories") {
+        updatedFilters.categories = updatedFilters.categories.filter(
+          (category) => category !== value
+        );
+      } else if (filterType === "subCategories") {
+        updatedFilters.subCategories = updatedFilters.subCategories.filter(
+          (subCategory) => subCategory !== value
+        );
+      } else if (filterType === "ratings") {
+        updatedFilters.ratings = null; // Remove the rating filter
+      } else if (filterType === "priceRange") {
+        updatedFilters.priceRange = null; // Remove the price range filter
+      } else if (filterType === "status") {
+        updatedFilters.status = null; // Remove the status filter
+      }
+
+      // Return the updated filter state
+      return updatedFilters;
+    });
+  };
+
 
   if (listData.length !== 0) {
     return (
@@ -143,13 +170,13 @@ const Listing = () => {
                   className="ms-2.5 focus:outline-none focus:ring-gray-400 bg-[#F1F1F1]"
                 />
               </div>
-              <button onClick={() => setIsfilterPopup(!isFilterPopup)} className="mx-5 w-[40px] h-[40px] bg-[#F1F1F1] flex items-center justify-center rounded-[10px]">
+              {/* <button onClick={() => setIsfilterPopup(!isFilterPopup)} className="mx-5 w-[40px] h-[40px] bg-[#F1F1F1] flex items-center justify-center rounded-[10px]">
                 <FilterSvg />
-              </button> 
+              </button>  */}
 
               <button
                 onClick={() => setIsfilterPopup(!isFilterPopup)}
-                className="bg-[#0832DE] text-white px-[15px] py-2 rounded-[10px] flex items-center"
+                className="bg-[#0832DE] text-white px-[15px] py-2 ms-5 rounded-[10px] flex items-center"
               >
                 <span>
                   <CiFilter className="w-[24px] h-[24px] me-[12px]" />
@@ -158,9 +185,54 @@ const Listing = () => {
               </button>
             </div>
           </div>
+          {/* Applied Filters Display */}
+          <div className="flex gap-2 items-center">
+            {appliedFilters?.categories.map((filters, index) => {
+            return (
+              <div key={index} className="flex items-center px-2 py-1 border rounded-full gap-2">
+                <span className="">{filters}</span>
+                <span onClick={() => removeFilter("categories", filters)} className="text-2xl text-[#333] cursor-pointer">&times;</span>
+             </div>
+            )
+          })}
+            {appliedFilters?.subCategories.map((filters, index) => {
+            return (
+              <div key={index} className="flex items-center px-2 py-1 border rounded-full gap-2">
+                <span className="">{filters}</span>
+                <span onClick={() => removeFilter("subCategories", filters)} className="text-2xl text-[#333] cursor-pointer">&times;</span>
+             </div>
+            )
+          })}
+         
+         
+            {appliedFilters?.ratings && (
+              <div className="flex items-center px-2 py-1 border rounded-full gap-2">
+                <span>{appliedFilters?.ratings}</span>
+                <span onClick={() => removeFilter("ratings")} className="text-2xl text-[#333] cursor-pointer">&times;</span>
+              </div>
+            )}
+
+            {appliedFilters?.priceRange && (
+              <div className="flex items-center px-2 py-1 border rounded-full gap-2">
+                <span>{appliedFilters?.priceRange}</span>
+                <span onClick={() => removeFilter("priceRange")} className="text-2xl text-[#333] cursor-pointer">&times;</span>
+              </div>
+            )}
+
+            {appliedFilters?.status && (
+              <div className="flex items-center px-2 py-1 border rounded-full gap-2">
+                <span>{appliedFilters?.status}</span>
+                <span onClick={() => removeFilter("status")} className="text-2xl text-[#333] cursor-pointer">&times;</span>
+              </div>
+            )}
+
+          
+       
+          </div>
+          
 
           <div className="flex flex-row flex-wrap -mx-3">
-            {filteredData?.map((item) => (
+            {filteredData.length > 0 ? (filteredData?.map((item) => (
               <Link
                 to={`${item.id}`}
                 style={{ filter: "drop-shadow(0,0,34 rgba(0,0,0,0.11))" }}
@@ -246,14 +318,19 @@ const Listing = () => {
                   </div>
                 </div>
               </Link>
-            ))}
+            ))
+            ) : (
+              <p className="text-center text-gray-500 text-lg mt-5 w-full">No Data Found</p>
+            )}
           </div>
         </div>
         {isFilterPopup && (
-          <div  className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 overflow-hidden z-50">
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 overflow-hidden z-50">
             <div onClick={() => setIsfilterPopup(false)} className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"></div>
             <div className="bg-white w-[425px] relative  z-[60]">
-              <FilterComponent onApplyFilters={applyFilters} onClose={() => setIsfilterPopup(false)} />
+              <FilterComponent onApplyFilters={applyFilters} onClose={() => setIsfilterPopup(false)} preSelectedCategories={appliedFilters?.categories || []}
+                preSelectedSubCategories={appliedFilters?.subCategories || []}
+                preSelectedFilters={appliedFilters || {}} />
             </div>
           </div>
         )}

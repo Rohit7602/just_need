@@ -1,22 +1,59 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DownIcon, UpIcon } from '../../assets/icon/Icon';
 import PriceRange from './PriceRange';
 import { useServiceContext } from '../../store/ServiceContext';
 
-const FilterComponent = ({ onClose, onApplyFilters }) => {
+const FilterComponent = ({ onClose, onApplyFilters ,preSelectedCategories = [], preSelectedSubCategories = [], preSelectedFilters = {}, onFilterChange }) => {
     const { categories } = useServiceContext();
-
+    const [selectedPriceFilters, setSelectedPriceFilters] = useState({
+        priceRange: [100, 800], 
+    });
     const [openDropdown, setOpenDropdown] = useState(null);
-    const [selectedCategories, setSelectedCategories] = useState([]); // To track selected categories
-    const [selectedSubCategories, setSelectedSubCategories] = useState([]); // To track selected subcategories
-    const [selectedFilters, setSelectedFilters] = useState({ // Reintroduced for status, priceRange, ratings
+    const [selectedCategories, setSelectedCategories] = useState([]); 
+    const [selectedSubCategories, setSelectedSubCategories] = useState([]); 
+    const [selectedFilters, setSelectedFilters] = useState({ 
         status: null,
         priceRange: null,
         ratings: null
     });
+
+
+
+    useEffect(() => {
+        setSelectedCategories([...preSelectedCategories]);
+        setSelectedSubCategories([...preSelectedSubCategories]);
+        setSelectedFilters({
+            status: preSelectedFilters.status || null,
+            priceRange: preSelectedFilters.priceRange || null,
+            ratings: preSelectedFilters.ratings || null,
+        });
+    }, [preSelectedCategories, preSelectedSubCategories, preSelectedFilters]);
+
+    const handleCategorySelect = (category) => {
+        const updatedCategories = selectedCategories.includes(category)
+            ? selectedCategories.filter((c) => c !== category)
+            : [...selectedCategories, category];
+        setSelectedCategories(updatedCategories);
+        onFilterChange("categories", updatedCategories);
+    };
+
+    const handleSubCategorySelect = (subCategory) => {
+        const updatedSubCategories = selectedSubCategories.includes(subCategory)
+            ? selectedSubCategories.filter((sc) => sc !== subCategory)
+            : [...selectedSubCategories, subCategory];
+        setSelectedSubCategories(updatedSubCategories);
+        onFilterChange("subCategories", updatedSubCategories);
+    };
+
+    const handleFilterSelect = (filterType, value) => {
+        setSelectedFilters((prevFilters) => ({ ...prevFilters, [filterType]: value }));
+        onFilterChange(filterType, value);
+    };
+
+
 
     const filterOptions = {
         status: ['Active', 'Blocked'],
@@ -25,29 +62,6 @@ const FilterComponent = ({ onClose, onApplyFilters }) => {
 
     const toggleDropdown = (dropdownName) => {
         setOpenDropdown(openDropdown === dropdownName ? null : dropdownName);
-    };
-
-    const handleCategorySelect = (categoryName) => {
-        setSelectedCategories(prev =>
-            prev.includes(categoryName)
-                ? prev.filter(item => item !== categoryName)
-                : [...prev, categoryName]
-        );
-    };
-
-    const handleSubCategorySelect = (subCategoryName) => {
-        setSelectedSubCategories(prev =>
-            prev.includes(subCategoryName)
-                ? prev.filter(item => item !== subCategoryName)
-                : [...prev, subCategoryName]
-        );
-    };
-
-    const handleFilterSelect = (filterType, value) => {
-        setSelectedFilters(prev => ({
-            ...prev,
-            [filterType]: prev[filterType] === value ? null : value
-        }));
     };
 
     const clearFilters = () => {
@@ -72,6 +86,8 @@ const FilterComponent = ({ onClose, onApplyFilters }) => {
         onApplyFilters(filters);  
         onClose(); 
     };
+
+    console.log(selectedFilters.priceRange, "selectedFilters")
     return (
         <div className="p-[18px] bg-white rounded-lg">
             <div className='flex flex-col justify-between  overflow-y-scroll h-[390px] scrollRemove'>
@@ -103,16 +119,16 @@ const FilterComponent = ({ onClose, onApplyFilters }) => {
                             <div className="mt-2 p-3 grid grid-cols-2 rounded-lg">
                                 {categories.map((item) => (
                                     <div key={item.id} className="flex items-center mb-2 last:mb-0">
-                                        <input
+                                        <span>  <input
                                             type="checkbox"
                                             id={`category-${item.id}`}
                                             checked={selectedCategories.includes(item.categoryName)}
                                             onChange={() => handleCategorySelect(item.categoryName)}
-                                            className="h-4 w-4 text-blue-600 rounded"
-                                        />
+                                            className="h-4 w-4 text-blue-600 rounded flex"
+                                        /></span>
                                         <label
                                             htmlFor={`category-${item.id}`}
-                                            className="ml-2 text-[#00000099] font-normal text-base whitespace-nowrap"
+                                            className="ml-2 text-[#00000099] font-normal text-base whitespace-wrap"
                                         >
                                             {item.categoryName}
                                         </label>
@@ -215,7 +231,7 @@ const FilterComponent = ({ onClose, onApplyFilters }) => {
                                 <p className="h-5 w-5 text-gray-500"><UpIcon /></p>
                             )}
                         </button>
-                        {openDropdown === 'priceRange' && <PriceRange />}
+                        {openDropdown === 'priceRange' && <PriceRange initialPriceRange={selectedFilters} onPriceChange={handleFilterSelect} />}
                     </div>
 
                     {/* Ratings Filter */}

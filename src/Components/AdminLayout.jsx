@@ -14,7 +14,7 @@ function AdminLayout() {
         <div className="sticky top-0 z-30 bg-white px-4 pt-5 pb-[15px] rounded-[10px]">
           <TopBar />
         </div>
-        <div className="h-[calc(100vh-115px)] flex flex-col mt-4 pb-5 overflow-auto scrollRemove">
+        <div className="h-[calc(100vh-115px)] flex flex-col mt-4 pb-5 overflow-auto scrollRemove ">
           <Outlet />
         </div>
       </div>
