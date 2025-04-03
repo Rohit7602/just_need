@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 
 
 /* eslint-disable no-unused-vars */
@@ -7,6 +8,7 @@ import { FilterIcon, CloseIcon, DeleteIcon, DownArrow, ArrowIconLeft, ArrowIconR
 import Filters from '../../Components/Popups/Filters';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { supabase } from '../../store/supabaseCreateClient';
+import { useComplaintProvider } from '../../store/RaiseComplaintData';
 
 export const Complaints = () => {
   const location = useLocation();
@@ -27,23 +29,15 @@ export const Complaints = () => {
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [complaintData, setComplaintData] = useState([]);
 
-  // Fetch data from Supabase
-  const handleComplaintData = async () => {
-    try {
-      const { data: RaiseComplaint, error } = await supabase
-        .from('RaiseComplaint')
-        .select('*');
 
-      if (error) throw error;
-      setComplaintData(RaiseComplaint);
-    } catch (error) {
-      console.error('Error fetching complaints:', error);
-    }
-  };
+
+  const { complaints } = useComplaintProvider()
 
   useEffect(() => {
-    handleComplaintData();
-  }, []);
+    setComplaintData(complaints)
+  })
+
+
 
   // Pagination calculations using complaintData
   const totalItems = complaintData.length;
@@ -195,7 +189,7 @@ export const Complaints = () => {
 
           {/* Complaints Table */}
           <div className="overflow-x-auto mt-6">
-              <table className="w-full text-left border-separate border-spacing-y-2 whitespace-nowrap rounded-xl">
+            <table className="w-full text-left border-separate border-spacing-y-2 whitespace-nowrap rounded-xl">
               <thead>
                 <tr>
                   <th className="text-black text-sm font-medium py-3 px-4 border-b">
@@ -213,6 +207,7 @@ export const Complaints = () => {
               </thead>
               <tbody>
                 {currentItems.map((item) => (
+
                   <tr key={item.id} className="align-top">
                     <td className="text-black text-sm font-normal py-[4px] px-4">
                       <input
@@ -222,16 +217,24 @@ export const Complaints = () => {
                       />
                     </td>
                     <td className="text-[#6C4DEF] ext-sm font-normal px-4">
-                      <Link to={`/dashboard/complaints/complaintsDetails/${item.id}`} onClick={() => setVal(item.id)}>
+                      {/* <Link to={`/dashboard/complaints/complaintsDetails/${item.id}`}  onClick={() => setVal(item.id)}>
+                        {item.id}
+                      </Link> */}
+                      <Link
+                        to={`/dashboard/complaints/complaintsDetails/${item.id}`}
+                        state={{ complaint: item }} // Pass the entire complaint object as state
+                        onClick={() => setVal(item.id)}
+                      >
                         {item.id}
                       </Link>
+
                     </td>
                     <td className="text-black text-sm font-normal px-4">{item.complaintType}</td>
                     <td className="text-black text-sm font-normal px-4">{item.subject}</td>
                     <td className="text-black text-sm font-normal px-4 max-w-[279px] overflow-hidden whitespace-pre-wrap">
                       <div className="w-[279px] max-h-[60px] overflow-hidden whitespace-pre-wrap">
-                                                {item.description}
-                                         </div>
+                        {item.description}
+                      </div>
                     </td>
                     <td className="text-black text-sm font-normal px-4">
                       {new Date(item.created_at).toLocaleDateString('en-GB', {
@@ -249,13 +252,13 @@ export const Complaints = () => {
                     <td className=" text-black text-sm font-normal px-4">{item.userdetails?.useremail}</td>
                     <td className="text-center">
                       <span className={`px-2.5 py-[4px] rounded-full ${item.userdetails?.verificationStatus === 'Pending'
-                          ? 'bg-[#FFA50029] text-[#FFA500]'
-                          : 'bg-[#0080001A] text-[#008000]'
+                        ? 'bg-[#FFA50029] text-[#FFA500]'
+                        : 'bg-[#0080001A] text-[#008000]'
                         }`}>
                         {item.userdetails?.verificationStatus}
                       </span>
                     </td>
-                    <td className="text-black text-sm font-normal px-4"><ActionIcon /></td>
+                    <td className="text-black text-sm font-normal px-4 text_center"><ActionIcon /></td>
                   </tr>
                 ))}
               </tbody>

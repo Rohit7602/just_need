@@ -7,8 +7,8 @@ import ConfirmDeltePopUp from "./Popups/ConfirmDeltePopUp";
 import { useSubscriptionContext } from "../store/SubscriptionContext";
 
 const Subscription = () => {
-  const [deletePopUp, setDeletePopUp] = useState(false); // Fixed typo: setDeletePouUp -> setDeletePopUp
-  const [deleteItemId, setDeleteItemId] = useState(""); // Fixed typo: setDeleteItmeId -> setDeleteItemId
+  const [deletePopUp, setDeletePopUp] = useState(false);
+  const [deleteItemId, setDeleteItemId] = useState("");
   const [updateItemId, setUpdateItemId] = useState("");
   const [showPopup, setShowPopup] = useState(false);
 
@@ -24,7 +24,7 @@ const Subscription = () => {
 
   const handlePopup = () => {
     setUpdateItemId(""); // Clear update ID for adding new plan
-    setShowPopup(prev => !prev);
+    setShowPopup((prev) => !prev);
   };
 
   const handleEditPlan = (plan) => {
@@ -46,7 +46,10 @@ const Subscription = () => {
             className="bg-[#0832DE] font-normal text-base text-white py-2 xl:py-2.5 h-[42px] px-3 xl:px-[15px] rounded-[10px] mt-3 float-right"
           >
             <div className="flex items-center">
-              <span className="me-3"><Plusicon /></span> Add Plan
+              <span className="me-3">
+                <Plusicon />
+              </span>{" "}
+              Add Plan
             </div>
           </button>
         </div>
@@ -96,7 +99,7 @@ const Subscription = () => {
                   <span>1</span>
                 </div>
                 <p className="text-xs lg:text-sm font-normal text-[#FFFFFF99]">
-                  Lorem ipsum dolor sit amet consectetur.
+                  <span className="font-bold text-white">View Seller Profiles :</span>  Get complete access to seller details.
                 </p>
               </div>
               <div className="flex items-center gap-[15px] mt-[15px]">
@@ -104,7 +107,8 @@ const Subscription = () => {
                   <span>2</span>
                 </div>
                 <p className="text-xs lg:text-sm font-normal text-[#FFFFFF99]">
-                  Lorem ipsum dolor sit amet consectetur.
+                  <span className="font-bold text-white"> Chat with Sellers :</span>   Message sellers directly within the app.
+
                 </p>
               </div>
               <div className="flex items-center gap-[15px] mt-[15px]">
@@ -112,15 +116,53 @@ const Subscription = () => {
                   <span>3</span>
                 </div>
                 <p className="text-xs lg:text-sm font-normal text-[#FFFFFF99]">
-                  Lorem ipsum dolor sit amet consectetur.
+                  <span className="font-bold text-white"> Call Sellers :</span>   Instantly connect with sellers via call.
+
+                </p>
+              </div>
+              <div className="flex items-center gap-[15px] mt-[15px]">
+                <div className="rounded-[50px] text-white h-[24px] w-[24px] bg-[#382488] text-sm font-normal flex items-center justify-center">
+                  <span>4</span>
+                </div>
+                <p className="text-xs lg:text-sm font-normal text-[#FFFFFF99]">
+                  <span className="font-bold text-white"> Switch to Seller Mode :</span>    Become a seller and list your services.
+
+                </p>
+              </div>
+              <div className="flex items-center gap-[15px] mt-[15px]">
+                <div className="rounded-[50px] text-white h-[24px] w-[24px] bg-[#382488] text-sm font-normal flex items-center justify-center">
+                  <span>5</span>
+                </div>
+                <p className="text-xs lg:text-sm font-normal text-[#FFFFFF99]">
+                  <span className="font-bold text-white">Priority Support:</span>   Get faster customer assistance.
+
+                </p>
+              </div>
+              <div className="flex items-center gap-[15px] mt-[15px]">
+                <div className="rounded-[50px] text-white h-[24px] w-[24px] bg-[#382488] text-sm font-normal flex items-center justify-center">
+                  <span>6</span>
+                </div>
+                <p className="text-xs lg:text-sm font-normal text-[#FFFFFF99]">
+                  <span className="font-bold text-white">Exclusive Offers :</span>    Access special deals and discounts.
+
                 </p>
               </div>
             </div>
           </div>
         ))}
       </div>
-      {showPopup && <SuscriptionPopUp updateItemId={updateItemId} handlePopup={handlePopup} />}
-      {deletePopUp && <ConfirmDeltePopUp deleteId={deleteItemId} onCancel={() => setDeletePopUp(false)} />}
+      {showPopup && (
+        <SuscriptionPopUp
+          updateItemId={updateItemId}
+          handlePopup={handlePopup}
+        />
+      )}
+      {deletePopUp && (
+        <ConfirmDeltePopUp
+          deleteId={deleteItemId}
+          onCancel={() => setDeletePopUp(false)}
+        />
+      )}
     </div>
   );
 };

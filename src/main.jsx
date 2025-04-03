@@ -16,6 +16,7 @@ import ListingProvider from "./store/ListingContext.jsx";
 import { CustomerContext } from "./store/CustomerContext.jsx";
 import { SubscriptionContext } from "./store/SubscriptionContext.jsx";
 import { UserProvider } from "./store/UserContext.jsx";
+import { ComplaintProvider } from "./store/RaiseComplaintData.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -28,7 +29,9 @@ createRoot(document.getElementById("root")).render(
                 <SubscriptionContext>
                   <BrowserRouter>
                     <UserProvider>
-                      <App />
+                      <ComplaintProvider>
+                        <App />
+                      </ComplaintProvider>
                     </UserProvider>
                   </BrowserRouter>
                 </SubscriptionContext>
