@@ -174,60 +174,60 @@ const Provider_Detail = () => {
                     </button>
                   </div>
                   <div className="mt-3">
-                    <div onClick={assignDropdown} className={`flex ${!assignDropdown && "flex"}`} >
                       <p className="font-normal text-base whitespace-nowrap">1. Assign to</p>
+                    <div onClick={assignDropdown} className={`flex bg-[#F2F2F2] py-3 rounded-md mt-2 pe-4 ${!assignDropdown && "flex"}`} >
                       <span className="flex justify-end w-full">
                         <DropdownIcon />
                       </span>
                     </div>
 
                     {AssignDropdown && (
-                      <div className="mt-2 rounded-md">
+                      <div className="mt-2 rounded-md bg-[#F2F2F2] overflow-hidden">
                         <div
                           className="p-2 cursor-pointer rounded-[90px]"
                         >
-                          provider list
+                          Seller
                         </div>
                         <div
                           className="p-2 cursor-pointer rounded-[90px] "
                         >
-                          provider list
+                      Admin
                         </div>
                         <div
                           className="p-2  cursor-pointer rounded-[90px] "
                         >
-                          provider list
+                          Technical Engineer
                         </div>
                       </div>
                     )}
 
 
                     <hr className="my-2.5" />
-
-                    <input className="font-normal text-base outline-none border-none placeholder-black" type="text" placeholder="2. Instructions" />
+                    <p className="font-normal text-base whitespace-nowrap ">2. Instructions</p>
+                    <input className="font-normal text-base outline-none border-none bg-[#F2F2F2] py-3 rounded-md mt-2 px-4 w-full placeholder-black" type="text" placeholder="" />
                     <hr className="my-2.5" />
 
-                    <div onClick={toggleDropdown} className={`flex ${!dropdown && "flex"}`}>
                       <p className="whitespace-nowrap">3. Status</p>
+                    <div onClick={toggleDropdown} className={`flex bg-[#F2F2F2] py-3 rounded-md mt-2 pe-4 ${!dropdown && "flex"}`}>
                       <span className="flex justify-end w-full">
                         <DropdownIcon />
                       </span>
 
                     </div>
                     {dropdown && (
-                      <div className="mt-2 rounded-md">
+                      <div className="mt-2 rounded-md bg-[#F2F2F2] overflow-hidden">
                         <div
-                          className="p-2 mt-2 cursor-pointer rounded-[90px] hover:bg-[#6C4DEF1A] text-[#6C4DEF]"
+                          className="p-2 cursor-pointer hover:bg-[#6C4DEF1A] text-[#6C4DEF]"
                         >
                           Process
                         </div>
                         <div
-                          className="p-2 mt-2 cursor-pointer rounded-[90px] hover:bg-[#FFA50029] text-[#FFA500]"
+                          className="p-2 cursor-pointer hover:bg-[#FFA50029] text-[#FFA500]"
                         >
                           Pending
                         </div>
                         <div
-                          className="p-2 mt-2 cursor-pointer rounded-[90px] hover:bg-[#0080001A] text-[#008000]"
+                          className="p-2 cursor-pointer hover:bg-[#0080001A] text-[#008000]"
                         >
                           Done
                         </div>

@@ -96,7 +96,7 @@ const Subscription = () => {
                   <span>1</span>
                 </div>
                 <p className="text-xs lg:text-sm font-normal text-[#FFFFFF99]">
-                  Lorem ipsum dolor sit amet consectetur.
+                  <span className="font-bold text-white">View Seller Profiles :</span>  Get complete access to seller details.
                 </p>
               </div>
               <div className="flex items-center gap-[15px] mt-[15px]">
@@ -104,7 +104,8 @@ const Subscription = () => {
                   <span>2</span>
                 </div>
                 <p className="text-xs lg:text-sm font-normal text-[#FFFFFF99]">
-                  Lorem ipsum dolor sit amet consectetur.
+                  <span className="font-bold text-white"> Chat with Sellers :</span>   Message sellers directly within the app.
+
                 </p>
               </div>
               <div className="flex items-center gap-[15px] mt-[15px]">
@@ -112,7 +113,35 @@ const Subscription = () => {
                   <span>3</span>
                 </div>
                 <p className="text-xs lg:text-sm font-normal text-[#FFFFFF99]">
-                  Lorem ipsum dolor sit amet consectetur.
+                  <span className="font-bold text-white"> Call Sellers :</span>   Instantly connect with sellers via call.
+
+                </p>
+              </div>
+              <div className="flex items-center gap-[15px] mt-[15px]">
+                <div className="rounded-[50px] text-white h-[24px] w-[24px] bg-[#382488] text-sm font-normal flex items-center justify-center">
+                  <span>4</span>
+                </div>
+                <p className="text-xs lg:text-sm font-normal text-[#FFFFFF99]">
+                  <span className="font-bold text-white"> Switch to Seller Mode :</span>    Become a seller and list your services.
+
+                </p>
+              </div>
+              <div className="flex items-center gap-[15px] mt-[15px]">
+                <div className="rounded-[50px] text-white h-[24px] w-[24px] bg-[#382488] text-sm font-normal flex items-center justify-center">
+                  <span>5</span>
+                </div>
+                <p className="text-xs lg:text-sm font-normal text-[#FFFFFF99]">
+                  <span className="font-bold text-white">Priority Support:</span>   Get faster customer assistance.
+
+                </p>
+              </div>
+              <div className="flex items-center gap-[15px] mt-[15px]">
+                <div className="rounded-[50px] text-white h-[24px] w-[24px] bg-[#382488] text-sm font-normal flex items-center justify-center">
+                  <span>6</span>
+                </div>
+                <p className="text-xs lg:text-sm font-normal text-[#FFFFFF99]">
+                  <span className="font-bold text-white">Exclusive Offers :</span>    Access special deals and discounts.
+
                 </p>
               </div>
             </div>
