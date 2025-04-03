@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 
 
 /* eslint-disable no-unused-vars */
@@ -7,6 +8,7 @@ import { FilterIcon, CloseIcon, DeleteIcon, DownArrow, ArrowIconLeft, ArrowIconR
 import Filters from '../../Components/Popups/Filters';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { supabase } from '../../store/supabaseCreateClient';
+import { useComplaintProvider } from '../../store/RaiseComplaintData';
 
 export const Complaints = () => {
   const location = useLocation();
@@ -27,23 +29,15 @@ export const Complaints = () => {
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [complaintData, setComplaintData] = useState([]);
 
-  // Fetch data from Supabase
-  const handleComplaintData = async () => {
-    try {
-      const { data: RaiseComplaint, error } = await supabase
-        .from('RaiseComplaint')
-        .select('*');
 
-      if (error) throw error;
-      setComplaintData(RaiseComplaint);
-    } catch (error) {
-      console.error('Error fetching complaints:', error);
-    }
-  };
+
+  const { complaints } = useComplaintProvider()
 
   useEffect(() => {
-    handleComplaintData();
-  }, []);
+    setComplaintData(complaints)
+  })
+
+
 
   // Pagination calculations using complaintData
   const totalItems = complaintData.length;
@@ -213,6 +207,7 @@ export const Complaints = () => {
               </thead>
               <tbody>
                 {currentItems.map((item) => (
+
                   <tr key={item.id} className="align-top">
                     <td className="text-black text-sm font-normal py-[4px] px-4">
                       <input
@@ -222,9 +217,17 @@ export const Complaints = () => {
                       />
                     </td>
                     <td className="text-[#6C4DEF] ext-sm font-normal px-4">
-                      <Link to={`/dashboard/complaints/complaintsDetails/${item.id}`} onClick={() => setVal(item.id)}>
+                      {/* <Link to={`/dashboard/complaints/complaintsDetails/${item.id}`}  onClick={() => setVal(item.id)}>
+                        {item.id}
+                      </Link> */}
+                      <Link
+                        to={`/dashboard/complaints/complaintsDetails/${item.id}`}
+                        state={{ complaint: item }} // Pass the entire complaint object as state
+                        onClick={() => setVal(item.id)}
+                      >
                         {item.id}
                       </Link>
+
                     </td>
                     <td className="text-black text-sm font-normal px-4">{item.complaintType}</td>
                     <td className="text-black text-sm font-normal px-4">{item.subject}</td>
