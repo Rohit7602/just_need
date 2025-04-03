@@ -174,7 +174,7 @@
 //                         </div>
 //                     </div>
 
-                    
+
 
 //                     <div className="mt-4">
 //                         <div className="flex items-center justify-between">
@@ -196,11 +196,11 @@
 //                                 style={{ backgroundColor: subscriptionData.color }}
 //                                 onClick={() => setShowColorPicker(!showColorPicker)}
 //                             >
-                               
+
 //                             </button>
 //                             <button
 //                                 className="h-[42px] w-[calc(100%-163px)] text-start px-4 rounded-[10px] text-black/70 bg-[#F2F2F2]"
-                               
+
 //                             >
 //                                 {subscriptionData.color}
 //                             </button>
@@ -229,7 +229,6 @@
 // }
 
 // export default SuscriptionPopUp;
-
 
 
 /* eslint-disable react-hooks/exhaustive-deps */

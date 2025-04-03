@@ -7,8 +7,8 @@ import ConfirmDeltePopUp from "./Popups/ConfirmDeltePopUp";
 import { useSubscriptionContext } from "../store/SubscriptionContext";
 
 const Subscription = () => {
-  const [deletePopUp, setDeletePopUp] = useState(false); // Fixed typo: setDeletePouUp -> setDeletePopUp
-  const [deleteItemId, setDeleteItemId] = useState(""); // Fixed typo: setDeleteItmeId -> setDeleteItemId
+  const [deletePopUp, setDeletePopUp] = useState(false);
+  const [deleteItemId, setDeleteItemId] = useState("");
   const [updateItemId, setUpdateItemId] = useState("");
   const [showPopup, setShowPopup] = useState(false);
 
@@ -24,7 +24,7 @@ const Subscription = () => {
 
   const handlePopup = () => {
     setUpdateItemId(""); // Clear update ID for adding new plan
-    setShowPopup(prev => !prev);
+    setShowPopup((prev) => !prev);
   };
 
   const handleEditPlan = (plan) => {
@@ -46,7 +46,10 @@ const Subscription = () => {
             className="bg-[#0832DE] font-normal text-base text-white py-2 xl:py-2.5 h-[42px] px-3 xl:px-[15px] rounded-[10px] mt-3 float-right"
           >
             <div className="flex items-center">
-              <span className="me-3"><Plusicon /></span> Add Plan
+              <span className="me-3">
+                <Plusicon />
+              </span>{" "}
+              Add Plan
             </div>
           </button>
         </div>
@@ -148,8 +151,18 @@ const Subscription = () => {
           </div>
         ))}
       </div>
-      {showPopup && <SuscriptionPopUp updateItemId={updateItemId} handlePopup={handlePopup} />}
-      {deletePopUp && <ConfirmDeltePopUp deleteId={deleteItemId} onCancel={() => setDeletePopUp(false)} />}
+      {showPopup && (
+        <SuscriptionPopUp
+          updateItemId={updateItemId}
+          handlePopup={handlePopup}
+        />
+      )}
+      {deletePopUp && (
+        <ConfirmDeltePopUp
+          deleteId={deleteItemId}
+          onCancel={() => setDeletePopUp(false)}
+        />
+      )}
     </div>
   );
 };

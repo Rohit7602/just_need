@@ -18,20 +18,23 @@ export const SubscriptionContext = ({ children }) => {
         try {
             const { data, error } = await supabase
                 .from("Subscription")
-                .insert([{
-                    planName: planData.planName,
-                    price: parseFloat(planData.price),
-                    durationInDays: parseInt(planData.durationInDays),
-                    currency: planData.currency,
-                    color: planData.color,
-                    cancellationPolicy: planData.cancellationPolicy || "Standard policy"
-                }])
+                .insert([
+                    {
+                        planName: planData.planName,
+                        price: parseFloat(planData.price),
+                        durationInDays: parseInt(planData.durationInDays),
+                        currency: planData.currency,
+                        color: planData.color,
+                        cancellationPolicy: planData.cancellationPolicy || "Standard policy",
+                        features: planData.features || [], // Add features field (default to empty array if not provided)
+                    },
+                ])
                 .select();
 
             if (error) throw error;
 
             console.log("Plan added successfully:", data);
-            setPlans(prev => [...prev, data[0]]);
+            setPlans((prev) => [...prev, data[0]]);
             setShowPopup(false);
             toast.success("Plan added successfully!");
             return { success: true };
@@ -54,7 +57,7 @@ export const SubscriptionContext = ({ children }) => {
             if (error) throw error;
 
             console.log("Plan deleted successfully!");
-            setPlans(prev => prev.filter(plan => plan.id !== planId));
+            setPlans((prev) => prev.filter((plan) => plan.id !== planId));
             toast.success("Plan deleted successfully!");
             return { success: true };
         } catch (error) {
@@ -75,7 +78,8 @@ export const SubscriptionContext = ({ children }) => {
                     durationInDays: parseInt(updatedData.durationInDays),
                     currency: updatedData.currency,
                     color: updatedData.color,
-                    cancellationPolicy: updatedData.cancellationPolicy
+                    cancellationPolicy: updatedData.cancellationPolicy,
+                    features: updatedData.features || [], // Update features field
                 })
                 .eq("id", planId)
                 .select();
@@ -83,8 +87,8 @@ export const SubscriptionContext = ({ children }) => {
             if (error) throw error;
 
             console.log("Plan updated successfully:", data);
-            setPlans(prev =>
-                prev.map(plan =>
+            setPlans((prev) =>
+                prev.map((plan) =>
                     plan.id === planId ? { ...plan, ...data[0] } : plan
                 )
             );
@@ -102,14 +106,11 @@ export const SubscriptionContext = ({ children }) => {
 
     const fetchSubscription = async () => {
         try {
-            const { data, error } = await supabase
-                .from("Subscription")
-                .select("*");
+            const { data, error } = await supabase.from("Subscription").select("*");
 
             if (error) throw error;
 
             setPlans(data);
-            // No success toast for fetch (silent operation)
             return data;
         } catch (error) {
             console.error("Error fetching subscriptions:", error);
@@ -127,8 +128,7 @@ export const SubscriptionContext = ({ children }) => {
                 .single();
 
             if (error) throw error;
-           
-            // No success toast for fetch by ID (silent operation)
+
             return data;
         } catch (error) {
             console.error("Error fetching subscription:", error);

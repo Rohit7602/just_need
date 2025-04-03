@@ -82,7 +82,9 @@ function TopBar() {
                 `User's Details / ${userName}`
               ) : location.pathname.includes("/dashboard/listings/") ? (
                 "Listings Details"
-              ) : (
+              ) :location.pathname.includes("/dashboard/complaints/complaintsDetails/") ? (
+              "Complaint Details"
+  ) : (
                 location.pathname
                   .replace("/dashboard/", "")
                   .replace("/", " ")
