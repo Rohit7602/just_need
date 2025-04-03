@@ -15,16 +15,19 @@ function SuscriptionPopUp({ handlePopup, updateItemId }) {
         currency: "₹",
         color: "#0832DE",
         cancellationPolicy: "",
-          features: [""]
+        features: [], // Initialize as an empty array
     };
 
     const [subscriptionData, setSubscriptionData] = useState(initialData);
     const [showColorPicker, setShowColorPicker] = useState(false);
+    const [errors, setErrors] = useState({}); // For form validation
+    const [newFeature, setNewFeature] = useState(""); // State for the new feature input
     const colorPickerRef = useRef(null);
 
+    // Load existing plan data for editing
     useEffect(() => {
         if (updateItemId) {
-            const existingPlan = plans.find(plan => plan.id === updateItemId);
+            const existingPlan = plans.find((plan) => plan.id === updateItemId);
             if (existingPlan) {
                 setSubscriptionData({
                     planName: existingPlan.planName || "",
@@ -32,7 +35,8 @@ function SuscriptionPopUp({ handlePopup, updateItemId }) {
                     durationInDays: existingPlan.durationInDays?.toString() || "",
                     currency: existingPlan.currency || "₹",
                     color: existingPlan.color || "#0832DE",
-                    cancellationPolicy: existingPlan.cancellationPolicy || "", features: existingPlan.features || [""]
+                    cancellationPolicy: existingPlan.cancellationPolicy || "",
+                    features: Array.isArray(existingPlan.features) ? existingPlan.features : [], // Ensure features is an array
                 });
             }
         } else {
@@ -40,28 +44,71 @@ function SuscriptionPopUp({ handlePopup, updateItemId }) {
         }
     }, [updateItemId, plans]);
 
+    // Handle color picker change
     const handleColorChange = (color) => {
-        setSubscriptionData(prev => ({
+        setSubscriptionData((prev) => ({
             ...prev,
-            color: color.hex
+            color: color.hex,
         }));
     };
 
+    // Handle input changes for text fields
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setSubscriptionData(prev => ({ ...prev, [name]: value }));
-    };
-    const handleFeatureChange = (index, value) => {
-        const newFeatures = [...subscriptionData.features];
-        newFeatures[index] = value;
-        setSubscriptionData(prev => ({ ...prev, features: newFeatures }));
+        setSubscriptionData((prev) => ({ ...prev, [name]: value }));
+        // Clear error for the field
+        setErrors((prev) => ({ ...prev, [name]: "" }));
     };
 
-    const addFeatureField = () => {
-        setSubscriptionData(prev => ({ ...prev, features: [...prev.features, ""] }));
+    // Handle new feature input change
+    const handleNewFeatureChange = (e) => {
+        setNewFeature(e.target.value);
     };
-    const handleSubmit = async () => {
+
+    // Add a new feature to the list
+    const addFeatureField = () => {
+        if (newFeature.trim() === "") return; // Prevent adding empty features
+        setSubscriptionData((prev) => ({
+            ...prev,
+            features: [...prev.features, newFeature.trim()],
+        }));
+        setNewFeature(""); // Clear the input field
+    };
+
+    // Remove a feature from the list
+    const removeFeatureField = (index) => {
+        const newFeatures = subscriptionData.features.filter((_, i) => i !== index);
+        setSubscriptionData((prev) => ({ ...prev, features: newFeatures }));
+    };
+
+    // Validate form data
+    const validateForm = () => {
+        const newErrors = {};
+        if (!subscriptionData.planName.trim()) {
+            newErrors.planName = "Plan name is required";
+        }
+        if (!subscriptionData.price || isNaN(subscriptionData.price) || parseFloat(subscriptionData.price) <= 0) {
+            newErrors.price = "Valid price is required";
+        }
+        if (
+            !subscriptionData.durationInDays ||
+            isNaN(subscriptionData.durationInDays) ||
+            parseInt(subscriptionData.durationInDays) <= 0
+        ) {
+            newErrors.durationInDays = "Valid duration (in years) is required";
+        }
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    // Handle form submission
+    const handleSubmit = async (e) => {
+        e.preventDefault();
         if (loading) return;
+
+        if (!validateForm()) {
+            return;
+        }
 
         const payload = {
             planName: subscriptionData.planName,
@@ -69,7 +116,8 @@ function SuscriptionPopUp({ handlePopup, updateItemId }) {
             durationInDays: parseInt(subscriptionData.durationInDays),
             currency: subscriptionData.currency,
             color: subscriptionData.color,
-            cancellationPolicy: subscriptionData.cancellationPolicy
+            cancellationPolicy: subscriptionData.cancellationPolicy,
+            features: subscriptionData.features.filter((f) => f.trim() !== ""), // Remove empty features
         };
 
         try {
@@ -84,6 +132,7 @@ function SuscriptionPopUp({ handlePopup, updateItemId }) {
         }
     };
 
+    // Close color picker when clicking outside
     useEffect(() => {
         const handleClickOutside = (e) => {
             if (colorPickerRef.current && !colorPickerRef.current.contains(e.target)) {
@@ -94,6 +143,14 @@ function SuscriptionPopUp({ handlePopup, updateItemId }) {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
+    // Handle Enter key press to add feature
+    const handleKeyPress = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault(); // Prevent form submission
+            addFeatureField();
+        }
+    };
+
     return (
         <>
             <div
@@ -101,7 +158,7 @@ function SuscriptionPopUp({ handlePopup, updateItemId }) {
                 className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50"
             />
             <div className="fixed inset-0 flex items-center justify-center z-50 h-[458px] w-[500px] xl:w-[694px] m-auto">
-                <div className="w-full bg-white rounded-lg shadow-lg p-6 relative">
+                <div className="w-full bg-white rounded-lg shadow-lg p-6 relative max-h-[80vh] overflow-y-auto">
                     <button
                         onClick={handlePopup}
                         className="absolute top-4 right-4 text-gray-600 hover:text-black text-2xl"
@@ -113,115 +170,179 @@ function SuscriptionPopUp({ handlePopup, updateItemId }) {
                         {updateItemId ? "Edit Subscription" : "Add Subscription"}
                     </p>
 
-                    <div className="mt-[15px]">
-                        <label className="block text-base font-normal text-gray-700 mb-2.5">
-                            Subscription Name
-                        </label>
-                        <input
-                            name="planName"
-                            value={subscriptionData.planName}
-                            onChange={handleInputChange}
-                            placeholder="Standard"
-                            className="w-full px-3 py-[12px] rounded-[7px] bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                    </div>
-
-                    <div className="flex justify-between mt-[15px]">
-                        <div className="w-[25%]">
+                    <form onSubmit={handleSubmit}>
+                        <div className="mt-[15px]">
                             <label className="block text-base font-normal text-gray-700 mb-2.5">
-                                Currency
-                            </label>
-                            <div className="w-full pe-3 rounded-[7px] bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <select
-                                    name="currency"
-                                    value={subscriptionData.currency}
-                                    onChange={handleInputChange}
-                                    className="w-full px-3 py-[12px] rounded-[7px] bg-gray-100 focus:outline-none"
-                                >
-                                    <option value="₹">Ind (Rs)</option>
-                                    <option value="$">US Dollar ($)</option>
-                                    <option value="€">Euro (€)</option>
-                                    <option value="£">Pound (£)</option>
-                                </select>
-                            </div>
-                        </div> <div className="w-[35%]">
-                            <label className="block text-base font-normal text-gray-700 mb-2.5">
-                                Price
+                                Subscription Name
                             </label>
                             <input
-                                name="price"
-                                type="number"
-                                value={subscriptionData.price}
+                                name="planName"
+                                value={subscriptionData.planName}
                                 onChange={handleInputChange}
-                                placeholder="₹199.00"
-                                className="w-full px-3 py-[12px] rounded-[7px] bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                onWheel={(e) => e.target.blur()}
+                                placeholder="Standard"
+                                className={`w-full px-3 py-[12px] rounded-[7px] bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.planName ? "border-red-500" : ""
+                                    }`}
                             />
-                        </div>
-                        <div className="w-[35%]">
-                            <label className="block text-base font-normal text-gray-700 mb-2.5">
-                                Duration (In years)
-                            </label>
-                            <input
-                                name="durationInDays"
-                                type="number"
-                                value={subscriptionData.durationInDays}
-                                onChange={handleInputChange}
-                                placeholder="1"
-                                className="w-full px-3 py-[12px] rounded-[7px] bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                onWheel={(e) => e.target.blur()}
-                            />
-                        </div>
-                    </div>
-
-                    
-
-                    <div className="mt-4">
-                        <div className="flex items-center justify-between">
-                            <label className="block text-base font-normal text-gray-700">Features</label>
-                            <button onClick={addFeatureField} className=" text-[#6C4DEF] px-4 py-2 rounded mt-2">+ Add Features</button>
-</div>
-                        {subscriptionData.features.map((feature, index) => (
-                            <input key={index} value={feature} onChange={(e) => handleFeatureChange(index, e.target.value)} placeholder="Feature" className="w-full px-3 py-2 rounded bg-gray-100 mb-2 focus:ring-2 focus:ring-blue-500" />
-                        ))}
-                    </div>
-
-                    <div className="mt-[15px] relative">
-                        <label className="block text-base font-normal text-gray-700 mb-2.5">
-                            Plan Color
-                        </label>
-                        <div className="flex items-center gap-2.5">
-                            <button
-                                className="h-[42px] w-[163px] px-4 rounded-[10px] text-white"
-                                style={{ backgroundColor: subscriptionData.color }}
-                                onClick={() => setShowColorPicker(!showColorPicker)}
-                            >
-                               
-                            </button>
-                            <button
-                                className="h-[42px] w-[calc(100%-163px)] text-start px-4 rounded-[10px] text-black/70 bg-[#F2F2F2]"
-                               
-                            >
-                                {subscriptionData.color}
-                            </button>
-                            {showColorPicker && (
-                                <div ref={colorPickerRef} className="absolute z-10 top-full mt-2">
-                                    <ChromePicker
-                                        color={subscriptionData.color}
-                                        onChange={handleColorChange}
-                                    />
-                                </div>
+                            {errors.planName && (
+                                <p className="text-red-500 text-sm mt-1">{errors.planName}</p>
                             )}
                         </div>
-                    </div>
 
-                    <button
-                        onClick={handleSubmit}
-                        disabled={loading}
-                        className="w-full bg-[#0832DE] text-base text-white font-medium py-2.5 h-[42px] rounded-[10px] mt-[15px] disabled:opacity-50"
-                    >
-                        {loading ? "Saving..." : "Save Plan"}
-                    </button>
+                        <div className="flex justify-between mt-[15px]">
+                            <div className="w-[25%]">
+                                <label className="block text-base font-normal text-gray-700 mb-2.5">
+                                    Currency
+                                </label>
+                                <div className="w-full pe-3 rounded-[7px] bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <select
+                                        name="currency"
+                                        value={subscriptionData.currency}
+                                        onChange={handleInputChange}
+                                        className="w-full px-3 py-[12px] rounded-[7px] bg-gray-100 focus:outline-none"
+                                    >
+                                        <option value="₹">Ind (Rs)</option>
+                                        <option value="$">US Dollar ($)</option>
+                                        <option value="€">Euro (€)</option>
+                                        <option value="£">Pound (£)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="w-[35%]">
+                                <label className="block text-base font-normal text-gray-700 mb-2.5">
+                                    Price
+                                </label>
+                                <input
+                                    name="price"
+                                    type="number"
+                                    value={subscriptionData.price}
+                                    onChange={handleInputChange}
+                                    placeholder="₹199.00"
+                                    className={`w-full px-3 py-[12px] rounded-[7px] bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.price ? "border-red-500" : ""
+                                        }`}
+                                    onWheel={(e) => e.target.blur()}
+                                />
+                                {errors.price && (
+                                    <p className="text-red-500 text-sm mt-1">{errors.price}</p>
+                                )}
+                            </div>
+                            <div className="w-[35%]">
+                                <label className="block text-base font-normal text-gray-700 mb-2.5">
+                                    Duration (In years)
+                                </label>
+                                <input
+                                    name="durationInDays"
+                                    type="number"
+                                    value={subscriptionData.durationInDays}
+                                    onChange={handleInputChange}
+                                    placeholder="1"
+                                    className={`w-full px-3 py-[12px] rounded-[7px] bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.durationInDays ? "border-red-500" : ""
+                                        }`}
+                                    onWheel={(e) => e.target.blur()}
+                                />
+                                {errors.durationInDays && (
+                                    <p className="text-red-500 text-sm mt-1">{errors.durationInDays}</p>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="mt-[15px]">
+                            <label className="block text-base font-normal text-gray-700 mb-2.5">
+                                Cancellation Policy
+                            </label>
+                            <input
+                                name="cancellationPolicy"
+                                value={subscriptionData.cancellationPolicy}
+                                onChange={handleInputChange}
+                                placeholder="Standard policy"
+                                className="w-full px-3 py-[12px] rounded-[7px] bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                        </div>
+
+                        <div className="mt-4">
+                            <div className="flex justify-between">
+                                <label className="block text-base font-normal text-gray-700 mb-2.5">
+                                    Features
+                                </label>
+                                <button
+                                    type="button"
+                                    onClick={addFeatureField}
+                                    className="text-[#6C4DEF] px-4 py-2 rounded"
+                                >
+                                    + Add Feature
+                                </button>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <input
+                                    value={newFeature}
+                                    onChange={handleNewFeatureChange}
+                                    onKeyPress={handleKeyPress}
+                                    placeholder="Enter a feature"
+                                    className="w-full px-3 py-2 rounded bg-gray-100 focus:ring-2 focus:ring-blue-500"
+                                />
+
+                            </div>
+                            {subscriptionData.features.length > 0 && (
+                                <div className="mt-3">
+                                    {subscriptionData.features.map((feature, index) => (
+                                        <div key={index} className="relative mt-2">
+                                            <input
+                                                value={feature}
+                                                readOnly
+                                                className="w-full px-3 py-2 rounded bg-gray-200 text-gray-700 cursor-default"
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => removeFeatureField(index)}
+                                                className="absolute top-1/2 right-3 transform -translate-y-1/2 text-red-500 hover:text-red-700 text-sm"
+                                                aria-label="Remove feature"
+                                            >
+                                                ✕
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                            {subscriptionData.features.length === 0 && (
+                                <p className="text-gray-500 text-sm mt-2">No features added yet.</p>
+                            )}
+                        </div>
+
+                        <div className="mt-[15px] relative">
+                            <label className="block text-base font-normal text-gray-700 mb-2.5">
+                                Plan Color
+                            </label>
+                            <div className="flex items-center gap-2.5">
+                                <button
+                                    type="button"
+                                    className="h-[42px] w-[163px] px-4 rounded-[10px] text-white"
+                                    style={{ backgroundColor: subscriptionData.color }}
+                                    onClick={() => setShowColorPicker(!showColorPicker)}
+                                />
+                                <button
+                                    type="button"
+                                    className="h-[42px] w-[calc(100%-163px)] text-start px-4 rounded-[10px] text-black/70 bg-[#F2F2F2]"
+                                >
+                                    {subscriptionData.color}
+                                </button>
+                                {showColorPicker && (
+                                    <div ref={colorPickerRef} className="absolute z-10 top-full mt-2">
+                                        <ChromePicker
+                                            color={subscriptionData.color}
+                                            onChange={handleColorChange}
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full bg-[#0832DE] text-base text-white font-medium py-2.5 h-[42px] rounded-[10px] mt-[15px] disabled:opacity-50"
+                        >
+                            {loading ? "Saving..." : "Save Plan"}
+                        </button>
+                    </form>
                 </div>
             </div>
         </>

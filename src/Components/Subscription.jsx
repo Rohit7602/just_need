@@ -7,8 +7,8 @@ import ConfirmDeltePopUp from "./Popups/ConfirmDeltePopUp";
 import { useSubscriptionContext } from "../store/SubscriptionContext";
 
 const Subscription = () => {
-  const [deletePopUp, setDeletePopUp] = useState(false); // Fixed typo: setDeletePouUp -> setDeletePopUp
-  const [deleteItemId, setDeleteItemId] = useState(""); // Fixed typo: setDeleteItmeId -> setDeleteItemId
+  const [deletePopUp, setDeletePopUp] = useState(false);
+  const [deleteItemId, setDeleteItemId] = useState("");
   const [updateItemId, setUpdateItemId] = useState("");
   const [showPopup, setShowPopup] = useState(false);
 
@@ -24,7 +24,7 @@ const Subscription = () => {
 
   const handlePopup = () => {
     setUpdateItemId(""); // Clear update ID for adding new plan
-    setShowPopup(prev => !prev);
+    setShowPopup((prev) => !prev);
   };
 
   const handleEditPlan = (plan) => {
@@ -46,7 +46,10 @@ const Subscription = () => {
             className="bg-[#0832DE] font-normal text-base text-white py-2 xl:py-2.5 h-[42px] px-3 xl:px-[15px] rounded-[10px] mt-3 float-right"
           >
             <div className="flex items-center">
-              <span className="me-3"><Plusicon /></span> Add Plan
+              <span className="me-3">
+                <Plusicon />
+              </span>{" "}
+              Add Plan
             </div>
           </button>
         </div>
@@ -91,36 +94,38 @@ const Subscription = () => {
               <p className="mt-[15px] text-[#FFFFFF99] text-sm xl:text-base font-normal">
                 How It Works?
               </p>
-              <div className="flex items-center gap-[15px] mt-[15px]">
-                <div className="rounded-[50px] text-white h-[24px] w-[24px] bg-[#382488] text-sm font-normal flex items-center justify-center">
-                  <span>1</span>
-                </div>
-                <p className="text-xs lg:text-sm font-normal text-[#FFFFFF99]">
-                  Lorem ipsum dolor sit amet consectetur.
+              {item.features && item.features.length > 0 ? (
+                item.features.map((feature, index) => (
+                  <div key={index} className="flex items-center gap-[15px] mt-[15px]">
+                    <div className="rounded-[50px] text-white h-[24px] w-[24px] bg-[#382488] text-sm font-normal flex items-center justify-center">
+                      <span>{index + 1}</span>
+                    </div>
+                    <p className="text-xs lg:text-sm font-normal text-[#FFFFFF99]">
+                      {feature}
+                    </p>
+                  </div>
+                ))
+              ) : (
+                <p className="text-xs lg:text-sm font-normal text-[#FFFFFF99] mt-[15px]">
+                  No features available
                 </p>
-              </div>
-              <div className="flex items-center gap-[15px] mt-[15px]">
-                <div className="rounded-[50px] text-white h-[24px] w-[24px] bg-[#382488] text-sm font-normal flex items-center justify-center">
-                  <span>2</span>
-                </div>
-                <p className="text-xs lg:text-sm font-normal text-[#FFFFFF99]">
-                  Lorem ipsum dolor sit amet consectetur.
-                </p>
-              </div>
-              <div className="flex items-center gap-[15px] mt-[15px]">
-                <div className="rounded-[50px] text-white h-[24px] w-[24px] bg-[#382488] text-sm font-normal flex items-center justify-center">
-                  <span>3</span>
-                </div>
-                <p className="text-xs lg:text-sm font-normal text-[#FFFFFF99]">
-                  Lorem ipsum dolor sit amet consectetur.
-                </p>
-              </div>
+              )}
             </div>
           </div>
         ))}
       </div>
-      {showPopup && <SuscriptionPopUp updateItemId={updateItemId} handlePopup={handlePopup} />}
-      {deletePopUp && <ConfirmDeltePopUp deleteId={deleteItemId} onCancel={() => setDeletePopUp(false)} />}
+      {showPopup && (
+        <SuscriptionPopUp
+          updateItemId={updateItemId}
+          handlePopup={handlePopup}
+        />
+      )}
+      {deletePopUp && (
+        <ConfirmDeltePopUp
+          deleteId={deleteItemId}
+          onCancel={() => setDeletePopUp(false)}
+        />
+      )}
     </div>
   );
 };
