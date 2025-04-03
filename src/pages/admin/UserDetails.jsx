@@ -126,20 +126,15 @@ function UserDetails() {
   };
 
 console.log(user)
-
-
   const approveUser = async () => {
     const confirmApprove = window.confirm("Are you sure you want to approve this user?");
     if (!confirmApprove) return;
 
-    if (!user) {
-      toast.error("User data not found");
+    if (!user || !user.businessDetail.businessId) {
+      toast.error("User data not found or invalid Business ID");
       return;
     }
-    if (!user.businessDetail.businessId || typeof user.businessDetail.businessId !== 'string') {
-      toast.error("Invalid Business ID");
-      return;
-    }
+
     try {
       const { data, error } = await supabase
         .from('Businessdetailsview')
@@ -147,13 +142,16 @@ console.log(user)
         .eq('businessId', user.businessDetail.businessId)
         .select();
 
-      console.log("✅ Updated Data:", data);
-      console.log("❌ Update Error:", error);
-
       if (error) {
         toast.error("Failed to update business status");
       } else {
         toast.success("Business status updated successfully");
+
+        // ✅ Approve के बाद तुरंत UI अपडेट करें
+        setUser((prevUser) => ({
+          ...prevUser,
+          businessDetail: { ...prevUser.businessDetail, status: 'Approved' }
+        }));
       }
     } catch (err) {
       console.error("🚨 Unexpected Error:", err);
@@ -161,28 +159,84 @@ console.log(user)
     }
   };
 
+
+  // const approveUser = async () => {
+  //   const confirmApprove = window.confirm("Are you sure you want to approve this user?");
+  //   if (!confirmApprove) return;
+
+  //   if (!user) {
+  //     toast.error("User data not found");
+  //     return;
+  //   }
+  //   if (!user.businessDetail.businessId || typeof user.businessDetail.businessId !== 'string') {
+  //     toast.error("Invalid Business ID");
+  //     return;
+  //   }
+  //   try {
+  //     const { data, error } = await supabase
+  //       .from('Businessdetailsview')
+  //       .update({ status: 'Approved' })
+  //       .eq('businessId', user.businessDetail.businessId)
+  //       .select();
+
+  //     console.log("✅ Updated Data:", data);
+  //     console.log("❌ Update Error:", error);
+
+  //     if (error) {
+  //       toast.error("Failed to update business status");
+  //     } else {
+  //       toast.success("Business status updated successfully");
+  //     }
+  //   } catch (err) {
+  //     console.error("🚨 Unexpected Error:", err);
+  //     toast.error("An unexpected error occurred.");
+  //   }
+  // };
+
   return (
     <div className="px-4">
       <div className="flex items-center justify-center">
-        {user.businessDetail.status === null ? (
-          <div className="flex items-center gap-10 py-2.5 h-[42px] px-3 xl:px-[15px] rounded-[10px]">
-            {/* Approve Button */}
-            <div onClick={approveUser} className="flex gap-1.5 cursor-pointer">
-              <RightSvg />
-              <span className="text-[green] font-normal text-base uppercase">
-                Approve
-              </span>
-            </div>
+        {user.IsSeller ? (
+          user.businessDetail.status === "Approved" ? (
+            // ✅ Seller is Approved -> Show Block/Enable Provider button
+            <button
+              onClick={handlePopupDisable}
+              className="flex items-center gap-3 py-2.5 h-[42px] px-3 xl:px-[15px] rounded-[10px]"
+            >
+              {isActive ? (
+                <>
+                  <DisableRedicon />
+                  <span className="text-black font-normal text-base">Block Provider</span>
+                </>
+              ) : (
+                <>
+                  <EnableRedIcon />
+                  <span className="text-black font-normal text-base">Enable Provider</span>
+                </>
+              )}
+            </button>
+          ) : (
+            // ❌ Seller is NOT Approved -> Show Approve/Deny buttons
+            <div className="flex items-center gap-10 py-2.5 h-[42px] px-3 xl:px-[15px] rounded-[10px]">
+              {/* Approve Button */}
+              <div onClick={approveUser} className="flex gap-1.5 cursor-pointer">
+                <RightSvg />
+                <span className="text-[green] font-normal text-base uppercase">
+                  Approve
+                </span>
+              </div>
 
-            {/* Deny Button */}
-            <div onClick={userDenied} className="flex gap-1.5 cursor-pointer">
-              <DisableRedicon />
-              <span className="text-[red] font-normal text-base uppercase">
-                Deny
-              </span>
+              {/* Deny Button */}
+              <div onClick={userDenied} className="flex gap-1.5 cursor-pointer">
+                <DisableRedicon />
+                <span className="text-[red] font-normal text-base uppercase">
+                  Deny
+                </span>
+              </div>
             </div>
-          </div>
+          )
         ) : (
+          // 🔹 If user is NOT a seller -> Always show Block/Enable Provider button
           <button
             onClick={handlePopupDisable}
             className="flex items-center gap-3 py-2.5 h-[42px] px-3 xl:px-[15px] rounded-[10px]"
@@ -200,6 +254,8 @@ console.log(user)
             )}
           </button>
         )}
+
+
       </div>
 
 
