@@ -31,8 +31,6 @@ const Provider_Detail = () => {
   const location = useLocation();
   const complaint = location.state?.complaint;
 
-  console.log(complaint, "data");
-
   // Toggle dropdowns using arrow functions to avoid binding issues
   const toggleDropdown = () => {
     setDropdown((prev) => !prev);

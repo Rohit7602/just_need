@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
@@ -11,6 +12,8 @@ import { ArrowIcon } from "../../assets/icon/Icons";
 import NotificationPopUp from "../Popups/NotificationPopUp";
 import ScrollNotify from "../Popups/ScrollNotify";
 import { useUserContext } from "../../store/UserContext";
+import { useComplaintProvider } from "../../store/RaiseComplaintData";
+
 
 function TopBar() {
   const navigate = useNavigate();
@@ -23,6 +26,19 @@ function TopBar() {
   const toggleSearchInput = () => setIsInputVisible((prev) => !prev);
 
   const { userName } = useUserContext();
+
+  const { complaints } = useComplaintProvider()
+
+  const getComplaintUsername = () => {
+    if (location.pathname.includes("/dashboard/complaints/complaintsDetails/")) {
+      const complaintId = location.pathname.split("/").pop(); // Get the last segment of the URL (the complaint ID)
+      const complaint = complaints.find((c) => c.id === complaintId);
+      if (complaint && complaint.userdetails) {
+        return `${complaint.userdetails.firstName} ${complaint.userdetails.lastName}`;
+      }
+    }
+    return "";
+  };
 
   const handleClickOutside = (event) => {
     if (searchRef.current && !searchRef.current.contains(event.target)) {
@@ -82,6 +98,8 @@ function TopBar() {
                 `User's Details / ${userName}`
               ) : location.pathname.includes("/dashboard/listings/") ? (
                 "Listings Details"
+              ) : location.pathname.includes("/dashboard/complaints/complaintsDetails/") ? (
+                `Complaint Details / ${getComplaintUsername()}`
               ) : (
                 location.pathname
                   .replace("/dashboard/", "")
