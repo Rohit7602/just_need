@@ -311,7 +311,7 @@ const CustomerData = () => {
     setPaginatedData(updatedUsers.slice(startIndex, endIndex));
   };
 
- 
+
 
 
   return (
@@ -518,9 +518,10 @@ const CustomerData = () => {
                       </div>
                     </td>
                     <td className="px-[19px] md:px-[24px] text-center bg-white">
-                      <button className="text-2xl font-medium">
-                        <EyeIcon />
-                      </button>
+                      <Link to={`/dashboard/usersList/userDetails/${customer.id}`}>
+                        <button className="text-2xl font-medium">
+                          <EyeIcon />
+                        </button></Link>
                       <button
                         className="text-2xl font-medium ms-[6px]"
                         onClick={() => handleSingleDeleteClick(customer.id)}
