@@ -3,95 +3,214 @@
 import React, { useState, useEffect, useRef } from "react";
 import { DropdownIcon } from "../../assets/icon/Icon";
 import { useLocation } from "react-router-dom";
-import cleaning from "../../assets/Images/Png/cleaning.png";
+import { supabase } from "../../store/supabaseCreateClient";
 
 const Provider_Detail = () => {
   const [popup, setPopup] = useState(false);
   const [showImagePreviewPopUp, setShowImagePreviewPupUp] = useState(false);
   const popupRef = useRef(null);
-
   const [isOpen, setIsOpen] = useState(false);
   const [dropdown, setDropdown] = useState(false);
   const [assignDropdown, setAssignDropDown] = useState(false);
-
-  // State to store the selected values
   const [assignTo, setAssignTo] = useState("Select Assignee");
   const [instructions, setInstructions] = useState("");
   const [status, setStatus] = useState("Processing");
-
-  // State to manage history log updates
-  const [historyLog, setHistoryLog] = useState([
-    { status: "Received", description: "Complaint logged and acknowledged.", active: true },
-    { status: "In Review", description: "Assigned to the concerned department for investigation.", active: false },
-    { status: "Action Taken", description: "Resolution steps initiated.", active: false },
-    { status: "Resolved", description: "Complaint successfully addressed.", active: false },
-    { status: "Closed", description: "Confirmed resolution and feedback received.", active: false },
-  ]);
+  const [complaintLogs, setComplaintLogs] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const location = useLocation();
   const complaint = location.state?.complaint;
 
-  // Toggle dropdowns using arrow functions to avoid binding issues
-  const toggleDropdown = () => {
-    setDropdown((prev) => !prev);
-    setAssignDropDown(false); // Close the other dropdown
+  // Fetch complaint logs from Supabase
+  const fetchComplaintLogs = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('ComplaintLogs')
+        .select('*')
+        .eq('complaintid', complaint?.id)
+        .order('createdAt', { ascending: true });
+
+      if (error) throw error;
+
+      if (data && data.length > 0) {
+        setComplaintLogs(data);
+        // Set the latest status
+        const latestLog = data[data.length - 1];
+        setStatus(latestLog.status);
+        setAssignTo(latestLog.assignTo || "Select Assignee");
+        setInstructions(latestLog.instruction || "");
+      }
+    } catch (error) {
+      console.error("Error fetching complaint logs:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // const assignDropdown = () => {
-  //   setAssignDropDown((prev) => !prev);
-  //   setDropdown(false); // Close the other dropdown
-  // };
+  useEffect(() => {
+    if (complaint?.id) {
+      fetchComplaintLogs();
+    }
+  }, [complaint?.id]);
 
-  // Handle selection of "Assign to"
+  // Initialize history log based on complaint logs or default
+  const initializeHistoryLog = () => {
+    const statusOrder = ["Received", "In Review", "Action Taken", "Resolved", "Closed"];
+
+    // Find the highest achieved status from complaintLogs
+    let highestStatusIndex = 0; // Default to "Received"
+
+    if (complaintLogs.length > 0) {
+      const latestLog = complaintLogs[complaintLogs.length - 1];
+      const latestStatusIndex = statusOrder.indexOf(latestLog.status);
+      if (latestStatusIndex > -1) {
+        highestStatusIndex = latestStatusIndex;
+      }
+    }
+
+    return statusOrder.map((status, index) => {
+      const logForStatus = complaintLogs.find(log => log.status === status);
+      const isActive = index <= highestStatusIndex;
+
+      let description = "";
+      if (logForStatus) {
+        description = logForStatus.instruction || "";
+      } else {
+        // Default descriptions
+        description =
+          status === "Received" ? "Complaint logged and acknowledged." :
+            status === "In Review" ? "Assigned to the concerned department for investigation." :
+              status === "Action Taken" ? "Resolution steps initiated." :
+                status === "Resolved" ? "Complaint successfully addressed." :
+                  "Confirmed resolution and feedback received.";
+      }
+
+      return {
+        status,
+        description,
+        active: isActive
+      };
+    });
+  };
+
+  const [historyLog, setHistoryLog] = useState(initializeHistoryLog());
+
+  useEffect(() => {
+    setHistoryLog(initializeHistoryLog());
+  }, [complaintLogs]);
+
+  const toggleDropdown = () => {
+    setDropdown((prev) => !prev);
+    setAssignDropDown(false);
+  };
+
+  const toggleAssignDropdown = () => {
+    setAssignDropDown((prev) => !prev);
+    setDropdown(false);
+  };
+
   const handleAssignToSelect = (value) => {
     setAssignTo(value);
     setAssignDropDown(false);
   };
 
-  // Handle selection of "Status"
   const handleStatusSelect = (value) => {
     setStatus(value);
     setDropdown(false);
   };
 
-  // Handle instructions input change
   const handleInstructionsChange = (e) => {
     setInstructions(e.target.value);
   };
 
-  // Handle applying the changes and updating history log
-  const handleApply = () => {
+  // Save log to Supabase
+  const saveComplaintLog = async (logData) => {
+    try {
+      // First check if a log with this complaintid, status, and assignTo already exists
+      const { data: existingLog, error: findError } = await supabase
+        .from('ComplaintLogs')
+        .select('*')
+        .eq('complaintid', logData.complaintid)
+        .eq('status', logData.status)
+        .eq('assignTo', logData.assignTo)
+        .single();
+
+      let result;
+
+      if (existingLog) {
+        // Update existing record
+        const { data, error } = await supabase
+          .from('ComplaintLogs')
+          .update({
+            instruction: logData.instruction,
+            updatedAt: Date.now()
+          })
+          .eq('logid', existingLog.logid)
+          .select();
+
+        if (error) throw error;
+        result = data;
+      } else {
+        // Create new record
+        const logID = crypto.randomUUID();
+        const { data, error } = await supabase
+          .from('ComplaintLogs')
+          .insert([{ ...logData, logid: logID }])
+          .select();
+
+        if (error) throw error;
+        result = data;
+      }
+
+      return result;
+    } catch (error) {
+      console.error("Error saving complaint log:", error);
+      return null;
+    }
+  };
+
+  const handleApply = async () => {
     if (assignTo === "Select Assignee") {
       alert("Please select an assignee.");
       return;
     }
 
-    // Update history log based on the selected status
+    // Define the mapping of selected status to history log status
     const statusToHistoryMap = {
+      Processing: "In Review",
       Process: "In Review",
       Pending: "Action Taken",
-      Done: "Resolved",
+      Done: "Closed",
+
     };
 
     const newStatus = statusToHistoryMap[status] || "In Review";
-    const updatedHistoryLog = historyLog.map((log) => {
-      if (log.status === newStatus) {
-        return { ...log, active: true, description: `Assigned to ${assignTo}. ${instructions}` };
-      } else if (log.status === "Closed" && status === "Done") {
-        return { ...log, active: true };
-      }
-      return { ...log, active: log.status === "Received" || log.status === newStatus };
-    });
 
-    setHistoryLog(updatedHistoryLog);
-    setIsOpen(false); // Close the popup
+    // Prepare the new log data
+    const newLog = {
+      complaintid: complaint.id,
+      assignTo: assignTo,
+      instruction: instructions,
+      status: newStatus,
+      createdAt: Date.now(),
+    };
+
+    const savedLog = await saveComplaintLog(newLog);
+    if (!savedLog) {
+      alert("Failed to save the log. Please try again.");
+      return;
+    }
+
+    // Update local state
+    await fetchComplaintLogs();
+    setIsOpen(false);
   };
 
   const handleImagePreviewPopUp = () => {
     setShowImagePreviewPupUp(!showImagePreviewPopUp);
   };
 
-  // Toggle the visibility of the popup
   const togglePopup = () => {
     setPopup(!popup);
   };
@@ -114,14 +233,8 @@ const Provider_Detail = () => {
     };
   }, [popup]);
 
-
-  const toggleAssignDropdown = () => {
-    setAssignDropDown((prev) => !prev);
-    setDropdown(false); // Close the other dropdown
-  };
-
   const formatDate = (epochTime) => {
-    const date = new Date(epochTime); // Convert epoch to Date object
+    const date = new Date(epochTime);
     return date.toLocaleDateString("en-GB", {
       day: "2-digit",
       month: "short",
@@ -151,7 +264,7 @@ const Provider_Detail = () => {
                     {complaint?.userdetails?.firstName} {complaint?.userdetails?.lastName}
                   </p>
                   <p className="text-[#6C4DEF] font-normal text-sm bg-[#6C4DEF1A] px-2.5 py-1 rounded-[90px]">
-                    {complaint?.userdetails?.verificationStatus}
+                    {status} {/* Updated to show current status */}
                   </p>
                 </div>
                 <p className="font-normal text-sm text-[#ADA4A5]">{complaint?.subject}</p>
@@ -165,7 +278,6 @@ const Provider_Detail = () => {
                 Show Contact Detail
               </button>
 
-              {/* Contact Info Box */}
               {showContact && (
                 <div className="absolute top-1/2 mt-2 left-1/2 transform -translate-x-1/2 w-48 bg-white shadow-lg p-3 rounded-md border border-gray-200 z-10">
                   <button
@@ -185,7 +297,6 @@ const Provider_Detail = () => {
 
           <div className="mt-5">
             <div className="grid grid-cols-2 gap-y-2 text-sm text-gray-700">
-              {/* Complaint ID and Date */}
               <div className="flex mt-[16px]">
                 <span className="font-normal text-sm text-[#1D1617]">Complaint Id :</span>
                 <span className="ml-2 text-[#1D1617] font-normal text-sm opacity-[50%]">
@@ -199,7 +310,6 @@ const Provider_Detail = () => {
                 </span>
               </div>
 
-              {/* Complaint Type and Email */}
               <div className="flex mt-[16px]">
                 <span className="font-normal text-sm">Complaint Type :</span>
                 <span className="ml-2 text-[#1D1617] font-normal text-sm opacity-[50%]">
@@ -213,7 +323,6 @@ const Provider_Detail = () => {
                 </span>
               </div>
 
-              {/* Service Type and Status */}
               <div className="flex mt-[16px]">
                 <span className="font-normal text-sm">Service Type :</span>
                 <span className="ml-2 text-[#1D1617] font-normal text-sm opacity-[50%]">
@@ -231,24 +340,20 @@ const Provider_Detail = () => {
 
           <div className="border my-[24px]"></div>
 
-          {/* Complaint Description */}
           <div className="p-[14px] rounded-[10px] bg-[#DDDADA4D]">
             <h2 className="font-semibold text-base text-black">Complaint</h2>
             <div className="w-full opacity-40 my-3"></div>
             <p className="text-sm font-normal text-black opacity-70">
-              It is a long established fact that a reader will be distracted by the readable
-              content of a page when looking at its layout. The point of using Lorem Ipsum is
-              that it has a more-or-less normal distribution of letters, as opposed to using
-              'Content here, content here', making it look like readable English.
+              {complaint?.description || "No description provided"}
             </p>
             <div className="flex gap-[14px] mt-2.5">
-              <img src={cleaning} alt="" />
-              <img src={cleaning} alt="" />
+              {complaint?.images?.map((img, index) => (
+                <img key={index} src={img} alt="" className="w-20 h-20 object-cover" />
+              ))}
             </div>
           </div>
 
           <div className="relative">
-            {/* Button to open the popup */}
             <div className="flex justify-end mt-5">
               <button
                 className="px-[15px] py-[12px] font-normal text-base rounded-[10px] bg-[#0832DE] text-white"
@@ -258,7 +363,6 @@ const Provider_Detail = () => {
               </button>
             </div>
 
-            {/* Popup */}
             {isOpen && (
               <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                 <div className="bg-white p-[18px] rounded-[14px] shadow-[#00000040] w-[350px]">
@@ -272,7 +376,6 @@ const Provider_Detail = () => {
                     </button>
                   </div>
                   <div className="mt-3">
-                    {/* Assign to */}
                     <p className="font-normal text-base whitespace-nowrap">1. Assign to</p>
                     <div
                       onClick={toggleAssignDropdown}
@@ -311,7 +414,6 @@ const Provider_Detail = () => {
 
                     <hr className="my-2.5" />
 
-                    {/* Instructions */}
                     <p className="font-normal text-base whitespace-nowrap">2. Instructions</p>
                     <input
                       className="font-normal text-base outline-none border-none bg-[#F2F2F2] py-3 rounded-md mt-2 px-4 w-full placeholder-gray-500"
@@ -322,7 +424,6 @@ const Provider_Detail = () => {
                     />
                     <hr className="my-2.5" />
 
-                    {/* Status */}
                     <p className="whitespace-nowrap">3. Status</p>
                     <div
                       onClick={toggleDropdown}
@@ -386,40 +487,50 @@ const Provider_Detail = () => {
 
         <div className="rounded-md p-4 xl:w-4/12 w-full">
           <h2 className="font-semibold text-base mb-4">History Log</h2>
-          <div>
-            {historyLog.map((log, index) => (
-              <div key={index} className="flex items-start">
-                <div className="flex flex-col items-center">
-                  <div
-                    className={`w-4 h-4 border-2 rounded-full ${log.active ? "border-[#6C4DEF]" : "border-gray-300"
-                      }`}
-                  ></div>
-                  {index < historyLog.length - 1 && (
+          {loading ? (
+            <p>Loading history...</p>
+          ) : (
+            <div>
+              {historyLog.map((log, index) => (
+                <div key={index} className="flex items-start">
+                  <div className="flex flex-col items-center">
                     <div
-                      className={`w-[2px] h-20 border border-dashed ${log.active && historyLog[index + 1].active
-                          ? "border-[#6C4DEF]"
-                          : "border-[#000] opacity-10"
+                      className={`w-4 h-4 border-2 rounded-full ${log.active ? "border-[#6C4DEF]" : "border-gray-300"
                         }`}
                     ></div>
-                  )}
+                    {index < historyLog.length - 1 && (
+                      <div
+                        className={`w-[2px] h-20 border border-dashed ${log.active && historyLog[index + 1].active
+                          ? "border-[#6C4DEF]"
+                          : "border-[#000] opacity-10"
+                          }`}
+                      ></div>
+                    )}
+                  </div>
+                  <div className="ml-4">
+                    <h3
+                      className={`font-semibold font-base ${log.active ? "text-black" : "text-gray-400"
+                        }`}
+                    >
+                      {log.status}
+                    </h3>
+                    <p
+                      className={`text-sm font-normal text-black opacity-[80%] mt-2.5 ${log.active ? "text-black" : "text-gray-400"
+                        }`}
+                    >
+                      {log.description}
+                    </p>
+                    {/* Show timestamp if available */}
+                    {log.active && complaintLogs.find(l => l.status === log.status)?.createdAt && (
+                      <p className="text-xs text-gray-500 mt-1">
+                        {new Date(complaintLogs.find(l => l.status === log.status)?.createdAt).toLocaleString()}
+                      </p>
+                    )}
+                  </div>
                 </div>
-                <div className="ml-4">
-                  <h3
-                    className={`font-semibold font-base ${log.active ? "text-black" : "text-gray-400"
-                      }`}
-                  >
-                    {log.status}
-                  </h3>
-                  <p
-                    className={`text-sm font-normal text-black opacity-[80%] mt-2.5 ${log.active ? "text-black" : "text-gray-400"
-                      }`}
-                  >
-                    {log.description}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
