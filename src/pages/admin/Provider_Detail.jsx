@@ -26,16 +26,15 @@ const Provider_Detail = () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('ComplaintLogs')
-        .select('*')
-        .eq('complaintid', complaint?.id)
-        .order('createdAt', { ascending: true });
+        .from("ComplaintLogs")
+        .select("*")
+        .eq("complaintid", complaint?.id)
+        .order("createdAt", { ascending: true });
 
       if (error) throw error;
 
       if (data && data.length > 0) {
         setComplaintLogs(data);
-        // Set the latest status
         const latestLog = data[data.length - 1];
         setStatus(latestLog.status);
         setAssignTo(latestLog.assignTo || "Select Assignee");
@@ -58,38 +57,40 @@ const Provider_Detail = () => {
   const initializeHistoryLog = () => {
     const statusOrder = ["Received", "In Review", "Action Taken", "Resolved", "Closed"];
 
-    // Find the highest achieved status from complaintLogs
-    let highestStatusIndex = 0; // Default to "Received"
+    // Find the highest achieved status
+    let highestStatusIndex = 0;
+    const currentStatusIndex = statusOrder.indexOf(
+      status === "Process" ? "In Review" :
+        status === "Pending" ? "Action Taken" :
+          status === "Done" ? "Closed" : status
+    );
 
-    if (complaintLogs.length > 0) {
-      const latestLog = complaintLogs[complaintLogs.length - 1];
-      const latestStatusIndex = statusOrder.indexOf(latestLog.status);
-      if (latestStatusIndex > -1) {
-        highestStatusIndex = latestStatusIndex;
-      }
+    if (currentStatusIndex > -1) {
+      highestStatusIndex = currentStatusIndex;
     }
 
+    // Create history log items
     return statusOrder.map((status, index) => {
-      const logForStatus = complaintLogs.find(log => log.status === status);
       const isActive = index <= highestStatusIndex;
+      const logForStatus = complaintLogs.find(log =>
+        log.status === status ||
+        (status === "In Review" && log.status === "Process") ||
+        (status === "Action Taken" && log.status === "Pending") ||
+        (status === "Closed" && log.status === "Done")
+      );
 
-      let description = "";
-      if (logForStatus) {
-        description = logForStatus.instruction || "";
-      } else {
-        // Default descriptions
-        description =
-          status === "Received" ? "Complaint logged and acknowledged." :
-            status === "In Review" ? "Assigned to the concerned department for investigation." :
-              status === "Action Taken" ? "Resolution steps initiated." :
-                status === "Resolved" ? "Complaint successfully addressed." :
-                  "Confirmed resolution and feedback received.";
-      }
+      let description = logForStatus?.instruction ||
+        (status === "Received" ? "Complaint logged and acknowledged." :
+          status === "In Review" ? "Assigned to the concerned department for investigation." :
+            status === "Action Taken" ? "Resolution steps initiated." :
+              status === "Resolved" ? "Complaint successfully addressed." :
+                "Confirmed resolution and feedback received.");
 
       return {
         status,
         description,
-        active: isActive
+        active: isActive,
+        createdAt: logForStatus?.createdAt
       };
     });
   };
@@ -127,73 +128,46 @@ const Provider_Detail = () => {
   // Save log to Supabase
   const saveComplaintLog = async (logData) => {
     try {
-      // First check if a log with this complaintid, status, and assignTo already exists
-      const { data: existingLog, error: findError } = await supabase
-        .from('ComplaintLogs')
-        .select('*')
-        .eq('complaintid', logData.complaintid)
-        .eq('status', logData.status)
-        .eq('assignTo', logData.assignTo)
-        .single();
+      const logID = crypto.randomUUID();
 
-      let result;
+      // Map the UI status to database status
+      const statusMap = {
+        "Process": "In Review",
+        "Pending": "Action Taken",
+        "Done": "Closed"
+      };
 
-      if (existingLog) {
-        // Update existing record
-        const { data, error } = await supabase
-          .from('ComplaintLogs')
-          .update({
-            instruction: logData.instruction,
-            updatedAt: Date.now()
-          })
-          .eq('logid', existingLog.logid)
-          .select();
+      const dbStatus = statusMap[logData.status] || logData.status;
 
-        if (error) throw error;
-        result = data;
-      } else {
-        // Create new record
-        const logID = crypto.randomUUID();
-        const { data, error } = await supabase
-          .from('ComplaintLogs')
-          .insert([{ ...logData, logid: logID }])
-          .select();
+      const { data, error } = await supabase
+        .from("ComplaintLogs")
+        .insert([{
+          ...logData,
+          status: dbStatus,
+          logid: logID,
+          createdAt: Date.now()
+        }])
+        .select();
 
-        if (error) throw error;
-        result = data;
-      }
-
-      return result;
+      if (error) throw error;
+      return data;
     } catch (error) {
       console.error("Error saving complaint log:", error);
       return null;
     }
   };
-
   const handleApply = async () => {
     if (assignTo === "Select Assignee") {
       alert("Please select an assignee.");
       return;
     }
 
-    // Define the mapping of selected status to history log status
-    const statusToHistoryMap = {
-      Processing: "In Review",
-      Process: "In Review",
-      Pending: "Action Taken",
-      Done: "Closed",
-
-    };
-
-    const newStatus = statusToHistoryMap[status] || "In Review";
-
     // Prepare the new log data
     const newLog = {
       complaintid: complaint.id,
       assignTo: assignTo,
-      instruction: instructions,
-      status: newStatus,
-      createdAt: Date.now(),
+      instruction: instructions || null,
+      status: status, // Use the selected status directly
     };
 
     const savedLog = await saveComplaintLog(newLog);
@@ -244,6 +218,31 @@ const Provider_Detail = () => {
 
   const [showContact, setShowContact] = useState(false);
 
+  const getDisplayStatus = (status) => {
+    // First check if it's one of our UI statuses
+    switch (status) {
+      case "Process":
+        return "Process";
+      case "Pending":
+        return "Pending";
+      case "Done":
+        return "Done";
+      default:
+        // Then check if it's one of the database statuses
+        switch (status) {
+          case "In Review":
+            return "Process";
+          case "Action Taken":
+            return "Pending";
+          case "Resolved":
+          case "Closed":
+            return "Done";
+          default:
+            return status;
+        }
+    }
+  };
+
   return (
     <div>
       <div className="flex flex-col xl:flex-row justify-between gap-5">
@@ -257,14 +256,13 @@ const Provider_Detail = () => {
                   alt=""
                 />
               </div>
-
               <div className="ms-3">
                 <div className="flex items-center gap-[10px]">
                   <p className="font-semibold text-lg">
                     {complaint?.userdetails?.firstName} {complaint?.userdetails?.lastName}
                   </p>
                   <p className="text-[#6C4DEF] font-normal text-sm bg-[#6C4DEF1A] px-2.5 py-1 rounded-[90px]">
-                    {status} {/* Updated to show current status */}
+                    {getDisplayStatus(status)}
                   </p>
                 </div>
                 <p className="font-normal text-sm text-[#ADA4A5]">{complaint?.subject}</p>
@@ -277,7 +275,6 @@ const Provider_Detail = () => {
               >
                 Show Contact Detail
               </button>
-
               {showContact && (
                 <div className="absolute top-1/2 mt-2 left-1/2 transform -translate-x-1/2 w-48 bg-white shadow-lg p-3 rounded-md border border-gray-200 z-10">
                   <button
@@ -294,7 +291,6 @@ const Provider_Detail = () => {
               )}
             </div>
           </div>
-
           <div className="mt-5">
             <div className="grid grid-cols-2 gap-y-2 text-sm text-gray-700">
               <div className="flex mt-[16px]">
@@ -309,7 +305,6 @@ const Provider_Detail = () => {
                   {formatDate(complaint?.created_at)}
                 </span>
               </div>
-
               <div className="flex mt-[16px]">
                 <span className="font-normal text-sm">Complaint Type :</span>
                 <span className="ml-2 text-[#1D1617] font-normal text-sm opacity-[50%]">
@@ -322,7 +317,6 @@ const Provider_Detail = () => {
                   {complaint?.userdetails?.useremail}
                 </span>
               </div>
-
               <div className="flex mt-[16px]">
                 <span className="font-normal text-sm">Service Type :</span>
                 <span className="ml-2 text-[#1D1617] font-normal text-sm opacity-[50%]">
@@ -332,14 +326,12 @@ const Provider_Detail = () => {
               <div className="flex items-center mt-[16px]">
                 <span className="font-normal text-sm">Status :</span>
                 <span className="ml-2 bg-[#6C4DEF1A] font-normal text-sm rounded-[90px] text-purple-700 px-2 py-0.5 border-none outline-none">
-                  {status}
+                  {getDisplayStatus(status)}
                 </span>
               </div>
             </div>
           </div>
-
           <div className="border my-[24px]"></div>
-
           <div className="p-[14px] rounded-[10px] bg-[#DDDADA4D]">
             <h2 className="font-semibold text-base text-black">Complaint</h2>
             <div className="w-full opacity-40 my-3"></div>
@@ -352,7 +344,6 @@ const Provider_Detail = () => {
               ))}
             </div>
           </div>
-
           <div className="relative">
             <div className="flex justify-end mt-5">
               <button
@@ -362,16 +353,12 @@ const Provider_Detail = () => {
                 Update complaint state
               </button>
             </div>
-
             {isOpen && (
               <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                 <div className="bg-white p-[18px] rounded-[14px] shadow-[#00000040] w-[350px]">
                   <div className="flex justify-between items-center">
                     <h2 className="text-xl font-medium">Update complaint state</h2>
-                    <button
-                      className="text-4xl font-normal"
-                      onClick={() => setIsOpen(false)}
-                    >
+                    <button className="text-4xl font-normal" onClick={() => setIsOpen(false)}>
                       ×
                     </button>
                   </div>
@@ -381,14 +368,11 @@ const Provider_Detail = () => {
                       onClick={toggleAssignDropdown}
                       className="flex justify-between items-center bg-[#F2F2F2] py-3 px-4 rounded-md mt-2 cursor-pointer"
                     >
-                      <span className="font-normal text-base text-gray-700">
-                        {assignTo}
-                      </span>
+                      <span className="font-normal text-base text-gray-700">{assignTo}</span>
                       <span>
                         <DropdownIcon />
                       </span>
                     </div>
-
                     {assignDropdown && (
                       <div className="mt-2 rounded-md bg-[#F2F2F2] overflow-hidden">
                         <div
@@ -411,9 +395,7 @@ const Provider_Detail = () => {
                         </div>
                       </div>
                     )}
-
                     <hr className="my-2.5" />
-
                     <p className="font-normal text-base whitespace-nowrap">2. Instructions</p>
                     <input
                       className="font-normal text-base outline-none border-none bg-[#F2F2F2] py-3 rounded-md mt-2 px-4 w-full placeholder-gray-500"
@@ -423,7 +405,6 @@ const Provider_Detail = () => {
                       onChange={handleInstructionsChange}
                     />
                     <hr className="my-2.5" />
-
                     <p className="whitespace-nowrap">3. Status</p>
                     <div
                       onClick={toggleDropdown}
@@ -482,9 +463,7 @@ const Provider_Detail = () => {
             )}
           </div>
         </div>
-
         <div className="border"></div>
-
         <div className="rounded-md p-4 xl:w-4/12 w-full">
           <h2 className="font-semibold text-base mb-4">History Log</h2>
           {loading ? (
@@ -495,37 +474,35 @@ const Provider_Detail = () => {
                 <div key={index} className="flex items-start">
                   <div className="flex flex-col items-center">
                     <div
-                      className={`w-4 h-4 border-2 rounded-full ${log.active ? "border-[#6C4DEF]" : "border-gray-300"
-                        }`}
+                      className={`w-4 h-4 border-2 rounded-full ${log.active ? "border-[#6C4DEF]" : "border-gray-300"}`}
                     ></div>
                     {index < historyLog.length - 1 && (
                       <div
                         className={`w-[2px] h-20 border border-dashed ${log.active && historyLog[index + 1].active
                           ? "border-[#6C4DEF]"
-                          : "border-[#000] opacity-10"
-                          }`}
+                          : "border-[#000] opacity-10"}`}
                       ></div>
                     )}
                   </div>
                   <div className="ml-4">
                     <h3
-                      className={`font-semibold font-base ${log.active ? "text-black" : "text-gray-400"
-                        }`}
+                      className={`font-semibold font-base ${log.active ? "text-black" : "text-gray-400"}`}
                     >
                       {log.status}
                     </h3>
                     <p
-                      className={`text-sm font-normal text-black opacity-[80%] mt-2.5 ${log.active ? "text-black" : "text-gray-400"
-                        }`}
+                      className={`text-sm font-normal text-black opacity-[80%] mt-2.5 ${log.active ? "text-black" : "text-gray-400"}`}
                     >
                       {log.description}
                     </p>
-                    {/* Show timestamp if available */}
-                    {log.active && complaintLogs.find(l => l.status === log.status)?.createdAt && (
-                      <p className="text-xs text-gray-500 mt-1">
-                        {new Date(complaintLogs.find(l => l.status === log.status)?.createdAt).toLocaleString()}
-                      </p>
-                    )}
+                    {log.active &&
+                      complaintLogs.find((l) => l.status === log.status)?.createdAt && (
+                        <p className="text-xs text-gray-500 mt-1">
+                          {new Date(
+                            complaintLogs.find((l) => l.status === log.status)?.createdAt
+                          ).toLocaleString()}
+                        </p>
+                      )}
                   </div>
                 </div>
               ))}
