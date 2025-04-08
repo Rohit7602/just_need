@@ -27,7 +27,7 @@ function UserDetails() {
   const [user, setUser] = useState(null);
   const [showPopupDisable, setShowPopupDisable] = useState(false);
   const [listings, setListings] = useState([]);
-  const [approveUsers,setUpproveUsers] = useState(false);
+  const [approveUsers, setUpproveUsers] = useState(false);
 
   const { users, loading, setLoading } = useCustomerContext();
   const { fetchlisting } = useListingContext();
@@ -114,18 +114,17 @@ function UserDetails() {
     const { error } = await supabase
       .from("users")
       .delete()
-      .eq("id", user.id); 
+      .eq("id", user.id);
 
     if (!error) {
       toast.success("User denied and removed successfully");
-      setUser(null); 
+      setUser(null);
     } else {
       console.error("Error deleting user:", error);
       toast.error("Failed to deny user. Please try again.");
     }
   };
 
-console.log(user)
   const approveUser = async () => {
     const confirmApprove = window.confirm("Are you sure you want to approve this user?");
     if (!confirmApprove) return;
@@ -362,99 +361,99 @@ console.log(user)
           <p className="font-medium text-lg leading-[22px] text-black pb-2.5 border-b-[0.5px] border-dashed border-[#00000066] mt-[30px]">
             Posted Listing
           </p>
-        
-               <div className="flex flex-row flex-wrap -mx-3">
+
+          <div className="flex flex-row flex-wrap -mx-3">
             {listings.length > 0 ? (listings?.map((item) => (
-                        <Link
+              <Link
                 to={`/dashboard/listings/${item.id}`}
-                          style={{ filter: "drop-shadow(0,0,34 rgba(0,0,0,0.11))" }}
-                          className="w-6/12 mt-3 xl:mt-[15px] xl:w-3/12 px-3 filter !drop-shadow-lg"
-                          key={item.id}
-                        >
-                          <div className="h-full">
-                            <div className="h-full  relative group flex flex-col">
-                              <div className="relative">
-                                <img
-                                  className="w-full group-hover:opacity-70 h-[128px] object-cover"
+                style={{ filter: "drop-shadow(0,0,34 rgba(0,0,0,0.11))" }}
+                className="w-6/12 mt-3 xl:mt-[15px] xl:w-3/12 px-3 filter !drop-shadow-lg"
+                key={item.id}
+              >
+                <div className="h-full">
+                  <div className="h-full  relative group flex flex-col">
+                    <div className="relative">
+                      <img
+                        className="w-full group-hover:opacity-70 h-[128px] object-cover"
                         src={item.images?.[0]}
-                                  alt="Listing"
-                                />
-                                <button className="absolute bg-[#6C4DEF] z-20 text-white py-[2px] px-2 rounded-tr-[20px] rounded-br-[20px] bottom-[10px] transition-opacity duration-300 text-xs">
-                                  {item?.categoryName}
-                                </button>
-                              </div>
-          
-                              <div className="p-2.5 bg-white flex-grow">
-                                <div className="flex  justify-between items-center">
-                                  <p className="font-normal text-base text-black">
-                                    {item.title}
-                                  </p>
-                                  <p className="font-normal text-[12px] text-[rgba(0, 0, 0, 0.6)]">
-                                    Feb 12
-                                  </p>
-                                </div>
-          
-                                <div className="flex justify-between mt-[5px]">
-                                  <div>
-                                    <p className="font-semibold text-[18px]">
-                                      ₹ {item.price}
-                                    </p>
-                                  </div>
-                                  <div className="group-hover:hidden transition-opacity duration-300">
-                                    <button className="py-1">
-                                      {item.blockStatus.isBlocked ? (
-                                        <img src={disable_img} alt="disable_img" />
-                                      ) : (
-                                        <span className="text-xs font-normal text-[#0DA800] hover:opacity-100 opacity-100">
-                                          <img src={enable_img} alt="enable_img" />
-                                        </span>
-                                      )}
-                                    </button>
-                                  </div>
-                                  <div className="hidden py-[3px] group-hover:block  transition-opacity duration-300">
-                                    <button
-                                      onClick={(e) =>
-                                        handleBlock(e, item.id, item.blockStatus)
-                                      }
-                                    >
-                                      {item.blockStatus.isBlocked ? (
-                                        <span className="text-sm font-normal text-[#0DA800] hover:opacity-100 opacity-100">
-                                          <p>Enable</p>
-                                        </span>
-                                      ) : (
-                                        <span className="text-sm font-normal text-[#a81400] hover:opacity-100 opacity-100">
-                                          <p>Disable</p>
-                                        </span>
-                                      )}
-                                    </button>
-                                  </div>
-                                </div>
-          
-                                <p className="font-normal text-[14px] text-[#00000099] mt-1">
-                                  {truncateText(item.description, 100)}
-                                </p>
-                                <div className="flex items-center justify-between gap-1 mt-2">
-                                  <div>
-                                    <p className="font-normal text-[#00000099] text-[12px]">
-                                      Hisar, Haryana
-                                    </p>
-                                  </div>
-                                  <div className="flex gap-3 items-center bg-[#FFA5001A] rounded-[50px] py-[2px] px-[5px]">
-                                    <RatingStarIcon />
-                                    <h3 className="text-[#000F02] text-[10px] font-normal">
-                                      {item.rating}
-                                    </h3>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </Link>
-                      ))
-                      ) : (
-                        <p className="text-center text-gray-500 text-lg mt-5 w-full">No Data Found</p>
-                      )}
+                        alt="Listing"
+                      />
+                      <button className="absolute bg-[#6C4DEF] z-20 text-white py-[2px] px-2 rounded-tr-[20px] rounded-br-[20px] bottom-[10px] transition-opacity duration-300 text-xs">
+                        {item?.categoryName}
+                      </button>
                     </div>
+
+                    <div className="p-2.5 bg-white flex-grow">
+                      <div className="flex  justify-between items-center">
+                        <p className="font-normal text-base text-black">
+                          {item.title}
+                        </p>
+                        <p className="font-normal text-[12px] text-[rgba(0, 0, 0, 0.6)]">
+                          Feb 12
+                        </p>
+                      </div>
+
+                      <div className="flex justify-between mt-[5px]">
+                        <div>
+                          <p className="font-semibold text-[18px]">
+                            ₹ {item.price}
+                          </p>
+                        </div>
+                        <div className="group-hover:hidden transition-opacity duration-300">
+                          <button className="py-1">
+                            {item.blockStatus.isBlocked ? (
+                              <img src={disable_img} alt="disable_img" />
+                            ) : (
+                              <span className="text-xs font-normal text-[#0DA800] hover:opacity-100 opacity-100">
+                                <img src={enable_img} alt="enable_img" />
+                              </span>
+                            )}
+                          </button>
+                        </div>
+                        <div className="hidden py-[3px] group-hover:block  transition-opacity duration-300">
+                          <button
+                            onClick={(e) =>
+                              handleBlock(e, item.id, item.blockStatus)
+                            }
+                          >
+                            {item.blockStatus.isBlocked ? (
+                              <span className="text-sm font-normal text-[#0DA800] hover:opacity-100 opacity-100">
+                                <p>Enable</p>
+                              </span>
+                            ) : (
+                              <span className="text-sm font-normal text-[#a81400] hover:opacity-100 opacity-100">
+                                <p>Disable</p>
+                              </span>
+                            )}
+                          </button>
+                        </div>
+                      </div>
+
+                      <p className="font-normal text-[14px] text-[#00000099] mt-1">
+                        {truncateText(item.description, 100)}
+                      </p>
+                      <div className="flex items-center justify-between gap-1 mt-2">
+                        <div>
+                          <p className="font-normal text-[#00000099] text-[12px]">
+                            Hisar, Haryana
+                          </p>
+                        </div>
+                        <div className="flex gap-3 items-center bg-[#FFA5001A] rounded-[50px] py-[2px] px-[5px]">
+                          <RatingStarIcon />
+                          <h3 className="text-[#000F02] text-[10px] font-normal">
+                            {item.rating}
+                          </h3>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))
+            ) : (
+              <p className="text-center text-gray-500 text-lg mt-5 w-full">No Data Found</p>
+            )}
+          </div>
         </>
       )}
 

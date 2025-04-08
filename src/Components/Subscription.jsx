@@ -17,7 +17,6 @@ const Subscription = () => {
   useEffect(() => {
     async function getPlans() {
       const data = await fetchSubscription();
-      console.log("Fetched plans:", data);
     }
     getPlans();
   }, []);
