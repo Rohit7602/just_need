@@ -46,6 +46,10 @@ function AddSubCategoryPopUp({
       toast.error("Please enter a subcategory name.");
       return;
     }
+    // if (!subcategoryImage) {
+    //   toast.error("Please enter a subcategory Image.");
+    //   return;
+    // }
 
     // Check if the subcategory name already exists in the selected category
     const selectedCategory = categories.find((cat) => cat.id === selectedCategoryId);
@@ -138,6 +142,7 @@ function AddSubCategoryPopUp({
           </label>
           <div className="flex items-center gap-2 bg-[#F2F2F2] rounded-lg p-2">
             <input
+              required
               type="text"
               value={subcategoryImageName || ""}
               placeholder="No Image Chosen"
@@ -145,6 +150,7 @@ function AddSubCategoryPopUp({
               disabled
             />
             <input
+              required
               type="file"
               className="hidden"
               id="fileUpload"

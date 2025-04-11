@@ -40,7 +40,7 @@ const ListingDetails = () => {
 
   async function handleBlock(e, val) {
     e.preventDefault();
-    const confirmDelete = window.confirm("Are you sure?");
+    const confirmDelete = window.confirm("Are you sure to Block user?");
     if (confirmDelete) {
       const { data, error } = await supabase
         .from("service_listings")

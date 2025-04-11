@@ -214,26 +214,7 @@ function UserDetails() {
                 </>
               )}
             </button>
-          ) : (
-            // ❌ Seller is NOT Approved -> Show Approve/Deny buttons
-            <div className="flex items-center gap-10 py-2.5 h-[42px] px-3 xl:px-[15px] rounded-[10px]">
-              {/* Approve Button */}
-              <div onClick={approveUser} className="flex gap-1.5 cursor-pointer">
-                <RightSvg />
-                <span className="text-[green] font-normal text-base uppercase">
-                  Approve
-                </span>
-              </div>
-
-              {/* Deny Button */}
-              <div onClick={userDenied} className="flex gap-1.5 cursor-pointer">
-                <DisableRedicon />
-                <span className="text-[red] font-normal text-base uppercase">
-                  Deny
-                </span>
-              </div>
-            </div>
-          )
+          ) : ""
         ) : (
           // 🔹 If user is NOT a seller -> Always show Block/Enable Provider button
           <button

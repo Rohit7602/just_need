@@ -529,7 +529,7 @@ function Services() {
           <div className="mt-8 relative">
             <div className={`flex whitespace-nowrap ${isVertical ? "border-b border-[rgb(128,128,128)]" : ""}`}>
               <div
-                className={`gap-4 flex items-center cursor-pointer ${isVertical ? "flex-wrap" : "overflow-x-auto scrollbar-hide"}`}
+                className={`gap-4 flex items-center cursor-pointer scrollRemove border-b-2 ${isVertical ? "flex-wrap" : "overflow-x-auto "}`}
               >
                 {filteredCategoriesData?.map((items, index) => (
                   <div
@@ -626,11 +626,12 @@ function Services() {
 
                     <div className="flex lg:gap-4 gap-2">
                       <div
+                        className="cursor-pointer"
                         onClick={(e) => handleSubcategoryEdit(sub.id, sub.categoryName, e)}
                       >
                         <Editicon />
                       </div>
-                      <div onClick={() => handleDisableClick(sub.id)}>
+                      <div onClick={() => handleDisableClick(sub.id)} className="cursor-pointer">
                         {sub.isActive ? <EnableRedIcon /> : <DisableRedicon />}
                       </div>
                     </div>
