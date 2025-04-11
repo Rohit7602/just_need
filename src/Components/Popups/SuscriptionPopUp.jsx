@@ -284,8 +284,18 @@ function SuscriptionPopUp({ handlePopup, updateItemId }) {
         setSubscriptionData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
         if (loading) return;
+        // Manual validation
+        if (
+            !subscriptionData.planName ||
+            !subscriptionData.price ||
+            !subscriptionData.durationInDays
+        ) {
+            alert('Please fill all required fields!');
+            return;
+        }
 
         const payload = {
             planName: subscriptionData.planName,
@@ -342,6 +352,7 @@ function SuscriptionPopUp({ handlePopup, updateItemId }) {
                             Plan Name
                         </label>
                         <input
+                            required
                             name="planName"
                             value={subscriptionData.planName}
                             onChange={handleInputChange}
@@ -356,11 +367,12 @@ function SuscriptionPopUp({ handlePopup, updateItemId }) {
                                 Price
                             </label>
                             <input
+                                required
                                 name="price"
                                 type="number"
                                 value={subscriptionData.price}
                                 onChange={handleInputChange}
-                                placeholder="000.00"
+                                placeholder="Rs 1000.00 "
                                 className="w-full px-3 py-[12px] rounded-[7px] bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 onWheel={(e) => e.target.blur()}
                             />
@@ -370,6 +382,7 @@ function SuscriptionPopUp({ handlePopup, updateItemId }) {
                                 Duration (Days)
                             </label>
                             <input
+                                required
                                 name="durationInDays"
                                 type="number"
                                 value={subscriptionData.durationInDays}
@@ -381,7 +394,7 @@ function SuscriptionPopUp({ handlePopup, updateItemId }) {
                         </div>
                     </div>
 
-                    <div className="mt-[15px]">
+                    {/* <div className="mt-[15px]">
                         <label className="block text-base font-normal text-gray-700 mb-2.5">
                             Currency
                         </label>
@@ -396,7 +409,7 @@ function SuscriptionPopUp({ handlePopup, updateItemId }) {
                             <option value="€">Euro (€)</option>
                             <option value="£">Pound (£)</option>
                         </select>
-                    </div>
+                    </div> */}
 
                     <div className="mt-[15px]">
                         <label className="block text-base font-normal text-gray-700 mb-2.5">
@@ -416,13 +429,13 @@ function SuscriptionPopUp({ handlePopup, updateItemId }) {
                             Plan Color
                         </label>
                         <div className="flex items-center gap-2.5">
-                            <button
-                                className="h-[42px] px-4 rounded-[10px] text-white"
+                            <span
+                                className="h-[42px] flex justify-center items-center px-4 rounded-[10px] text-white"
                                 style={{ backgroundColor: subscriptionData.color }}
                                 onClick={() => setShowColorPicker(!showColorPicker)}
                             >
                                 {subscriptionData.color}
-                            </button>
+                            </span>
                             {showColorPicker && (
                                 <div ref={colorPickerRef} className="absolute z-10 top-full mt-2">
                                     <ChromePicker

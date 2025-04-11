@@ -371,7 +371,7 @@ const CustomerData = () => {
           </button>
         </div>
       </div>
-      <div className="overflow-x-auto scrollRemove mt-5">
+      <div className="overflow-x-auto  mt-5">
         <table className="w-full text-left border-separate border-spacing-4 whitespace-nowrap rounded-[10px]">
           <thead>
             <tr className="py-[8px]">

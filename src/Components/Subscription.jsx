@@ -64,7 +64,7 @@ const Subscription = () => {
               className="p-5 rounded-[10px] group bg-gradient-to-br from-[#8970F2] to-[#321A95]"
             >
               <div className="flex items-center justify-between">
-                <h1 className="text-xl xl:text-[26px] font-semibold text-white">
+                <h1 className="text-xl xl:text-[26px] font-semibold text-white uppercase">
                   {item.planName}
                 </h1>
                 <div className="flex items-center gap-[15px] opacity-0 group-hover:opacity-100 transition-opacity duration-300">

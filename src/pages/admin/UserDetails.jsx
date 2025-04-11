@@ -230,7 +230,7 @@ console.log(user)
               <div onClick={userDenied} className="flex gap-1.5 cursor-pointer">
                 <DisableRedicon />
                 <span className="text-[red] font-normal text-base uppercase">
-                  Deny
+                  Reject
                 </span>
               </div>
             </div>

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { ChromePicker } from "react-color";
 import Logo from "../../assets/logo.png"; // Default logo image
 import { toast } from "react-toastify";
@@ -391,7 +391,7 @@ function SettinGeneral() {
               Are you sure you want to discard your changes?
             </p>
             <p className="font-normal text-base text-[#00000099] mt-3 text-center mb-10">
-              Lorem Ipsum is simply dummy text of the printing and typesetting
+              Lorem Ipsum is simply dummy text of the printing and typesetting
               industry.
             </p>
             <div className="flex  gap-4">
@@ -426,7 +426,7 @@ function SettinGeneral() {
               Are you sure you want to save all changes?
             </p>
             <p className="font-normal text-base text-[#00000099] mt-3 text-center mb-10">
-              Lorem Ipsum is simply dummy text of the printing and typesetting
+              Lorem Ipsum is simply dummy text of the printing and typesetting
               industry.
             </p>
             <div className="flex gap-4">

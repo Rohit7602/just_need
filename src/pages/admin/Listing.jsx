@@ -28,7 +28,7 @@ const Listing = () => {
   //handle block
   async function handleBlock(e, id, val) {
     e.preventDefault();
-    const confirmDelete = window.confirm("Are you sure?");
+    const confirmDelete = window.confirm("Are you sure to Block User ?");
     if (confirmDelete) {
       const { data, error } = await supabase
         .from("service_listings") // Replace with your table name
