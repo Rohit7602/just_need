@@ -103,15 +103,27 @@ function Services() {
   }, [categories, loading]);
 
   const filteredCategoriesData = useMemo(() => {
-    if (!searchQuery.trim()) return categories;
+    if (!searchQuery.trim()) {
+      return categories
+        .filter((cat) => cat.isActive)
+        .map((category) => ({
+          ...category,
+          subcategory: (category.subcategory || []).filter((sub) => sub.isActive),
+        }))
+        .filter((cat) => cat.subcategory.length > 0);
+    }
 
     return categories
       .map((category) => {
+        if (!category.isActive) return null;
+
         const categoryMatches = category?.categoryName
           ?.toLowerCase()
           .includes(searchQuery.toLowerCase());
+
         const filteredSubcategories = (category.subcategory || []).filter(
           (sub) =>
+            sub.isActive &&
             sub?.categoryName?.toLowerCase().includes(searchQuery.toLowerCase())
         );
 
@@ -120,14 +132,41 @@ function Services() {
             ...category,
             subcategory:
               filteredSubcategories.length > 0 || categoryMatches
-                ? category.subcategory
+                ? filteredSubcategories
                 : [],
           };
         }
         return null;
       })
-      .filter((cat) => cat !== null);
+      .filter((cat) => cat !== null && cat.subcategory.length > 0);
   }, [categories, searchQuery]);
+
+  // const filteredCategoriesData = useMemo(() => {
+  //   if (!searchQuery.trim()) return categories;
+
+  //   return categories
+  //     .map((category) => {
+  //       const categoryMatches = category?.categoryName
+  //         ?.toLowerCase()
+  //         .includes(searchQuery.toLowerCase());
+  //       const filteredSubcategories = (category.subcategory || []).filter(
+  //         (sub) =>
+  //           sub?.categoryName?.toLowerCase().includes(searchQuery.toLowerCase())
+  //       );
+
+  //       if (categoryMatches || filteredSubcategories.length > 0) {
+  //         return {
+  //           ...category,
+  //           subcategory:
+  //             filteredSubcategories.length > 0 || categoryMatches
+  //               ? category.subcategory
+  //               : [],
+  //         };
+  //       }
+  //       return null;
+  //     })
+  //     .filter((cat) => cat !== null);
+  // }, [categories, searchQuery]);
 
   const toggle = useCallback(() => {
     setShowForm((prev) => {
@@ -430,6 +469,23 @@ function Services() {
     },
     [showForm, toggle]
   );
+  const confirmUnblock = () => {
+    const updatedCategories = categories.map((category) => {
+      return {
+        ...category,
+        subcategory: category.subcategory?.map((sub) => {
+          if (sub.id === currentCardIndex) {
+            return { ...sub, isActive: true }; // 👈 unblocking
+          }
+          return sub;
+        }),
+      };
+    });
+
+    setCategories(updatedCategories); // 👈 this updates the UI
+    setShowDisablePopup(false); // close the popup
+  };
+
 
   const toggleOptionsVisibility = useCallback(() => {
     setIsVisible((prev) => !prev);
@@ -529,7 +585,7 @@ function Services() {
           <div className="mt-8 relative">
             <div className={`flex whitespace-nowrap ${isVertical ? "border-b border-[rgb(128,128,128)]" : ""}`}>
               <div
-                className={`gap-4 flex items-center cursor-pointer scrollRemove border-b-2 ${isVertical ? "flex-wrap" : "overflow-x-auto "}`}
+                className={`gap-4 flex items-center grid-3 cursor-pointer scrollRemove border-b-2 ${isVertical ? "flex-wrap" : "overflow-x-auto "}`}
               >
                 {filteredCategoriesData?.map((items, index) => (
                   <div
@@ -746,7 +802,7 @@ function Services() {
                       </button>
                     </div>
                   </div>
-                  <div className="py-2.5 px-5 h-[250px] overflow-y-scroll">
+                  <div className="py-2.5 px-5 h-[250px] overflow-y-scroll pt-14">
                     {blockedSubcategories.length === 0 ? (
                       <p className="text-[#999999] font-normal text-base py-2">
                         No blocked subcategories found.
@@ -758,7 +814,7 @@ function Services() {
                           className="flex justify-between items-center py-2"
                         >
                           <div
-                            className={`flex items-center ${index === 1 ? "mt-3" : ""}`}
+                            className={`flex items-center ${index === 0 ? "mt-3" : ""}`}
                           >
                             <label className="custom-radio">
                               <input type="radio" name="blockedService" />
@@ -770,7 +826,10 @@ function Services() {
                               )}
                             </span>
                           </div>
-                          <div>
+                          <div onClick={(e) => {
+                            e.stopPropagation();
+                            handleCategoryDisable(sub.id);
+                          }}>
                             <DisableRedicon />
                           </div>
                         </div>
