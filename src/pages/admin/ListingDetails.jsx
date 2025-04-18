@@ -15,6 +15,7 @@ import { DisableIcon, EnableIcon } from "../../assets/icon/Icon";
 import { truncateText } from "../../utility/wordTruncate";
 import { list } from "postcss";
 import userDummyImg from '../../assets/Images/Png/dummyimage.jpg'
+import active from "../../assets/png/active.png"
 
 const ListingDetails = () => {
   const [listData, setListData] = useState({});
@@ -71,7 +72,7 @@ const ListingDetails = () => {
     getData();
   }, []);
 
-  console.log(listData,"list data")
+  console.log(listData, "list data")
 
   return (
     <div className="bg-white rounded-md flex flex-col lg:flex-row h-full overflow-auto scrollRemove">
@@ -101,7 +102,7 @@ const ListingDetails = () => {
                       <p className="font-semibold text-lg">
                         {listData?.user_detail?.firstName}{" "}
                         {listData?.user_detail?.lastName}
-                        
+
                       </p>
                     </div>
                     <p className="font-normal text-sm text-[#ADA4A5]">
@@ -140,11 +141,11 @@ const ListingDetails = () => {
                   Address <span className="ms-5">:</span>
                 </span>
                 <span className="text-[#1D1617] font-normal text-sm opacity-[50%] ms-10">
-              
-                    {listData?.user_detail?.address?.city && listData?.user_detail?.address?.state
-                      ? `${listData.user_detail.address.city} ${listData.user_detail.address.state}`
-                      : "N/A"}
-                
+
+                  {listData?.user_detail?.address?.city && listData?.user_detail?.address?.state
+                    ? `${listData.user_detail.address.city} ${listData.user_detail.address.state}`
+                    : "N/A"}
+
 
                 </span>
               </div>
@@ -168,7 +169,7 @@ const ListingDetails = () => {
                 ) : (
                   <button className="px-[37px] py-[12px] text-[green] border-[green] border font-medium text-base rounded-[10px] mt-[19px] flex items-center">
                     <span className="me-2">
-                      <EnableIcon />
+                      <img src={active} alt="" />
                     </span>
                     Active
                   </button>
