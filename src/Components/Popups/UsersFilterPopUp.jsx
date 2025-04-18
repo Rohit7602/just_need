@@ -42,8 +42,8 @@ function UsersFilterPopUp({ handleFilterPopupClose, applyFilters   }) {
         onClick={handleFilterPopupClose}
         className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50"
       ></div>
-      <div className="fixed inset-0 flex items-center justify-center z-50 w-[330px] h-auto m-auto">
-        <div className="bg-white p-4 shadow-lg w-full">
+      <div className="fixed inset-0 flex items-center justify-center z-50 w-[470px]  h-auto m-auto">
+        <div className="bg-white p-4 shadow-2xl w-full rounded-2xl">
           <div className="flex justify-between items-center">
             <h2 className="text-lg md:text-xl font-medium">Filters</h2>
             <button className="text-lg md:text-xl" onClick={handleFilterPopupClose} aria-label="Close">

@@ -30,7 +30,7 @@ const CustomerData = () => {
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [filterPopupsvg, setFilterPopupSvg] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState(["name"]);
-  const [searchPlaceholder, setSearchPlaceholder] = useState("Search Name");
+  const [searchPlaceholder, setSearchPlaceholder] = useState("Search");
   const [selectAll, setSelectAll] = useState(false);
 
 
@@ -342,7 +342,7 @@ const CustomerData = () => {
           )}
         </div>
 
-        <div className="flex">
+        <div className="flex gap-5">
           <div className="flex rounded-[10px] items-center p-2 h-[42px] bg-[#F1F1F1] xl:me-[20px]">
             <CiSearch className="ms-2" />
             <input
@@ -353,12 +353,12 @@ const CustomerData = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <button
+          {/* <button
             onClick={() => setFilterPopupSvg(!filterPopupsvg)}
             className="mx-5 w-[40px] h-[40px] bg-[#F1F1F1] flex items-center justify-center rounded-[10px]"
           >
             <FilterSvg />
-          </button>
+          </button> */}
 
           <button
             className="bg-[#0832DE] text-white px-[15px] py-2 rounded-[10px] flex items-center"
@@ -493,28 +493,35 @@ const CustomerData = () => {
                     <td>
                       <div className="flex justify-center items-center">
                         <span
-                          className={`px-[10px] py-[4px] text-sm font-normal text-center ${customer.accountStatus === "active"
+                          className={`px-[10px] py-[4px] text-sm font-normal text-center ${customer?.accountStatus?.toLowerCase() === "active"
                             ? "bg-[#00800012] text-[#008000] rounded-[90px]"
                             : "text-[#800000] rounded-[90px] bg-[#FF000012]"
                             }`}
                         >
-                          {customer.accountStatus ? "Active" : "Inactive"}
+                          {customer.accountStatus?.toLowerCase() === "active" ? "Active" : "Inactive"}
                         </span>
                       </div>
                     </td>
                     <td>
                       <div className="flex justify-center items-center">
-                        <span
-                          className={`px-[10px] py-[4px] text-sm font-normal text-center ${customer?.businessDetail.status === "Active" &&
-                            "bg-[#00800012] text-[#008000] rounded-[90px]"
-                            } ${customer?.businessDetail.status === "Pending" &&
-                            "bg-[#6C4DEF1A] text-[#6C4DEF] rounded-[90px]"
-                            } ${customer?.businessDetail.status === "Rejected" &&
-                            "bg-[#FF00001A] text-[#FF0000] rounded-[90px]"
-                            }`}
-                        >
-                          {customer?.businessDetail.status}
-                        </span>
+                        {customer.IsSeller ? (
+                          <span
+                            className={`px-[10px] py-[4px] text-sm font-normal text-center rounded-[90px] ${!customer?.businessDetail?.status
+                              ? "bg-gray-100 text-gray-500"
+                              : customer.businessDetail.status === "Pending"
+                                ? "bg-[#6C4DEF1A] text-[#6C4DEF]"
+                                : customer.businessDetail.status === "Rejected"
+                                  ? "bg-[#FF00001A] text-[#800000]"
+                                  : customer.businessDetail.status === "Approved"
+                                    ? "bg-[#00800012] text-[#008000]"
+                                    : "bg-gray-100 text-gray-500"
+                              }`}
+                          >
+                            {customer?.businessDetail?.status || "N/A"}
+                          </span>
+                        ) : (
+                          <span className="text-gray-400">-</span>
+                        )}
                       </div>
                     </td>
                     <td className="px-[19px] md:px-[24px] text-center bg-white">

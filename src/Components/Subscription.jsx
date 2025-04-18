@@ -39,7 +39,7 @@ const Subscription = () => {
   return (
     <div className="w-full p-[15px] bg-white rounded-[10px]">
       <div className="rounded-lg mb-5">
-        <div className="flex justify-end items-center">
+        {/* <div className="flex justify-end items-center">
           <button
             onClick={handlePopup}
             className="bg-[#0832DE] font-normal text-base text-white py-2 xl:py-2.5 h-[42px] px-3 xl:px-[15px] rounded-[10px] mt-3 float-right"
@@ -51,7 +51,7 @@ const Subscription = () => {
               Add Plan
             </div>
           </button>
-        </div>
+        </div> */}
       </div>
       <div className="flex -mx-3 flex-wrap">
         {plans?.map((item) => (
@@ -87,7 +87,7 @@ const Subscription = () => {
                   {item.price}
                 </span>
                 <sub className="text-xl font-normal">
-                  /{item.durationInDays} Years
+                  /{item.durationInDays} Months
                 </sub>
               </p>
               <p className="mt-[15px] text-[#FFFFFF99] text-sm xl:text-base font-normal">
