@@ -107,23 +107,50 @@ function UserDetails() {
   const isActive = user.accountStatus === "active";
 
 
+  // const userDenied = async () => {
+  //   const confirmDelete = window.confirm("Are you sure you want to deny this user?");
+  //   if (!confirmDelete) return;
+
+  //   const { error } = await supabase
+  //     .from("users")
+  //     .delete()
+  //     .eq("id", user.id);
+
+  //   if (!error) {
+  //     toast.success("User denied and removed successfully");
+  //     setUser(null);
+  //   } else {
+  //     console.error("Error deleting user:", error);
+  //     toast.error("Failed to deny user. Please try again.");
+  //   }
+  // };
+
+
   const userDenied = async () => {
-    const confirmDelete = window.confirm("Are you sure you want to deny this user?");
-    if (!confirmDelete) return;
+    const confirmDeny = window.confirm("Are you sure you want to deny this user?");
+    if (!confirmDeny) return;
 
     const { error } = await supabase
       .from("users")
-      .delete()
+      .update({ "businessDetail.status": "Rejected" })
       .eq("id", user.id);
 
     if (!error) {
-      toast.success("User denied and removed successfully");
-      setUser(null);
+      toast.success("User denied successfully");
+      // Optionally update local user state if needed
+      setUser(prev => ({
+        ...prev,
+        businessDetail: {
+          ...prev.businessDetail,
+          status: "Rejected"
+        }
+      }));
     } else {
-      console.error("Error deleting user:", error);
+      console.error("Error denying user:", error);
       toast.error("Failed to deny user. Please try again.");
     }
   };
+
 
   const approveUser = async () => {
     const confirmApprove = window.confirm("Are you sure you want to approve this user?");
@@ -159,45 +186,15 @@ function UserDetails() {
   };
 
 
-  // const approveUser = async () => {
-  //   const confirmApprove = window.confirm("Are you sure you want to approve this user?");
-  //   if (!confirmApprove) return;
-
-  //   if (!user) {
-  //     toast.error("User data not found");
-  //     return;
-  //   }
-  //   if (!user.businessDetail.businessId || typeof user.businessDetail.businessId !== 'string') {
-  //     toast.error("Invalid Business ID");
-  //     return;
-  //   }
-  //   try {
-  //     const { data, error } = await supabase
-  //       .from('Businessdetailsview')
-  //       .update({ status: 'Approved' })
-  //       .eq('businessId', user.businessDetail.businessId)
-  //       .select();
-
-  //     console.log("✅ Updated Data:", data);
-  //     console.log("❌ Update Error:", error);
-
-  //     if (error) {
-  //       toast.error("Failed to update business status");
-  //     } else {
-  //       toast.success("Business status updated successfully");
-  //     }
-  //   } catch (err) {
-  //     console.error("🚨 Unexpected Error:", err);
-  //     toast.error("An unexpected error occurred.");
-  //   }
-  // };
 
   return (
     <div className="px-4">
       <div className="flex items-center justify-center">
+  
+
         {user.IsSeller ? (
           user.businessDetail.status === "Approved" ? (
-            // ✅ Seller is Approved -> Show Block/Enable Provider button
+            // ✅ Seller Approved => Show Block/Enable Button
             <button
               onClick={handlePopupDisable}
               className="flex items-center gap-3 py-2.5 h-[42px] px-3 xl:px-[15px] rounded-[10px]"
@@ -214,9 +211,25 @@ function UserDetails() {
                 </>
               )}
             </button>
-          ) : ""
+          ) : (
+            // ❌ Seller NOT Approved => Show Approve/Deny Buttons
+            <div className="flex gap-4">
+              <button
+                  onClick={approveUser}
+                className="flex items-center gap-3 py-2.5 h-[42px] px-4 xl:px-[15px] rounded-[10px] bg-green-500 text-white"
+              >
+                Approve
+              </button>
+              <button
+                  onClick={userDenied}
+                className="flex items-center gap-3 py-2.5 h-[42px] px-4 xl:px-[15px] rounded-[10px] bg-red-500 text-white"
+              >
+                Deny
+              </button>
+            </div>
+          )
         ) : (
-          // 🔹 If user is NOT a seller -> Always show Block/Enable Provider button
+          // 🔹 Normal User => Show Block/Enable Button
           <button
             onClick={handlePopupDisable}
             className="flex items-center gap-3 py-2.5 h-[42px] px-3 xl:px-[15px] rounded-[10px]"
@@ -234,6 +247,7 @@ function UserDetails() {
             )}
           </button>
         )}
+
 
 
       </div>
