@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+/* eslint-disable no-unused-vars */
+import { useState } from "react";
 import { EmailIcon, LockIcon, UnseenIcon } from "../../assets/icon/Icon";
 import { useAuthContext } from "../../store/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -63,11 +64,10 @@ function LoginPupUp() {
         <div className="w-full max-w-md bg-[#FFFFFF99] rounded-lg shadow-lg p-5 relative">
           <div>
             <p className="text-[#1D1617] font-semibold text-[28px]">
-              Log In Now
+              Login Now
             </p>
             <p className="text-base font-normal mt-4 text-[#00000099] leading-[22px]">
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard.
+Welcome back! Sign in to manage your system settings and data.
             </p>
             <div className="flex items-center p-4 border-[1px] border-[#ADA4A54D] rounded-[10px] mt-8">
               <EmailIcon />

@@ -12,6 +12,7 @@ import { CiFilter, CiSearch } from "react-icons/ci";
 import FiltersPopup from "../../Components/Popups/Filterpop";
 import FilterComponent from "../../Components/Popups/Filterpop";
 
+
 const Listing = () => {
   const { fetchlisting } = useListingContext();
   const [listData, setListData] = useState([]);
@@ -20,6 +21,13 @@ const Listing = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchPlaceholder, setSearchPlaceholder] = useState("Search Name");
   const [appliedFilters, setAppliedFilters] = useState(null);
+  const [visibleCount, setVisibleCount] = useState(10);
+  
+  const handleShowMore = () => {
+    setVisibleCount((prev) => prev + 10);
+  };
+
+  const visibleData = filteredData.slice(0, visibleCount);
   async function getData() {
     const value = await fetchlisting();
 
@@ -28,7 +36,7 @@ const Listing = () => {
   //handle block
   async function handleBlock(e, id, val) {
     e.preventDefault();
-    const confirmDelete = window.confirm("Are you sure?");
+    const confirmDelete = window.confirm("Are you sure to Block User ?");
     if (confirmDelete) {
       const { data, error } = await supabase
         .from("service_listings") // Replace with your table name
@@ -139,7 +147,8 @@ const Listing = () => {
 
   if (listData.length !== 0) {
     return (
-      <div>
+      <div     className="bg-[rgba(255, 255, 255, 1)] rounded-md p-5"
+          style={{ background: "white" }}>
         <div
           className="bg-[rgba(255, 255, 255, 1)] rounded-md p-5"
           style={{ background: "white" }}
@@ -232,7 +241,7 @@ const Listing = () => {
           
 
           <div className="flex flex-row flex-wrap -mx-3">
-            {filteredData.length > 0 ? (filteredData?.map((item) => (
+            {visibleData.length > 0 ? (visibleData?.map((item) => (
               <Link
                 to={`${item.id}`}
                 style={{ filter: "drop-shadow(0,0,34 rgba(0,0,0,0.11))" }}
@@ -322,6 +331,7 @@ const Listing = () => {
             ) : (
               <p className="text-center text-gray-500 text-lg mt-5 w-full">No Data Found</p>
             )}
+        
           </div>
         </div>
         {isFilterPopup && (
@@ -334,8 +344,20 @@ const Listing = () => {
             </div>
           </div>
         )}
+            {visibleCount <= visibleData.length && (
+        <div className="text-center mt-4">
+          <button
+            onClick={handleShowMore}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Show More
+          </button>
+        </div>
+      )}
       </div>
+      
     );
+    
   } else {
     return <div>No data found</div>;
   }
