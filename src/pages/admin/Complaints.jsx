@@ -125,6 +125,8 @@ export const Complaints = () => {
     return () => document.removeEventListener('click', handleClickOutside);
   }, []);
 
+  console.log(currentItems,"currentItems")
+
   return (
     <div className="p-5 bg-white rounded-[10px]">
       {location.pathname === `/dashboard/complaints/complaintsDetails/${val}` ? (
@@ -212,8 +214,8 @@ export const Complaints = () => {
                     <td className="text-black text-sm font-normal py-[4px] px-4">
                       <input
                         type="checkbox"
-                        checked={checkedItems[item.id] || false}
-                        onChange={handleItemCheckboxChange(item.id)}
+                        checked={checkedItems[item.complaintId] || false}
+                        onChange={handleItemCheckboxChange(item.complaintId)}
                       />
                     </td>
                     <td className="text-[#6C4DEF] ext-sm font-normal px-4">
@@ -221,11 +223,11 @@ export const Complaints = () => {
                         {item.id}
                       </Link> */}
                       <Link
-                        to={`/dashboard/complaints/complaintsDetails/${item.id}`}
+                        to={`/dashboard/complaints/complaintsDetails/${item.complaintId}`}
                         state={{ complaint: item }} // Pass the entire complaint object as state
-                        onClick={() => setVal(item.id)}
+                        onClick={() => setVal(item.complaintId)}
                       >
-                        {item.id}
+                        {item.complaintId}
                       </Link>
 
                     </td>

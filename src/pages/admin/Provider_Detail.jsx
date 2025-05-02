@@ -4,8 +4,14 @@ import React, { useState, useEffect, useRef } from "react";
 import { DropdownIcon } from "../../assets/icon/Icon";
 import { useLocation } from "react-router-dom";
 import { supabase } from "../../store/supabaseCreateClient";
+import Lightbox from "react-image-lightbox";
 
 const Provider_Detail = () => {
+  const location = useLocation();
+  const complaint = location.state?.complaint;
+  const [isFullImg, setIsFullImg] = useState(false)
+  const [photoIndex, setPhotoIndex] = useState(0)
+  const images = complaint?.images || []
   const [popup, setPopup] = useState(false);
   const [showImagePreviewPopUp, setShowImagePreviewPupUp] = useState(false);
   const popupRef = useRef(null);
@@ -18,8 +24,7 @@ const Provider_Detail = () => {
   const [complaintLogs, setComplaintLogs] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const location = useLocation();
-  const complaint = location.state?.complaint;
+  
 
   // Fetch complaint logs from Supabase
   const fetchComplaintLogs = async () => {
@@ -242,9 +247,19 @@ const Provider_Detail = () => {
         }
     }
   };
-
+console.log(photoIndex,"photoIndex")
   return (
     <div>
+
+ {isFullImg && (
+  <Lightbox
+
+                mainSrc={photoIndex}
+                onCloseRequest={() => setIsFullImg(false)}
+                enableZoom={true}
+              />
+
+)}
       <div className="flex flex-col xl:flex-row justify-between gap-5">
         <div className="xl:w-7/12 w-full">
           <div className="flex justify-between">
@@ -340,7 +355,10 @@ const Provider_Detail = () => {
             </p>
             <div className="flex gap-[14px] mt-2.5">
               {complaint?.images?.map((img, index) => (
-                <img key={index} src={img} alt="" className="w-20 h-20 object-cover" />
+                <img onClick={() => {
+    setPhotoIndex(img);
+    setIsFullImg(true);
+  }} key={index} src={img} alt="" className="w-20 h-20 object-cover" />
               ))}
             </div>
           </div>
