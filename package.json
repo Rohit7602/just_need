@@ -32,8 +32,7 @@
     "react-toastify": "^11.0.3",
     "recharts": "^2.15.0",
     "slick-carousel": "^1.8.1",
-    "vite-plugin-node-polyfills": "^0.23.0",
-    "yet-another-react-lightbox": "^3.23.0"
+    "vite-plugin-node-polyfills": "^0.23.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",
