@@ -5,12 +5,14 @@ import { DropdownIcon } from "../../assets/icon/Icon";
 import { useLocation } from "react-router-dom";
 import { supabase } from "../../store/supabaseCreateClient";
 import Lightbox from "react-image-lightbox";
+import "react-image-lightbox/style.css";
+
 
 const Provider_Detail = () => {
   const location = useLocation();
   const complaint = location.state?.complaint;
   const [isFullImg, setIsFullImg] = useState(false)
-  const [photoIndex, setPhotoIndex] = useState(0)
+  const [photoIndex, setPhotoIndex] = useState(null)
   const images = complaint?.images || []
   const [popup, setPopup] = useState(false);
   const [showImagePreviewPopUp, setShowImagePreviewPupUp] = useState(false);
@@ -251,14 +253,12 @@ console.log(photoIndex,"photoIndex")
   return (
     <div>
 
- {isFullImg && (
-  <Lightbox
-
+       {isFullImg && (
+               <Lightbox
                 mainSrc={photoIndex}
                 onCloseRequest={() => setIsFullImg(false)}
                 enableZoom={true}
               />
-
 )}
       <div className="flex flex-col xl:flex-row justify-between gap-5">
         <div className="xl:w-7/12 w-full">
@@ -358,7 +358,7 @@ console.log(photoIndex,"photoIndex")
                 <img onClick={() => {
     setPhotoIndex(img);
     setIsFullImg(true);
-  }} key={index} src={img} alt="" className="w-20 h-20 object-cover" />
+  }} key={index} src={img} alt="img" className="w-20 h-20 object-cover" />
               ))}
             </div>
           </div>
