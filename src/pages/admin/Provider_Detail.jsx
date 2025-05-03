@@ -4,8 +4,9 @@ import React, { useState, useEffect, useRef } from "react";
 import { DropdownIcon } from "../../assets/icon/Icon";
 import { useLocation } from "react-router-dom";
 import { supabase } from "../../store/supabaseCreateClient";
-import Lightbox from "react-image-lightbox";
-import "react-image-lightbox/style.css";
+import Lightbox from "yet-another-react-lightbox";
+// import Lightbox from "react-image-lightbox";
+// import "react-image-lightbox/style.css";
 
 
 const Provider_Detail = () => {
@@ -355,14 +356,10 @@ const Provider_Detail = () => {
             </p>
             <div className="flex gap-[14px] mt-2.5">
               {complaint?.images?.map((img, index) => (
-                <img
-
-                  //               onClick={() => {
-                  //   setPhotoIndex(img);
-                  //   // setIsFullImg(true);
-                  // }} 
-
-                  key={index} src={img} alt="img" className="w-20 h-20 object-cover" />
+                <img onClick={() => {
+                  setPhotoIndex(img);
+                  setIsFullImg(true);
+                }} key={index} src={img} alt="img" className="w-20 h-20 object-cover" />
               ))}
             </div>
           </div>
