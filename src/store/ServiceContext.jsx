@@ -26,7 +26,7 @@ function ServiceContext({ children }) {
       const formattedData = data.map((category) => {
         return {
           ...category,
-          subcategory: category.subcategory ?? [],
+          SubCategories: category.SubCategories ?? [],
         };
       });
 
@@ -34,7 +34,7 @@ function ServiceContext({ children }) {
       setCategories(formattedData);
     } catch (error) {
       console.error("Error fetching data:", error.message);
-    } finally {
+    } finally { 
       setLoading(false);
     }
   }
@@ -81,7 +81,7 @@ function ServiceContext({ children }) {
 
       // Insert category into Supabase
       const { data: category, error: categoryError } = await supabase
-        .from("categories")
+        .from("Categories")
         .insert([
           {
             categoryName,

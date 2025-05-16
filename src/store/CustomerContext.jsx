@@ -17,7 +17,7 @@ export function CustomerContext({ children }) {
     const fetchUsers = async () => {
       try {
         setLoading(true);
-        const { data, error } = await supabase.from("userview").select("*");
+        const { data, error } = await supabase.from("Users").select("*");
 
         if (error) throw error;
         setUsers(data || []);

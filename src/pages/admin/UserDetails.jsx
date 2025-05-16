@@ -81,7 +81,7 @@ function UserDetails() {
       };
 
       const { data, error } = await supabase
-        .from("service_listings")
+        .from("ServiceListings")
         .update({ blockStatus: updatedBlockStatus })
         .eq("id", listing.id);
 
